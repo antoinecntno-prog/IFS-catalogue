@@ -1,0 +1,3 @@
+# Le site publié est le dossier site/.
+[build]
+  publish = "site"
