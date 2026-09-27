@@ -19,7 +19,7 @@ Leur tâche sur le catalogue : trouver le produit au prix de leur palier de quan
 
 ## Product Purpose
 
-Le catalogue sublimation 2026 présente 42 références personnalisables en 10 catégories, avec les prix unitaires hors taxes par palier de quantité, et transforme la consultation en demande de devis. Une visite réussie se termine par un devis envoyé avec un produit chiffrable et des coordonnées exploitables.
+Le catalogue sublimation 2026 présente 34 références personnalisables en 9 catégories, avec les prix unitaires hors taxes par palier de quantité, et transforme la consultation en demande de devis. Une visite réussie se termine par un devis envoyé avec un produit chiffrable et des coordonnées exploitables.
 
 ## Positioning
 
@@ -39,7 +39,8 @@ Les produits de ce catalogue sont fabriqués en Europe par un partenaire ; IFS c
 - Site statique hébergé sur Netlify (`site/`), demandes de devis par Netlify Forms (formulaire « devis ») avec un lien email prérempli de secours vers antoine.contino@groupecontino.com.
 - Le catalogue s'affiche par JavaScript à partir des données `DATA` de `site/index.html` ; sans JavaScript, un message renvoie vers l'email.
 - **Origine** : la mention exacte pour ces produits est « Fabriqué en Europe ». Aucune page du catalogue ne revendique « fabriqué en France » ou « Made in France » pour ces références, même si l'atelier IFS fabrique en France pour ses autres activités.
-- 16 produits sur 42 n'ont pas encore de visuel et affichent « Visuel à venir ». Le fanion de club et le coussin de stade en font partie depuis le retrait de leurs photos trompeuses, le 27/09/2026.
+- 11 produits sur 34 n'ont pas encore de visuel et affichent « Visuel à venir ». Le fanion de club et le coussin de stade en font partie depuis le retrait de leurs photos trompeuses, le 27/09/2026.
+- Retirés du catalogue le 27/09/2026 : poncho adulte, sac t-shirt, sac banane, serviette microfibre, cordon tour de cou, brassard de capitaine, maintien-chaussettes, mini beachflag de table.
 - Vocabulaire du métier : BAT, HT, palier, pièces (pcs), sublimation intégrale, recto verso, marquage DTF, flocage, frais de lancement.
 - À décider : ajout d'un contact visible (téléphone, adresse de l'atelier) hors formulaire.
 
