@@ -44,6 +44,28 @@
     { id: "lobster", label: "Lobster", family: "Lobster", weight: 400 }
   ];
   const fontOf = id => FONTS.find(f => f.id === id) || FONTS[0];
+  /* Designs prêts des maillots : les quatre motifs du maillot de la page d'accueil, dans leurs couleurs d'origine.
+     cols : fond, motif, liseré. Dessinés en 400 × 440, la boîte des gabarits tshirt et tank. */
+  const MOTIFS = [
+    { id: "uni", label: "Uni" },
+    { id: "eclats", label: "Éclats", cols: ["--kit-white", "--magenta", "--kit-yellow"], liser: true },
+    { id: "rayures", label: "Rayures", cols: ["--kit-white", "--kit-red", "--kit-red"] },
+    { id: "degrade", label: "Dégradé", cols: ["--kit-turquoise", "--kit-navy", "--kit-white"], liser: true },
+    { id: "chevrons", label: "Chevrons", cols: ["--kit-black", "--kit-gold", "--kit-gold"] }
+  ];
+  const MOTIF_T = ["tshirt", "tank"];
+  const motifOf = id => MOTIFS.find(m => m.id === id) || MOTIFS[0];
+  /* gid : dégradé déclaré dans les defs. mirror : le dos montre le motif retourné, comme un maillot vu de derrière. */
+  function motifSvg(id, c1, c2, c3, gid, mirror) {
+    const d = {
+      eclats: `<path d="M-20 262 420 72v84L-20 346z" fill="${c2}"/><path d="M-20 368 420 178v18L-20 386z" fill="${c3}"/>`,
+      rayures: `<path d="M36 0h38v440H36zM118 0h38v440h-38zM200 0h38v440h-38zM282 0h38v440h-38z" fill="${c2}"/>`,
+      degrade: `<rect width="400" height="440" fill="url(#${gid})"/><path d="M-20 300h440M-20 318h440M-20 336h440" stroke="${c3}" stroke-width="3" stroke-opacity=".45" fill="none"/>`,
+      chevrons: `<path d="M-30 268 200 372 430 268" stroke="${c2}" stroke-width="34" fill="none"/><path d="M-30 320 200 424 430 320" stroke="${c2}" stroke-width="10" fill="none"/>`
+    }[id] || "";
+    return mirror && d ? `<g transform="matrix(-1 0 0 1 400 0)">${d}</g>` : d;
+  }
+  const motifGrad = (gid, c1, c2) => `<linearGradient id="${gid}" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="440"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient>`;
   const fontCss = (f, px) => `${f.weight} ${px}px "${f.family}"`;
 
   /* ---------- Gabarits ----------
@@ -256,27 +278,38 @@
     }
     tpl.zones.push(Z("short-g", "Short, jambe gauche", "face", 236, dy + 110, 70, 70), Z("short-d", "Short, jambe droite", "face", 94, dy + 110, 70, 70));
     tpl.vb = [tpl.vb[0], dy + 230];
+    tpl.shortDy = dy;
     return tpl;
   }
 
   /* ---------- État ---------- */
   const PRODUCTS = DATA.products.filter(p => p.viz);
   const byId = Object.fromEntries(PRODUCTS.map(p => [p.id, p]));
-  const S = { pid: null, short: false, color: null, view: "face", els: [], sel: null, files: {}, extra: [], tab: "produit" };
+  const S = { pid: null, short: false, color: null, motif: "uni", c2: null, c3: null, view: "face", els: [], sel: null, files: {}, extra: [], tab: "produit" };
   const KFIX = () => ({ wood: tok("--viz-wood"), metal: tok("--viz-metal"), jute: tok("--viz-jute"), shade: tok("--viz-shade"), hole: tok("--paper") });
   let TPL = null, CUR = null;
   function build() {
     const p = byId[S.pid], k = KFIX();
     const fixed = p.viz.fixed === "jute";
     const color = fixed ? k.jute.toUpperCase() : (S.color || tok("--kit-white").toUpperCase());
-    const c = { c: color, t: trimOf(color), i: inkOf(color) };
+    const motifOk = MOTIF_T.includes(p.viz.t), mo = motifOk ? motifOf(S.motif) : MOTIFS[0];
+    const m = mo.cols ? { ...mo, c2: S.c2 || tok(mo.cols[1]).toUpperCase(), c3: S.c3 || tok(mo.cols[2]).toUpperCase() } : null;
+    /* Avec un motif, col, poignets et ceinture du short prennent la couleur du motif */
+    const c = { c: color, t: m ? m.c2 : trimOf(color), i: inkOf(color) };
     let tpl = T[p.viz.t](p.viz, c, k);
     if (p.quoteShort && S.short) tpl = withShort(tpl, c);
     tpl.names = Object.assign({ face: "Face", dos: "Dos" }, tpl.names || {});
     if (!tpl.views[S.view]) S.view = "face";
     TPL = tpl;
-    CUR = { p, tpl, c, k, fixed };
+    CUR = { p, tpl, c, k, fixed, motifOk, m };
     return CUR;
+  }
+  /* Couleurs et design en clair, pour l'aperçu, le lecteur d'écran et le devis */
+  function colorsText(hex) {
+    const n = c => hex ? `${colorName(c)} (${c})` : colorName(c);
+    if (CUR.fixed) return "couleur jute naturel";
+    if (!CUR.m) return `couleur ${n(CUR.c.c)}`;
+    return `design ${CUR.m.label.toLowerCase()}, fond ${n(CUR.c.c)}, motif ${n(CUR.m.c2)}${CUR.m.liser ? `, liseré ${n(CUR.m.c3)}` : ""}`;
   }
   const optionName = () => { const p = byId[S.pid]; if (p.quoteAs && p.quoteShort) { const i = p.quoteShort.indexOf(!!S.short); if (i >= 0) return p.quoteAs[i]; } return p.name; };
   const zonesOf = view => TPL.zones.filter(z => z.view === view);
@@ -321,9 +354,16 @@
   function defs(uid, view) {
     const v = TPL.views[view];
     const shapes = v.shapes.map(([d, dx = 0, dy = 0]) => `<path d="${d}"${dx || dy ? ` transform="translate(${dx} ${dy})"` : ""}/>`).join("");
-    return `<defs><clipPath id="${uid}-s">${shapes}</clipPath><linearGradient id="${uid}-g" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${CUR.k.shade}" stop-opacity=".2"/><stop offset=".28" stop-color="${CUR.k.shade}" stop-opacity="0"/><stop offset=".72" stop-color="${CUR.k.shade}" stop-opacity="0"/><stop offset="1" stop-color="${CUR.k.shade}" stop-opacity=".2"/></linearGradient></defs>`;
+    const grad = CUR.m && CUR.m.id === "degrade" ? motifGrad(`${uid}-m`, CUR.c.c, CUR.m.c2) : "";
+    return `<defs><clipPath id="${uid}-s">${shapes}</clipPath>${grad}<linearGradient id="${uid}-g" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${CUR.k.shade}" stop-opacity=".2"/><stop offset=".28" stop-color="${CUR.k.shade}" stop-opacity="0"/><stop offset=".72" stop-color="${CUR.k.shade}" stop-opacity="0"/><stop offset="1" stop-color="${CUR.k.shade}" stop-opacity=".2"/></linearGradient></defs>`;
   }
-  const under = (uid, view) => { const [W, H] = TPL.vb, v = TPL.views[view]; return `${v.outside || ""}<g clip-path="url(#${uid}-s)"><rect width="${W}" height="${H}" fill="${CUR.c.c}"/>${v.under || ""}</g>`; };
+  function motifLayer(uid, view) {
+    const m = CUR.m; if (!m) return "";
+    const dy = TPL.shortDy;
+    const short = dy ? `<path d="M70 10H86L68 220H50ZM330 10H314L332 220H350Z" fill="${m.c2}" transform="translate(0 ${dy})"/>` : "";
+    return motifSvg(m.id, CUR.c.c, m.c2, m.c3, `${uid}-m`, view === "dos") + short;
+  }
+  const under = (uid, view) => { const [W, H] = TPL.vb, v = TPL.views[view]; return `${v.outside || ""}<g clip-path="url(#${uid}-s)"><rect width="${W}" height="${H}" fill="${CUR.c.c}"/>${motifLayer(uid, view)}${v.under || ""}</g>`; };
   const over = (uid, view) => {
     const [W, H] = TPL.vb, v = TPL.views[view];
     const outline = v.shapes.map(([d, dx = 0, dy = 0]) => `<path d="${d}" fill="none" stroke="${mix(CUR.c.c, "#000000", .35)}" stroke-width="1.5"${dx || dy ? ` transform="translate(${dx} ${dy})"` : ""}/>`).join("");
@@ -347,7 +387,7 @@
   const stage = $("#stage"), svg = $("#st-svg"), hits = $("#st-hits");
   function stageLabel() {
     const n = S.els.filter(e => e.view === S.view).length;
-    return `Aperçu ${TPL.names[S.view].toLowerCase()} : ${optionName()}, couleur ${CUR.fixed ? "jute naturel" : colorName(CUR.c.c)}, ${n ? `${n} élément${n > 1 ? "s" : ""}` : "aucun élément"}`;
+    return `Aperçu ${TPL.names[S.view].toLowerCase()} : ${optionName()}, ${colorsText(false)}, ${n ? `${n} élément${n > 1 ? "s" : ""}` : "aucun élément"}`;
   }
   function renderStage() {
     const [W, H] = TPL.vb;
@@ -636,6 +676,18 @@
     const p = CUR.p;
     /* Produit */
     $("#p-color-row").hidden = CUR.fixed;
+    $("#p-motif-row").hidden = !CUR.motifOk;
+    const mid = CUR.m ? CUR.m.id : "uni";
+    $$('#p-motifs input').forEach(r => { r.checked = r.value === mid; });
+    $$('#p-motifs .pm-uni').forEach(r => r.setAttribute("fill", CUR.c.c));
+    $("#p-color-l").textContent = CUR.m ? "Couleur de fond" : "Couleur du produit";
+    $("#p-custom").setAttribute("aria-label", CUR.m ? "Autre couleur de fond" : "Autre couleur du produit");
+    $("#p-c2-row").hidden = !CUR.m;
+    $("#p-c3-row").hidden = !(CUR.m && CUR.m.liser);
+    if (CUR.m) {
+      $$('#p-c2s input').forEach(r => { r.checked = r.value === CUR.m.c2; }); $("#p-c2-custom").value = CUR.m.c2;
+      $$('#p-c3s input').forEach(r => { r.checked = r.value === CUR.m.c3; }); $("#p-c3-custom").value = CUR.m.c3;
+    }
     $("#p-fixed").hidden = !CUR.fixed;
     $("#p-short-row").hidden = !p.quoteShort;
     $("#p-short").checked = !!S.short;
@@ -690,6 +742,7 @@
   panel.addEventListener("input", e => {
     const t = e.target, card = t.closest(".st-card"), el = card && S.els.find(x => x.id === card.dataset.id);
     if (t.id === "p-custom") { S.color = t.value.toUpperCase(); renderAll(); save(); $("#p-custom").focus(); return; }
+    if (t.id === "p-c2-custom" || t.id === "p-c3-custom") { S[t.id.slice(2, 4)] = t.value.toUpperCase(); renderAll(); save(); $(`#${t.id}`).focus(); return; }
     if (!el) return;
     if (t.dataset.act === "text") {
       el.text = t.value.slice(0, 40) || " ";
@@ -701,6 +754,8 @@
   panel.addEventListener("change", e => {
     const t = e.target, card = t.closest(".st-card"), el = card && S.els.find(x => x.id === card.dataset.id);
     if (t.name === "p-color") { S.color = t.value; renderAll(); save(); $(`#p-colors input[value="${t.value}"]`).focus(); return; }
+    if (t.name === "p-c2" || t.name === "p-c3") { S[t.name.slice(2)] = t.value; renderAll(); save(); $(`input[name="${t.name}"][value="${t.value}"]`).focus(); return; }
+    if (t.name === "p-motif") { setMotif(t.value); $(`#p-motifs input[value="${t.value}"]`).focus(); return; }
     if (t.id === "p-short") { S.short = t.checked; syncProductSelect(); renderAll(); save(); $("#p-short").focus(); return; }
     if (!el) return;
     const act = t.dataset.act;
@@ -755,19 +810,36 @@
     await loadProduct(m.pid, m.short);
   });
   $("#p-colors").innerHTML = swatchRadios("p-color", null);
+  $("#p-c2s").innerHTML = swatchRadios("p-c2", null);
+  $("#p-c3s").innerHTML = swatchRadios("p-c3", null);
+  /* Vignettes des designs : la silhouette du maillot dans les couleurs d'origine de chaque motif */
+  $("#p-motifs").innerHTML = MOTIFS.map(m => {
+    const [c1, c2, c3] = m.cols ? m.cols.map(t => tok(t)) : [tok("--kit-white")];
+    const g = `pm-${m.id}`, trim = m.cols ? c2 : mix(c1, "#000000", .28);
+    return `<label class="st-motif"><input type="radio" name="p-motif" value="${m.id}"><span><svg viewBox="0 0 400 440" aria-hidden="true"><defs><clipPath id="${g}-c"><path d="${S_TEE}"/></clipPath>${m.id === "degrade" ? motifGrad(`${g}-m`, c1, c2) : ""}</defs><g clip-path="url(#${g}-c)"><rect width="400" height="440" fill="${c1}"${m.cols ? "" : ' class="pm-uni"'}/>${m.cols ? motifSvg(m.id, c1, c2, c3, `${g}-m`) : ""}<path d="M165 26C180 50 220 50 235 26" fill="none" stroke="${trim}" stroke-width="14"/></g><path d="${S_TEE}" fill="none" stroke="${mix(c1, "#000000", .35)}" stroke-width="6"/></svg>${m.label}</span></label>`;
+  }).join("");
+  /* Un design prêt remet ses couleurs d'origine ; Uni garde la couleur de fond actuelle */
+  function setMotif(id) {
+    const m = motifOf(id);
+    S.motif = m.id;
+    if (m.cols) [S.color, S.c2, S.c3] = m.cols.map(t => tok(t).toUpperCase());
+    renderAll(); save();
+    live(m.cols ? `Design ${m.label.toLowerCase()} appliqué. Changez ses couleurs juste en dessous.` : "Maillot uni.");
+  }
 
   /* ---------- Mémoire du visuel (par produit) ---------- */
   let saveT = null;
-  const serial = () => ({ pid: S.pid, short: S.short, color: S.color, els: S.els.map(e => ({ ...e })), files: Object.fromEntries(Object.entries(S.files).map(([k, f]) => [k, { blob: f.file, name: f.name }])), extra: S.extra.map(x => ({ blob: x.file, name: x.name })) });
+  const serial = () => ({ pid: S.pid, short: S.short, color: S.color, motif: S.motif, c2: S.c2, c3: S.c3, els: S.els.map(e => ({ ...e })), files: Object.fromEntries(Object.entries(S.files).map(([k, f]) => [k, { blob: f.file, name: f.name }])), extra: S.extra.map(x => ({ blob: x.file, name: x.name })) });
   function save() { clearTimeout(saveT); saveT = setTimeout(flush, 350); updateUrl(); }
   async function flush() { clearTimeout(saveT); if (S.pid && window.IFSStore) await IFSStore.set(`design:${S.pid}`, serial()); }
   function updateUrl() { const u = new URL(location.href); u.searchParams.set("produit", S.pid); if (byId[S.pid].quoteShort) u.searchParams.set("short", S.short ? "1" : "0"); else u.searchParams.delete("short"); history.replaceState(null, "", u); }
   async function loadProduct(pid, short) {
-    S.pid = pid; S.sel = null; S.view = "face"; S.els = []; S.files = {}; S.extra = []; S.color = null;
+    S.pid = pid; S.sel = null; S.view = "face"; S.els = []; S.files = {}; S.extra = []; S.color = null; S.motif = "uni"; S.c2 = null; S.c3 = null;
     S.short = typeof short === "boolean" ? short : (byId[pid].quoteShort ? byId[pid].quoteShort[0] : false);
     const saved = window.IFSStore ? await IFSStore.get(`design:${pid}`) : null;
     if (saved) {
       S.color = saved.color || null;
+      S.motif = saved.motif || "uni"; S.c2 = saved.c2 || null; S.c3 = saved.c3 || null;
       if (typeof short !== "boolean") S.short = !!saved.short;
       for (const [k, f] of Object.entries(saved.files || {})) {
         try { const file = f.blob instanceof File ? f.blob : new File([f.blob], f.name, { type: f.blob.type }); S.files[k] = await loadFile(file); S.files[k].name = f.name; } catch (e) { /* fichier illisible : ignoré */ }
@@ -784,7 +856,7 @@
     const b = e.currentTarget;
     if (b.dataset.confirm !== "1") { b.dataset.confirm = "1"; b.textContent = "Confirmer : tout effacer"; setTimeout(() => { b.dataset.confirm = ""; b.textContent = "Tout effacer"; }, 4000); return; }
     b.dataset.confirm = ""; b.textContent = "Tout effacer";
-    S.els = []; S.files = {}; S.extra = []; S.sel = null; S.color = null;
+    S.els = []; S.files = {}; S.extra = []; S.sel = null; S.color = null; S.motif = "uni"; S.c2 = null; S.c3 = null;
     renderAll(); await flush(); live("Visuel effacé.");
   });
 
@@ -835,7 +907,7 @@
   }
   function describe() {
     build();
-    const lines = [`${optionName()}, couleur ${CUR.fixed ? "jute naturel" : `${colorName(CUR.c.c)} (${CUR.c.c})`}.`];
+    const lines = [`${optionName()}, ${colorsText(true)}.`];
     for (const v of Object.keys(TPL.views)) {
       const els = S.els.filter(e => e.view === v); if (!els.length) continue;
       lines.push(`${TPL.names[v]} : ` + els.map(el => {
