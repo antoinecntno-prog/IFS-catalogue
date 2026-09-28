@@ -28,6 +28,7 @@ Relier le dépôt à Netlify, ou glisser le dossier `site/` sur Netlify Drop. Le
 
 - Gabarits : chaque produit de `site/donnees.js` porte une clé `viz` qui désigne son gabarit dans `site/studio.js` (`T`), par exemple `{"t":"tshirt"}` ou `{"t":"panel","r":[60,80],"d":"flag"}`. Un gabarit déclare ses vues (face, dos) et ses zones rapides : `Z(id, libellé, vue, x, y, w, h)`.
 - Polices : liste `FONTS` dans `site/studio.js` et `@font-face` dans `site/personnaliser.html`.
+- Designs des maillots : liste `MOTIFS` dans `site/studio.js`, proposée aux gabarits `tshirt` et `tank` (set football, maillots de basket, running et cyclisme). Ce sont les quatre motifs du maillot de la page d'accueil, plus Uni ; le client part d'un design, puis change le fond, le motif et le liseré.
 - Devis : « Demander un devis avec ce visuel » ouvre le devis du catalogue avec l'aperçu. La demande reçoit dans Netlify `apercu` (image face et dos), `placement` (description élément par élément) et les fichiers des logos (`fichier`, `logo_2` à `logo_5`). Au-delà de 8 Mo ou de cinq fichiers, les fichiers restants sont nommés dans `placement`.
 - La version fichier unique n'inclut pas le studio.
 

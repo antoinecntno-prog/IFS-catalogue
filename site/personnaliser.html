@@ -99,6 +99,14 @@ body{height:100dvh;display:flex;flex-direction:column;overflow:hidden}
 .st-sw span{display:block;width:100%;height:100%;border-radius:50%;background:var(--c);border:2px solid var(--line-strong)}
 .st-sw input:checked+span{box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--accent-text)}
 .st-sw input:focus-visible+span{outline:3px solid var(--focus);outline-offset:5px}
+.st-motifs{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:6px}
+.st-motif{position:relative;cursor:pointer}
+.st-motif input{position:absolute;inset:0;margin:0;opacity:0;cursor:pointer}
+.st-motif span{display:grid;justify-items:center;gap:4px;padding:6px 4px 7px;border:1.5px solid var(--line-strong);border-radius:var(--r);font:600 12.5px/1.2 var(--f-body);color:var(--text)}
+.st-motif svg{width:44px;height:48px}
+.st-motif:hover span{border-color:var(--accent-text)}
+.st-motif input:checked+span{border-color:var(--accent);box-shadow:inset 0 0 0 1.5px var(--accent);background:var(--soft)}
+.st-motif input:focus-visible+span{outline:3px solid var(--focus);outline-offset:2px}
 .st-custom{display:inline-flex;align-items:center;gap:8px;min-height:44px;font:600 14px var(--f-body);cursor:pointer}
 .st-custom input{width:44px;height:44px;padding:0;border:2px solid var(--line-strong);border-radius:50%;background:none;cursor:pointer}
 .st-custom input::-webkit-color-swatch-wrapper{padding:0}
@@ -155,7 +163,7 @@ body{height:100dvh;display:flex;flex-direction:column;overflow:hidden}
 }
 @media (max-width:420px){.brand-txt{font-size:14px}}
 @media (forced-colors:active){
-  .st-sw input:checked+span,.st-font input:checked+span{outline:3px solid Highlight;outline-offset:3px}
+  .st-sw input:checked+span,.st-font input:checked+span,.st-motif input:checked+span{outline:3px solid Highlight;outline-offset:3px}
   .st-thumb[aria-pressed="true"],.st-chip[aria-pressed="true"]{outline:3px solid Highlight}
   .st-hit.is-sel .st-frame{outline-color:Highlight}
 }
@@ -196,12 +204,21 @@ body{height:100dvh;display:flex;flex-direction:column;overflow:hidden}
     </div>
 
     <div class="st-tp" role="tabpanel" id="tab-produit" aria-labelledby="tb-produit" tabindex="0">
+      <div class="st-row" id="p-motif-row" hidden><span class="st-lbl" id="p-motif-l">Design du maillot</span>
+        <div class="st-motifs" id="p-motifs" role="radiogroup" aria-labelledby="p-motif-l"></div>
+      </div>
       <div class="st-row" id="p-color-row"><span class="st-lbl" id="p-color-l">Couleur du produit</span>
         <div class="st-sws" role="radiogroup" aria-labelledby="p-color-l"><span class="st-sws-in" id="p-colors"></span><label class="st-custom"><input type="color" id="p-custom" value="#FFFFFF" aria-label="Autre couleur du produit"><span>Autre</span></label></div>
       </div>
+      <div class="st-row" id="p-c2-row" hidden><span class="st-lbl" id="p-c2-l">Couleur du motif</span>
+        <div class="st-sws" role="radiogroup" aria-labelledby="p-c2-l"><span class="st-sws-in" id="p-c2s"></span><label class="st-custom"><input type="color" id="p-c2-custom" value="#FFFFFF" aria-label="Autre couleur du motif"><span>Autre</span></label></div>
+      </div>
+      <div class="st-row" id="p-c3-row" hidden><span class="st-lbl" id="p-c3-l">Couleur du liseré</span>
+        <div class="st-sws" role="radiogroup" aria-labelledby="p-c3-l"><span class="st-sws-in" id="p-c3s"></span><label class="st-custom"><input type="color" id="p-c3-custom" value="#FFFFFF" aria-label="Autre couleur du liseré"><span>Autre</span></label></div>
+      </div>
       <p class="st-hint" id="p-fixed" hidden>Couleur du sac selon le modèle choisi au devis.</p>
       <label class="st-check" id="p-short-row"><input type="checkbox" id="p-short"> Avec le short assorti</label>
-      <p class="st-hint">En sublimation, tout le tissu s'imprime : la couleur de fond est libre. Ajoutez ensuite vos logos et vos textes avec les onglets Logos et Textes.</p>
+      <p class="st-hint">En sublimation, tout le tissu s'imprime : couleurs et motifs sont libres. Ajoutez ensuite vos logos et vos textes avec les onglets Logos et Textes.</p>
     </div>
 
     <div class="st-tp" role="tabpanel" id="tab-logos" aria-labelledby="tb-logos" tabindex="0" hidden>
