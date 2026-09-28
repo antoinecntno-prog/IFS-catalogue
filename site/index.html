@@ -543,7 +543,7 @@ tbody tr:hover td,tbody tr:hover th{background:var(--surface-soft)}
             </div>
           </div>
           <div class="fg">
-            <label class="f"><span>Livraison souhaitée le</span><input name="date_livraison" type="date" id="q-date" aria-describedby="date-hint"><small id="date-hint">Au plus tôt deux semaines après la demande</small></label>
+            <label class="f"><span>Livraison souhaitée le</span><input name="date_livraison" type="date" id="q-date" aria-describedby="date-hint"><small id="date-hint">Au plus tôt trois semaines après la demande</small></label>
             <div class="f"><label class="f-lbl" id="l-file" for="q-file">Logo ou maquette</label>
               <label class="file"><input name="fichier" type="file" id="q-file" accept="image/*,.pdf,.ai,.eps,.svg" aria-labelledby="l-file" aria-describedby="file-hint"><span class="file-btn" aria-hidden="true">Ajouter un fichier</span><span class="file-name" id="file-name" aria-hidden="true">Aucun fichier choisi</span></label>
               <small id="file-hint">PDF, AI, SVG ou image, 8 Mo maximum</small>
@@ -953,7 +953,8 @@ function openQuote(pid, push = true, short) {
   $("#q-status").textContent = ""; $("#q-submit").disabled = false;
   $$(".f.bad", form).forEach(clearError);
   fillProducts();
-  const d = new Date(); d.setDate(d.getDate() + 14); $("#q-date").min = localISO(d);
+  const d = new Date(); d.setDate(d.getDate() + 21); $("#q-date").min = localISO(d);
+  $("#date-hint").textContent = `Au plus tôt le ${d.toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}, trois semaines après la demande`;
   if (p) $("#q-prod").value = pickOption(p, short);
   syncOther();
   syncStudioLink();
@@ -997,7 +998,7 @@ function qCheck(pane) {
       const msg = el.tagName === "SELECT" ? "Choisissez un produit dans la liste."
         : el.type === "email" ? "Adresse email à vérifier, par exemple nom@club.fr."
         : el.type === "tel" ? "Numéro à vérifier : 8 chiffres au minimum."
-        : el.type === "date" ? "Choisissez une date au moins deux semaines après aujourd'hui."
+        : el.type === "date" ? "Choisissez une date au moins trois semaines après aujourd'hui."
         : "Champ à compléter.";
       bad.push([el.closest(".f"), msg]);
     }
