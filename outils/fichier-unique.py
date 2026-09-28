@@ -35,6 +35,12 @@ ancien_set = "const imgSet = name => `img/${name}-360.webp 360w, img/${name}.web
 assert ancien_src in html and ancien_set in html, "les fonctions imgSrc et imgSet ont changé dans site/index.html"
 html = html.replace(ancien_src, table + "const imgSrc = name => IMG[name];\n").replace(ancien_set, 'const imgSet = () => "";\n')
 
+# Visualiseur : le script est inclus dans la page
+viz = (SITE / "viz.js").read_text(encoding="utf-8")
+assert "</script" not in viz.lower(), "viz.js ne doit pas contenir de balise de fin de script"
+assert '<script src="viz.js"></script>' in html, "la balise du visualiseur a changé dans site/index.html"
+html = html.replace('<script src="viz.js"></script>', "<script>\n" + viz + "\n</script>", 1)
+
 html = html.replace("<!doctype html>", "<!doctype html>\n<!-- Version fichier unique générée par outils/fichier-unique.py depuis site/. Ne pas modifier ici. -->", 1)
 SORTIE.write_text(html, encoding="utf-8")
 print(f"{SORTIE.name} : {SORTIE.stat().st_size / 1024:.0f} Ko, {len(photos)} photos, {n_polices} polices")

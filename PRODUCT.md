@@ -41,6 +41,7 @@ Les produits de ce catalogue sont fabriqués en Europe par un partenaire ; IFS c
 - **Origine** : la mention exacte pour ces produits est « Fabriqué en Europe ». Aucune page du catalogue ne revendique « fabriqué en France » ou « Made in France » pour ces références, même si l'atelier IFS fabrique en France pour ses autres activités.
 - 11 produits sur 34 n'ont pas encore de visuel et affichent « Visuel à venir ». Le fanion de club et le coussin de stade en font partie depuis le retrait de leurs photos trompeuses, le 27/09/2026.
 - Retirés du catalogue le 27/09/2026 : poncho adulte, sac t-shirt, sac banane, serviette microfibre, cordon tour de cou, brassard de capitaine, maintien-chaussettes, mini beachflag de table.
+- **Visualiseur** (`site/viz.js`) : sur chaque fiche et dans le devis, le client voit le produit dessiné dans la couleur de son choix et place son logo sur une zone d'impression. L'aperçu (image JPEG) et la description du placement partent avec la demande. Règle : chaque aperçu porte la mention « Aperçu indicatif », le rendu définitif est celui du BAT officiel. Le fichier du client reste dans son navigateur jusqu'à l'envoi.
 - Vocabulaire du métier : BAT, HT, palier, pièces (pcs), sublimation intégrale, recto verso, marquage DTF, flocage, frais de lancement.
 - À décider : ajout d'un contact visible (téléphone, adresse de l'atelier) hors formulaire.
 
