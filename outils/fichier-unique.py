@@ -2,6 +2,7 @@
 
 Le site en ligne reste le dossier site/ (photos chargées au défilement, plus léger).
 Cette version sert à ouvrir la page seule : aperçu, pièce jointe, clé USB.
+Le studio de personnalisation (personnaliser.html) n'y figure pas : il demande le site en ligne ou le dossier site/.
 
 Usage : python3 outils/fichier-unique.py
 """
@@ -19,6 +20,16 @@ def data_uri(chemin: pathlib.Path, mime: str) -> str:
 
 
 html = (SITE / "index.html").read_text(encoding="utf-8")
+
+# Feuille commune et scripts partagés : inclus dans la page
+def inline(tag, contenu, balise):
+    assert tag in html, f"balise introuvable : {tag}"
+    assert f"</{balise}" not in contenu.lower(), f"{tag} contient une balise de fin"
+    return html.replace(tag, f"<{balise}>\n{contenu}\n</{balise}>", 1)
+
+html = inline('<link rel="stylesheet" href="base.css">', (SITE / "base.css").read_text(encoding="utf-8"), "style")
+html = inline('<script src="donnees.js"></script>', (SITE / "donnees.js").read_text(encoding="utf-8"), "script")
+html = inline('<script src="stockage.js"></script>', (SITE / "stockage.js").read_text(encoding="utf-8") + "\n/* Fichier unique : pas de studio (page à part), le lien Personnaliser est masqué */\nwindow.IFS_FICHIER_UNIQUE = true;", "script")
 
 # Polices : incluses en base64, les préchargements n'ont plus d'objet
 html = re.sub(r'\s*<link rel="preload" href="fonts/[^"]+"[^>]*>', "", html)

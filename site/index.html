@@ -15,109 +15,12 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preload" href="fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/hanken-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="base.css">
 <style>
-/* Polices hébergées avec le site : aucune requête vers un service tiers */
-@font-face{font-family:"Archivo";font-style:normal;font-weight:700 900;font-stretch:75% 100%;font-display:swap;src:url(fonts/archivo-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:"Archivo";font-style:normal;font-weight:700 900;font-stretch:75% 100%;font-display:swap;src:url(fonts/archivo-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
-@font-face{font-family:"Hanken Grotesk";font-style:normal;font-weight:400 700;font-display:swap;src:url(fonts/hanken-grotesk-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:"Hanken Grotesk";font-style:normal;font-weight:400 700;font-display:swap;src:url(fonts/hanken-grotesk-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
-/* Polices de secours calibrées sur la largeur d'Archivo et de Hanken Grotesk : le texte occupe la même place
-   avant et après le chargement, la page ne saute pas. Une face par plage de largeur utilisée. */
-@font-face{font-family:"Archivo Fallback";font-weight:700 900;font-stretch:75% 79%;src:local("Arial Bold"),local("Arial-BoldMT"),local("Liberation Sans Bold");size-adjust:88.5%;ascent-override:99.2%;descent-override:23.7%;line-gap-override:0%}
-@font-face{font-family:"Archivo Fallback";font-weight:700 900;font-stretch:79% 83%;src:local("Arial Bold"),local("Arial-BoldMT"),local("Liberation Sans Bold");size-adjust:90.8%;ascent-override:96.7%;descent-override:23.1%;line-gap-override:0%}
-@font-face{font-family:"Archivo Fallback";font-weight:700 900;font-stretch:83% 86.5%;src:local("Arial Bold"),local("Arial-BoldMT"),local("Liberation Sans Bold");size-adjust:93%;ascent-override:94.4%;descent-override:22.6%;line-gap-override:0%}
-@font-face{font-family:"Archivo Fallback";font-weight:700 900;font-stretch:86.5% 90%;src:local("Arial Bold"),local("Arial-BoldMT"),local("Liberation Sans Bold");size-adjust:93.5%;ascent-override:93.9%;descent-override:22.5%;line-gap-override:0%}
-@font-face{font-family:"Archivo Fallback";font-weight:700 900;font-stretch:90% 96%;src:local("Arial Bold"),local("Arial-BoldMT"),local("Liberation Sans Bold");size-adjust:96.9%;ascent-override:90.6%;descent-override:21.7%;line-gap-override:0%}
-@font-face{font-family:"Archivo Fallback";font-weight:700 900;font-stretch:96% 100%;src:local("Arial Bold"),local("Arial-BoldMT"),local("Liberation Sans Bold");size-adjust:101.5%;ascent-override:86.5%;descent-override:20.7%;line-gap-override:0%}
-@font-face{font-family:"Hanken Fallback";font-weight:400 500;src:local("Arial"),local("ArialMT"),local("Liberation Sans");size-adjust:100.2%;ascent-override:99.8%;descent-override:30.2%;line-gap-override:0%}
-@font-face{font-family:"Hanken Fallback";font-weight:600 700;src:local("Arial Bold"),local("Arial-BoldMT"),local("Liberation Sans Bold");size-adjust:94.4%;ascent-override:105.9%;descent-override:32.1%;line-gap-override:0%}
-
-/* Toutes les couleurs du site sont ici. Les règles plus bas n'utilisent que ces jetons. */
-:root{
-  color-scheme:light dark;
-  /* Encres de base, reprises de la sublimation */
-  --magenta:#B3125F; --magenta-deep:#940E4E; --magenta-night:#8E0F4F; --magenta-lit:#C2186B; --magenta-glow:#FF7DBA;
-  --yellow:#FFE45C; --yellow-deep:#FFD426;
-  --ink:#1A1320; --paper:#FFFFFF;
-
-  /* Rôles, thème clair */
-  --bg:var(--paper); --surface:#F4F0F3; --surface-2:#EAE3E8; --surface-soft:#FAF7F9;
-  --text:var(--ink); --text-2:#5E5360; --text-3:#6B606C;
-  --line:#E7E0E5;          /* filets décoratifs */
-  --line-strong:#8A7E88;   /* bordures de champs : 3,9 pour 1 sur fond clair */
-  --accent:var(--magenta); --accent-hover:var(--magenta-deep); --on-accent:#FFFFFF; --on-accent-2:#FBDDEA;
-  --accent-text:var(--magenta);   /* magenta posé en texte : prix, liens, repères */
-  --hero-bg:var(--magenta);
-  --spark:var(--yellow); --spark-hover:var(--yellow-deep); --on-spark:var(--ink);
-  --soft:#FCEAF2; --on-soft-2:#5A3A4A;
-  --foot-bg:var(--ink); --foot-text:#C9BEC6; --foot-strong:#FFFFFF;
-  --err:#B03A0A;
-  --focus:var(--accent-text); --focus-on-color:#FFFFFF; --on-accent-line:rgba(255,255,255,.55);
-  --photo-scrim:rgba(26,19,32,.8);
-  --scrim:rgba(26,19,32,.6); --shadow-dialog:0 30px 80px rgba(26,19,32,.35); --shadow-kit:0 28px 34px rgba(58,4,30,.45);
-  --kit-shade:#3A041E;
-  /* Maillots de démonstration du bandeau : couleurs de club, identiques dans les deux thèmes */
-  --kit-white:#FFFFFF; --kit-red:#D62839; --kit-turquoise:#19C3A6; --kit-navy:#0E1B4D; --kit-black:#15151C; --kit-gold:#E8B021;
-  /* Motif sublimé des visuels à venir */
-  --motif-ink:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500' preserveAspectRatio='xMidYMid slice'%3E%3Cpath d='M-20 330 420 120v80L-20 410z' fill='%231A1320' fill-opacity='.045'/%3E%3Cpath d='M-20 436 420 226v14L-20 450z' fill='%231A1320' fill-opacity='.06'/%3E%3C/svg%3E");
-  --motif-accent:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500' preserveAspectRatio='xMidYMid slice'%3E%3Cpath d='M-20 330 420 120v80L-20 410z' fill='%23B3125F' fill-opacity='.12'/%3E%3Cpath d='M-20 436 420 226v14L-20 450z' fill='%23B3125F' fill-opacity='.2'/%3E%3C/svg%3E");
-
-  --f-head:"Archivo", "Archivo Fallback", Arial, sans-serif;
-  --f-body:"Hanken Grotesk", "Hanken Fallback", Arial, sans-serif;
-  --r:3px; --ease:cubic-bezier(.16,1,.3,1);
-}
-/* Thème sombre : surfaces violet-noir et magenta éclairci pour rester lisible sur fond sombre */
-@media (prefers-color-scheme:dark){
-  :root{
-    --bg:#141016; --surface:#1F1922; --surface-2:#2B232E; --surface-soft:#19141B;
-    --text:#F5EFF3; --text-2:#C8BCC5; --text-3:#A89BA5;
-    --line:#2E2631; --line-strong:#85778A;
-    --accent:var(--magenta-lit); --accent-hover:var(--magenta);
-    --accent-text:var(--magenta-glow);
-    --hero-bg:var(--magenta-night);
-    --soft:#2A1522; --on-soft-2:#DCC6D2;
-    --foot-bg:#0C090E; --foot-text:#C8BCC5;
-    --err:#FF9270;
-    --photo-scrim:rgba(12,9,14,.82);
-    --scrim:rgba(0,0,0,.66); --shadow-dialog:0 30px 80px rgba(0,0,0,.6); --shadow-kit:0 28px 34px rgba(0,0,0,.5);
-    --kit-shade:#000000;
-    --motif-ink:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500' preserveAspectRatio='xMidYMid slice'%3E%3Cpath d='M-20 330 420 120v80L-20 410z' fill='%23FFFFFF' fill-opacity='.04'/%3E%3Cpath d='M-20 436 420 226v14L-20 450z' fill='%23FFFFFF' fill-opacity='.06'/%3E%3C/svg%3E");
-    --motif-accent:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500' preserveAspectRatio='xMidYMid slice'%3E%3Cpath d='M-20 330 420 120v80L-20 410z' fill='%23FF7DBA' fill-opacity='.1'/%3E%3Cpath d='M-20 436 420 226v14L-20 450z' fill='%23FF7DBA' fill-opacity='.18'/%3E%3C/svg%3E");
-  }
-}
-
-*{box-sizing:border-box}
-[hidden]{display:none!important}
-html{scroll-behavior:smooth;scroll-padding-top:88px;scrollbar-color:var(--line-strong) var(--bg)}
-body{margin:0;background:var(--bg);color:var(--text);font:400 16px/1.5 var(--f-body);-webkit-font-smoothing:antialiased}
-body:has(dialog[open]){overflow:hidden}
-::selection{background:var(--spark);color:var(--on-spark)}
-input,textarea{caret-color:var(--accent-text)}
-img{display:block;max-width:100%}
-a{color:inherit;text-underline-offset:.2em}
-p{text-wrap:pretty}
-h1,h2,h3,h4{font-family:var(--f-head);margin:0;color:var(--text);text-wrap:balance}
-/* Colonne du site : 1320 px de contenu, retrait intérieur de 24 px (16 px sur mobile) */
-.wrap{max-width:1368px;margin-inline:auto;padding-inline:24px}
-@media (max-width:600px){.wrap{padding-inline:16px}}
-.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+html{scroll-behavior:smooth;scroll-padding-top:88px}
 .sprite{position:absolute;width:0;height:0;overflow:hidden}
-:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
-.skip{position:absolute;left:16px;top:-80px;z-index:100;padding:12px 16px;background:var(--accent);color:var(--on-accent);border-radius:var(--r);font-weight:700;text-decoration:none}
-.skip:focus{top:12px}
-.skip:focus-visible{outline-color:var(--text)}
 main:focus{outline:none}
 .noscript{margin:0;padding:16px 24px;background:var(--spark);color:var(--on-spark);font-weight:600;text-align:center}
-
-/* Boutons */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:0 22px;border:1.5px solid transparent;border-radius:var(--r);font:700 15px/1 var(--f-body);text-decoration:none;cursor:pointer;transition:background-color .2s,color .2s,border-color .2s}
-.btn-primary{background:var(--accent);color:var(--on-accent)}
-.btn-primary:hover{background:var(--accent-hover)}
-.btn-spark{background:var(--spark);color:var(--on-spark)}
-.btn-spark:hover{background:var(--spark-hover)}
-.btn-line{background:var(--bg);color:var(--text);border-color:var(--text)}
-.btn-line:hover{background:var(--text);color:var(--bg)}
-.btn[disabled]{opacity:.6;cursor:progress}
 
 /* En-tête */
 .top{background:var(--bg);border-bottom:1px solid var(--line)}
@@ -359,6 +262,19 @@ tbody tr:hover td,tbody tr:hover th{background:var(--surface-soft)}
 .opts li span:last-child{white-space:nowrap;font-weight:700;font-variant-numeric:tabular-nums}
 .fine{margin:18px 0 0;font-size:13.5px;color:var(--text-2)}
 
+/* Visuel venu du studio, repris dans le devis */
+.q-visuel{display:grid;gap:8px}
+.q-visuel-in{display:grid;grid-template-columns:minmax(0,200px) 1fr;gap:14px;align-items:start;padding:12px;border:1.5px solid var(--line-strong);border-radius:var(--r)}
+.q-visuel-in img{width:100%;height:auto;border-radius:var(--r);background:var(--paper)}
+.q-visuel-in p{margin:0 0 10px;font-size:13.5px;color:var(--text-2);white-space:pre-line;overflow-wrap:anywhere}
+.q-visuel-act{display:flex;flex-wrap:wrap;gap:8px}
+.q-visuel-act .btn{min-height:44px;padding:0 14px;font-size:14px}
+.q-visuel small{font-size:12.5px;color:var(--text-2)}
+.q-studio{margin:-8px 0 0;font-size:14px;color:var(--text-2)}
+.q-studio a{color:var(--accent-text);font-weight:700}
+.viz-open{width:100%;margin-top:14px}
+@media (max-width:520px){.q-visuel-in{grid-template-columns:1fr}}
+
 /* Formulaire de devis */
 .q-prog{flex:1;max-width:280px}
 .q-step{margin:0 0 8px;font:700 13px/1.2 var(--f-body);color:var(--accent-text)}
@@ -369,42 +285,15 @@ tbody tr:hover td,tbody tr:hover th{background:var(--surface-soft)}
 .q-top p{margin:10px 0 0;color:var(--on-soft-2)}
 .q-body{padding:24px 28px 30px}
 .req-note{margin:0 0 20px;font-size:13.5px;color:var(--text-2)}
-.req{color:var(--accent-text)}
 .fg{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.f{display:flex;flex-direction:column;gap:6px;min-width:0}
-.f.full{grid-column:1 / -1}
-.f>span{font:600 14px var(--f-body)}
-.f input,.f textarea{width:100%;min-height:48px;padding:11px 14px;border:1.5px solid var(--line-strong);border-radius:var(--r);background:var(--bg);color:var(--text);font:400 16px var(--f-body)}
 .f input::placeholder,.f textarea::placeholder,.search input::placeholder{color:var(--text-3)}
-.f input[type=date]{accent-color:var(--accent)}
-.sel{position:relative;display:block}
-.sel::after{content:"";position:absolute;right:18px;top:50%;width:8px;height:8px;border-right:2px solid var(--text-2);border-bottom:2px solid var(--text-2);transform:translateY(-75%) rotate(45deg);pointer-events:none}
-.f select{width:100%;min-height:48px;padding:11px 44px 11px 14px;border:1.5px solid var(--line-strong);border-radius:var(--r);background:var(--bg);color:var(--text);font:400 16px var(--f-body);-webkit-appearance:none;appearance:none;cursor:pointer}
-.f select:invalid{color:var(--text-3)}
-.f select option,.f select optgroup{background:var(--bg);color:var(--text)}
-.f select:focus{border-color:var(--accent-text)}
-.f textarea{min-height:104px;resize:vertical}
-.f input:focus,.f textarea:focus{border-color:var(--accent-text)}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .legal{margin:0;font-size:13px;color:var(--text-2)}
 .q-body .btn{width:100%}
+.q-body .q-visuel-act .btn{width:auto}
 .form-status{margin:14px 0 0;font-size:14.5px}
 .form-status a{color:var(--accent-text);font-weight:700}
 .q-pane{border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:22px;min-width:0}
-.pick{display:flex;flex-wrap:wrap;gap:8px}
-.pick label{position:relative;cursor:pointer}
-.pick input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
-.pick b{display:flex;align-items:center;min-height:46px;padding:10px 16px;border:1.5px solid var(--line-strong);border-radius:var(--r);font:600 15px/1.25 var(--f-body);background:var(--bg);transition:border-color .15s,background-color .15s,color .15s}
-.pick label:hover b{border-color:var(--accent-text)}
-.pick input:checked+b{border-color:var(--accent);background:var(--accent);color:var(--on-accent)}
-.pick input:focus-visible+b{outline:3px solid var(--focus);outline-offset:2px}
-.file{position:relative;display:flex;align-items:center;gap:12px;min-height:48px;padding:6px 12px 6px 6px;border:1.5px solid var(--line-strong);border-radius:var(--r);background:var(--bg);cursor:pointer}
-.file input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
-.file:focus-within{outline:3px solid var(--focus);outline-offset:2px}
-.file:hover{border-color:var(--accent-text)}
-.file-btn{flex:none;padding:9px 12px;border-radius:var(--r);background:var(--surface);font:600 14px/1 var(--f-body);color:var(--text)}
-.file-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;color:var(--text-2)}
-.f small{font-size:12.5px;color:var(--text-2)}
 .f.bad input,.f.bad textarea,.f.bad select,.f.bad .pick b,.f.bad .file{border-color:var(--err)}
 .q-err{display:flex;align-items:flex-start;gap:6px;margin:0;color:var(--err);font-size:14px;font-weight:600}
 .q-err .ico{flex:none;width:18px;height:18px;margin-top:1px;stroke-width:2}
@@ -615,6 +504,10 @@ tbody tr:hover td,tbody tr:hover th{background:var(--surface-soft)}
     <div class="q-body">
       <form name="devis" id="quote-form" method="POST" action="/" enctype="multipart/form-data" data-netlify="true" netlify-honeypot="bot-field" novalidate>
         <input type="hidden" name="form-name" value="devis">
+        <input type="hidden" name="placement" id="q-placement">
+        <input type="file" name="apercu" id="q-apercu" hidden tabindex="-1" aria-hidden="true">
+        <input type="file" name="logo_2" hidden tabindex="-1" aria-hidden="true"><input type="file" name="logo_3" hidden tabindex="-1" aria-hidden="true">
+        <input type="file" name="logo_4" hidden tabindex="-1" aria-hidden="true"><input type="file" name="logo_5" hidden tabindex="-1" aria-hidden="true">
         <p class="hp" aria-hidden="true"><label>Ne pas remplir ce champ <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
         <p class="req-note">Les champs marqués <span class="req">*</span> sont obligatoires.</p>
         <fieldset class="q-pane" id="q-p1">
@@ -651,11 +544,18 @@ tbody tr:hover td,tbody tr:hover th{background:var(--surface-soft)}
           </div>
           <div class="fg">
             <label class="f"><span>Livraison souhaitée le</span><input name="date_livraison" type="date" id="q-date" aria-describedby="date-hint"><small id="date-hint">Au plus tôt deux semaines après la demande</small></label>
-            <div class="f"><span id="l-file">Logo ou maquette</span>
+            <div class="f"><label class="f-lbl" id="l-file" for="q-file">Logo ou maquette</label>
               <label class="file"><input name="fichier" type="file" id="q-file" accept="image/*,.pdf,.ai,.eps,.svg" aria-labelledby="l-file" aria-describedby="file-hint"><span class="file-btn" aria-hidden="true">Ajouter un fichier</span><span class="file-name" id="file-name" aria-hidden="true">Aucun fichier choisi</span></label>
               <small id="file-hint">PDF, AI, SVG ou image, 8 Mo maximum</small>
             </div>
           </div>
+          <div class="q-visuel" id="q-visuel" hidden>
+            <span class="f-lbl">Votre visuel</span>
+            <div class="q-visuel-in"><div id="q-visuel-media"></div><div><p id="q-visuel-txt"></p>
+              <div class="q-visuel-act"><a class="btn btn-line" id="q-visuel-edit" href="personnaliser.html">Modifier le visuel</a><button class="btn btn-line" type="button" id="q-visuel-del">Retirer</button></div></div></div>
+            <small>Aperçu indicatif : les couleurs et le placement définitifs sont validés avec vous sur le BAT officiel.</small>
+          </div>
+          <p class="q-studio" id="q-studio" hidden><a href="personnaliser.html" id="q-studio-link">Placer mes logos et mes textes sur le produit</a> dans le studio de personnalisation.</p>
           <button class="btn btn-primary" type="button" id="q-next">Continuer</button>
           <p class="q-reassure">Gratuit et sans engagement. Vous validez la maquette avant toute production.</p>
         </fieldset>
@@ -690,11 +590,17 @@ tbody tr:hover td,tbody tr:hover th{background:var(--surface-soft)}
 <!-- Pictogrammes des produits, appelés par <use> : placés en fin de page, ils ne retardent pas le premier affichage -->
 <svg class="sprite" aria-hidden="true" focusable="false"><symbol id="i-tshirt" viewBox="0 0 48 48"><path d="M17 7 10 10 4 17l5 5 4-3v22h22V19l4 3 5-5-6-7-7-3c-1 3-4 5-7 5s-6-2-7-5Z"/></symbol><symbol id="i-polo" viewBox="0 0 48 48"><path d="M17 7 10 10 4 17l5 5 4-3v22h22V19l4 3 5-5-6-7-7-3c-1 3-4 5-7 5s-6-2-7-5Z"/><path d="M19 8l5 6 5-6M24 14v7"/></symbol><symbol id="i-tank" viewBox="0 0 48 48"><path d="M17 6c0 7-2 10-5 12v24h24V18c-3-2-5-5-5-12-2 4-4 6-7 6s-5-2-7-6Z"/></symbol><symbol id="i-set" viewBox="0 0 48 48"><path d="M18 4 13 6 9 11l3 3 3-2v11h18V12l3 2 3-3-4-5-5-2c-1 2-3 3-6 3s-5-1-6-3Z"/><path d="M15 27h18l1 16h-7l-3-9-3 9h-7Z"/></symbol><symbol id="i-shorts" viewBox="0 0 48 48"><path d="M11 10h26l2 30H28l-4-16-4 16H9Z"/><path d="M11 15h26"/></symbol><symbol id="i-jacket" viewBox="0 0 48 48"><path d="M18 6 11 9 7 40h6l2-18v20h18V22l2 18h6L37 9l-7-3-6 5Z"/><path d="M24 11v31"/></symbol><symbol id="i-hoodie" viewBox="0 0 48 48"><path d="M18 8c0-4 3-6 6-6s6 2 6 6"/><path d="M18 8 11 10 7 40h6l2-18v20h18V22l2 18h6L37 10l-7-2-6 5Z"/><path d="M19 30h10"/></symbol><symbol id="i-shirt" viewBox="0 0 48 48"><path d="M17 7 10 10 4 17l5 5 4-3v22h22V19l4 3 5-5-6-7-7-3"/><path d="M17 7l7 7 7-7M24 14v26"/></symbol><symbol id="i-towel" viewBox="0 0 48 48"><rect x="9" y="8" width="30" height="32" rx="2"/><path d="M9 31h30M9 35h30"/></symbol><symbol id="i-round" viewBox="0 0 48 48"><circle cx="24" cy="24" r="17"/><circle cx="24" cy="24" r="10"/></symbol><symbol id="i-flag" viewBox="0 0 48 48"><path d="M12 5v38"/><path d="M12 8h25l-5 7 5 7H12"/></symbol><symbol id="i-handflag" viewBox="0 0 48 48"><path d="M15 10v34"/><path d="M15 10h22v15H15Z"/><path d="M22 10v15M29 10v15"/></symbol><symbol id="i-pennant" viewBox="0 0 48 48"><path d="M6 10h36"/><path d="M9 10h30L24 42Z"/></symbol><symbol id="i-bunting" viewBox="0 0 48 48"><path d="M4 10c9 5 31 5 40 0"/><path d="M8 12l3 10 4-9M20 14l4 10 4-10M33 13l4 9 3-10"/></symbol><symbol id="i-cushion" viewBox="0 0 48 48"><path d="M10 10c5 2 23 2 28 0-2 5-2 23 0 28-5-2-23-2-28 0 2-5 2-23 0-28Z"/></symbol><symbol id="i-neckpillow" viewBox="0 0 48 48"><path d="M12 12v14a12 12 0 0 0 24 0V12"/><path d="M20 12v14a4 4 0 0 0 8 0V12"/><path d="M12 12h8M28 12h8"/></symbol><symbol id="i-apron" viewBox="0 0 48 48"><path d="M18 5h12v9l6 3v26H12V17l6-3Z"/><path d="M12 21 6 23M36 21l6 2"/><rect x="19" y="27" width="10" height="7"/></symbol><symbol id="i-glove" viewBox="0 0 48 48"><path d="M15 43V22c0-9 5-14 11-14 3 0 5 2 5 5l3-2c2-1 5 1 4 4l-3 7v21Z"/><path d="M15 36h20"/></symbol><symbol id="i-placemat" viewBox="0 0 48 48"><rect x="6" y="12" width="36" height="24" rx="2"/><circle cx="24" cy="24" r="7"/></symbol><symbol id="i-blanket" viewBox="0 0 48 48"><rect x="8" y="8" width="32" height="26" rx="2"/><path d="M8 16h32"/><path d="M14 34v6h26v-6"/></symbol><symbol id="i-drawstring" viewBox="0 0 48 48"><path d="M13 8h22v34H13Z"/><path d="M13 8 9 42M35 8l4 34"/></symbol><symbol id="i-tote" viewBox="0 0 48 48"><path d="M10 18h28l-3 24H13Z"/><path d="M17 18c0-8 3-11 7-11s7 3 7 11"/></symbol><symbol id="i-shopper" viewBox="0 0 48 48"><path d="M9 16h30v26H9Z"/><path d="M13 16V9h22v7"/><path d="M18 22c0 4 2 6 6 6s6-2 6-6"/></symbol><symbol id="i-pouch" viewBox="0 0 48 48"><rect x="7" y="17" width="34" height="16" rx="8"/><path d="M13 21h22"/></symbol><symbol id="i-scarf" viewBox="0 0 48 48"><path d="M6 18h36v12H6Z"/><path d="M6 30v5M9 30v5M12 30v5M36 30v5M39 30v5M42 30v5"/><path d="M18 18v12M30 18v12"/></symbol><symbol id="i-tube" viewBox="0 0 48 48"><ellipse cx="24" cy="10" rx="10" ry="3"/><path d="M14 10v28c0 2 4 3 10 3s10-1 10-3V10"/></symbol><symbol id="i-bandana" viewBox="0 0 48 48"><path d="M6 12h36L24 40Z"/><path d="M6 12 3 8M42 12l3-4"/></symbol><symbol id="i-headband" viewBox="0 0 48 48"><ellipse cx="24" cy="24" rx="17" ry="9"/><ellipse cx="24" cy="24" rx="17" ry="4"/></symbol><symbol id="i-lanyard" viewBox="0 0 48 48"><path d="M15 5c0 14 4 23 9 26 5-3 9-12 9-26"/><path d="M24 31v4"/><rect x="18" y="35" width="12" height="9" rx="1"/></symbol><symbol id="i-bracelet" viewBox="0 0 48 48"><ellipse cx="24" cy="24" rx="16" ry="11"/><ellipse cx="24" cy="24" rx="12" ry="7"/></symbol><symbol id="i-sash" viewBox="0 0 48 48"><path d="M10 6h8l20 36h-8Z"/></symbol><symbol id="i-cloth" viewBox="0 0 48 48"><rect x="8" y="12" width="32" height="24" rx="2"/><circle cx="19" cy="24" r="4"/><circle cx="29" cy="24" r="4"/><path d="M23 24h2"/></symbol><symbol id="i-cap" viewBox="0 0 48 48"><path d="M8 31c0-10 7-17 16-17s16 7 16 17Z"/><path d="M40 31h6"/><path d="M24 14v17"/></symbol><symbol id="i-bob" viewBox="0 0 48 48"><path d="M14 27c0-9 4-15 10-15s10 6 10 15"/><path d="M5 30c6-4 32-4 38 0-6 4-32 4-38 0Z"/></symbol><symbol id="i-beanie" viewBox="0 0 48 48"><circle cx="24" cy="8" r="3"/><path d="M11 33c0-12 6-22 13-22s13 10 13 22"/><rect x="9" y="33" width="30" height="7" rx="1"/></symbol><symbol id="i-swimcap" viewBox="0 0 48 48"><path d="M8 34c0-14 7-24 16-24s16 10 16 24c-5 2-27 2-32 0Z"/></symbol><symbol id="i-stadium" viewBox="0 0 48 48"><rect x="8" y="14" width="32" height="20" rx="3"/><path d="M24 14v20"/></symbol><symbol id="i-beanbag" viewBox="0 0 48 48"><path d="M8 38c-3-9 1-20 11-24 9-4 19 1 21 11 2 8 0 13-4 14Z"/><path d="M8 38h28"/></symbol><symbol id="i-table" viewBox="0 0 48 48"><path d="M4 16h40l-3 22H7Z"/><path d="M4 16l6-6h28l6 6"/></symbol><symbol id="i-chair" viewBox="0 0 48 48"><path d="M15 6h18v18H15Z"/><path d="M13 24h22v6H13Z"/><path d="M15 30v12M33 30v12"/></symbol><symbol id="i-tent" viewBox="0 0 48 48"><path d="M4 20 24 8l20 12Z"/><path d="M8 20v22M40 20v22"/><path d="M8 26h32"/></symbol><symbol id="i-mascot" viewBox="0 0 48 48"><circle cx="24" cy="10" r="6"/><path d="M14 44V24c0-5 4-8 10-8s10 3 10 8v20"/><path d="M14 26l-6 8M34 26l6 8"/></symbol><symbol id="i-boxer" viewBox="0 0 48 48"><path d="M10 12h28v6l-3 22h-8l-3-12-3 12h-8l-3-22Z"/><path d="M10 18h28"/></symbol><symbol id="i-flipflop" viewBox="0 0 48 48"><ellipse cx="16" cy="26" rx="7" ry="16"/><path d="M10 19l6 4 6-4"/><ellipse cx="33" cy="26" rx="7" ry="16"/><path d="M27 19l6 4 6-4"/></symbol><symbol id="i-sleeve" viewBox="0 0 48 48"><path d="M16 6h14l-2 36h-10Z"/><path d="M16 12h14M18 36h10"/></symbol><symbol id="i-armband" viewBox="0 0 48 48"><ellipse cx="24" cy="18" rx="16" ry="6"/><path d="M8 18v10c0 3 7 6 16 6s16-3 16-6V18"/></symbol><symbol id="i-racebib" viewBox="0 0 48 48"><rect x="9" y="9" width="30" height="30" rx="2"/><circle cx="13" cy="13" r="1.5"/><circle cx="35" cy="13" r="1.5"/><circle cx="13" cy="35" r="1.5"/><circle cx="35" cy="35" r="1.5"/><path d="M20 19h8M24 19v11"/></symbol><symbol id="i-bib" viewBox="0 0 48 48"><path d="M17 6c0 5 3 8 7 8s7-3 7-8"/><path d="M17 6 11 8v34h26V8l-6-2"/><path d="M11 22h26"/></symbol><symbol id="i-mousepad" viewBox="0 0 48 48"><rect x="6" y="12" width="36" height="24" rx="4"/><path d="M30 19c3 0 5 2 5 5v3c0 3-2 5-5 5s-5-2-5-5v-3c0-3 2-5 5-5Z"/></symbol><symbol id="i-yoga" viewBox="0 0 48 48"><rect x="6" y="18" width="28" height="14" rx="1"/><circle cx="36" cy="25" r="7"/><circle cx="36" cy="25" r="3"/></symbol><symbol id="i-beachflag" viewBox="0 0 48 48"><path d="M16 44V6c12 0 20 8 18 38"/><path d="M11 44h10"/></symbol><symbol id="i-poncho" viewBox="0 0 48 48"><path d="M24 5c-5 0-8 4-8 9L6 40h36L32 14c0-5-3-9-8-9Z"/><path d="M20 20h8"/></symbol><symbol id="i-pennant_club" viewBox="0 0 48 48"><path d="M7 9h34"/><circle cx="6" cy="9" r="2"/><circle cx="42" cy="9" r="2"/><path d="M11 9h26L24 41Z"/><path d="M14 14h20M16 19h16"/></symbol><symbol id="i-banner" viewBox="0 0 48 48"><path d="M8 6h32"/><path d="M11 6h26v34l-13-7-13 7Z"/><path d="M17 16h14M17 21h14"/></symbol><symbol id="i-pennant_mini" viewBox="0 0 48 48"><path d="M14 12h20L24 34Z"/><path d="M12 12h24"/><path d="M24 34v6"/></symbol><symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></symbol></svg>
 
+<script src="donnees.js"></script>
+<script src="stockage.js"></script>
 <script>
+/* Page ouverte sans son dossier (donnees.js absent) : un message clair plutôt qu'un catalogue vide */
+if (typeof DATA === "undefined") {
+  document.body.insertAdjacentHTML("afterbegin", '<p class="noscript">Cette page doit être ouverte avec son dossier complet (site/) ou depuis le site en ligne. Pour un fichier seul, utilisez la version fichier unique du catalogue.</p>');
+  throw new Error("donnees.js absent");
+}
 /* Destinataire des demandes de devis. L'envoi passe par Netlify Forms (formulaire « devis ») ;
    l'adresse sert au lien email de secours si l'envoi automatique échoue. */
 const QUOTE_TO = ["antoine.contino", "groupecontino.com"].join("@");
-const DATA = {"cats":[{"id":"maillots","name":"Maillots & shorts","sub":"Football, basketball, volley, handball, cyclisme, running","cover":"set-football","icon":"set"},{"id":"sacs","name":"Sacs & bagagerie","sub":"Tote bags et sacs à cordon","cover":"tote-sublime","icon":"drawstring"},{"id":"accessoires","name":"Accessoires & textile promotionnel","sub":"Écharpes, tours de cou, bandanas, bandeaux, bracelets","cover":"tour-de-cou","icon":"scarf"},{"id":"sport","name":"Accessoires sport & protection","sub":"Serviettes de pétanque, manchons genoux, manchons bras, dossards","cover":"manchons-bras","icon":"towel"},{"id":"objets","name":"Objets & accessoires techniques","sub":"Tapis de yoga et trousses","cover":"trousse","icon":"yoga"},{"id":"drapeaux","name":"Drapeaux & bannières","sub":"Drapeaux supporters, fanions de club, fanions triangle, beachflags","cover":"fanion-feutrine","icon":"flag"},{"id":"chapeaux","name":"Chapeaux","sub":"Bobs et bonnets","cover":"bob","icon":"bob"},{"id":"evenementiel","name":"Événementiel & PLV","sub":"Coussins de stade","cover":null,"icon":"stadium"},{"id":"sousvetements","name":"Sous-vêtements personnalisés","sub":"Boxers adulte et enfant","cover":null,"icon":"boxer"}],"products":[{"id":"set-football","cat":"maillots","name":"Set football, maillot + short","sub":"Football, volley, handball, badminton","new":false,"icon":"set","specs":[["Composition","100 % polyester, tissu aéré haute performance"],["Impression","Sublimation intégrale en couleurs"],["Tailles","Enfant à XXL adulte"],["Options","Flocage noms et numéros, col V ou rond, manches courtes ou longues"]],"imgs":[0,1,2],"tables":[{"title":null,"unit":"€ HT / pièce (maillot ou ensemble)","heads":["30 pcs","50 pcs","100 pcs","200 pcs","500 pcs"],"rows":[{"label":"Maillot seul","cells":[19.99,15.99,14.99,13.99,13.99],"t":true},{"label":"Set maillot + short","cells":[25.99,24.99,23.99,22.99,21.99],"t":true}],"q":"pcs","firstQty":30}],"options":[],"min":"30 pièces par modèle/taille. En dessous : 50 € HT de frais de lancement.","entry":{"price":19.99,"txt":"HT la pièce, dès 30 pcs"},"transport":"inclus","tnote":"inclus dans le prix.","photo":"set-football","origin":"Fabriqué en Europe","quoteAs":["Set football, maillot + short","Maillot de football seul (sans short)"]},{"id":"basket-double","cat":"maillots","name":"Maillot basketball double face (réversible)","sub":"Basketball","new":false,"icon":"tank","specs":[["Composition","100 % polyester mesh respirant"],["Impression","Double face, deux designs différents recto et verso"],["Tailles","Enfant à XXL"],["Options","Avec ou sans short assorti"]],"imgs":[4,5,6,7],"tables":[{"title":null,"unit":"€ HT / pièce (maillot ou ensemble)","heads":["30 pcs","50 pcs","100 pcs","200 pcs","500 pcs"],"rows":[{"label":"Maillot réversible seul","cells":[30.99,29.99,28.99,26.99,24.99],"t":true},{"label":"Ensemble maillot + short réversibles","cells":[43.99,42.99,41.99,40.99,39.99],"t":true}],"q":"pcs","firstQty":30}],"options":[],"min":"30 pièces. En dessous : 50 € HT de frais de lancement.","entry":{"price":30.99,"txt":"HT la pièce, dès 30 pcs"},"transport":"inclus","tnote":"inclus dans le prix.","photo":"basket-double","origin":"Fabriqué en Europe","quoteAs":["Maillot basketball double face (réversible)","Ensemble basketball double face, maillot + short"]},{"id":"basket-simple","cat":"maillots","name":"Maillot basketball simple face","sub":"Basketball","new":false,"icon":"tank","specs":[["Composition","100 % polyester mesh, sublimation recto uniquement"],["Options","Set complet avec short disponible"]],"imgs":[],"tables":[{"title":null,"unit":"€ HT / pièce (maillot ou ensemble)","heads":["30 pcs","50 pcs","100 pcs","200 pcs","500 pcs"],"rows":[{"label":"Maillot seul","cells":[22.99,21.99,20.99,18.99,17.99],"t":true},{"label":"Ensemble maillot + short","cells":[32.99,30.99,29.99,28.99,27.99],"t":true}],"q":"pcs","firstQty":30}],"options":[],"min":"30 pièces. En dessous : 50 € HT de frais de lancement.","entry":{"price":22.99,"txt":"HT la pièce, dès 30 pcs"},"transport":"inclus","tnote":"inclus dans le prix.","photo":"basket-simple","origin":"Fabriqué en Europe","quoteAs":["Maillot basketball simple face","Ensemble basketball simple face, maillot + short"]},{"id":"running-ml","cat":"maillots","name":"Maillot running manches longues","sub":"Running, trail","new":true,"icon":"tshirt","specs":[["Impression","Sublimation intégrale en couleurs"],["Manches courtes","Même tarif que le maillot football seul"]],"imgs":[],"tables":[{"title":null,"unit":"€ HT / pièce","heads":["30 pcs","50 pcs","100 pcs","200 pcs","500 pcs"],"rows":[{"label":"Manches longues","cells":[22.99,19.99,17.99,16.99,16.99],"t":true}],"q":"pcs","firstQty":30}],"options":[],"min":"30 pièces. En dessous : 50 € HT de frais de lancement.","entry":{"price":22.99,"txt":"HT la pièce, dès 30 pcs"},"transport":"inclus","tnote":"inclus dans le prix.","photo":"running-ml","origin":"Fabriqué en Europe"},{"id":"maillot-cyclisme","cat":"maillots","name":"Maillot cyclisme","sub":"Cyclisme, VTT","new":true,"icon":"tshirt","specs":[["Impression","Sublimation intégrale en couleurs"],["Fermeture","Zip court de série, zip intégral en option"]],"imgs":[],"tables":[{"title":null,"unit":"€ HT / pièce","heads":["30 pcs","50 pcs","100 pcs","200 pcs","500 pcs"],"rows":[{"label":"Manches courtes, zip court","cells":[28.99,23.99,21.99,20.99,18.99],"t":true},{"label":"Manches longues, zip court","cells":[33.99,31.99,29.99,27.99,26.99],"t":true}],"q":"pcs","firstQty":30}],"options":[{"label":"Zip intégral (manches courtes)","price":3.09,"unit":"€ HT / pièce"}],"min":"30 pièces. En dessous : 50 € HT de frais de lancement.","entry":{"price":28.99,"txt":"HT la pièce, dès 30 pcs"},"transport":"inclus","tnote":"inclus dans le prix.","photo":"maillot-cyclisme","origin":"Fabriqué en Europe"},{"id":"chasuble","cat":"maillots","name":"Chasuble d'entraînement","sub":"Entraînements et tournois","new":true,"icon":"bib","specs":[["Composition","100 % polyester, 155 g/m²"],["Format","67 × 48 cm par face"],["Impression","Recto verso en couleurs"],["Maintien","Deux élastiques latéraux"]],"imgs":[],"tables":[{"title":null,"unit":"€ HT / pièce","heads":["25 pcs","50 pcs","100 pcs","250 pcs","500 pcs","1 000 pcs","2 500 pcs","5 000 pcs"],"rows":[{"label":"Chasuble 67 × 48 cm","cells":[12.99,10.99,9.99,9.29,8.99,8.89,8.49,7.89],"t":true}],"q":"pcs","firstQty":25}],"options":[],"min":"25 pièces. En dessous : sur devis.","entry":{"price":12.99,"txt":"HT la pièce, dès 25 pcs"},"transport":"inclus","tnote":"inclus dans le prix.","photo":null,"origin":"Fabriqué en Europe"},{"id":"veste-matelassee","cat":"maillots","name":"Veste matelassée hiver","sub":"Vêtements techniques & training","new":false,"icon":"jacket","specs":[["Composition","Extérieur polyester déperlant 185 g/m², isolation matelassée 80 g"],["Impression","Sublimation intégrale extérieure"],["Intérieur","Noir"],["Options","Capuche amovible et poches zippées"]],"imgs":[9,10],"tables":[{"title":null,"unit":"€ HT / pièce","heads":["10 pcs","30 pcs","50 pcs","100 pcs"],"rows":[{"label":"Veste manches longues","cells":[106.99,96.99,88.99,83.99],"t":true},{"label":"Gilet sans manches","cells":[97.99,89.99,79.99,74.99],"t":true}],"q":"pcs","firstQty":10}],"options":[],"min":"10 pièces. En dessous : sur devis.","entry":{"price":106.99,"txt":"HT la pièce, dès 10 pcs"},"transport":"inclus","tnote":"inclus dans le prix.","photo":"veste-matelassee","origin":"Fabriqué en Europe"},{"id":"softshell","cat":"maillots","name":"Veste et gilet softshell","sub":"Vêtements techniques & training","new":true,"icon":"jacket","specs":[["Composition","Softshell 240 g/m²"],["Impression","Sublimation intégrale"]],"imgs":[],"tables":[{"title":null,"unit":"€ HT / pièce","heads":["10 pcs","30 pcs","50 pcs","100 pcs"],"rows":[{"label":"Veste softshell","cells":[85.99,75.99,68.99,63.99],"t":true},{"label":"Gilet softshell","cells":[75.99,62.99,53.99,48.99],"t":true}],"q":"pcs","firstQty":10}],"options":[],"min":"10 pièces. En dessous : sur devis.","entry":{"price":85.99,"txt":"HT la pièce, dès 10 pcs"},"transport":"inclus","tnote":"inclus dans le prix.","photo":"softshell","origin":"Fabriqué en Europe"},{"id":"survetement","cat":"maillots","name":"Survêtement complet","sub":"Vêtements techniques & training","new":false,"icon":"jacket","specs":[["Grammage","250 g/m²"],["Composition","88 % polyester et 12 % élasthanne"],["Impression","Sublimation veste et pantalon"],["Confort","Intérieur brossé, coupe moderne"]],"imgs":[],"tables":[{"title":null,"unit":"€ HT / ensemble","heads":["30 pcs","50 pcs","100 pcs"],"rows":[{"label":"Ensemble veste + pantalon","cells":[78.99,70.99,64.99],"t":true}],"q":"pcs","firstQty":30}],"options":[],"min":"30 pièces. En dessous : sur devis.","entry":{"price":78.99,"txt":"HT l'ensemble, dès 30 pcs"},"transport":"inclus","tnote":"inclus dans le prix.","photo":"survetement","origin":"Fabriqué en Europe"},{"id":"hoodie","cat":"maillots","name":"Sweat à capuche","sub":"Vêtements techniques & training","new":false,"icon":"hoodie","specs":[["Grammage","250 g/m²"],["Composition","Polyester et élasthanne"],["Impression","Sublimation intégrale"],["Options","Poche kangourou, avec ou sans zip intégral"]],"imgs":[13],"tables":[{"title":null,"unit":"€ HT / pièce","heads":["30 pcs","50 pcs","100 pcs"],"rows":[{"label":"Sweat à capuche","cells":[40.99,38.99,36.99],"t":true}],"q":"pcs","firstQty":30}],"options":[],"min":"30 pièces. En dessous : sur devis.","entry":{"price":40.99,"txt":"HT la pièce, dès 30 pcs"},"transport":"inclus","tnote":"inclus dans le prix.","photo":"hoodie","origin":"Fabriqué en Europe"},{"id":"serviette-petanque","cat":"sport","name":"Serviette de pétanque","sub":null,"new":false,"icon":"towel","specs":[["Format","20 × 20 cm"],["Matière","Polaire 240 g"],["Découpe","Bords découpés au laser, formes spéciales possibles"],["Options","Mousqueton ou œillet d'accroche"]],"imgs":[],"tables":[{"title":null,"unit":"€ HT / pièce","heads":["50 pcs","100 pcs","200 pcs","500 pcs","1 000 pcs"],"rows":[{"label":"20 × 20 cm","cells":[2.29,1.49,1.09,0.77,0.62],"t":true}],"q":"pcs","firstQty":50}],"options":[],"min":"50 pièces. En dessous : sur devis.","entry":{"price":2.29,"txt":"HT la pièce, dès 50 pcs"},"transport":"inclus","tnote":"inclus dans le prix.","photo":"serviette-petanque","origin":"Fabriqué en Europe"},{"id":"drapeau-supporter","cat":"drapeaux","name":"Drapeau supporter","sub":null,"new":false,"icon":"flag","specs":[["Tissu","Drapeau 115 g/m², classement feu M1/B1"],["Impression","Recto verso, verso en miroir"],["Hampe","PVC incluse jusqu'au 60 × 80 cm, en option au-delà"],["Usage","Stades et manifestations"]],"imgs":[],"tables":[{"title":null,"unit":"€ HT / pièce","heads":["50 pcs","100 pcs","150 pcs","200 pcs","250 pcs","300 pcs","400 pcs","500 pcs","1 000 pcs","5 000 pcs et +"],"rows":[{"label":"15 × 20 cm","cells":[2.29,2.19,1.99,1.89,1.49,1.39,1.29,1.09,0.9,0.75],"t":false},{"label":"20 × 30 cm","cells":[2.69,2.49,2.19,2.09,1.79,1.59,1.39,1.19,1.09,0.93],"t":false},{"label":"30 × 40 cm","cells":[4.29,3.79,3.19,2.79,2.49,2.29,2.19,2.09,1.89,1.69],"t":false},{"label":"40 × 60 cm","cells":[4.39,4.19,3.99,3.79,3.59,3.39,3.19,2.99,2.79,2.49],"t":false},{"label":"60 × 80 cm","cells":[8.19,7.99,7.49,7.09,6.69,6.19,5.79,5.39,5.09,4.59],"t":false},{"label":"80 × 120 cm, sans hampe","cells":[15.99,13.99,12.99,12.99,11.99,10.99,9.19,8.39,7.49,6.69],"t":false},{"label":"90 × 140 cm, sans hampe","cells":[18.99,16.99,15.99,15.99,14.99,13.99,13.99,12.99,10.99,9.89],"t":false}],"q":"pcs","firstQty":50}],"options":[{"label":"Hampe PVC pour 80 × 120 cm","price":0.45,"unit":"€ HT / pièce"},{"label":"Hampe PVC pour 90 × 140 cm","price":0.54,"unit":"€ HT / pièce"}],"min":"50 pièces. En dessous : sur devis.","entry":{"price":2.29,"txt":"HT la pièce, dès 50 pcs"},"transport":"en sus","tnote":"en sus, chiffré au devis.","photo":null,"origin":"Fabriqué en Europe"},{"id":"fanion-club","cat":"drapeaux","name":"Fanion de club","sub":null,"new":true,"icon":"pennant_club","specs":[["Finition","Franges incluses"],["Accroche","Tige et boules en bois incluses"],["Impression","1 face ou recto verso"],["Formats","Du 18 × 27 au 30 × 45 cm"]],"imgs":[],"tables":[{"title":null,"unit":"€ HT / pièce","heads":["5 pcs","10 pcs","25 pcs","50 pcs","100 pcs","250 pcs","500 pcs","1 000 pcs","2 000 pcs"],"rows":[{"label":"18 × 27 cm, 1 face","cells":[20.99,13.99,9.19,7.89,6.89,6.39,5.49,5.19,5.09],"t":false},{"label":"18 × 27 cm, recto verso","cells":[26.99,17.99,11.99,9.49,8.19,7.39,6.69,6.29,6.09],"t":false},{"label":"20 × 30 cm, 1 face","cells":[21.99,14.99,10.99,10.99,8.19,7.19,6.49,6.19,5.99],"t":false},{"label":"20 × 30 cm, recto verso","cells":[28.99,19.99,13.99,11.99,9.89,8.89,8.19,7.59,7.29],"t":false},{"label":"25 × 35 cm, 1 face","cells":[22.99,15.99,12.99,12.99,9.49,7.89,7.59,7.09,6.89],"t":false},{"label":"25 × 35 cm, recto verso","cells":[27.99,20.99,17.99,12.99,11.99,9.59,9.39,9.09,8.69],"t":false},{"label":"28 × 40 cm, 1 face","cells":[27.99,21.99,18.99,13.99,12.99,10.99,9.99,9.59,9.29],"t":false},{"label":"28 × 40 cm, recto verso","cells":[36.99,26.99,20.99,16.99,15.99,13.99,12.99,12.99,11.99],"t":false},{"label":"30 × 45 cm, 1 face","cells":[30.99,23.99,18.99,14.99,13.99,11.99,11.99,10.99,10.99],"t":false},{"label":"30 × 45 cm, recto verso","cells":[41.99,30.99,23.99,19.99,16.99,14.99,13.99,13.99,12.99],"t":false}],"q":"pcs","firstQty":5}],"options":[],"min":"5 pièces. En dessous : sur devis.","entry":{"price":20.99,"txt":"HT la pièce, dès 5 pcs"},"transport":"en sus","tnote":"en sus, chiffré au devis.","photo":null,"origin":"Fabriqué en Europe"},{"id":"fanion-triangle","cat":"drapeaux","name":"Fanion triangle","sub":null,"new":false,"icon":"pennant","specs":[["Matière","Feutrine 100 % polyester"],["Bords","Coupés nets, sans effilochage"],["Impression","1 face (verso blanc), seconde face en option"],["Fixation","Bande de 1,5 cm sur le côté droit"]],"imgs":[],"tables":[{"title":null,"unit":"€ HT / pièce","heads":["50 pcs","100 pcs","250 pcs","500 pcs","750 pcs","1 000 pcs"],"rows":[{"label":"20 × 40 cm","cells":[6.39,5.39,4.79,4.39,4.09,3.89],"t":true},{"label":"30 × 60 cm","cells":[7.89,6.59,6.19,5.69,5.29,4.89],"t":true}],"q":"pcs","firstQty":50}],"options":[{"label":"Seconde face imprimée, 20 × 40 cm","price":0.84,"unit":"€ HT / pièce"},{"label":"Seconde face imprimée, 30 × 60 cm","price":1.89,"unit":"€ HT / pièce"}],"min":"50 pièces. En dessous : sur devis.","entry":{"price":6.39,"txt":"HT la pièce, dès 50 pcs"},"transport":"inclus","tnote":"inclus dans le prix.","photo":"fanion-feutrine","origin":"Fabriqué en Europe"},{"id":"beachflag","cat":"drapeaux","name":"Beachflag (voile + mât)","sub":null,"new":true,"icon":"beachflag","specs":[["Formes","Goutte ou plume"],["Hauteur totale","Voile + 50 cm"],["Pied","Vendu séparément"],["Poids du kit","De 1,3 kg (S) à 2 kg (XL)"]],"imgs":[],"tables":[{"title":"Kit voile + mât","unit":"€ HT / kit","heads":["10 pcs","25 pcs","50 pcs","100 pcs","200 pcs"],"rows":[{"label":"S : goutte 79 × 172 cm ou plume 60 × 205 cm","cells":[37.99,36.99,34.99,33.99,30.99],"t":false},{"label":"M : goutte 98 × 220 cm ou plume 68 × 273 cm","cells":[45.99,43.99,42.99,40.99,37.99],"t":false},{"label":"L : goutte 110 × 267 cm ou plume 77 × 364 cm","cells":[60.99,58.99,57.99,55.99,48.99],"t":false},{"label":"XL : goutte 120 × 420 cm ou plume 87 × 455 cm","cells":[75.99,72.99,69.99,67.99,63.99],"t":false}],"q":"pcs","firstQty":10},{"title":"Pieds et lests","unit":"€ HT / pièce","heads":["10 pcs","25 pcs","50 pcs","100 pcs","200 pcs"],"rows":[{"label":"Pied croisé","cells":[14.99,13.99,12.99,12.99,11.99],"t":false},{"label":"Pied croisé rotatif ou à visser","cells":[22.99,21.99,21.99,20.99,19.99],"t":false},{"label":"Pique de sol","cells":[13.99,12.99,12.99,11.99,10.99],"t":false},{"label":"Platine 4 kg","cells":[27.99,25.99,24.99,22.99,21.99],"t":false}],"q":"pcs","firstQty":10}],"options":[{"label":"Lest à eau","price":13.99,"unit":"€ HT / pièce"}],"min":"10 pièces. En dessous : sur devis.","entry":{"price":37.99,"txt":"HT le kit, dès 10 pcs"},"transport":"en sus","tnote":"en sus, chiffré au devis.","photo":null,"origin":"Fabriqué en Europe"},{"id":"sac-cordon","cat":"sacs","name":"Sac à cordon","sub":null,"new":false,"icon":"drawstring","specs":[["Matière","Polyester 200 g, imperméable"],["Impression","Recto verso incluse"],["Usage","Sport et goodies"],["Formats","34 × 42 et 42 × 46 cm"]],"imgs":[],"tables":[{"title":null,"unit":"€ HT / pièce","heads":["50 pcs","100 pcs","500 pcs","1 000 pcs"],"rows":[{"label":"34 × 42 cm","cells":[6.39,5.79,5.29,4.99],"t":false},{"label":"42 × 46 cm","cells":[6.89,6.39,5.99,5.79],"t":false}],"q":"pcs","firstQty":50}],"options":[],"min":"50 pièces. En dessous : sur devis.","entry":{"price":6.39,"txt":"HT la pièce, dès 50 pcs"},"transport":"en sus","tnote":"en sus, chiffré au devis.","photo":"sac-cordon","origin":"Fabriqué en Europe"},{"id":"tote-sublime","cat":"sacs","name":"Tote bag sublimé","sub":null,"new":false,"icon":"tote","specs":[["Format","42 × 38 cm, autres formats sur devis"],["Anses","Longues (66 cm) ou courtes, imprimées"],["Tissu","60 ou 185 g/m²"],["Impression","Sublimation intégrale"]],"imgs":[31],"tables":[{"title":null,"unit":"€ HT / pièce","heads":["100 pcs","300 pcs","500 pcs","1 000 pcs"],"rows":[{"label":"Tissu 60 g/m²","cells":[5.59,5.19,4.99,4.69],"t":true},{"label":"Tissu 185 g/m²","cells":[5.89,5.49,5.29,4.89],"t":true}],"q":"pcs","firstQty":100}],"options":[],"min":"100 pièces. En dessous : sur devis.","entry":{"price":5.59,"txt":"HT la pièce, dès 100 pcs"},"transport":"inclus","tnote":"inclus dans le prix.","photo":"tote-sublime","origin":"Fabriqué en Europe"},{"id":"tote-jute","cat":"sacs","name":"Tote bag jute et coton, marquage DTF","sub":null,"new":false,"icon":"tote","specs":[["Principe","Sac vierge au choix + marquage DTF, à additionner"],["Impression","Marquage DTF, adapté au jute et au coton"]],"imgs":[32,33,34,35,36,37,38,39],"tables":[{"title":"Sacs vierges","unit":"€ HT / pièce","heads":["Prix unitaire"],"rows":[{"label":"Coton 140 g/m² à anses longues, 38 × 42 cm","cells":[0.75],"t":false},{"label":"Jute à anses longues, 38 × 40 cm","cells":[1.39],"t":false},{"label":"Jute à anses coton, 38 × 40 cm","cells":[1.49],"t":false},{"label":"Sergé de coton 160 g/m² à détail jute, 38 × 41 cm","cells":[1.59],"t":false},{"label":"Sac à cordon en sergé de coton à détail jute, 38 × 41 cm","cells":[2.09],"t":false},{"label":"Jute laminé à face avant toile, 42 × 19 × 33 cm","cells":[3.09],"t":false},{"label":"Jute laminé à anses courtes rembourrées, 40 × 17 × 32,5 cm","cells":[3.79],"t":false},{"label":"Sac de plage en toile 280 g/m² à anses cordelette, 48 × 15 × 35 cm","cells":[6.39],"t":false}],"q":"flat","firstQty":null},{"title":"Marquage DTF, 1 face","unit":"€ HT / sac","heads":["100 pcs","300 pcs","500 pcs","1 000 pcs","2 000 pcs"],"rows":[{"label":"Zone 20 × 20 cm","cells":[1.99,1.69,1.39,1.29,1.09],"t":false},{"label":"Zone 30 × 15 cm","cells":[2.29,1.89,1.59,1.39,1.29],"t":false},{"label":"Zone 20 × 25 cm","cells":[2.49,2.19,1.69,1.59,1.39],"t":false},{"label":"Zone 30 × 30 cm","cells":[4.29,3.69,2.89,2.59,2.29],"t":false}],"q":"pcs","firstQty":100}],"options":[],"min":null,"entry":{"price":0.75,"txt":"HT le sac vierge, hors marquage"},"transport":"en sus","tnote":"en sus, chiffré au devis.","photo":"tote-jute","origin":"Marquage réalisé en Europe"},{"id":"echarpe","cat":"accessoires","name":"Écharpe supporter","sub":null,"new":false,"icon":"scarf","specs":[["Tissu","Polyester sport 130 g/m², 160 g/m² en option"],["Impression","Recto verso, identique ou différente"],["Finition","Franges incluses, classement feu M1/B1"],["Usage","Clubs sportifs et événements"]],"imgs":[],"tables":[{"title":null,"unit":"€ HT / pièce","heads":["100 pcs","200 pcs","300 pcs","500 pcs","1 000 pcs","2 500 pcs","5 000 pcs"],"rows":[{"label":"127 × 15 cm","cells":[6.29,5.59,4.89,4.59,4.39,4.09,3.99],"t":true},{"label":"138 × 14 cm","cells":[6.29,5.59,4.99,4.59,4.59,4.09,3.99],"t":true},{"label":"145 × 15 cm","cells":[6.89,6.19,5.49,5.09,4.89,4.59,4.39],"t":true},{"label":"125 × 17 cm","cells":[6.79,6.09,5.39,4.99,4.79,4.49,4.29],"t":true},{"label":"135 × 19 cm","cells":[7.99,7.19,6.39,5.89,5.59,5.29,5.09],"t":true}],"q":"pcs","firstQty":100}],"options":[],"min":"100 pièces. En dessous : sur devis.","entry":{"price":6.29,"txt":"HT la pièce, dès 100 pcs"},"transport":"inclus","tnote":"inclus dans le prix.","photo":null,"origin":"Fabriqué en Europe"},{"id":"tour-de-cou","cat":"accessoires","name":"Tour de cou","sub":null,"new":false,"icon":"tube","specs":[["Format","25 × 50 cm, tubulaire sans couture"],["Matière","Polyester 150 g/m², version recyclée disponible"],["Usage","Cou, tête, masque ou bandeau, plus de dix façons de le porter"],["Encres","Fluo disponibles"]],"imgs":[46],"tables":[{"title":null,"unit":"€ HT / pièce","heads":["100 pcs","200 pcs","300 pcs","500 pcs","1 000 pcs","3 000 pcs","5 000 pcs"],"rows":[{"label":"Standard 150 g/m²","cells":[3.69,3.09,2.89,2.39,2.09,1.89,1.79],"t":true}],"q":"pcs","firstQty":100},{"title":null,"unit":"€ HT / pièce","heads":["100 pcs","200 pcs","500 pcs","1 000 pcs","3 000 pcs"],"rows":[{"label":"Recyclé","cells":[4.09,3.49,3.09,2.79,2.39],"t":true}],"q":"pcs","firstQty":100},{"title":null,"unit":"€ HT / pièce","heads":["100 pcs","200 pcs","500 pcs","1 000 pcs"],"rows":[{"label":"Avec bande polaire de 18 cm","cells":[6.49,5.29,4.69,4.29],"t":true}],"q":"pcs","firstQty":100}],"options":[{"label":"Emballage individuel avec notice","price":0.08,"unit":"€ HT / pièce"}],"min":"100 pièces. En dessous : sur devis.","entry":{"price":3.69,"txt":"HT la pièce, dès 100 pcs"},"transport":"inclus","tnote":"inclus dans le prix.","photo":"tour-de-cou","origin":"Fabriqué en Europe"},{"id":"bandana-carre","cat":"accessoires","name":"Bandana carré","sub":null,"new":false,"icon":"bandana","specs":[["Matière","100 % polyester 60 g/m²"],["Impression","Sublimation intégrale"]],"imgs":[47],"tables":[{"title":null,"unit":"€ HT / pièce","heads":["200 pcs","500 pcs","1 000 pcs"],"rows":[{"label":"55 × 55 cm","cells":[5.89,5.09,4.89],"t":true},{"label":"90 × 90 cm","cells":[10.99,10.99,9.59],"t":true}],"q":"pcs","firstQty":200},{"title":null,"unit":"€ HT / pièce","heads":["100 pcs","200 pcs","500 pcs","1 000 pcs","1 500 pcs"],"rows":[{"label":"63 × 63 cm","cells":[6.39,5.79,4.89,4.69,4.49],"t":true}],"q":"pcs","firstQty":100}],"options":[],"min":"200 pièces. En dessous : sur devis.","entry":{"price":5.89,"txt":"HT la pièce, dès 200 pcs"},"transport":"inclus","tnote":"inclus dans le prix.","photo":"bandana-carre","origin":"Fabriqué en Europe"},{"id":"bandana-triangle","cat":"accessoires","name":"Bandana triangulaire","sub":null,"new":false,"icon":"bandana","specs":[["Matière","100 % polyester 60 g/m²"],["Usage","Cuisine et événements"]],"imgs":[48],"tables":[{"title":null,"unit":"€ HT / pièce","heads":["200 pcs","500 pcs","1 000 pcs"],"rows":[{"label":"55 × 55 × 77 cm","cells":[3.49,3.09,2.89],"t":true},{"label":"90 × 90 × 127 cm","cells":[10.99,9.49,7.99],"t":true}],"q":"pcs","firstQty":200},{"title":null,"unit":"€ HT / pièce","heads":["100 pcs","200 pcs","500 pcs","1 000 pcs","1 500 pcs"],"rows":[{"label":"63 × 63 × 82 cm","cells":[6.19,5.59,4.89,4.59,4.29],"t":true}],"q":"pcs","firstQty":100}],"options":[],"min":"200 pièces. En dessous : sur devis.","entry":{"price":3.49,"txt":"HT la pièce, dès 200 pcs"},"transport":"inclus","tnote":"inclus dans le prix.","photo":"bandana-triangle","origin":"Fabriqué en Europe"},{"id":"bandeau","cat":"accessoires","name":"Bandeau","sub":null,"new":false,"icon":"headband","specs":[["Largeur","7,5 cm"],["Matière","Tissu 250 g/m²"],["Usage","Sport et fitness"],["Impression","1 face ou 2 faces"]],"imgs":[],"tables":[{"title":null,"unit":"€ HT / pièce","heads":["250 pcs","500 pcs","1 000 pcs"],"rows":[{"label":"Impression 1 face (extérieur)","cells":[3.29,3.09,2.79],"t":true},{"label":"Impression 2 faces (intérieur et extérieur)","cells":[3.99,3.79,3.59],"t":true}],"q":"pcs","firstQty":250}],"options":[],"min":"250 pièces. En dessous : sur devis.","entry":{"price":3.29,"txt":"HT la pièce, dès 250 pcs"},"transport":"inclus","tnote":"inclus dans le prix.","photo":"bandeau","origin":"Fabriqué en Europe"},{"id":"bracelet","cat":"accessoires","name":"Bracelet textile","sub":null,"new":false,"icon":"bracelet","specs":[["Format","10 mm × 35 cm, sublimation 1 face"],["Fermeture","Clip plastique blanc ou noir"]],"imgs":[54],"tables":[{"title":null,"unit":"€ HT / pièce","heads":["100 pcs","200 pcs","500 pcs","1 000 pcs","2 000 pcs","5 000 pcs","10 000 pcs"],"rows":[{"label":"10 mm × 35 cm","cells":[1.49,0.86,0.53,0.33,0.3,0.29,0.26],"t":false}],"q":"pcs","firstQty":100}],"options":[],"min":"100 pièces. En dessous : sur devis.","entry":{"price":1.49,"txt":"HT la pièce, dès 100 pcs"},"transport":"en sus","tnote":"en sus, chiffré au devis.","photo":null,"origin":"Fabriqué en Europe"},{"id":"bob","cat":"chapeaux","name":"Bob","sub":null,"new":false,"icon":"bob","specs":[["Matière","100 % polyester 160 g/m²"],["Impression","Simple ou double face"]],"imgs":[55],"tables":[{"title":null,"unit":"€ HT / pièce","heads":["100 pcs","300 pcs","500 pcs","1 000 pcs"],"rows":[{"label":"Simple face (extérieur)","cells":[7.29,6.49,6.19,5.59],"t":true},{"label":"Double face (extérieur et intérieur)","cells":[9.69,8.89,8.59,7.99],"t":true}],"q":"pcs","firstQty":100}],"options":[{"label":"Protège-nuque cousu","price":0.75,"unit":"€ HT / pièce"}],"min":"100 pièces. En dessous : sur devis.","entry":{"price":7.29,"txt":"HT la pièce, dès 100 pcs"},"transport":"inclus","tnote":"inclus dans le prix.","photo":"bob","origin":"Fabriqué en Europe"},{"id":"bonnet-polaire","cat":"chapeaux","name":"Bonnet polaire","sub":null,"new":false,"icon":"beanie","specs":[["Matière","Polaire 240 g/m²"],["Options","Avec ou sans revers"]],"imgs":[56],"tables":[{"title":null,"unit":"€ HT / pièce","heads":["50 pcs","100 pcs","200 pcs","500 pcs"],"rows":[{"label":"Intérieur blanc","cells":[8.49,7.59,6.99,6.09],"t":true}],"q":"pcs","firstQty":50},{"title":null,"unit":"€ HT / pièce","heads":["50 pcs","100 pcs","200 pcs","500 pcs","1 000 pcs"],"rows":[{"label":"Doublure polaire intérieure","cells":[10.99,9.39,8.89,8.09,7.39],"t":true}],"q":"pcs","firstQty":50}],"options":[],"min":"50 pièces. En dessous : sur devis.","entry":{"price":8.49,"txt":"HT la pièce, dès 50 pcs"},"transport":"inclus","tnote":"inclus dans le prix.","photo":"bonnet-polaire","origin":"Fabriqué en Europe"},{"id":"bonnet-bain","cat":"chapeaux","name":"Bonnet de bain","sub":null,"new":false,"icon":"swimcap","specs":[["Matière","Lycra, intérieur blanc"],["Tailles","Adulte et enfant"]],"imgs":[57,58,59],"tables":[{"title":null,"unit":"€ HT / pièce","heads":["50 pcs","100 pcs","200 pcs","500 pcs","1 000 pcs"],"rows":[{"label":"Bonnet de bain","cells":[8.49,7.59,6.99,6.09,5.59],"t":true}],"q":"pcs","firstQty":50}],"options":[],"min":"50 pièces. En dessous : sur devis.","entry":{"price":8.49,"txt":"HT la pièce, dès 50 pcs"},"transport":"inclus","tnote":"inclus dans le prix.","photo":"bonnet-bain","origin":"Fabriqué en Europe"},{"id":"coussin-stade","cat":"evenementiel","name":"Coussin de stade","sub":null,"new":false,"icon":"stadium","specs":[["Tissu","100 % polyester imperméable"],["Mousse","25 kg/m³, épaisseur 2,5 cm"],["Impression","Sublimation couleurs"],["Modèles","Cinq modèles, pliants ou fixes"]],"imgs":[],"tables":[{"title":null,"unit":"€ HT / pièce","heads":["100 pcs","250 pcs","500 pcs","1 000 pcs"],"rows":[{"label":"Pliant 38 × 26 cm","cells":[7.79,6.89,5.99,5.09],"t":false},{"label":"Maxi 30 × 40 cm","cells":[7.79,6.89,5.99,5.09],"t":false},{"label":"Simple 19 × 26 cm","cells":[5.99,5.09,4.19,3.29],"t":false},{"label":"Pliable en 4, 31 × 24,5 cm","cells":[5.99,5.39,5.29,4.79],"t":false}],"q":"pcs","firstQty":100},{"title":null,"unit":"€ HT / pièce","heads":["100 pcs","300 pcs","500 pcs"],"rows":[{"label":"Maxi pliant 40 × 72 cm","cells":[15.99,13.99,13.99],"t":false}],"q":"pcs","firstQty":100}],"options":[{"label":"Épaisseur 40 mm","price":0.45,"unit":"€ HT / pièce"},{"label":"Mousse 40 kg/m³","price":0.45,"unit":"€ HT / pièce"},{"label":"Verso imprimé","price":0.9,"unit":"€ HT / pièce"},{"label":"Étiquette personnalisée","price":0.75,"unit":"€ HT / pièce"}],"min":"100 pièces. En dessous : sur devis.","entry":{"price":7.79,"txt":"HT la pièce, dès 100 pcs"},"transport":"en sus","tnote":"en sus, chiffré au devis.","photo":null,"origin":"Fabriqué en Europe"},{"id":"boxer","cat":"sousvetements","name":"Boxer imprimé","sub":null,"new":false,"icon":"boxer","specs":[["Matière","Lycra 130 g/m²"],["Tailles","Adulte et enfant"]],"imgs":[],"tables":[{"title":null,"unit":"€ HT / pièce","heads":["50 pcs","100 pcs","200 pcs","300 pcs","500 pcs"],"rows":[{"label":"Boxer","cells":[10.99,9.89,9.09,8.49,7.99],"t":true}],"q":"pcs","firstQty":50}],"options":[],"min":"50 pièces. En dessous : sur devis.","entry":{"price":10.99,"txt":"HT la pièce, dès 50 pcs"},"transport":"inclus","tnote":"inclus dans le prix.","photo":null,"origin":"Fabriqué en Europe"},{"id":"manchons-genoux","cat":"sport","name":"Manchons genoux","sub":null,"new":false,"icon":"sleeve","specs":[["Matière","Lycra 220 g/m², bande silicone antidérapante"],["Impression","Sublimation personnalisée"]],"imgs":[78,77],"tables":[{"title":null,"unit":"€ HT / paire","heads":["50 pcs","100 pcs","250 pcs","500 pcs","1 000 pcs","1 500 pcs","2 000 pcs"],"rows":[{"label":"Manchons genoux","cells":[12.99,11.99,10.99,10.99,9.79,9.59,9.19],"t":true}],"q":"pcs","firstQty":50}],"options":[],"min":"50 pièces. En dessous : sur devis.","entry":{"price":12.99,"txt":"HT la paire, dès 50 pcs"},"transport":"inclus","tnote":"inclus dans le prix.","photo":null,"origin":"Fabriqué en Europe"},{"id":"manchons-bras","cat":"sport","name":"Manchons bras","sub":null,"new":false,"icon":"sleeve","specs":[["Matière","Lycra 220 g/m², bande silicone antidérapante"],["Usage","Cyclisme et course à pied"]],"imgs":[79],"tables":[{"title":null,"unit":"€ HT / paire","heads":["50 pcs","100 pcs","200 pcs","500 pcs","1 000 pcs"],"rows":[{"label":"Manchons bras","cells":[10.99,9.99,8.89,8.59,7.99],"t":true}],"q":"pcs","firstQty":50}],"options":[],"min":"50 pièces. En dessous : sur devis.","entry":{"price":10.99,"txt":"HT la paire, dès 50 pcs"},"transport":"inclus","tnote":"inclus dans le prix.","photo":"manchons-bras","origin":"Fabriqué en Europe"},{"id":"dossards","cat":"sport","name":"Dossards","sub":null,"new":true,"icon":"racebib","specs":[["Dossard 15 × 20 cm","Non-tissé 130 g/m² indéchirable, 2 épingles fournies"],["Chasuble dossard","Recto verso, tailles S-M et L-XL"]],"imgs":[],"tables":[{"title":null,"unit":"€ HT / pièce","heads":["100 pcs","200 pcs","500 pcs","1 000 pcs"],"rows":[{"label":"Dossard 15 × 20 cm, même visuel","cells":[2.09,1.29,0.9,0.73],"t":true}],"q":"pcs","firstQty":100},{"title":null,"unit":"€ HT / pièce","heads":["100 pcs","250 pcs","500 pcs","750 pcs","1 000 pcs"],"rows":[{"label":"Chasuble dossard running ou ski","cells":[9.39,8.69,8.49,8.29,8.09],"t":true}],"q":"pcs","firstQty":100}],"options":[{"label":"Numérotation individuelle, dossard","price":0.45,"unit":"€ HT / pièce"},{"label":"Numérotation individuelle, chasuble","price":1.59,"unit":"€ HT / pièce"}],"min":"100 pièces. En dessous : sur devis.","entry":{"price":2.09,"txt":"HT la pièce, dès 100 pcs"},"transport":"inclus","tnote":"inclus dans le prix.","photo":null,"origin":"Fabriqué en Europe"},{"id":"tapis-yoga","cat":"objets","name":"Tapis de yoga","sub":null,"new":false,"icon":"yoga","specs":[["Format","61 × 183 × 0,4 cm"],["Face supérieure","Polyester doux effet velours, sublimé"],["Face inférieure","Caoutchouc antidérapant"],["Impression","Sublimation couleurs"]],"imgs":[82,83,84],"tables":[{"title":null,"unit":"€ HT / pièce","heads":["50 pcs","100 pcs","200 pcs","300 pcs"],"rows":[{"label":"61 × 183 cm","cells":[54.99,49.99,44.99,40.99],"t":true}],"q":"pcs","firstQty":50}],"options":[],"min":"50 pièces. En dessous : sur devis.","entry":{"price":54.99,"txt":"HT la pièce, dès 50 pcs"},"transport":"inclus","tnote":"inclus dans le prix.","photo":null,"origin":"Fabriqué en Europe"},{"id":"trousse","cat":"objets","name":"Trousse imprimée","sub":null,"new":false,"icon":"pouch","specs":[["Format","200 × 60 mm, autres formats possibles"],["Tissu","200 g/m²"],["Impression","Couleurs"],["Usage","Crayons ou cosmétiques"]],"imgs":[85],"tables":[{"title":null,"unit":"€ HT / pièce","heads":["100 pcs","300 pcs","500 pcs"],"rows":[{"label":"200 × 60 mm","cells":[5.29,4.19,3.99],"t":true}],"q":"pcs","firstQty":100}],"options":[],"min":"100 pièces. En dessous : sur devis.","entry":{"price":5.29,"txt":"HT la pièce, dès 100 pcs"},"transport":"inclus","tnote":"inclus dans le prix.","photo":"trousse","origin":"Fabriqué en Europe"}]};
 
 /* Photos : fichiers du dossier img/, en 640 px et en 360 px pour les petits écrans */
 const imgSrc = name => `img/${name}.webp`;
@@ -901,18 +807,26 @@ function table(t) {
 }
 
 let currentProduct = null;
+/* Studio de personnalisation : page à part, ouverte depuis la fiche ou le devis.
+   La version fichier unique (IFS_FICHIER_UNIQUE) n'a pas de studio : le lien est masqué. */
+const hasStudio = p => !!(p && p.viz) && !window.IFS_FICHIER_UNIQUE;
+const studioUrl = (pid, short, retour) => `personnaliser.html?produit=${encodeURIComponent(pid)}${typeof short === "boolean" ? `&short=${short ? 1 : 0}` : ""}${retour ? `&retour=${retour}` : ""}`;
+function galHTML(p) {
+  return (p.photo
+    ? `<div class="gal-main"><img src="${imgSrc(p.photo)}" width="640" height="800" alt="Photo d'illustration : ${esc(p.name)}" data-icon="${p.icon}"></div><p class="gal-note">Photo d'illustration</p>`
+    : `<div class="gal-main ph">${icon(p.icon)}</div><p class="gal-note">Visuel à venir</p>`)
+    + (hasStudio(p) ? `<a class="btn btn-line viz-open" href="${studioUrl(p.id)}">Personnaliser ce produit</a>` : "");
+}
 function openSheet(id, push = true) {
   const p = byId[id]; if (!p) return false;
   currentProduct = p;
   $("#sheet-cat").textContent = catById[p.cat].name;
-  const gal = p.photo
-    ? `<div class="gal-main"><img src="${imgSrc(p.photo)}" width="640" height="800" alt="Photo d'illustration : ${esc(p.name)}" data-icon="${p.icon}"></div><p class="gal-note">Photo d'illustration</p>`
-    : `<div class="gal-main ph">${icon(p.icon)}</div><p class="gal-note">Visuel à venir</p>`;
+  const gal = galHTML(p);
   const chips = [`<span class="chip spark">${esc(p.origin)}</span>`];
   if (p.transport === "inclus") chips.push(`<span class="chip">Transport inclus</span>`);
   $("#sheet-body").innerHTML = `
     <div class="sheet-main">
-      <div>${gal}</div>
+      <div class="gal" id="gal">${gal}</div>
       <div class="info">
         <h2 id="sheet-title" tabindex="-1" autofocus>${esc(p.name)}</h2>
         ${p.sub ? `<p class="sub">${esc(p.sub)}</p>` : ""}
@@ -958,9 +872,20 @@ function showFileName() {
   $("#file-name").textContent = f ? f.name : "Aucun fichier choisi";
 }
 $("#q-file").addEventListener("change", showFileName);
-/* Liste des produits du devis, rangée par catégorie. quoteAs : variantes proposées à part (maillot seul, set). */
+/* Liste des produits du devis, rangée par catégorie. quoteAs : variantes proposées à part (maillot seul, set) ;
+   quoteShort dit, variante par variante, si le short est compris. */
 const OTHER = "Autre produit ou besoin hors catalogue";
 const quoteNames = p => p.quoteAs || [p.name];
+const optMap = {};
+DATA.products.forEach(p => quoteNames(p).forEach((n, i) => { optMap[n] = { pid: p.id, short: p.quoteShort ? p.quoteShort[i] : false }; }));
+const pickOption = (p, short) => { const i = typeof short === "boolean" && p.quoteShort ? Math.max(0, p.quoteShort.indexOf(short)) : 0; return quoteNames(p)[i]; };
+/* Lien vers le studio sous la liste des produits, tant qu'aucun visuel n'est joint */
+function syncStudioLink() {
+  const m = optMap[$("#q-prod").value], p = m && byId[m.pid];
+  const show = hasStudio(p) && !visuel;
+  $("#q-studio").hidden = !show;
+  if (show) $("#q-studio-link").href = studioUrl(p.id, m.short, "devis");
+}
 function fillProducts() {
   const sel = $("#q-prod");
   if (sel.querySelector("optgroup")) return;
@@ -972,9 +897,56 @@ function syncOther() {
   $("#q-autre-f").hidden = !other; $("#q-autre").disabled = !other;
   if (!other) clearError($("#q-autre-f"));
 }
-$("#q-prod").addEventListener("change", () => { syncOther(); if ($("#q-prod").value === OTHER) $("#q-autre").focus(); });
+$("#q-prod").addEventListener("change", () => { syncOther(); syncStudioLink(); if ($("#q-prod").value === OTHER) $("#q-autre").focus(); });
+/* ---------- Visuel du studio joint au devis ---------- */
+let visuel = null, visuelUrl = "";
+function showVisuel() {
+  $("#q-visuel").hidden = !visuel;
+  if (visuelUrl) { URL.revokeObjectURL(visuelUrl); visuelUrl = ""; $("#q-visuel-media").innerHTML = ""; }
+  if (visuel) {
+    visuelUrl = URL.createObjectURL(visuel.preview);
+    $("#q-visuel-media").innerHTML = `<img src="${visuelUrl}" alt="Aperçu de votre visuel, face et dos">`;
+    $("#q-visuel-txt").textContent = visuel.placement.split("\n").filter(l => !/^Aperçu indicatif/.test(l)).join("\n");
+    $("#q-visuel-edit").href = studioUrl(visuel.pid, visuel.short, "devis");
+  }
+  syncStudioLink();
+}
+$("#q-visuel-del").addEventListener("click", async () => { visuel = null; await IFSStore.del("devis"); showVisuel(); $("#q-prod").focus(); });
+/* Brouillon du devis : gardé le temps d'un aller-retour dans le studio */
+const DRAFT = "ifs-devis-brouillon";
+function saveDraft() {
+  try {
+    const data = {};
+    for (const el of $("#quote-form").elements) {
+      if (!el.name || el.type === "file" || el.type === "hidden" || el.name === "bot-field") continue;
+      if (el.type === "radio") { if (el.checked) data[el.name] = el.value; } else data[el.name] = el.value;
+    }
+    sessionStorage.setItem(DRAFT, JSON.stringify(data));
+  } catch (err) { /* stockage de session indisponible : le formulaire repart vide */ }
+}
+function restoreDraft() {
+  let data = null;
+  try { data = JSON.parse(sessionStorage.getItem(DRAFT) || "null"); sessionStorage.removeItem(DRAFT); } catch (err) { return; }
+  if (!data) return;
+  const form = $("#quote-form");
+  for (const [k, v] of Object.entries(data)) {
+    const els = form.querySelectorAll(`[name="${k}"]`);
+    els.forEach(el => { if (el.type === "radio") el.checked = el.value === v; else if (k !== "produit") el.value = v; });
+  }
+}
+$("#q-studio-link").addEventListener("click", saveDraft);
+$("#q-visuel-edit").addEventListener("click", saveDraft);
+async function openQuoteWithVisual() {
+  visuel = (await IFSStore.get("devis")) || null;
+  if (visuel && !byId[visuel.pid]) visuel = null;
+  openQuote(visuel ? visuel.pid : "", false, visuel ? visuel.short : undefined);
+  restoreDraft();
+  if (visuel) $("#q-prod").value = visuel.option;
+  syncOther();
+  showVisuel();
+}
 const localISO = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-function openQuote(pid, push = true) {
+function openQuote(pid, push = true, short) {
   const p = pid ? byId[pid] : null;
   const form = $("#quote-form");
   $("#q-form-wrap").hidden = false; $("#q-sent").hidden = true;
@@ -982,8 +954,9 @@ function openQuote(pid, push = true) {
   $$(".f.bad", form).forEach(clearError);
   fillProducts();
   const d = new Date(); d.setDate(d.getDate() + 14); $("#q-date").min = localISO(d);
-  if (p) $("#q-prod").value = quoteNames(p)[0];
+  if (p) $("#q-prod").value = pickOption(p, short);
   syncOther();
+  syncStudioLink();
   qStep(1);
   const dlg = $("#quote");
   if (!dlg.open) dlg.showModal();
@@ -1054,7 +1027,7 @@ function fallbackMail(fd) {
   const g = k => fd.get(k) || "";
   const lines = [
     `Profil : ${g("profil")}`, `Produit : ${g("produit")}${g("produit_autre") ? " : " + g("produit_autre") : ""}`, `Quantité : ${g("quantite")}`, `Visuel : ${g("visuel")}`,
-    `Livraison souhaitée : ${g("date_livraison")}`, "",
+    `Livraison souhaitée : ${g("date_livraison")}`, g("placement") ? `Aperçu : ${g("placement")}` : "", "",
     `Prénom : ${g("prenom")}`, `Nom : ${g("nom")}`, `Structure : ${g("societe")}`,
     `Email : ${g("email")}`, `Téléphone : ${g("telephone")}`, `Code postal : ${g("code_postal")}`, "", g("message"),
     fd.get("fichier") && fd.get("fichier").name ? "\n(Pensez à joindre votre fichier à cet email.)" : ""
@@ -1069,8 +1042,26 @@ $("#quote-form").addEventListener("submit", async e => {
   if (btn.disabled) return;
   if (!qCheck($("#q-p1"))) { qStep(1); qCheck($("#q-p1")); return; }
   if (!qCheck($("#q-p2"))) return;
-  const fd = new FormData(form);
   btn.disabled = true; st.textContent = "Envoi en cours…";
+  /* Visuel du studio : aperçu, description du placement et fichiers des logos, base de travail du BAT.
+     Netlify limite la taille d'un envoi : au-delà de 8 Mo, les fichiers restants sont signalés dans le placement. */
+  const fd = new FormData(form);
+  fd.delete("apercu"); ["logo_2", "logo_3", "logo_4", "logo_5"].forEach(k => fd.delete(k));
+  $("#q-placement").value = "";
+  if (visuel) {
+    const LIMIT = 8 * 1024 * 1024, own = fd.get("fichier");
+    let used = own && own.size ? own.size : 0;
+    const left = [];
+    if (visuel.preview && used + visuel.preview.size <= LIMIT) { fd.set("apercu", visuel.preview, "apercu-ifs.jpg"); used += visuel.preview.size; }
+    const slots = own && own.size ? ["logo_2", "logo_3", "logo_4", "logo_5"] : ["fichier", "logo_2", "logo_3", "logo_4", "logo_5"];
+    for (const f of visuel.files || []) {
+      const slot = slots[0];
+      if (slot && used + f.blob.size <= LIMIT) { fd.set(slot, f.blob, f.name); used += f.blob.size; slots.shift(); }
+      else left.push(f.name);
+    }
+    const note = left.length ? `\nFichiers non joints (taille ou nombre) : ${left.join(", ")}. Envoyez-les par email en réponse au devis.` : "";
+    fd.set("placement", visuel.placement + note);
+  }
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), 20000);
   try {
@@ -1078,6 +1069,7 @@ $("#quote-form").addEventListener("submit", async e => {
     const res = await fetch("/", { method: "POST", body: fd, signal: ctrl.signal });
     if (!res.ok) throw new Error("HTTP " + res.status);
     form.reset(); showFileName(); syncOther();
+    if (visuel) { visuel = null; IFSStore.del("devis"); showVisuel(); }
     $("#q-form-wrap").hidden = true; $("#q-sent").hidden = false; $("#q-sent-title").focus();
   } catch (err) {
     btn.disabled = false;
@@ -1120,7 +1112,8 @@ function fromHash() {
     const id = decodeURIComponent(h.slice(7));
     if ($("#sheet").open && currentProduct && currentProduct.id === id) return;
     if (!openSheet(id, false)) history.replaceState(null, "", location.pathname + location.search);
-  } else if (h === "#devis" && !$("#quote").open) openQuote("", false);
+  } else if (h === "#devis-visuel") openQuoteWithVisual();
+  else if (h === "#devis" && !$("#quote").open) { openQuote("", false); restoreDraft(); syncOther(); syncStudioLink(); }
 }
 
 /* Une photo qui ne charge pas (fichier absent, page ouverte hors de son dossier) laisse place
