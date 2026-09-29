@@ -39,3 +39,16 @@ Toutes les couleurs sont des jetons dans `site/base.css`, partagés par le catal
 ## Remplacer une photo
 
 Déposer deux fichiers WebP en 4:5 dans `site/img/` : `nom.webp` (640 × 800) et `nom-360.webp` (360 × 450), puis renseigner `"photo": "nom"` sur le produit dans `site/donnees.js`.
+
+## Showreel
+
+`showreel/` contient le showreel motion design de 20 secondes du catalogue (1920 × 1080, 60 i/s), rendu dans `2026-09-29_showreel-catalogue-ifs.mp4`. La page `showreel/index.html` anime les éléments du site (maillot, photos, prix de `site/donnees.js`, polices et motifs du studio) sur une timeline GSAP ; `showreel/cues.js` porte les temps des scènes et des repères sonores ; `showreel/son.mjs` synthétise l'habillage sonore ; `showreel/rendu.mjs` capture chaque image dans Chromium et assemble la vidéo avec ffmpeg.
+
+```
+cd showreel
+PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm install
+npm run brouillon   # 30 i/s sans flou, dans showreel/tmp/
+npm run rendu       # version finale, flou de mouvement, à la racine du dépôt
+```
+
+Aperçu en temps réel : servir la racine du dépôt (`npx serve .`) et ouvrir `showreel/index.html?play`, ou `?t=12.3` pour figer une image. Après un changement de prix ou de produit dans `site/donnees.js`, reporter la valeur dans `showreel/index.html` (listes `GRID` et `TIERS`) puis relancer le rendu.

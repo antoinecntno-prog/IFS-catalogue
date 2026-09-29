@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Showreel catalogue IFS</title>
+<meta name="viewport" content="width=1920">
+<style>
+/* Polices du site et du studio, servies depuis site/fonts */
+@font-face{font-family:"Archivo";font-weight:700 900;font-stretch:75% 100%;src:url(../site/fonts/archivo-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2212,U+2215}
+@font-face{font-family:"Archivo";font-weight:700 900;font-stretch:75% 100%;src:url(../site/fonts/archivo-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+20A0-20AB,U+20AD-20C0}
+@font-face{font-family:"Hanken Grotesk";font-weight:400 700;src:url(../site/fonts/hanken-grotesk-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2212,U+2215}
+@font-face{font-family:"Hanken Grotesk";font-weight:400 700;src:url(../site/fonts/hanken-grotesk-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+20A0-20AB,U+20AD-20C0}
+@font-face{font-family:"Teko";font-weight:600;src:url(../site/fonts/studio-teko.woff2) format("woff2")}
+@font-face{font-family:"Bebas Neue";src:url(../site/fonts/studio-bebas-neue.woff2) format("woff2")}
+@font-face{font-family:"Anton";src:url(../site/fonts/studio-anton.woff2) format("woff2")}
+@font-face{font-family:"Oswald";font-weight:700;src:url(../site/fonts/studio-oswald.woff2) format("woff2")}
+@font-face{font-family:"Russo One";src:url(../site/fonts/studio-russo-one.woff2) format("woff2")}
+@font-face{font-family:"Graduate";src:url(../site/fonts/studio-graduate.woff2) format("woff2")}
+@font-face{font-family:"Black Ops One";src:url(../site/fonts/studio-black-ops-one.woff2) format("woff2")}
+@font-face{font-family:"Bungee";src:url(../site/fonts/studio-bungee.woff2) format("woff2")}
+@font-face{font-family:"Staatliches";src:url(../site/fonts/studio-staatliches.woff2) format("woff2")}
+@font-face{font-family:"Alfa Slab One";src:url(../site/fonts/studio-alfa-slab-one.woff2) format("woff2")}
+@font-face{font-family:"Permanent Marker";src:url(../site/fonts/studio-permanent-marker.woff2) format("woff2")}
+@font-face{font-family:"Pacifico";src:url(../site/fonts/studio-pacifico.woff2) format("woff2")}
+@font-face{font-family:"Lobster";src:url(../site/fonts/studio-lobster.woff2) format("woff2")}
+
+/* Jetons repris de site/base.css (thème clair) */
+:root{
+  --magenta:#B3125F; --magenta-deep:#940E4E; --magenta-glow:#FF7DBA; --yellow:#FFE45C;
+  --ink:#1A1320; --paper:#FFFFFF; --night:#141016;
+  --surface:#F4F0F3; --surface-2:#EAE3E8; --text-2:#5E5360; --line-strong:#8A7E88; --on-accent-2:#FBDDEA;
+  --f-head:"Archivo",Arial,sans-serif; --f-body:"Hanken Grotesk",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:#000}
+body{font-family:var(--f-body);-webkit-font-smoothing:antialiased}
+#stage{position:relative;width:1920px;height:1080px;overflow:hidden;background:var(--ink);color:#fff}
+#shake,.layer{position:absolute;inset:0}
+.layer{overflow:hidden}
+.abs{position:absolute}
+.head{font-family:var(--f-head);font-weight:900;text-transform:uppercase;line-height:.92;letter-spacing:-.01em;white-space:nowrap}
+.line{display:block;overflow:hidden;padding:.08em .04em .06em}
+.in{display:inline-block}
+.c{display:inline-block;font-variation-settings:"wdth" 78}
+.kitbox{position:absolute;width:400px;height:440px;transform-origin:50% 50%}
+.kitbox svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.kit-num{font:900 76px/1 var(--f-head);font-stretch:80%}
+.kit-logo{font:800 10px/1 var(--f-body);letter-spacing:.08em}
+.wipeL{clip-path:polygon(0 0,calc(var(--w)*1% + 12%) 0,calc(var(--w)*1% - 12%) 100%,0 100%)}
+.wipeR{clip-path:polygon(calc(var(--w)*1% + 12%) 0,100% 0,100% 100%,calc(var(--w)*1% - 12%) 100%)}
+.btn{position:absolute;display:flex;align-items:center;justify-content:center;border-radius:3px;font:700 22px/1 var(--f-body);background:var(--magenta);color:#fff}
+.chip{display:inline-flex;align-items:center;height:52px;padding:0 20px;border:2px solid var(--line-strong);border-radius:3px;font:600 21px/1 var(--f-body);color:var(--ink);background:#fff;margin:0 10px 10px 0}
+.chip.on{background:var(--magenta);border-color:var(--magenta);color:#fff}
+.lbl{font:600 21px/1.2 var(--f-body);color:var(--ink)}
+.field{border:2px solid var(--line-strong);border-radius:3px;height:62px;display:flex;align-items:center;padding:0 18px;font:500 23px/1 var(--f-body);color:var(--ink);background:#fff}
+.typed{height:14px;border-radius:2px;background:#D9CFD6;width:0}
+.card{position:absolute;width:300px;height:462px;background:#fff;border-radius:4px;overflow:hidden;color:var(--ink);box-shadow:0 30px 60px rgba(0,0,0,.35)}
+.card img{display:block;width:300px;height:375px;object-fit:cover}
+.card b{display:block;padding:14px 16px 4px;font:700 19px/1.2 var(--f-body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card i{display:block;padding:0 16px;font:800 19px/1.2 var(--f-head);font-style:normal;color:var(--magenta)}
+.cat{display:inline-block;padding:0 34px;height:96px;line-height:96px;font:600 30px/96px var(--f-body);color:var(--ink);white-space:nowrap}
+.cat.on{color:var(--magenta);box-shadow:inset 0 -6px 0 var(--magenta)}
+.sw{width:56px;height:56px;border-radius:3px;margin-right:12px;display:inline-block;box-shadow:inset 0 0 0 2px rgba(26,19,32,.18)}
+.sw.on{box-shadow:0 0 0 3px #fff,0 0 0 6px var(--magenta)}
+.frow{height:44px;line-height:44px;padding:0 16px;font-size:26px;color:var(--ink);white-space:nowrap}
+.frow.on{background:var(--magenta);color:#fff}
+#vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,rgba(0,0,0,0) 55%,rgba(0,0,0,.28) 100%)}
+</style>
+</head>
+<body>
+<div id="stage"><div id="shake"></div><div id="vignette"></div></div>
+<script src="node_modules/gsap/dist/gsap.min.js"></script>
+<script src="node_modules/gsap/dist/CustomEase.min.js"></script>
+<script src="node_modules/gsap/dist/DrawSVGPlugin.min.js"></script>
+<script type="module">
+import { DUREE, SCENES as S, MOTIFS_T, SONS } from "./cues.js";
+
+gsap.registerPlugin(CustomEase, DrawSVGPlugin);
+CustomEase.create("marque", "M0,0 C0.16,1 0.3,1 1,1");   // --ease du site : cubic-bezier(.16,1,.3,1)
+gsap.config({ force3D: false });
+
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const root = $("#shake");
+const html = (s) => { const t = document.createElement("template"); t.innerHTML = s.trim(); return t.content.firstElementChild; };
+const add = (parent, s) => parent.appendChild(html(s));
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const prog = (t, a, d) => clamp((t - a) / d);
+const eOut = p => 1 - Math.pow(1 - p, 3), eInOut = p => p < .5 ? 8 * p ** 4 : 1 - Math.pow(-2 * p + 2, 4) / 2;
+const eur = v => v.toFixed(2).replace(".", ",");
+/* Aléatoire à graine fixe : le même rendu à chaque passage */
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+/* ---------- Données reprises du site (site/donnees.js, site/studio.js, site/index.html) ---------- */
+const CATS = ["Maillots & shorts", "Sacs & bagagerie", "Accessoires & textile promotionnel", "Accessoires sport & protection", "Objets & accessoires techniques", "Drapeaux & bannières", "Chapeaux", "Événementiel & PLV", "Sous-vêtements personnalisés"];
+const GRID = [
+  ["set-football", "Set football, maillot + short", 19.99], ["basket-double", "Maillot basketball double face", 30.99],
+  ["hoodie", "Sweat à capuche", 40.99], ["tote-sublime", "Tote bag sublimé", 5.59],
+  ["running-ml", "Maillot running manches longues", 22.99], ["maillot-cyclisme", "Maillot cyclisme", 28.99],
+  ["bob", "Bob", 7.29], ["tour-de-cou", "Tour de cou", 3.69],
+  ["survetement", "Survêtement complet", 78.99], ["softshell", "Veste et gilet softshell", 85.99],
+  ["bandana-carre", "Bandana carré", 5.89], ["sac-cordon", "Sac à cordon", 6.39],
+  ["veste-matelassee", "Veste matelassée hiver", 106.99], ["bonnet-polaire", "Bonnet polaire", 8.49],
+  ["tapis-yoga", "Tapis de yoga", 54.99], ["trousse", "Trousse imprimée", 5.29]
+];
+const TIERS = [["30 pcs", 19.99], ["50 pcs", 15.99], ["100 pcs", 14.99], ["200 pcs", 13.99], ["500 pcs", 13.99]];
+const FONTS = [["Teko", "Teko", 600], ["Bebas Neue", "Bebas Neue", 400], ["Anton", "Anton", 400], ["Oswald", "Oswald", 700], ["Archivo", "Archivo", 900], ["Russo One", "Russo One", 400], ["Graduate", "Graduate", 400], ["Black Ops One", "Black Ops One", 400], ["Bungee", "Bungee", 400], ["Staatliches", "Staatliches", 400], ["Alfa Slab One", "Alfa Slab One", 400], ["Hanken Grotesk", "Hanken Grotesk", 700], ["Permanent Marker", "Permanent Marker", 400], ["Pacifico", "Pacifico", 400], ["Lobster", "Lobster", 400]];
+const FONT_ORDER = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 1, 2, 3, 4];  // finit sur Archivo, la police de la marque
+const KITS = {
+  uni: ["#FFFFFF", "#FFFFFF", "#FFFFFF", "#1A1320"],
+  eclats: ["#FFFFFF", "#B3125F", "#FFE45C", "#1A1320"],
+  rayures: ["#FFFFFF", "#D62839", "#D62839", "#15151C"],
+  degrade: ["#19C3A6", "#0E1B4D", "#FFFFFF", "#FFFFFF"],
+  chevrons: ["#15151C", "#E8B021", "#E8B021", "#E8B021"]
+};
+const MOTIF_NOMS = ["Éclats", "Rayures", "Dégradé", "Chevrons", "Éclats"];
+const SWATCH = ["#FFFFFF", "#1A1320", "#0E1B4D", "#D62839", "#19C3A6", "#E8B021"];
+const SWATCH2 = ["#B3125F", "#FFE45C", "#FFFFFF", "#D62839", "#19C3A6", "#E8B021"];
+
+/* ---------- Maillot : silhouette et motifs du site ---------- */
+const S_TEE = "M165 26C180 44 220 44 235 26L292 44 372 104 340 164 302 142 304 420Q200 432 96 420L98 142 60 164 28 104 108 44Z";
+const S_TEE_B = "M165 26C185 34 215 34 235 26L292 44 372 104 340 164 302 142 304 420Q200 432 96 420L98 142 60 164 28 104 108 44Z";
+const MOTIF = {
+  eclats: () => `<path d="M-20 262 420 72v84L-20 346z" style="fill:var(--k2)"/><path d="M-20 368 420 178v18L-20 386z" style="fill:var(--k3)"/>`,
+  rayures: () => `<path d="M36 0h38v440H36zM118 0h38v440h-38zM200 0h38v440h-38zM282 0h38v440h-38z" style="fill:var(--k2)"/>`,
+  degrade: g => `<rect width="400" height="440" fill="url(#${g})"/><path d="M-20 300h440M-20 318h440M-20 336h440" style="stroke:var(--k3)" stroke-width="3" stroke-opacity=".45" fill="none"/>`,
+  chevrons: () => `<path d="M-30 268 200 372 430 268" style="stroke:var(--k2)" stroke-width="34" fill="none"/><path d="M-30 320 200 424 430 320" style="stroke:var(--k2)" stroke-width="10" fill="none"/>`
+};
+let uid = 0;
+function kit(motif, { back = false, extra = "" } = {}) {
+  const id = "k" + uid++;
+  const m = MOTIF[motif] ? MOTIF[motif](id + "g") : "";
+  const mm = back && m ? `<g transform="matrix(-1 0 0 1 400 0)">${m}</g>` : m;
+  return `<svg viewBox="0 0 400 440"><defs><clipPath id="${id}c"><path d="${back ? S_TEE_B : S_TEE}"/></clipPath>
+    <linearGradient id="${id}g" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="440"><stop offset="0" style="stop-color:var(--k1)"/><stop offset="1" style="stop-color:var(--k2)"/></linearGradient>
+    <linearGradient id="${id}s" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3A041E" stop-opacity=".16"/><stop offset=".3" stop-color="#3A041E" stop-opacity="0"/><stop offset=".7" stop-color="#3A041E" stop-opacity="0"/><stop offset="1" stop-color="#3A041E" stop-opacity=".16"/></linearGradient></defs>
+    <g clip-path="url(#${id}c)"><rect width="400" height="440" style="fill:var(--k1)"/>${mm}<rect width="400" height="440" fill="url(#${id}s)"/>
+    <path d="M28 104 60 164 71 156 39 96zM372 104 340 164 329 156 361 96z" style="fill:var(--k4)"/>
+    <path d="${back ? "M165 26C185 34 215 34 235 26" : "M165 26C180 50 220 50 235 26"}" style="stroke:var(--k4)" stroke-width="10" fill="none"/>${extra}</g></svg>`;
+}
+const HERO_EXTRA = `<circle cx="258" cy="116" r="21" style="stroke:var(--k4)" stroke-width="2" stroke-dasharray="4 4" fill="none"/><text x="258" y="120" text-anchor="middle" class="kit-logo" style="fill:var(--k4)">LOGO</text><text x="200" y="262" text-anchor="middle" class="kit-num" style="fill:var(--k4)">10</text>`;
+const kitVars = k => `--k1:${k[0]};--k2:${k[1]};--k3:${k[2]};--k4:${k[3]}`;
+/* Écusson générique de démonstration */
+const CREST = `<path d="M-24 -26H24V2C24 16 12 25 0 30C-12 25 -24 16 -24 2Z" fill="#B3125F" stroke="#FFFFFF" stroke-width="2.5"/><path d="M-24 -8H24" stroke="#FFE45C" stroke-width="5"/><path d="M0 -1 3.5 7 12 7.6 5.5 13 7.6 21 0 16.6 -7.6 21 -5.5 13 -12 7.6 -3.5 7Z" fill="#FFE45C"/>`;
+const LOGO_IFS = `<svg viewBox="0 0 64 64" width="100%" height="100%"><defs><linearGradient id="lgn" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#3C4452"/><stop offset=".55" stop-color="#8A93A1"/><stop offset="1" stop-color="#4A5260"/></linearGradient><clipPath id="lgc"><rect width="64" height="64" rx="14"/></clipPath></defs><g clip-path="url(#lgc)"><rect width="64" height="64" fill="#FFFFFF"/><path d="M3.87 48V17H9.61V48ZM14.94 48V17H35.67V22.16H20.68V29.54H33.71V34.66H20.68V48ZM49.37 48.58Q44.43 48.58 41.25 46Q38.07 43.42 37.4 39.15L43.01 37.77Q43.5 40.62 45.25 42.04Q47.01 43.46 49.59 43.46Q50.97 43.46 52.06 43Q53.15 42.53 53.79 41.62Q54.44 40.71 54.44 39.46Q54.44 38.3 53.77 37.46Q53.1 36.61 51.75 35.9Q50.39 35.19 48.35 34.43Q45.41 33.28 43.43 31.97Q41.45 30.65 40.47 28.92Q39.49 27.19 39.49 24.83Q39.49 22.34 40.72 20.42Q41.94 18.51 44.14 17.4Q46.34 16.29 49.28 16.29Q52.39 16.29 54.82 17.73Q57.24 19.18 58.71 22.03L54.13 24.83Q53.19 23.14 51.93 22.27Q50.66 21.4 49.1 21.4Q47.99 21.4 47.12 21.83Q46.25 22.25 45.74 22.98Q45.23 23.72 45.23 24.69Q45.23 25.72 45.83 26.52Q46.43 27.32 47.79 28.05Q49.15 28.79 51.32 29.59Q54.22 30.65 56.15 31.94Q58.09 33.23 59.11 34.95Q60.13 36.66 60.13 39.1Q60.13 41.86 58.77 44.02Q57.42 46.18 55.02 47.38Q52.61 48.58 49.37 48.58Z" fill="#1F2A44"/><path class="fil" d="M55.47 12.02C52 2.5 42 1.5 36 5.5C31 8.5 26 8.5 25.5 5C25 1.8 29.5 1.3 30 4.3C30.6 7.8 25 11 18 10C13.5 9.4 10.5 7.6 8.5 5.6" fill="none" stroke="#B3262C" stroke-width="1.7" stroke-linecap="round"/><path class="fil" d="M33.6 55.5C30.5 59.5 29 60.5 29.5 63" fill="none" stroke="#B3262C" stroke-width="1.7" stroke-linecap="round"/><g class="aiguille"><path d="M32.55 57.39 44.38 40.94 59.59 11.63 58.27 6.48 53.34 8.47 38.77 38.11Z" fill="#FFFFFF"/><path d="M33 56.5 42.86 40.17 58.07 10.86 58.38 8.45 57.68 7.64 56.62 7.55 54.86 9.24 40.29 38.88Z" fill="url(#lgn)"/><path d="M54.57 13.8L56.37 10.23" stroke="#FFFFFF" stroke-width="1" stroke-linecap="round"/></g></g></svg>`;
+
+/* Titre découpé en lettres, chaque ligne masquée */
+function splitLine(text, cls = "") {
+  return `<span class="line ${cls}">${[...text].map(ch => ch === " " ? `<span class="c">&nbsp;</span>` : `<span class="c">${ch}</span>`).join("")}</span>`;
+}
+
+/* ================= Construction de la scène ================= */
+const L = {};
+function layer(id, cls = "", style = "") { L[id] = add(root, `<div class="layer ${cls}" id="${id}" style="${style}"></div>`); return L[id]; }
+
+/* Scène 1 et 2 : encre, puis bandeau magenta */
+layer("s1");
+add(L.s1, `<div class="abs" id="flood" style="inset:0;background:var(--magenta);clip-path:circle(var(--r) at 960px 560px);--r:0px">
+  <svg class="abs" id="bands" viewBox="0 0 1920 1080" style="inset:0;width:1920px;height:1080px;overflow:visible">
+    <path d="M-600 900 2520 -460v210L-600 1110z" fill="#940E4E" opacity=".55"/>
+    <path d="M-600 1180 2520 -180v34L-600 1214z" fill="#FFE45C" opacity=".9"/>
+    <path d="M-600 560 2520 -800v70L-600 630z" fill="#C2186B" opacity=".5"/>
+  </svg></div>`);
+add(L.s1, `<div class="abs" id="drop" style="left:924px;top:60px;width:72px;height:72px;border-radius:50%;background:var(--magenta);box-shadow:0 0 40px rgba(255,125,186,.5)"></div>`);
+add(L.s1, `<div class="abs" id="ring" style="left:860px;top:460px;width:200px;height:200px;border-radius:50%;border:5px solid var(--magenta-glow);opacity:0"></div>`);
+const drops = [];
+{ const r = rng(7); for (let i = 0; i < 14; i++) { const s = 6 + r() * 18; drops.push({ el: add(L.s1, `<div class="abs" style="width:${s}px;height:${s}px;margin:${-s / 2}px 0 0 ${-s / 2}px;border-radius:50%;background:${i % 4 === 0 ? "var(--magenta-glow)" : "var(--magenta)"};opacity:0"></div>`), a: (-160 + i * (140 / 13) + (r() - .5) * 12) * Math.PI / 180, v: 520 + r() * 900 }); } }
+add(L.s1, `<div class="abs head" id="h1" style="left:130px;top:292px;font-size:106px;transform-origin:0 0">${splitLine("Vous l'imaginez.")}</div>`);
+add(L.s1, `<div class="abs head" id="h2" style="left:130px;top:396px;font-size:106px;color:var(--yellow)">${splitLine("Nous l'imprimons.")}</div>`);
+add(L.s1, `<p class="abs" id="lead" style="left:136px;top:560px;width:840px;margin:0;font:500 30px/1.4 var(--f-body);color:var(--on-accent-2)">Votre logo et vos couleurs sur tout l'équipement de votre club ou de votre entreprise.</p>`);
+/* Maillot : base unie, motif imprimé, puis les quatre motifs en volets */
+const kitWrap = add(L.s1, `<div class="abs" id="kitwrap" style="left:1220px;top:340px;width:400px;height:440px;perspective:1600px"><div class="kitbox" id="kit3d" style="filter:drop-shadow(0 28px 34px rgba(58,4,30,.45))"></div></div>`);
+const kit3d = $("#kit3d");
+const kitLayers = [["uni", "uni"], ["eclats", "eclats"], ["rayures", "rayures"], ["degrade", "degrade"], ["chevrons", "chevrons"], ["eclats", "eclats"]].map(([m, k], i) =>
+  add(kit3d, `<div class="kitbox ${i >= 2 ? "wipeL" : ""}" style="${kitVars(KITS[k])};${i === 1 ? "clip-path:inset(0 0 calc(100% - var(--s)*1%) 0);--s:0" : ""}${i >= 2 ? ";--w:-14" : ""}">${kit(m === "uni" ? "" : m, { extra: HERO_EXTRA })}</div>`));
+const scan = add(kit3d, `<div class="abs" style="left:-80px;width:560px;height:10px;top:0;margin-top:-5px;background:linear-gradient(90deg,rgba(255,228,92,0),#FFE45C 18%,#FFF6C2 50%,#FFE45C 82%,rgba(255,228,92,0));box-shadow:0 0 30px 8px rgba(255,228,92,.7);opacity:0"></div>`);
+add(L.s1, `<div class="abs" id="kitcap" style="left:1070px;top:860px;width:700px;text-align:center;opacity:0">
+  <div style="display:flex;gap:14px;justify-content:center;margin-bottom:18px">${["eclats", "rayures", "degrade", "chevrons"].map(k => `<span class="sw kitsw" style="width:44px;height:44px;margin:0;background:linear-gradient(135deg,${KITS[k][0]} 50%,${KITS[k][1]} 50%)"></span>`).join("")}</div>
+  <div style="font:600 24px/1 var(--f-body);color:var(--on-accent-2)">Design du maillot : <b id="kitname" style="color:#fff">Éclats</b></div></div>`);
+
+/* Scène 3 : le catalogue */
+layer("s3", "wipeR", "--w:112;background:var(--ink)");
+const cam3 = add(L.s3, `<div class="abs" id="cam3" style="inset:0"></div>`);
+const plane = add(cam3, `<div class="abs" id="plane" style="left:780px;top:-40px;width:1284px;height:1932px;transform-origin:0 0;transform:perspective(2400px) rotateX(24deg) rotateY(-10deg) rotateZ(-9deg)"></div>`);
+const cards = GRID.map(([id, name, price], i) => add(plane, `<div class="card" data-m="${/maillot/i.test(name) ? 1 : 0}" style="left:${(i % 4) * 328}px;top:${Math.floor(i / 4) * 490}px"><img src="../site/img/${id}.webp" alt=""><b>${name}</b><i>dès ${eur(price)} € HT</i></div>`));
+add(cam3, `<div class="abs" style="inset:0;background:linear-gradient(90deg,var(--ink) 0,var(--ink) 34%,rgba(26,19,32,0) 56%);pointer-events:none"></div>`);
+add(cam3, `<div class="abs head" style="left:112px;top:190px;font-size:300px;font-variation-settings:'wdth' 80">${`<span class="line"><span class="c" id="n34">0</span></span>`}</div>`);
+add(cam3, `<div class="abs head" id="refs" style="left:120px;top:486px;font-size:78px;color:var(--yellow)">${splitLine("références")}</div>`);
+add(cam3, `<div class="abs" id="cats9" style="left:124px;top:600px;font:700 46px/1.2 var(--f-body)"><span id="n9">0</span> catégories</div>`);
+add(cam3, `<div class="abs" id="catsub" style="left:124px;top:666px;font:500 28px/1.3 var(--f-body);color:#C8BCC5">Prix unitaires HT par palier de quantité</div>`);
+const search = add(cam3, `<div class="abs" id="search" style="left:1150px;top:74px;width:640px;height:82px;background:#fff;border-radius:3px;display:flex;align-items:center;gap:16px;padding:0 24px;color:var(--ink);box-shadow:0 20px 50px rgba(0,0,0,.4)">
+  <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#1A1320" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+  <span style="font:500 28px/1 var(--f-body)"><span id="qtxt"></span><span id="caret" style="display:inline-block;width:3px;height:32px;background:var(--magenta);vertical-align:-6px;margin-left:2px"></span><span id="qph" style="color:#8A7E88">Rechercher : maillot, drapeau, tote bag…</span></span></div>`);
+const strip = add(cam3, `<div class="abs" id="strip" style="left:0;top:960px;width:1920px;height:96px;background:#fff;overflow:hidden"><div id="stripin" style="white-space:nowrap;position:absolute;left:0;top:0">${[0, 1, 2].map(() => CATS.map(c => `<span class="cat">${c}</span>`).join("")).join("")}</div></div>`);
+
+/* Scène 4 : fiche produit et paliers */
+layer("s4", "", "background:var(--ink);clip-path:inset(var(--it) var(--ir) var(--ib) var(--il) round 8px);--it:48%;--ir:44%;--ib:48%;--il:44%");
+const panel = add(L.s4, `<div class="abs" style="left:160px;top:110px;width:1600px;height:860px;background:#fff;border-radius:6px;color:var(--ink)"></div>`);
+add(L.s4, `<div class="abs" style="left:200px;top:150px;width:560px;height:700px;overflow:hidden;border-radius:3px"><img id="ph4" src="../site/img/set-football.webp" style="width:100%;height:100%;object-fit:cover"></div>`);
+const col4 = [
+  add(L.s4, `<div class="abs" style="left:820px;top:156px;font:700 20px/1 var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--magenta)">Maillots &amp; shorts</div>`),
+  add(L.s4, `<div class="abs" style="left:818px;top:190px;font:900 66px/1 var(--f-head);font-variation-settings:'wdth' 82;color:var(--ink)">Set football, maillot + short</div>`),
+  add(L.s4, `<div class="abs" style="left:820px;top:274px;font:500 24px/1.3 var(--f-body);color:var(--text-2)">100 % polyester · Sublimation intégrale en couleurs</div>`),
+  add(L.s4, `<div class="abs" style="left:820px;top:340px;width:880px;display:flex;justify-content:space-between;align-items:baseline;color:var(--ink)"><span style="font:800 32px/1 var(--f-head)">Grille tarifaire</span><span style="font:500 22px/1 var(--f-body);color:var(--text-2)">Maillot seul, € HT la pièce</span></div>`)
+];
+const bars = TIERS.map(([q, p], i) => ({
+  bar: add(L.s4, `<div class="abs" style="left:${820 + i * 178}px;top:${760}px;width:140px;height:0;background:var(--surface-2);border-radius:3px 3px 0 0"></div>`),
+  val: add(L.s4, `<div class="abs" style="left:${820 + i * 178}px;width:140px;text-align:center;font:900 34px/1 var(--f-head);font-variation-settings:'wdth' 85;color:var(--ink);opacity:0">0,00</div>`),
+  lab: add(L.s4, `<div class="abs" style="left:${820 + i * 178}px;top:774px;width:140px;text-align:center;font:700 22px/1 var(--f-body);color:var(--ink);opacity:0">${q}</div>`),
+  p
+}));
+add(L.s4, `<div class="abs" style="left:820px;top:760px;width:880px;height:2px;background:var(--ink)"></div>`);
+const qmark = add(L.s4, `<div class="abs" style="left:820px;top:808px;width:140px;height:8px;background:var(--yellow);border-radius:2px;opacity:0"></div>`);
+const cap4 = add(L.s4, `<div class="abs head" style="left:820px;top:874px;font-size:32px;text-transform:none;color:var(--magenta);letter-spacing:0">${splitLine("Prix affichés, palier par palier.")}</div>`);
+const btn4 = add(L.s4, `<div class="btn" style="left:1400px;top:872px;width:320px;height:64px;opacity:0">Personnaliser ce produit</div>`);
+const fill4 = add(L.s4, `<div class="abs" style="left:1400px;top:872px;width:320px;height:64px;background:var(--magenta);border-radius:3px;opacity:0"></div>`);
+
+/* Scène 5 : le studio */
+layer("s5", "wipeL", "--w:-14;background:var(--night)");
+add(L.s5, `<div class="abs" style="inset:0;background-image:radial-gradient(rgba(255,255,255,.09) 1.5px,transparent 1.6px);background-size:36px 36px"></div>`);
+const cam5 = add(L.s5, `<div class="abs" id="cam5" style="inset:0;transform-origin:700px 560px"></div>`);
+add(cam5, `<div class="abs" id="viewtag" style="left:120px;top:88px;font:600 26px/1 var(--f-body);color:rgba(255,255,255,.72)">Vue de face</div>`);
+add(cam5, `<div class="abs" id="note5" style="left:120px;top:1000px;font:500 23px/1 var(--f-body);color:rgba(255,255,255,.72)"><b style="color:#fff">Aperçu indicatif.</b> Couleurs et placement se valident sur le BAT.</div>`);
+const studioKit = add(cam5, `<div class="abs" style="left:350px;top:175px;width:700px;height:770px;perspective:2200px;--k1:#FFFFFF;--k2:#B3125F;--k3:#FFE45C;--k4:#1A1320;--tx:#1A1320"><div id="flip" style="position:absolute;inset:0;transform-style:preserve-3d"></div></div>`);
+const flip = $("#flip", studioKit);
+const face = add(flip, `<div class="abs" style="inset:0;backface-visibility:hidden;filter:drop-shadow(0 30px 40px rgba(0,0,0,.5))">${kit("eclats")}</div>`);
+const back = add(flip, `<div class="abs" style="inset:0;backface-visibility:hidden;transform:rotateY(180deg);filter:drop-shadow(0 30px 40px rgba(0,0,0,.5))">${kit("eclats", { back: true })}</div>`);
+const Z = (x, y, w, h, t, cls) => `<g class="${cls}"><rect class="zr" x="${x}" y="${y}" width="${w}" height="${h}" fill="rgba(179,18,95,.10)" stroke="#B3125F" stroke-width="2" stroke-dasharray="5 4"/><g class="zt"><rect x="${x}" y="${y - 17}" width="${t.length * 6.6 + 12}" height="15" rx="1.5" fill="#1A1320"/><text x="${x + 6}" y="${y - 6}" font-family="Hanken Grotesk" font-weight="700" font-size="10.5" fill="#fff">${t}</text></g></g>`;
+const ovF = add(face, `<svg viewBox="0 0 400 440" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
+  ${Z(232, 88, 56, 56, "Cœur", "zone z0")}${Z(112, 100, 110, 112, "Poitrine", "zone z1")}${Z(312, 90, 38, 38, "Manche gauche", "zone z2")}${Z(50, 90, 38, 38, "Manche droite", "zone z4")}
+  <text id="clubtxt" x="200" y="372" text-anchor="middle" font-size="34" style="fill:var(--tx)" font-family="Archivo" font-weight="900">VOTRE CLUB</text>
+  <g id="crest" transform="translate(260 116)"><g id="crestIn">${CREST}<g id="sel" opacity="0"><rect x="-31" y="-33" width="62" height="70" fill="none" stroke="#FFFFFF" stroke-width="1.6"/><rect x="-31" y="-33" width="62" height="70" fill="none" stroke="#B3125F" stroke-width="1.6" stroke-dasharray="4 3"/>
+  ${[[-31, -33], [31, -33], [-31, 37], [31, 37]].map(([x, y]) => `<rect x="${x - 4}" y="${y - 4}" width="8" height="8" fill="#fff" stroke="#B3125F" stroke-width="1.6"/>`).join("")}<path d="M0 -33V-46" stroke="#B3125F" stroke-width="1.6"/><circle cx="0" cy="-49" r="4" fill="#fff" stroke="#B3125F" stroke-width="1.6"/></g></g></g>
+</svg>`);
+const ovB = add(back, `<svg viewBox="0 0 400 440" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
+  ${Z(115, 144, 170, 180, "Centre du dos", "zone z3")}
+  <text id="num10" x="200" y="290" text-anchor="middle" font-size="150" style="fill:var(--tx);font-variation-settings:'wdth' 80" font-family="Archivo" font-weight="900" transform-origin="200 240">10</text>
+</svg>`);
+const p5 = add(cam5, `<div class="abs" id="p5" style="left:1290px;top:90px;width:540px;height:900px;background:#fff;border-radius:6px;color:var(--ink);padding:36px;box-shadow:0 30px 80px rgba(0,0,0,.5)"></div>`);
+const sec = [
+  add(p5, `<div class="abs" style="left:36px;top:34px;font:900 36px/1 var(--f-head);font-variation-settings:'wdth' 85">Studio de personnalisation</div>`),
+  add(p5, `<div class="abs" style="left:36px;top:108px;width:468px"><div class="lbl" style="color:var(--text-2)">Logo</div><div style="display:flex;align-items:center;gap:16px;margin-top:12px"><svg viewBox="-34 -36 68 72" width="60" height="64">${CREST}</svg><span style="font:600 25px/1.2 var(--f-body)">Placé sur : Cœur</span></div></div>`),
+  add(p5, `<div class="abs" style="left:36px;top:226px;width:468px"><div class="lbl" style="color:var(--text-2)">Texte</div><div id="ptxt" style="margin-top:10px;font-size:44px;line-height:1.1;height:52px">VOTRE CLUB</div>
+    <div style="display:flex;justify-content:space-between;margin-top:18px"><span class="lbl" style="color:var(--text-2)">Police</span><span style="font:700 20px/1 var(--f-body);color:var(--magenta)">15 polices</span></div>
+    <div style="position:relative;height:176px;overflow:hidden;margin-top:12px;border:2px solid var(--surface-2);border-radius:3px"><div id="flist" style="position:absolute;left:0;right:0;top:0">${FONT_ORDER.map(i => `<div class="frow" style="font-family:'${FONTS[i][1]}';font-weight:${FONTS[i][2]}">${FONTS[i][0]}</div>`).join("")}</div></div></div>`),
+  add(p5, `<div class="abs" style="left:36px;top:560px;width:468px"><div class="lbl" style="color:var(--text-2)">Couleur du produit</div><div style="margin-top:12px;display:flex">${SWATCH.map((c, i) => `<span class="sw sw1" style="background:${c}"></span>`).join("")}</div>
+    <div class="lbl" style="color:var(--text-2);margin-top:22px">Couleur du motif</div><div style="margin-top:12px;display:flex">${SWATCH2.map(c => `<span class="sw sw2" style="background:${c}"></span>`).join("")}</div></div>`),
+  add(p5, `<div class="btn" style="left:36px;top:810px;width:468px;height:64px">Demander un devis avec ce visuel</div>`)
+];
+
+/* Scène 6 : devis, BAT et les 4 étapes */
+layer("s6", "", "");
+const scrim = add(L.s6, `<div class="abs" style="inset:0;background:var(--ink);opacity:0"></div>`);
+const pathLayer = add(L.s6, `<div class="abs" style="inset:0"></div>`);
+const NODES = [240, 720, 1200, 1680], STEPS = ["Choisissez vos produits", "Envoyez votre design", "Validez le BAT", "Recevez la commande"];
+add(pathLayer, `<svg class="abs" style="left:0;top:0;width:1920px;height:1080px" viewBox="0 0 1920 1080"><path id="pline" d="M240 760H1680" stroke="#FFFFFF" stroke-width="4" fill="none"/></svg>`);
+const phead = add(pathLayer, `<div class="abs" style="left:0;top:760px;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;background:var(--yellow);box-shadow:0 0 24px 6px rgba(255,228,92,.6);opacity:0"></div>`);
+const nodes = NODES.map((x, i) => ({
+  dot: add(pathLayer, `<div class="abs" style="left:${x - 18}px;top:742px;width:36px;height:36px;border-radius:50%;background:var(--ink);border:4px solid #fff;opacity:0"></div>`),
+  lab: add(pathLayer, `<div class="abs" style="left:${x - 220}px;top:806px;width:440px;text-align:center;font:700 30px/1.2 var(--f-body);opacity:0">${STEPS[i]}</div>`)
+}));
+const n1 = add(pathLayer, `<div class="abs" style="left:130px;top:360px;width:220px;height:330px;background:#fff;border-radius:4px;overflow:hidden;color:var(--ink);opacity:0"><img src="../site/img/set-football.webp" style="width:220px;height:275px;object-fit:cover"><div style="padding:12px 14px;font:800 20px/1 var(--f-head);color:var(--magenta)">dès 19,99 € HT</div></div>`);
+const bat = add(pathLayer, `<div class="abs" style="left:1080px;top:330px;width:240px;height:330px;background:#fff;border-radius:3px;color:var(--ink);padding:18px;opacity:0;transform:rotate(-3deg);box-shadow:0 24px 50px rgba(0,0,0,.45)">
+  <div style="font:900 40px/1 var(--f-head)">BAT</div><div style="font:600 15px/1.2 var(--f-body);color:var(--text-2);margin-top:4px">Set football, face et dos</div>
+  <div style="display:flex;gap:6px;margin-top:14px;--k1:#0E1B4D;--k2:#19C3A6;--k3:#FFE45C;--k4:#1A1320"><div style="position:relative;width:100px;height:110px">${kit("eclats")}</div><div style="position:relative;width:100px;height:110px">${kit("eclats", { back: true })}</div></div>
+  <div style="height:8px;background:var(--surface-2);margin-top:18px;width:90%"></div><div style="height:8px;background:var(--surface-2);margin-top:10px;width:70%"></div><div style="height:8px;background:var(--surface-2);margin-top:10px;width:80%"></div></div>`);
+$$("svg", bat).forEach(s => { s.style.cssText = "position:absolute;inset:0;width:100%;height:100%"; });
+const stamp = add(pathLayer, `<div class="abs" style="left:1060px;top:470px;width:280px;text-align:center;opacity:0"><span style="display:inline-block;padding:10px 18px;border:5px solid var(--magenta);border-radius:4px;color:var(--magenta);background:rgba(255,255,255,.85);font:900 38px/1 var(--f-head);text-transform:uppercase;font-variation-settings:'wdth' 85;transform:rotate(-12deg)">BAT validé</span></div>`);
+const box = add(pathLayer, `<svg class="abs" viewBox="0 0 220 200" style="left:1570px;top:440px;width:220px;height:200px;opacity:0">
+  <path d="M20 70 110 30 200 70 200 160 110 196 20 160Z" fill="#FFE45C"/><path d="M20 70 110 110 200 70M110 110V196" stroke="#1A1320" stroke-width="5" fill="none" stroke-linejoin="round"/><path d="M65 50 155 90V120" stroke="#1A1320" stroke-width="5" fill="none" opacity=".5"/>
+  <path d="M20 70 110 30 200 70 200 160 110 196 20 160Z" stroke="#1A1320" stroke-width="5" fill="none" stroke-linejoin="round"/></svg>`);
+const dlg = add(L.s6, `<div class="abs" style="left:410px;top:150px;width:1100px;height:780px;background:#fff;border-radius:6px;color:var(--ink);overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.55);transform-origin:50% 50%"></div>`);
+const stepLbl = add(dlg, `<div class="abs" style="left:48px;top:44px;font:700 23px/1 var(--f-body);color:var(--magenta)">Étape 1 sur 2 : votre projet</div>`);
+add(dlg, `<div class="abs" style="left:48px;top:82px;width:1004px;height:6px;background:var(--surface-2);border-radius:3px"><div id="pbar" style="width:50%;height:100%;background:var(--magenta);border-radius:3px"></div></div>`);
+const dTitle = add(dlg, `<div class="abs" style="left:46px;top:112px;font:900 54px/1 var(--f-head);font-variation-settings:'wdth' 85">Parlez-nous de votre projet</div>`);
+const st1 = add(dlg, `<div class="abs" style="left:48px;top:196px;width:1004px;height:560px">
+  <div style="width:640px"><span class="chip on">Club sportif</span><span class="chip">Entreprise</span><span class="chip">Association ou collectivité</span><span class="chip">École ou université</span></div>
+  <div class="lbl" style="margin-top:20px">Produit souhaité</div><div class="field" style="width:620px;margin-top:10px">Set football, maillot + short</div>
+  <div class="lbl" style="margin-top:22px">Quantité</div><div style="margin-top:10px;width:660px"><span class="chip">Moins de 30</span><span class="chip">30 à 49</span><span class="chip on">50 à 99</span><span class="chip">100 à 249</span><span class="chip">250 et plus</span></div>
+  <div class="abs" style="left:680px;top:0;width:324px;height:350px;background:var(--surface);border-radius:4px;--k1:#0E1B4D;--k2:#19C3A6;--k3:#FFE45C;--k4:#1A1320">
+    <div class="abs" style="left:14px;top:24px;width:144px;height:158px">${kit("eclats")}</div><div class="abs" style="left:166px;top:24px;width:144px;height:158px">${kit("eclats", { back: true })}</div>
+    <div class="abs" style="left:0;right:0;top:204px;text-align:center;font:700 21px/1.3 var(--f-body)">Aperçu joint au devis</div>
+    <div class="abs" style="left:0;right:0;top:240px;text-align:center;font:500 18px/1.3 var(--f-body);color:var(--text-2)">Aperçu indicatif</div></div>
+  <div class="abs" style="left:0;top:474px;font:500 22px/1.3 var(--f-body);color:var(--text-2);width:560px">Gratuit et sans engagement. Vous validez la maquette avant toute production.</div>
+  <div class="btn" style="left:824px;top:464px;width:180px;height:64px">Continuer</div></div>`);
+const st2 = add(dlg, `<div class="abs" style="left:48px;top:196px;width:1004px;height:560px;opacity:0">
+  ${[["Prénom", 0, 0, 480, .42], ["Nom", 524, 0, 480, .5], ["Email", 0, 118, 480, .74], ["Téléphone", 524, 118, 480, .46], ["Nom du club, de l'entreprise ou de l'association", 0, 236, 1004, .34]].map(([l, x, y, w, f], i) =>
+    `<div class="abs" style="left:${x}px;top:${y}px;width:${w}px"><div class="lbl">${l}</div><div class="field" style="margin-top:10px"><div class="typed" data-f="${f}" data-w="${w - 40}"></div></div></div>`).join("")}
+  <div class="abs" style="left:0;top:384px;font:500 21px/1.3 var(--f-body);color:var(--text-2);width:640px">Vos coordonnées servent uniquement à traiter votre demande de devis.</div>
+  <div class="btn" style="left:744px;top:464px;width:260px;height:64px">Recevoir mon devis</div></div>`);
+const sent = add(dlg, `<div class="abs" style="inset:0;opacity:0">
+  <svg class="abs" viewBox="0 0 140 140" style="left:480px;top:170px;width:140px;height:140px"><circle id="ckc" cx="70" cy="70" r="62" fill="none" stroke="#B3125F" stroke-width="8"/><path id="ckp" d="M42 72 62 92 100 50" fill="none" stroke="#B3125F" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <div class="abs" style="left:0;right:0;top:350px;text-align:center;font:900 60px/1 var(--f-head);font-variation-settings:'wdth' 85">Demande envoyée</div>
+  <div class="abs" style="left:0;right:0;top:436px;text-align:center;font:500 27px/1.3 var(--f-body);color:var(--text-2)">Merci. Nous revenons vers vous rapidement avec un devis.</div></div>`);
+
+/* Scène 7 : carton de fin */
+layer("s7", "", "background:var(--magenta);clip-path:circle(var(--r) at 1680px 760px);--r:0px");
+add(L.s7, `<svg class="abs" id="bands7" viewBox="0 0 1920 1080" style="left:0;top:0;width:1920px;height:1080px;overflow:visible">
+  <path d="M-600 420 1300 -408v190L-600 610z" fill="#940E4E" opacity=".6"/><path d="M900 1240 2700 455v150L900 1390z" fill="#940E4E" opacity=".6"/><path d="M1000 1124 2600 426v26L1000 1150z" fill="#FFE45C" opacity=".9"/></svg>`);
+const lock = add(L.s7, `<div class="abs" style="left:0;top:210px;width:1920px;display:flex;justify-content:center;align-items:center;gap:40px">
+  <div id="logo7" style="width:176px;height:176px;filter:drop-shadow(0 20px 30px rgba(58,4,30,.4))">${LOGO_IFS}</div>
+  <div><div class="head" style="font-size:62px;text-transform:none;font-variation-settings:'wdth' 85"><span class="line"><span class="in" id="brand1">Industrie Française de Sellerie</span></span></div>
+  <div style="font:600 32px/1.3 var(--f-body);color:var(--on-accent-2)"><span class="line"><span class="in" id="brand2">Sublimation textile personnalisée</span></span></div></div></div>`);
+add(L.s7, `<div class="abs head" id="h7" style="left:0;width:1920px;top:490px;text-align:center;font-size:104px;color:var(--yellow)">${splitLine("Catalogue sublimation 2026")}</div>`);
+add(L.s7, `<div class="abs" style="left:0;width:1920px;top:660px;text-align:center;font:600 36px/1.3 var(--f-body)"><span class="line"><span class="in" id="t7">Fabriqué en Europe. BAT validé avant production.</span></span></div>`);
+const url7 = add(L.s7, `<div class="abs" style="left:0;width:1920px;top:772px;display:flex;justify-content:center"><div id="url7" style="background:#fff;color:var(--ink);border-radius:3px;padding:20px 34px;font:800 40px/1 var(--f-head);font-variation-settings:'wdth' 90;clip-path:inset(0 100% 0 0)">catalogue-ifs.netlify.app</div></div>`);
+
+/* Curseur et onde de clic */
+const cur = add(root, `<svg class="abs" viewBox="0 0 26 36" style="left:0;top:0;width:34px;height:47px;opacity:0;transform-origin:0 0;filter:drop-shadow(0 4px 6px rgba(0,0,0,.4))"><path d="M1.5 1.5V29L8.6 22.4 13.5 33.5 18.4 31.4 13.6 20.6H23Z" fill="#fff" stroke="#1A1320" stroke-width="2" stroke-linejoin="round"/></svg>`);
+const rip = add(root, `<div class="abs" style="left:0;top:0;width:80px;height:80px;margin:-40px 0 0 -40px;border-radius:50%;border:4px solid #fff;opacity:0"></div>`);
+
+/* ================= Chargement : polices et images prêtes avant la première image ================= */
+const loads = ["900 40px Archivo", "700 40px Archivo", "400 20px 'Hanken Grotesk'", "700 20px 'Hanken Grotesk'", ...FONTS.map(f => `${f[2]} 30px '${f[1]}'`)]
+  .map(f => document.fonts.load(f, "AÉÈœ€àç VOTRE CLUB 0123456789"));
+await Promise.all(loads);
+await document.fonts.ready;
+await Promise.all($$("img").map(i => i.decode().catch(() => { throw new Error("image " + i.src); })));
+
+/* Mesures fixes, prises avant toute animation */
+const c0 = cards[0].getBoundingClientRect();
+const zoomX = c0.left + c0.width / 2, zoomY = c0.top + c0.height / 2;
+cam3.style.transformOrigin = `${zoomX}px ${zoomY}px`;
+bars.forEach(b => { b.h = b.p / 20 * 320; });
+
+/* ================= Timeline maître (en pause, pilotée par seek) ================= */
+const tl = gsap.timeline({ paused: true, defaults: { ease: "marque" } });
+const riseChars = (sel, at, { st = .03, d = .55 } = {}) => {
+  const ch = $$(".c", typeof sel === "string" ? $(sel) : sel);
+  tl.fromTo(ch, { yPercent: 118, fontVariationSettings: '"wdth" 100' }, { yPercent: 0, duration: d, stagger: st, ease: "expo.out" }, at);
+  tl.fromTo(ch, { fontVariationSettings: '"wdth" 100' }, { fontVariationSettings: '"wdth" 78', duration: d + .25, stagger: st, ease: "power3.inOut", immediateRender: false }, at + .05);
+};
+const riseLine = (el, at, d = .6) => tl.fromTo(el, { yPercent: 115 }, { yPercent: 0, duration: d, ease: "expo.out" }, at);
+function click(at, x, y) {
+  tl.to(cur, { scale: .82, duration: .07, ease: "power2.out" }, at).to(cur, { scale: 1, duration: .14, ease: "power2.out" }, at + .07);
+  tl.fromTo(rip, { x, y, scale: .25, opacity: .9 }, { scale: 1.5, opacity: 0, duration: .45, ease: "expo.out", immediateRender: false }, at);
+}
+const curTo = (at, x, y, d = .35) => tl.to(cur, { x, y, duration: d, ease: "power3.inOut" }, at);
+const curShow = (at, x, y) => tl.fromTo(cur, { x, y, opacity: 0 }, { opacity: 1, duration: .12, ease: "none", immediateRender: false }, at);
+const curHide = at => tl.to(cur, { opacity: 0, duration: .1, ease: "none" }, at);
+
+/* --- Scène 1 : la goutte --- */
+tl.fromTo("#drop", { y: 0, scaleX: .8, scaleY: 1.1 }, { y: 464, scaleY: 1.7, duration: .45, ease: "power2.in" }, 0);
+tl.to("#drop", { scaleX: 2.6, scaleY: .25, duration: .08, ease: "power2.out" }, .45).to("#drop", { opacity: 0, duration: .08, ease: "none" }, .5);
+tl.fromTo("#ring", { scale: .1, opacity: 1 }, { scale: 9, opacity: 0, duration: .8, ease: "expo.out", immediateRender: false }, .45);
+tl.fromTo("#flood", { "--r": "0px" }, { "--r": "1300px", duration: .75, ease: "power3.inOut" }, .44);
+tl.fromTo("#bands", { x: -260 }, { x: 180, duration: 4.1, ease: "none" }, .5);
+riseChars("#h1", .64, { st: .032 });
+/* --- Scène 2 : le maillot imprimé --- */
+riseChars("#h2", S.impression + .3, { st: .032 });
+tl.fromTo("#lead", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: .6 }, S.impression + .75);
+tl.fromTo(kit3d, { y: 980, rotationY: -42, rotationX: 12, scale: 1.45 }, { y: 0, rotationY: 0, rotationX: 0, duration: .75, ease: "expo.out" }, S.impression);
+tl.fromTo(kitLayers[1], { "--s": 0 }, { "--s": 104, duration: .5, ease: "power2.inOut" }, S.impression + .5);
+tl.fromTo(scan, { top: "0%", opacity: 1 }, { top: "104%", duration: .5, ease: "power2.inOut", immediateRender: false }, S.impression + .5).to(scan, { opacity: 0, duration: .1, ease: "none" }, S.impression + 1);
+MOTIFS_T.forEach((t, i) => {
+  tl.fromTo(kitLayers[i + 2], { "--w": -14 }, { "--w": 114, duration: .22, ease: "power3.inOut" }, t - .11);
+  tl.fromTo(kit3d, { rotationY: 0 }, { rotationY: i % 2 ? -8 : 8, duration: .11, ease: "power2.out", yoyo: true, repeat: 1, immediateRender: false }, t - .11);
+});
+tl.fromTo("#kitcap", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: .5 }, S.impression + .9);
+/* Sortie : le maillot fonce vers la caméra, le catalogue entre en volet */
+tl.to(["#h1", "#h2", "#lead", "#kitcap"], { x: -240, opacity: 0, duration: .3, ease: "power3.in", stagger: .03 }, 4.22);
+tl.to(kit3d, { scale: 6.5, x: -420, y: 120, rotationZ: -8, duration: .42, ease: "power3.in" }, 4.28);
+tl.fromTo(L.s3, { "--w": 112 }, { "--w": -14, duration: .42, ease: "power3.inOut" }, 4.38);
+tl.set(L.s1, { visibility: "hidden" }, 4.9);
+
+/* --- Scène 3 : le catalogue --- */
+tl.fromTo(cards, { y: 140, z: -260, opacity: 0, rotationX: -20 }, { y: 0, z: 0, opacity: 1, rotationX: 0, duration: .6, stagger: .04, ease: "expo.out" }, S.catalogue + .08);
+tl.fromTo(plane, { x: 40, y: 80 }, { x: -60, y: -150, duration: 2.6, ease: "none" }, S.catalogue);
+riseLine("#n34", S.catalogue + .38);
+riseChars("#refs", S.catalogue + .5, { st: .025 });
+tl.fromTo(["#cats9", "#catsub"], { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: .5, stagger: .1 }, S.catalogue + .8);
+tl.fromTo(strip, { y: 110 }, { y: 0, duration: .45, ease: "expo.out" }, S.catalogue + .6);
+tl.fromTo(search, { y: -30, scale: .92, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: .4, ease: "expo.out" }, 5.65);
+tl.to(cards.filter(c => c.dataset.m === "0"), { opacity: .14, duration: .25, ease: "power2.out" }, 6.45);
+tl.to(cards.filter(c => c.dataset.m === "1"), { boxShadow: "0 0 0 6px #FFE45C, 0 30px 60px rgba(0,0,0,.35)", duration: .2, ease: "power2.out" }, 6.45);
+tl.to(cam3, { scale: 2.6, duration: .32, ease: "power4.in" }, 6.68);
+
+/* --- Scène 4 : fiche produit --- */
+const s4in = tl.fromTo(L.s4, { "--it": "45%", "--ib": "45%", "--il": "45%", "--ir": "45%" }, { "--it": "0%", "--ib": "0%", "--il": "0%", "--ir": "0%", duration: .45, ease: "expo.out" }, S.paliers);
+tl.set(L.s3, { visibility: "hidden" }, S.paliers + .5);
+tl.fromTo("#ph4", { scale: 1.25 }, { scale: 1, duration: 1, ease: "expo.out" }, S.paliers);
+col4.forEach((el, i) => tl.fromTo(el, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: "expo.out" }, S.paliers + .15 + i * .07));
+tl.fromTo(bars.map(b => b.lab), { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .3, stagger: .06 }, 7.45);
+tl.fromTo(bars.map(b => b.val), { opacity: 0 }, { opacity: 1, duration: .2, stagger: .08, ease: "none" }, 7.5);
+const PALIERS = [7.9, 8.25, 8.6, 8.95, 9.3];
+tl.fromTo(qmark, { opacity: 0 }, { opacity: 1, duration: .1, ease: "none" }, 7.88);
+PALIERS.forEach((t, i) => { if (i) tl.to(qmark, { x: i * 178, duration: .2, ease: "power3.out" }, t - .02); });
+riseChars(cap4, 8.1, { st: .012, d: .45 });
+tl.fromTo(btn4, { scale: .6, opacity: 0 }, { scale: 1, opacity: 1, duration: .4, ease: "back.out(2.2)" }, 9.35);
+curShow(9.35, 1760, 1050); curTo(9.4, 1560, 904, .4); click(9.85, 1560, 904);
+curHide(10.02);
+tl.set(fill4, { opacity: 1 }, 9.98);
+tl.to(fill4, { left: 0, top: 0, width: 1920, height: 1080, borderRadius: 0, duration: .3, ease: "power4.inOut" }, 9.98);
+
+/* --- Scène 5 : studio --- */
+tl.fromTo(L.s5, { "--w": -14 }, { "--w": 114, duration: .36, ease: "power3.inOut" }, S.studio + .2);
+tl.set(L.s4, { visibility: "hidden" }, S.studio + .6);
+tl.fromTo(flip, { scale: .78, rotationY: 30, y: 60 }, { scale: 1, rotationY: 0, y: 0, duration: .7, ease: "expo.out" }, S.studio + .28);
+tl.fromTo(p5, { x: 640 }, { x: 0, duration: .6, ease: "expo.out" }, S.studio + .35);
+tl.fromTo(["#viewtag", "#note5"], { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: .4, stagger: .08 }, S.studio + .45);
+tl.fromTo(sec[0], { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: "expo.out" }, S.studio + .5);
+tl.set(sec.slice(1), { opacity: 0 }, 0);
+tl.fromTo(sec[1], { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "expo.out", immediateRender: false }, 10.95);
+tl.fromTo(sec[2], { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "expo.out", immediateRender: false }, 11.55);
+tl.fromTo(sec[3], { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "expo.out", immediateRender: false }, 12.2);
+tl.fromTo(sec[4], { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: .4, ease: "expo.out", immediateRender: false }, 13.75);
+const zones = $$(".zone", ovF);
+tl.set([...zones, $(".z3", ovB)], { opacity: 0 }, 0);
+zones.forEach((z, i) => {
+  tl.set(z, { opacity: 1 }, 10.5 + i * .09);
+  tl.fromTo($(".zr", z), { drawSVG: "0%" }, { drawSVG: "100%", duration: .3, ease: "power2.out" }, 10.5 + i * .09);
+  tl.fromTo($(".zt", z), { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: .2, ease: "power2.out" }, 10.62 + i * .09);
+  if (i) tl.to(z, { opacity: 0, duration: .2, ease: "none" }, 11.3);
+});
+tl.to(zones[0], { opacity: 0, duration: .2, ease: "none" }, 11.55);
+tl.fromTo("#crestIn", { y: -150, scale: 2.6, rotation: 18, opacity: 0 }, { y: 0, scale: .82, rotation: 0, opacity: 1, duration: .28, ease: "back.out(1.9)" }, 10.8);
+tl.to("#sel", { opacity: 1, duration: .08, ease: "none" }, 11.1);
+tl.to("#crestIn", { scale: 1.05, rotation: -10, duration: .35, ease: "power3.inOut" }, 11.25);
+curShow(11.1, 850, 431); curTo(11.25, 873, 435, .35); curHide(11.62);
+tl.to("#sel", { opacity: 0, duration: .1, ease: "none" }, 11.6);
+tl.fromTo("#clubtxt", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: .25, ease: "expo.out" }, 11.6);
+curShow(12.3, 1330, 640); curTo(12.33, 1490, 715, .2); click(12.55, 1490, 715); curTo(12.62, 1626, 830, .16); click(12.8, 1626, 830); curHide(12.95);
+tl.to(studioKit, { "--k1": "#0E1B4D", "--tx": "#FFFFFF", duration: .25, ease: "power2.out" }, 12.55);
+tl.to(studioKit, { "--k2": "#19C3A6", duration: .2, ease: "power2.out" }, 12.8);
+tl.to(flip, { rotationY: 180, duration: .48, ease: "power4.inOut" }, 13.0);
+tl.fromTo(cam5, { scale: 1 }, { scale: 1.04, duration: .48, ease: "power2.inOut", yoyo: true, repeat: 1 }, 12.98);
+tl.set($(".z3", ovB), { opacity: 1 }, 13.3);
+tl.fromTo($(".z3 .zr", ovB), { drawSVG: "0%" }, { drawSVG: "100%", duration: .25, ease: "power2.out" }, 13.3);
+tl.to($(".z3", ovB), { opacity: 0, duration: .2, ease: "none" }, 13.7);
+tl.fromTo("#num10", { scale: 2.4, opacity: 0 }, { scale: 1, opacity: 1, duration: .3, ease: "expo.out" }, 13.42);
+curShow(13.9, 1420, 1020); curTo(13.92, 1560, 932, .24); click(14.2, 1560, 932); curHide(14.4);
+
+/* --- Scène 6 : devis, BAT, étapes --- */
+tl.to(cam5, { scale: .9, opacity: .35, duration: .45, ease: "power3.inOut" }, S.devis);
+tl.fromTo(dlg, { y: 900, rotationX: 0 }, { y: 0, duration: .5, ease: "expo.out" }, S.devis);
+curShow(14.9, 1180, 960); curTo(14.9, 1362, 842, .22); click(15.15, 1362, 842);
+tl.to(st1, { x: -140, opacity: 0, duration: .25, ease: "power3.in" }, 15.2);
+tl.fromTo(st2, { x: 140, opacity: 0 }, { x: 0, opacity: 1, duration: .3, ease: "expo.out" }, 15.3);
+tl.to("#pbar", { width: "100%", duration: .3, ease: "power3.inOut" }, 15.2);
+curTo(15.5, 1322, 842, .2); click(15.75, 1322, 842); curHide(15.9);
+tl.to([st2, stepLbl, dTitle, $("#pbar").parentElement], { opacity: 0, duration: .12, ease: "none" }, 15.8);
+tl.to(sent, { opacity: 1, duration: .1, ease: "none" }, 15.84);
+tl.fromTo(["#ckc", "#ckp"], { drawSVG: "0%" }, { drawSVG: "100%", duration: .3, stagger: .1, ease: "power2.inOut" }, 15.85);
+tl.to(scrim, { opacity: 1, duration: .3, ease: "none" }, 16.05);
+tl.set(L.s5, { visibility: "hidden" }, 16.4);
+tl.to(dlg, { x: 720 - 960, y: 480 - 540, scale: .3, duration: .38, ease: "power4.inOut" }, 16.08);
+tl.fromTo("#pline", { drawSVG: "0%" }, { drawSVG: "100%", duration: .9, ease: "none" }, 16.25);
+tl.fromTo(phead, { x: 240, opacity: 0 }, { x: 1680, opacity: 1, duration: .9, ease: "none" }, 16.25);
+tl.to(phead, { opacity: 0, duration: .15, ease: "none" }, 17.15);
+const ART = [n1, null, bat, box];
+[16.25, 16.55, 16.85, 17.15].forEach((t, i) => {
+  tl.fromTo(nodes[i].dot, { scale: .3, opacity: 0 }, { scale: 1, opacity: 1, duration: .25, ease: "back.out(3)" }, t - .02);
+  tl.to(nodes[i].dot, { backgroundColor: "#FFE45C", borderColor: "#FFE45C", duration: .1, ease: "none" }, t);
+  tl.fromTo(nodes[i].lab, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "expo.out" }, t);
+  if (ART[i]) tl.fromTo(ART[i], { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: "expo.out" }, t - .12);
+});
+tl.fromTo(stamp, { scale: 3, opacity: 0 }, { scale: 1, opacity: 1, duration: .16, ease: "power4.in" }, 16.72);
+tl.fromTo(pathLayer, { scale: 1 }, { scale: 1.035, duration: 1.3, ease: "none", transformOrigin: "960px 700px" }, 16.1);
+
+/* --- Scène 7 : carton de fin --- */
+tl.fromTo(L.s7, { "--r": "0px" }, { "--r": "2400px", duration: .38, ease: "power3.in" }, 17.3);
+tl.set(L.s6, { visibility: "hidden" }, 17.75);
+tl.fromTo("#bands7", { x: -320 }, { x: 0, duration: 1.5, ease: "power2.out" }, 17.5);
+tl.fromTo("#logo7", { scale: .3, rotation: -14, opacity: 0 }, { scale: 1, rotation: 0, opacity: 1, duration: .55, ease: "expo.out" }, 17.66);
+tl.fromTo($$(".fil", $("#logo7")), { drawSVG: "0%" }, { drawSVG: "100%", duration: .6, stagger: .12, ease: "power2.inOut" }, 17.85);
+tl.fromTo($(".aiguille", $("#logo7")), { x: 10, y: -14, opacity: 0 }, { x: 0, y: 0, opacity: 1, duration: .4, ease: "expo.out" }, 18.1);
+riseLine("#brand1", 17.8); riseLine("#brand2", 17.9);
+riseChars("#h7", 18.0, { st: .02 });
+riseLine("#t7", 18.35);
+tl.to("#url7", { clipPath: "inset(0 0% 0 0)", duration: .35, ease: "power3.inOut" }, 18.55);
+tl.set({}, {}, DUREE);
+/* Chaque scène n'existe qu'à partir de son entrée */
+[["s3", 4.38], ["s4", S.paliers], ["s5", S.studio + .2], ["s6", S.devis], ["s7", 17.3]].forEach(([id, t]) => { L[id].style.visibility = "hidden"; tl.set(L[id], { visibility: "visible" }, t); });
+
+/* Point de chute du zoom : la carte « Set football » telle qu'elle est à 6,7 s, après la dérive de la grille */
+tl.seek(6.7, true);
+const cz = cards[0].getBoundingClientRect(), zx = cz.left + cz.width / 2, zy = cz.top + cz.height / 2;
+tl.seek(0, true);
+cam3.style.transformOrigin = `${zx}px ${zy}px`;
+const pc = (v, tot) => (v / tot * 100).toFixed(2) + "%";
+s4in.vars.startAt = { "--it": pc(zy - 70, 1080), "--ib": pc(1080 - zy - 70, 1080), "--il": pc(zx - 60, 1920), "--ir": pc(1920 - zx - 60, 1920) };
+s4in.invalidate();
+
+/* ================= Couche procédurale : pure fonction du temps ================= */
+const h1 = $("#h1");
+const SHAKES = [[.45, 11], [7.0, 4], [11.05, 5], [13.45, 5], [16.85, 12], [17.62, 6]];
+const kitname = $("#kitname"), kitsw = $$(".kitsw"), qtxt = $("#qtxt"), qph = $("#qph"), caret = $("#caret");
+const stripin = $("#stripin"), catEls = $$(".cat", stripin), n34 = $("#n34"), n9 = $("#n9");
+const clubtxt = $("#clubtxt"), ptxt = $("#ptxt"), frows = $$(".frow"), flist = $("#flist"), viewtag = $("#viewtag");
+const sw1 = $$(".sw1"), sw2 = $$(".sw2"), typedEls = $$(".typed");
+let hSize = null;
+function proc(t) {
+  /* Titre : centré en scène 1, glisse à sa place de bandeau entre 2,0 et 2,6 s */
+  const w = h1.offsetWidth, h = h1.offsetHeight;
+  const s0 = 1.62, cx = 960 - 130 - w * s0 / 2, cy = 560 - 292 - h * s0 / 2;
+  const k = eInOut(prog(t, S.impression - .05, .6));
+  if (t < 4.2) h1.style.transform = `translate(${cx * (1 - k)}px,${cy * (1 - k)}px) scale(${s0 + (1 - s0) * k})`;
+  /* Gouttelettes : balistique simple */
+  drops.forEach(d => {
+    const dt = t - .45;
+    if (dt < 0 || dt > 1.1) { d.el.style.opacity = 0; return; }
+    const x = 960 + Math.cos(d.a) * d.v * dt, y = 560 + Math.sin(d.a) * d.v * dt + .5 * 2600 * dt * dt;
+    d.el.style.opacity = 1; d.el.style.transform = `translate(${x}px,${y}px) scale(${1 - dt * .7})`;
+  });
+  /* Nom du motif */
+  const mi = MOTIFS_T.filter(x => t >= x).length;
+  kitname.textContent = MOTIF_NOMS[mi];
+  kitsw.forEach((s, i) => s.classList.toggle("on", i === mi % 4));
+  /* Compteurs du catalogue */
+  n34.textContent = Math.round(34 * eOut(prog(t, 4.9, .9)));
+  n9.textContent = Math.round(9 * eOut(prog(t, 5.3, .6)));
+  /* Barre des catégories */
+  const off = Math.max(0, t - 5.1) * 360;
+  stripin.style.transform = `translateX(${-off}px)`;
+  const act = Math.floor(Math.max(0, t - 5.1) / .32) % 9;
+  catEls.forEach((c, i) => c.classList.toggle("on", t > 5.1 && i % 9 === act));
+  /* Recherche */
+  const nq = Math.max(0, Math.min(7, Math.floor((t - 5.95) / .065) + 1));
+  qtxt.textContent = "maillot".slice(0, t >= 5.95 ? nq : 0);
+  qph.style.display = t >= 5.95 ? "none" : "";
+  caret.style.opacity = t >= 5.75 && Math.floor(t * 4) % 2 === 0 ? 1 : 0;
+  /* Paliers : barres, prix qui défilent, palier actif */
+  const pa = PALIERS.filter(x => t >= x).length - 1;
+  bars.forEach((b, i) => {
+    const p = eOut(prog(t, 7.5 + i * .08, .5));
+    b.bar.style.height = b.h * p + "px"; b.bar.style.top = 760 - b.h * p + "px";
+    b.val.style.top = 760 - b.h * p - 48 + "px";
+    b.val.textContent = eur(b.p * p) + " €";
+    b.bar.style.background = i === pa ? "var(--magenta)" : "var(--surface-2)";
+    b.val.style.color = i === pa ? "var(--magenta)" : "var(--ink)";
+    b.val.style.transform = `scale(${i === pa ? 1 + .18 * (1 - eOut(prog(t, PALIERS[i], .25))) : 1})`;
+  });
+  /* Studio : défilé des polices */
+  const fi = Math.max(0, Math.min(14, Math.floor((t - 11.7) / .075)));
+  const f = FONTS[FONT_ORDER[fi]];
+  clubtxt.setAttribute("font-family", f[1]); clubtxt.setAttribute("font-weight", f[2]);
+  ptxt.style.fontFamily = `'${f[1]}'`; ptxt.style.fontWeight = f[2];
+  frows.forEach((r, i) => r.classList.toggle("on", t >= 11.65 && i === fi));
+  flist.style.transform = `translateY(${-Math.max(0, Math.min(11, fi - 1)) * 44}px)`;
+  clubtxt.setAttribute("font-size", 30); const cl = clubtxt.getComputedTextLength(); if (cl > 184) clubtxt.setAttribute("font-size", 30 * 184 / cl);
+  sw1.forEach((s, i) => s.classList.toggle("on", i === (t >= 12.55 ? 2 : 0)));
+  sw2.forEach((s, i) => s.classList.toggle("on", i === (t >= 12.8 ? 4 : 0)));
+  viewtag.textContent = t >= 13.24 ? "Vue de dos" : "Vue de face";
+  /* Devis : saisie symbolisée */
+  typedEls.forEach((e, i) => { e.style.width = +e.dataset.w * +e.dataset.f * eOut(prog(t, 15.32 + i * .07, .22)) + "px"; });
+  stepLbl.textContent = t >= 15.3 ? "Étape 2 sur 2 : vos coordonnées" : "Étape 1 sur 2 : votre projet";
+  /* Secousses de caméra sur les impacts */
+  let sx = 0, sy = 0;
+  SHAKES.forEach(([a, amp], j) => { const dt = t - a; if (dt >= 0 && dt < .45) { const e = amp * Math.exp(-dt * 11); sx += e * Math.sin(dt * 78 + j); sy += e * Math.cos(dt * 64 + j * 2); } });
+  root.style.transform = `translate(${sx}px,${sy}px)`;
+}
+
+window.__seek = t => { tl.seek(t, false); proc(t); };
+window.__duree = DUREE;
+window.__seek(0);
+window.__pret = true;
+
+/* Aperçu : ?play lit en temps réel, ?t=12.3 fige une image */
+const q = new URLSearchParams(location.search);
+if (q.has("t")) window.__seek(+q.get("t"));
+if (q.has("play")) { const t0 = performance.now(); const loop = () => { const t = ((performance.now() - t0) / 1000) % DUREE; window.__seek(t); requestAnimationFrame(loop); }; loop(); }
+</script>
+</body>
+</html>
