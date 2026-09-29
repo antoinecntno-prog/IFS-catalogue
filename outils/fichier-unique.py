@@ -36,8 +36,10 @@ html = re.sub(r'\s*<link rel="preload" href="fonts/[^"]+"[^>]*>', "", html)
 html, n_polices = re.subn(r"url\(fonts/([^)]+\.woff2)\)", lambda m: f'url("{data_uri(SITE / "fonts" / m.group(1), "font/woff2")}")', html)
 
 # Logo IFS : icône d'onglet et marque de l'en-tête
-logo = data_uri(SITE / "favicon.svg", "image/svg+xml")
-html = html.replace('href="favicon.svg"', f'href="{logo}"', 1).replace('src="favicon.svg"', f'src="{logo}"', 1)
+logo = data_uri(SITE / "logo-ifs.svg", "image/svg+xml")
+html = html.replace('href="logo-ifs.svg"', f'href="{logo}"', 1).replace('src="logo-ifs.svg"', f'src="{logo}"', 1)
+for png in ("logo-ifs-32.png", "logo-ifs-180.png"):
+    html = html.replace(f'href="{png}"', f'href="{data_uri(SITE / png, "image/png")}"', 1)
 
 # Photos : une table nom -> image 640 px, sans variante 360 px
 photos = {p.stem: data_uri(p, "image/webp") for p in sorted((SITE / "img").glob("*.webp")) if not p.stem.endswith("-360")}
