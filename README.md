@@ -38,4 +38,4 @@ Toutes les couleurs sont des jetons dans `site/base.css`, partagés par le catal
 
 ## Remplacer une photo
 
-Déposer deux fichiers WebP en 4:5 dans `site/img/` : `nom.webp` (640 × 800) et `nom-360.webp` (360 × 450), puis renseigner `"photo": "nom"` sur le produit dans `site/donnees.js`.
+Déposer deux fichiers WebP en 4:5 dans `site/img/` : `nom.webp` (640 × 800) et `nom-360.webp` (360 × 450), puis renseigner `"photo": "nom"` sur le produit dans `site/donnees.js`. Pour d'autres vues dans la galerie de la fiche (dos, détail), ajouter les fichiers `nom-2.webp` et `nom-2-360.webp`, puis `"more": ["nom-2"]` sur le produit.

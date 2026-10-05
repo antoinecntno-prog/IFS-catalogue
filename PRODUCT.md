@@ -30,7 +30,7 @@ Les produits de ce catalogue sont fabriqués en Europe par un partenaire ; IFS c
 ## Operating Context
 
 - **Saison** : les clubs commandent en juin et juillet pour jouer équipés à la reprise de septembre (reprise du championnat amateur de football le 13 septembre 2026). Source : veilles LinkedIn IFS de juin à août 2026.
-- **Parcours** : catégorie, fiche produit avec grille tarifaire, demande de devis en deux étapes (projet, puis coordonnées), BAT numérique, production, livraison.
+- **Parcours** : recherche dans l'en-tête (collé en haut sur toute la page) ou rangée de catégories, fiche produit avec photos et grille tarifaire, demande de devis en deux étapes (projet, puis coordonnées), BAT numérique, production, livraison.
 - **Règles commerciales affichées** : prix HT, transport inclus sauf mention sur la fiche, tarif du palier atteint par modèle, minimum par produit (en dessous : frais de lancement de 50 € HT ou devis petite série selon la fiche), tolérance de production de ±5 % sur les quantités, délai confirmé sur le devis.
 - **Diffusion** : chaque fiche produit a un lien copiable, fait pour être partagé entre membres d'un bureau ou d'un service. Le canal principal de diffusion du catalogue (lien envoyé après un contact, recherche Google, QR code sur un support imprimé, salon) reste à préciser.
 
@@ -56,8 +56,8 @@ Les produits de ce catalogue sont fabriqués en Europe par un partenaire ; IFS c
 
 - **Prix et caractéristiques** : réels, dans `DATA` (`site/index.html`).
 - **Photos actuelles** : illustrations de banque d'images, signalées comme non contractuelles dans le pied de page.
-- **Photos de réalisations** : Antoine peut en fournir (pièces sorties de production) pour remplacer les photos d'illustration de `site/img/`. Pas encore livrées.
-- **Absent, à ne pas fabriquer** : références clients citées, logos de clients, avis et témoignages, photos de l'atelier, chiffres de volume ou de délai présentés comme des résultats.
+- **Photos de réalisations** : le set football montre une vraie pièce, face et dos, avec les sponsors du club (Vittel, Casino Contrexéville, Ville de Contrexéville, Handball Contrex). Le club et ses sponsors ont donné leur accord à Antoine le 05/10/2026. Les maillots de basket et le tapis de yoga viennent aussi de vraies pièces. Les autres photos de réalisations arriveront avec les images retouchées par IA.
+- **Absent, à ne pas fabriquer** : références clients citées ou logos de clients sans leur accord, avis et témoignages, photos de l'atelier, chiffres de volume ou de délai présentés comme des résultats.
 
 ## Product Principles
 
