@@ -47,7 +47,8 @@ Les produits de ce catalogue sont fabriqués en Europe par un partenaire ; IFS c
 
 ## Brand Commitments
 
-- Nom : **IFS · Industrie Française de Sellerie**, entité du Groupe CONTINO.
+- Nom : **Contino Sport**, marque du Groupe Contino, en ligne sur continosport.fr depuis le 05/10/2026. Le favicon est le monogramme « C SPORT », l'en-tête montre le logo Contino Sport avec « Sublimation textile ».
+- IFS (Industrie Française de Sellerie), l'entité du groupe qui chiffre et coordonne, n'apparaît plus sur le site, sauf dans la mention de pied de page voulue par Antoine : « Contino Sport, marque du Groupe Contino IFS ».
 - L'Usinier Français (jeans et vêtements de travail) est une marque sœur, hors de ce catalogue.
 - Voix : français, vouvoiement, phrases courtes et factuelles, promesse concrète (« Vous l'imaginez. Nous l'imprimons. »).
 - Le catalogue a quitté le bleu et le vert, jugés génériques dans le secteur ; Antoine a choisi la palette magenta encre le 27/09/2026 (détail dans le code).

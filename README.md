@@ -1,6 +1,6 @@
 # IFS-catalogue
 
-Catalogue sublimation 2026 d'IFS, site statique prêt pour Netlify.
+Catalogue sublimation 2026 de Contino Sport (continosport.fr), marque du Groupe Contino. Site statique prêt pour Netlify.
 
 ## Contenu
 
@@ -11,6 +11,7 @@ Catalogue sublimation 2026 d'IFS, site statique prêt pour Netlify.
 - `site/stockage.js` : mémoire locale du navigateur qui porte le visuel du studio jusqu'au devis.
 - `site/img/` : photos des produits, chacune en 640 px et en 360 px (`-360.webp`) pour les petits écrans.
 - `site/fonts/` : Archivo et Hanken Grotesk, plus les 13 polices du studio (`studio-*.woff2`), toutes libres, avec leurs licences.
+- `site/logo-contino-sport.webp` et `site/logo-contino-sport-blanc.webp` : logo de l'en-tête, en thème clair et en thème sombre. `site/c-sport-32.png`, `-192.png` et `-180.png` : favicon C SPORT et icône d'écran d'accueil.
 - `site/_headers` : cache des photos et des polices, en-têtes de sécurité.
 - `netlify.toml` : publie le dossier `site/`.
 
@@ -20,7 +21,7 @@ Relier le dépôt à Netlify, ou glisser le dossier `site/` sur Netlify Drop. Le
 
 ## Ouvrir la page seule
 
-`site/index.html` a besoin des fichiers de son dossier (`base.css`, `donnees.js`, `img/`, `fonts/`). Ouverte seule, elle affiche un message qui renvoie vers le site en ligne ou la version fichier unique. Pour un aperçu, une pièce jointe ou une clé USB, utiliser `2026-09-27_catalogue-sublimation-ifs.html` : photos et polices sont incluses dans le fichier. Après toute modification de `site/`, le régénérer avec `python3 outils/fichier-unique.py`.
+`site/index.html` a besoin des fichiers de son dossier (`base.css`, `donnees.js`, `img/`, `fonts/`). Ouverte seule, elle affiche un message qui renvoie vers le site en ligne ou la version fichier unique. Pour un aperçu, une pièce jointe ou une clé USB, utiliser `2026-10-05_catalogue-sublimation-contino-sport.html` : photos et polices sont incluses dans le fichier. Après toute modification de `site/`, le régénérer avec `python3 outils/fichier-unique.py`.
 
 ## Studio de personnalisation
 

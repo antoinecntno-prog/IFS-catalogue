@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Personnaliser | IFS</title>
-<meta name="description" content="Studio de personnalisation IFS : placez vos logos et vos textes sur le produit, face et dos, puis demandez votre devis avec l'aperçu.">
+<title>Personnaliser | Contino Sport</title>
+<meta name="description" content="Studio de personnalisation Contino Sport : placez vos logos et vos textes sur le produit, face et dos, puis demandez votre devis avec l'aperçu.">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#141016" media="(prefers-color-scheme: dark)">
-<link rel="icon" href="logo-ifs.svg" type="image/svg+xml">
-<link rel="icon" href="logo-ifs-32.png" sizes="32x32" type="image/png">
-<link rel="apple-touch-icon" href="logo-ifs-180.png">
+<link rel="icon" href="c-sport-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="c-sport-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="c-sport-180.png">
 <link rel="preload" href="fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/hanken-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/studio-teko.woff2" as="font" type="font/woff2" crossorigin>
@@ -36,8 +36,8 @@
 body{height:100dvh;display:flex;flex-direction:column;overflow:hidden}
 .st-top{flex:none;display:flex;align-items:center;gap:16px;min-height:68px;padding:10px 20px;background:var(--bg);border-bottom:1px solid var(--line)}
 .brand{display:flex;align-items:center;gap:12px;text-decoration:none;flex:none}
-.brand-mark{display:block;flex:none;width:44px;height:44px;border-radius:var(--r);box-shadow:0 0 0 1px var(--line)}
-.brand-txt{font:800 16px/1.2 var(--f-head);color:var(--text)}
+.brand-logo{display:block;width:auto;height:44px}
+.brand-txt{padding-left:12px;border-left:1px solid var(--line-strong);font:800 16px/1.2 var(--f-head);color:var(--text)}
 .brand-txt small{display:block;font:500 12.5px/1.3 var(--f-body);color:var(--text-2)}
 .st-prod{flex:1;max-width:440px;margin-left:auto}
 .st-back{flex:none;min-height:48px}
@@ -163,7 +163,7 @@ body{height:100dvh;display:flex;flex-direction:column;overflow:hidden}
   .st-tp{overflow:visible;padding:16px}
   .st-foot{position:fixed;left:0;right:0;bottom:0;z-index:10;padding:10px 16px calc(10px + env(safe-area-inset-bottom))}
 }
-@media (max-width:420px){.brand-txt{font-size:14px}}
+@media (max-width:420px){.brand-txt{font-size:14px}.brand-logo{height:36px}}
 @media (forced-colors:active){
   .st-sw input:checked+span,.st-font input:checked+span,.st-motif input:checked+span{outline:3px solid Highlight;outline-offset:3px}
   .st-thumb[aria-pressed="true"],.st-chip[aria-pressed="true"]{outline:3px solid Highlight}
@@ -175,7 +175,7 @@ body{height:100dvh;display:flex;flex-direction:column;overflow:hidden}
 <a class="skip" href="#st-panel">Aller aux réglages</a>
 <noscript><p class="noscript">Le studio a besoin de JavaScript. Pour un devis, écrivez à antoine.contino@groupecontino.com</p></noscript>
 <header class="st-top">
-  <a class="brand" href="index.html"><img class="brand-mark" src="logo-ifs.svg" width="44" height="44" alt=""><span class="brand-txt">Studio de personnalisation<small>Industrie Française de Sellerie</small></span></a>
+  <a class="brand" href="index.html" aria-label="Contino Sport, retour au catalogue"><picture><source srcset="logo-contino-sport-blanc.webp" media="(prefers-color-scheme: dark)"><img class="brand-logo" src="logo-contino-sport.webp" width="104" height="44" alt=""></picture><span class="brand-txt">Studio de personnalisation<small>Sublimation textile</small></span></a>
   <div class="f st-prod"><label class="sr" for="p-product">Produit à personnaliser</label><span class="sel"><select id="p-product"></select></span></div>
   <a class="btn btn-line st-back" id="st-back" href="index.html">Retour au catalogue</a>
 </header>
