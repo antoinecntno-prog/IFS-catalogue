@@ -266,7 +266,6 @@ main:focus{outline:none}
 /* Catalogue */
 /* Le filtre de recherche change la hauteur du catalogue : pas d'ancrage de défilement, la page reste calée sur les résultats */
 #catalogue{overflow-anchor:none}
-.cat-intro{padding:48px 0 0}
 .search{position:relative;min-width:0}
 .search input{width:100%;height:46px;padding:0 12px 0 42px;border:1.5px solid var(--line-strong);border-radius:var(--r);background:var(--surface-soft);color:var(--text);font:500 16px var(--f-body);text-overflow:ellipsis}
 .search input:focus{border-color:var(--accent-text);background:var(--bg)}
@@ -280,6 +279,7 @@ main:focus{outline:none}
    colonnes) prend la largeur de ses cartes et laisse la suivante se ranger à côté. */
 #cats{--cols:4;display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));column-gap:20px}
 .cat{grid-column:1 / -1;padding:72px 0 0}
+#cats>.cat:first-child{padding-top:44px}
 .cat.compact{grid-column:span var(--span);grid-row:span 2;display:grid;grid-template-columns:subgrid;grid-template-rows:subgrid}
 .cat.compact .cat-head{grid-column:1 / -1;flex-direction:column;align-items:flex-start;align-self:start}
 .cat.compact .cat-head h2{font-size:clamp(1.7rem,2.3vw,2.2rem)}
@@ -572,9 +572,6 @@ tbody tr:hover td,tbody tr:hover th{background:var(--surface-soft)}
 </div>
 
 <main class="wrap" id="catalogue" tabindex="-1">
-  <div class="cat-intro head-row">
-    <div><h2 class="h2">Le catalogue</h2><p><span id="ref-count">42 références</span>, prix unitaires HT par palier de quantité.</p></div>
-  </div>
   <p class="status" id="status" aria-live="polite"></p>
   <div class="empty" id="empty" hidden>
     <p>Aucun produit ne correspond à « <span id="empty-q"></span> ». Décrivez votre besoin, nous le chiffrons.</p>
@@ -862,7 +859,6 @@ function card(p) {
 }
 
 function render() {
-  $("#ref-count").textContent = plural(DATA.products.length, "référence", "références");
   $("#tiles").innerHTML = DATA.cats.map(c => `<li><a class="tile" href="#cat-${c.id}">${coverOf(c)
       ? `<span class="tile-img"><img src="${imgSrc(coverOf(c))}" srcset="${imgSet(coverOf(c))}" sizes="${TILE_SIZES}" width="640" height="800" alt="" loading="lazy" decoding="async" data-icon="${c.icon}"></span>`
       : `<span class="tile-img tile-pat">${icon(c.icon)}</span>`}<span class="tile-name">${esc(c.name)}</span></a></li>`).join("");
