@@ -19,24 +19,34 @@
 <link rel="preload" href="fonts/hanken-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="base.css">
 <style>
-html{scroll-behavior:smooth;scroll-padding-top:88px}
+/* --top-h : hauteur de l'en-tête collé. La barre des catégories se colle juste dessous. */
+:root{--top-h:73px;--bar-h:61px}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--top-h) + var(--bar-h) + 16px)}
 .sprite{position:absolute;width:0;height:0;overflow:hidden}
 main:focus{outline:none}
 .noscript{margin:0;padding:16px 24px;background:var(--spark);color:var(--on-spark);font-weight:600;text-align:center}
 
 /* En-tête */
-.top{background:var(--bg);border-bottom:1px solid var(--line)}
-.top-in{display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:72px}
-.brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+/* En-tête collé : le logo, la recherche et le devis restent à portée sur toute la page */
+.top{position:sticky;top:0;z-index:40;background:var(--bg);border-bottom:1px solid var(--line)}
+.top-in{display:flex;align-items:center;gap:20px;height:72px}
+.brand{display:flex;flex:none;align-items:center;gap:12px;text-decoration:none}
 .brand-mark{display:block;flex:none;width:48px;height:48px;border-radius:var(--r);box-shadow:0 0 0 1px var(--line)}
 .brand-txt{font:700 15px/1.3 var(--f-head);color:var(--text)}
 .brand-txt small{display:block;font:500 12.5px/1.3 var(--f-body);color:var(--text-2)}
-.top-links{display:flex;align-items:center;gap:26px}
+.top .search{flex:1 1 auto;max-width:440px;margin-inline:auto}
+.top-links{display:flex;flex:none;align-items:center;gap:26px}
 .top-links a{padding:12px 0;font:600 15px/20px var(--f-body);text-decoration:none;color:var(--text-2)}
 .top-links a:hover{color:var(--accent-text)}
 .top .sm{display:none}
-@media (max-width:860px){.top-links a{display:none}}
-@media (max-width:600px){.brand-txt small{display:none}.top .lg{display:none}.top .sm{display:inline}.top .btn{padding:0 16px}}
+@media (max-width:1100px){.top-links a{display:none}}
+@media (max-width:600px){
+  :root{--top-h:61px}
+  .top-in{gap:10px;height:60px}
+  .brand-txt{display:none}
+  .brand-mark{width:44px;height:44px}
+  .top .lg{display:none}.top .sm{display:inline}.top .btn{padding:0 14px}
+}
 
 /* Bandeau : le maillot est la preuve de l'accroche */
 .hero{--focus:var(--focus-on-color);background:var(--hero-bg);color:var(--on-accent);overflow:hidden}
@@ -75,32 +85,23 @@ main:focus{outline:none}
 }
 @media (max-width:600px){.hero-facts{grid-template-columns:1fr;gap:10px;margin-top:32px;font-size:14px}.kit-svg{width:min(290px,76%)}}
 
-/* Catégories en tuiles */
-.univ{padding-block:80px 8px}
-.head-row{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px 32px;margin-bottom:28px}
-.h2{font-weight:900;font-stretch:80%;font-size:clamp(2.2rem,4vw,3.4rem);line-height:1;letter-spacing:-.01em}
-.head-row p{margin:10px 0 0;color:var(--text-2)}
-.tiles{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px}
-@media (max-width:1100px){.tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
-@media (max-width:760px){.tiles{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:44%;overflow-x:auto;overscroll-behavior-x:contain;padding-bottom:10px;scroll-snap-type:x proximity}}
-.tile{position:relative;display:block;aspect-ratio:4/5;border-radius:var(--r);overflow:hidden;background:var(--surface);text-decoration:none;scroll-snap-align:start}
-.tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
-.tile::after{content:"";position:absolute;inset:auto 0 0 0;height:55%;background:linear-gradient(to top,var(--photo-scrim),transparent)}
-.tile span{position:absolute;left:14px;right:14px;bottom:14px;z-index:1;color:var(--paper);font:800 20px/1.05 var(--f-head);font-stretch:85%;overflow-wrap:break-word;hyphens:auto}
+/* Catégories : une rangée de vignettes montre la gamme et laisse les produits haut dans la page */
+.univ{padding-block:44px 0}
+.univ-h{margin:0 0 16px;font:900 clamp(1.5rem,2.2vw,1.9rem)/1 var(--f-head);font-stretch:80%;letter-spacing:-.01em}
+.tiles{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:12px;margin:0;padding:0;list-style:none}
+@media (max-width:1100px){.tiles{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:112px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;padding-bottom:8px;scrollbar-width:thin}}
+@media (max-width:600px){.tiles{grid-auto-columns:96px;gap:10px}}
+.tile{display:flex;flex-direction:column;gap:8px;min-height:44px;text-decoration:none;color:var(--text);scroll-snap-align:start}
+.tile-img{position:relative;display:block;aspect-ratio:1;border-radius:var(--r);overflow:hidden;background:var(--surface)}
+.tile-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.tile-img .ico{position:absolute;left:50%;top:50%;width:46%;height:46%;transform:translate(-50%,-50%);color:var(--accent-text)}
 .tile-pat{background:var(--soft) var(--motif-accent) center/cover no-repeat}
-.tile-pat::after{display:none}
-.tile-pat .ico{position:absolute;left:50%;top:40%;width:42%;height:42%;transform:translate(-50%,-50%);color:var(--accent-text)}
-.tile-pat span{color:var(--text)}
-@media (min-width:761px){.tile-cta{grid-column:span var(--cta-span,2);aspect-ratio:auto}}
-.tile-cta{border:0;cursor:pointer;background:var(--accent);text-align:left;width:100%;font:inherit;transition:background-color .2s}
-.tile-cta::after{display:none}
-.tile-cta span{color:var(--spark)}
-.tile-cta small{display:block;margin-top:10px;color:var(--on-accent);font:700 14px var(--f-body);text-decoration:underline;text-underline-offset:4px}
-.tile-cta:hover{background:var(--accent-hover)}
+.tile-name{font:700 13.5px/1.25 var(--f-body);overflow-wrap:break-word;hyphens:auto}
+.tile:hover .tile-name{color:var(--accent-text)}
 
 /* Barre des catégories */
-.catbar{position:sticky;top:0;z-index:30;background:var(--bg);border-bottom:1px solid var(--line);margin-top:56px}
-.catbar-in{display:flex;align-items:center;gap:12px;min-height:64px}
+.catbar{position:sticky;top:var(--top-h);z-index:30;background:var(--bg);border-bottom:1px solid var(--line);margin-top:36px}
+.catbar-in{display:flex;align-items:center;min-height:60px}
 .nav-shell{position:relative;display:flex;flex:1;min-width:0;align-self:stretch}
 /* Fondu sur les bords qui cachent encore des catégories. Les flèches se posent sur la partie
    déjà transparente du fondu : elles ne recouvrent jamais un lien lisible. */
@@ -111,7 +112,7 @@ main:focus{outline:none}
 .nav.dragging{cursor:grabbing;scroll-behavior:auto}
 .nav::-webkit-scrollbar{display:none}
 .nav ul{display:flex;gap:4px;margin:0;padding:0;list-style:none;white-space:nowrap}
-.nav a{display:block;padding:21px 12px 18px;font:600 14.5px/1.2 var(--f-body);color:var(--text-2);text-decoration:none;border-bottom:3px solid transparent;-webkit-user-drag:none;user-select:none;transition:color .2s,border-color .2s}
+.nav a{display:block;padding:19px 12px 16px;font:600 14.5px/1.2 var(--f-body);color:var(--text-2);text-decoration:none;border-bottom:3px solid transparent;-webkit-user-drag:none;user-select:none;transition:color .2s,border-color .2s}
 .nav a:hover{color:var(--text)}
 .nav a[aria-current="true"]{color:var(--text);border-bottom-color:var(--accent-text)}
 .nav a:focus-visible{outline-offset:-3px}
@@ -123,16 +124,15 @@ main:focus{outline:none}
 .nav-arrow:hover{color:var(--accent-text)}
 /* Au doigt, le glissement natif suffit : le fondu seul signale la suite */
 @media (hover:none){.nav-arrow.on{display:none}}
-.catbar .btn{flex:none;min-height:44px;padding:0 16px;font-size:14px}
-.catbar .sm{display:none}
-@media (max-width:600px){.catbar .lg{display:none}.catbar .sm{display:inline}.catbar .btn{padding:0 14px}}
 
 /* Catalogue */
-.cat-intro{padding:56px 0 0}
-.search{position:relative;width:min(420px,100%)}
-.search input{width:100%;height:50px;padding:0 16px 0 46px;border:1.5px solid var(--line-strong);border-radius:var(--r);background:var(--bg);color:var(--text);font:500 16px var(--f-body)}
-.search input:focus{border-color:var(--accent-text)}
-.search svg{position:absolute;left:15px;top:50%;width:20px;height:20px;transform:translateY(-50%);fill:none;stroke:var(--text-2);stroke-width:2}
+/* Le filtre de recherche change la hauteur du catalogue : pas d'ancrage de défilement, la page reste calée sur les résultats */
+#catalogue{overflow-anchor:none}
+.cat-intro{padding:48px 0 0}
+.search{position:relative;min-width:0}
+.search input{width:100%;height:46px;padding:0 12px 0 42px;border:1.5px solid var(--line-strong);border-radius:var(--r);background:var(--surface-soft);color:var(--text);font:500 16px var(--f-body);text-overflow:ellipsis}
+.search input:focus{border-color:var(--accent-text);background:var(--bg)}
+.search svg{position:absolute;left:13px;top:50%;width:20px;height:20px;transform:translateY(-50%);fill:none;stroke:var(--text-2);stroke-width:2;pointer-events:none}
 .status{margin:18px 0 0;color:var(--text-2)}
 .status:empty{display:none}
 .empty{margin:48px 0;padding:36px;border:1.5px dashed var(--line-strong);border-radius:var(--r);text-align:center;color:var(--text-2)}
@@ -174,7 +174,7 @@ main:focus{outline:none}
 
 /* Survol réservé aux appareils qui survolent : rien ne reste figé au doigt */
 @media (hover:hover){
-  .tile:hover img{transform:scale(1.05)}
+  .tile:hover .tile-img img{transform:scale(1.05)}
   .card:hover .media img{transform:scale(1.04)}
   .card:hover .quick{opacity:1;transform:none}
   .sw:hover{border-color:var(--on-accent);transform:translateY(-2px)}
@@ -226,6 +226,16 @@ dialog::backdrop{background:var(--scrim)}
 .gal-main .ico{width:34%;height:34%;color:var(--accent-text)}
 .gal-main.ph{background:var(--surface) var(--motif-ink) center/cover no-repeat}
 .gal-note{margin:10px 0 0;font-size:13px;color:var(--text-2)}
+/* Plusieurs vues : les photos défilent au doigt, les miniatures choisissent la vue */
+.gal-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
+.gal-track::-webkit-scrollbar{display:none}
+.gal-track img{position:relative;inset:auto;flex:0 0 100%;scroll-snap-align:start}
+.gal-track:focus-visible{outline-offset:3px}
+.gal-thumbs{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.gal-th{width:56px;height:70px;padding:0;border:2px solid var(--line-strong);border-radius:var(--r);overflow:hidden;background:var(--surface);cursor:pointer}
+.gal-th img{display:block;width:100%;height:100%;object-fit:cover}
+.gal-th[aria-pressed="true"]{border-color:var(--accent-text);box-shadow:0 0 0 1px var(--accent-text)}
+.gal-th:hover{border-color:var(--text)}
 .info h2{font:900 clamp(2rem,3.2vw,2.8rem)/1 var(--f-head);font-stretch:80%;letter-spacing:-.01em}
 .info h2:focus{outline:none}
 .info .sub{margin:10px 0 0;color:var(--text-2)}
@@ -308,7 +318,7 @@ tbody tr:hover td,tbody tr:hover th{background:var(--surface-soft)}
 @media (max-width:860px){
   #sheet,#quote{width:100vw;max-width:100vw;max-height:100dvh;height:100dvh;margin:0;border-radius:0}
   .sheet-main{grid-template-columns:1fr;gap:22px;padding:18px 16px 4px}
-  .gal-main{max-width:460px}
+  .gal-main,.gal-thumbs{max-width:460px}
   .d-head{padding-left:16px}
   .tarifs{padding:24px 16px 30px}
   .q-top,.q-body{padding-left:16px;padding-right:16px}
@@ -321,14 +331,14 @@ tbody tr:hover td,tbody tr:hover th{background:var(--surface-soft)}
 /* Mouvement réduit : plus aucun déplacement ni zoom, les changements d'état restent visibles en fondu */
 @media (prefers-reduced-motion:reduce){
   html,.nav{scroll-behavior:auto}
-  .tile img,.media img,.sw,.q-bar i{transition:none}
-  .tile:hover img,.card:hover .media img,.sw:hover{transform:none}
+  .tile-img img,.media img,.sw,.q-bar i{transition:none}
+  .tile:hover .tile-img img,.card:hover .media img,.sw:hover{transform:none}
   .media .quick{transform:none;transition:opacity .2s}
 }
 /* Contraste forcé (Windows) : les états portés par la couleur de fond gardent un repère visible */
 @media (forced-colors:active){
   .pick input:checked+b{outline:3px solid Highlight;outline-offset:-3px}
-  .sw[aria-pressed="true"]{outline:3px solid Highlight;outline-offset:2px}
+  .sw[aria-pressed="true"],.gal-th[aria-pressed="true"]{outline:3px solid Highlight;outline-offset:2px}
   .nav a[aria-current="true"]{border-bottom-color:Highlight}
   .q-bar i{background:Highlight}
 }
@@ -344,8 +354,12 @@ tbody tr:hover td,tbody tr:hover th{background:var(--surface-soft)}
       <img class="brand-mark" src="logo-ifs.svg" width="48" height="48" alt="">
       <span class="brand-txt">Industrie Française de Sellerie<small>Sublimation textile personnalisée</small></span>
     </a>
+    <div class="search" role="search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      <label class="sr" for="q">Rechercher un produit</label>
+      <input id="q" type="search" placeholder="Maillot, drapeau, tote bag…" autocomplete="off" maxlength="80" enterkeyhint="search">
+    </div>
     <div class="top-links">
-      <a href="#h-univ">Catégories</a>
       <a href="#catalogue">Catalogue</a>
       <a href="#etapes">Comment ça marche</a>
       <a href="#conditions">Conditions</a>
@@ -405,10 +419,8 @@ tbody tr:hover td,tbody tr:hover th{background:var(--surface-soft)}
 </section>
 
 <section class="wrap univ" aria-labelledby="h-univ">
-  <div class="head-row">
-    <div><h2 class="h2" id="h-univ">Catégories</h2><p>Du maillot au bonnet de bain, tout se personnalise.</p></div>
-  </div>
-  <div class="tiles" id="tiles"></div>
+  <h2 class="univ-h" id="h-univ">Du maillot au bonnet de bain, tout se personnalise</h2>
+  <ul class="tiles" id="tiles"></ul>
 </section>
 
 <div class="catbar">
@@ -418,18 +430,12 @@ tbody tr:hover td,tbody tr:hover th{background:var(--surface-soft)}
       <nav class="nav" id="navbox" aria-label="Catégories"><ul id="nav"></ul></nav>
       <button class="nav-arrow next" type="button" id="nav-next" aria-label="Catégories suivantes" tabindex="-1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
     </div>
-    <button class="btn btn-primary" type="button" data-quote=""><span class="lg">Demander un devis</span><span class="sm">Devis</span></button>
   </div>
 </div>
 
 <main class="wrap" id="catalogue" tabindex="-1">
   <div class="cat-intro head-row">
     <div><h2 class="h2">Le catalogue</h2><p><span id="ref-count">42 références</span>, prix unitaires HT par palier de quantité.</p></div>
-    <div class="search" role="search">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
-      <label class="sr" for="q">Rechercher un produit</label>
-      <input id="q" type="search" placeholder="Rechercher : maillot, drapeau, tote bag, bandana…" autocomplete="off" maxlength="80" enterkeyhint="search">
-    </div>
   </div>
   <p class="status" id="status" aria-live="polite"></p>
   <div class="empty" id="empty" hidden>
@@ -638,7 +644,9 @@ $$(".sw").forEach(b => b.addEventListener("click", () => setKit(Number(b.dataset
 
 /* ---------- Rendu ---------- */
 const CARD_SIZES = "(max-width: 760px) 46vw, (max-width: 1100px) 31vw, 316px";
-const TILE_SIZES = "(max-width: 760px) 44vw, (max-width: 1100px) 23vw, 210px";
+const TILE_SIZES = "(max-width: 600px) 96px, 140px";
+/* Photos d'un produit : la principale, puis les vues supplémentaires (« more ») */
+const photosOf = p => p.photo ? [p.photo, ...(p.more || [])] : [];
 function media(p) {
   const inner = p.photo
     ? `<img src="${imgSrc(p.photo)}" srcset="${imgSet(p.photo)}" sizes="${CARD_SIZES}" width="640" height="800" alt="" loading="lazy" decoding="async" data-icon="${p.icon}">`
@@ -673,10 +681,9 @@ function card(p) {
 
 function render() {
   $("#ref-count").textContent = plural(DATA.products.length, "référence", "références");
-  $("#tiles").innerHTML = DATA.cats.map(c => c.cover
-      ? `<a class="tile" href="#cat-${c.id}"><img src="${imgSrc(c.cover)}" srcset="${imgSet(c.cover)}" sizes="${TILE_SIZES}" width="640" height="800" alt="" loading="lazy" decoding="async" data-icon="${c.icon}"><span>${esc(c.name)}</span></a>`
-      : `<a class="tile tile-pat" href="#cat-${c.id}">${icon(c.icon)}<span>${esc(c.name)}</span></a>`).join("")
-    + `<button class="tile tile-cta" type="button" data-quote=""><span>Besoin hors catalogue<small>Demander un devis</small></span></button>`;
+  $("#tiles").innerHTML = DATA.cats.map(c => `<li><a class="tile" href="#cat-${c.id}">${c.cover
+      ? `<span class="tile-img"><img src="${imgSrc(c.cover)}" srcset="${imgSet(c.cover)}" sizes="${TILE_SIZES}" width="640" height="800" alt="" loading="lazy" decoding="async" data-icon="${c.icon}"></span>`
+      : `<span class="tile-img tile-pat">${icon(c.icon)}</span>`}<span class="tile-name">${esc(c.name)}</span></a></li>`).join("");
   $("#nav").innerHTML = DATA.cats.map(c => `<li><a href="#cat-${c.id}" data-cat="${c.id}" draggable="false">${esc(c.name)}</a></li>`).join("");
   $("#cats").insertAdjacentHTML("afterbegin", DATA.cats.map(c => {
     const items = DATA.products.filter(p => p.cat === c.id);
@@ -687,11 +694,8 @@ function render() {
   }).join(""));
 }
 
-/* Rangement des catégories courtes côte à côte, à partir de trois colonnes.
-   La tuile « Besoin hors catalogue » complète la dernière rangée des catégories. */
+/* Rangement des catégories courtes côte à côte, à partir de trois colonnes */
 function layoutCats() {
-  const tiles = $("#tiles"), tcols = getComputedStyle(tiles).gridTemplateColumns.split(" ").filter(Boolean).length;
-  if (tcols > 2) { const rest = tcols - (DATA.cats.length % tcols); tiles.style.setProperty("--cta-span", rest >= 2 ? rest : rest + tcols); }
   const cols = parseInt(getComputedStyle($("#cats")).getPropertyValue("--cols"), 10) || 4;
   let pos = 0;
   $$(".cat").forEach(sec => {
@@ -732,7 +736,22 @@ function filter() {
   layoutCats();
   updateArrows();
 }
-$("#clear-q").addEventListener("click", () => { $("#q").value = ""; filter(); $("#q").focus(); });
+$("#clear-q").addEventListener("click", () => { $("#q").value = ""; filter(); $("#q").focus({ preventScroll: true }); });
+/* La recherche est dans l'en-tête : dès que la frappe marque une pause, la page descend au début
+   du catalogue pour montrer les résultats, si elle n'y est pas déjà. Entrée y mène tout de suite.
+   Le défilement attend la pause : un défilement lancé pendant que le filtre change la page s'interrompt. */
+let resultsT;
+function toResults(force) {
+  const top = $("#catalogue").getBoundingClientRect().top;
+  if (force || top > innerHeight * 0.45 || top < 0) $("#catalogue").scrollIntoView({ block: "start" });
+}
+$("#q").addEventListener("input", () => {
+  filter();
+  clearTimeout(resultsT);
+  if ($("#q").value.trim() === "") return;
+  resultsT = setTimeout(() => toResults(), 250);
+});
+$("#q").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); clearTimeout(resultsT); toResults(true); } });
 
 /* ---------- Barre des catégories : flèches, molette, glisser ---------- */
 const navbox = $("#navbox");
@@ -814,10 +833,30 @@ let currentProduct = null;
 const hasStudio = p => !!(p && p.viz) && !window.IFS_FICHIER_UNIQUE;
 const studioUrl = (pid, short, retour) => `personnaliser.html?produit=${encodeURIComponent(pid)}${typeof short === "boolean" ? `&short=${short ? 1 : 0}` : ""}${retour ? `&retour=${retour}` : ""}`;
 function galHTML(p) {
-  return (p.photo
-    ? `<div class="gal-main"><img src="${imgSrc(p.photo)}" width="640" height="800" alt="Photo d'illustration : ${esc(p.name)}" data-icon="${p.icon}"></div><p class="gal-note">Photo d'illustration</p>`
-    : `<div class="gal-main ph">${icon(p.icon)}</div><p class="gal-note">Visuel à venir</p>`)
-    + (hasStudio(p) ? `<a class="btn btn-line viz-open" href="${studioUrl(p.id)}">Personnaliser ce produit</a>` : "");
+  const ph = photosOf(p), n = ph.length;
+  let g;
+  if (!n) g = `<div class="gal-main ph">${icon(p.icon)}</div><p class="gal-note">Visuel à venir</p>`;
+  else if (n === 1) g = `<div class="gal-main"><img src="${imgSrc(p.photo)}" width="640" height="800" alt="Photo d'illustration : ${esc(p.name)}" data-icon="${p.icon}"></div><p class="gal-note">Photo d'illustration</p>`;
+  else g = `<div class="gal-main gal-track" id="gal-track" tabindex="0" role="region" aria-label="Photos du produit, ${n} vues. Flèches gauche et droite pour changer de vue.">${ph.map((name, i) =>
+      `<img src="${imgSrc(name)}" width="640" height="800" alt="Photo ${i + 1} sur ${n} : ${esc(p.name)}" data-icon="${p.icon}"${i ? ' loading="lazy"' : ""}>`).join("")}</div>
+    <div class="gal-thumbs" role="group" aria-label="Choisir une vue">${ph.map((name, i) =>
+      `<button class="gal-th" type="button" data-gal="${i}" aria-label="Vue ${i + 1} sur ${n}" aria-pressed="${i === 0}"><img src="${imgSrc(name)}" srcset="${imgSet(name)}" sizes="56px" alt=""></button>`).join("")}</div>
+    <p class="gal-note">Photo d'illustration</p>`;
+  return g + (hasStudio(p) ? `<a class="btn btn-line viz-open" href="${studioUrl(p.id)}">Personnaliser ce produit</a>` : "");
+}
+/* Galerie : miniatures, glissement au doigt et flèches du clavier restent synchronisés */
+function setupGallery() {
+  const track = $("#gal-track"); if (!track) return;
+  const thumbs = $$(".gal-th");
+  const go = i => { i = Math.max(0, Math.min(thumbs.length - 1, i)); track.scrollTo({ left: i * track.clientWidth, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); mark(i); };
+  const mark = i => thumbs.forEach((b, k) => b.setAttribute("aria-pressed", String(k === i)));
+  const cur = () => Math.round(track.scrollLeft / Math.max(1, track.clientWidth));
+  thumbs.forEach(b => b.addEventListener("click", () => go(Number(b.dataset.gal))));
+  let t; track.addEventListener("scroll", () => { clearTimeout(t); t = setTimeout(() => mark(cur()), 80); }, { passive: true });
+  track.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight") { e.preventDefault(); go(cur() + 1); }
+    else if (e.key === "ArrowLeft") { e.preventDefault(); go(cur() - 1); }
+  });
 }
 function openSheet(id, push = true) {
   const p = byId[id]; if (!p) return false;
@@ -852,6 +891,7 @@ function openSheet(id, push = true) {
       ${p.options.length ? `<div class="opts"><h4>Options</h4><ul>${p.options.map(o => `<li><span>${esc(o.label)}</span><span>+ ${eur.format(o.price)} ${esc(o.unit.replace("€ ", ""))}</span></li>`).join("")}</ul></div>` : ""}
       <p class="fine">Prix HT. Le tarif appliqué est celui du palier atteint.</p>
     </div>`;
+  setupGallery();
   const dlg = $("#sheet");
   if (!dlg.open) dlg.showModal(); else $("#sheet-title").focus();
   dlg.scrollTop = 0;
@@ -1125,14 +1165,15 @@ document.addEventListener("error", e => {
   const img = e.target;
   if (!(img instanceof HTMLImageElement) || !img.dataset.icon) return;
   const box = img.parentElement, note = box.nextElementSibling;
-  box.classList.add(box.classList.contains("tile") ? "tile-pat" : "ph");
+  box.classList.add(box.classList.contains("tile-img") ? "tile-pat" : "ph");
   img.replaceWith(document.createRange().createContextualFragment(icon(img.dataset.icon)));
   if (note && note.classList.contains("gal-note")) note.textContent = "Visuel à venir";
 }, true);
 
 render();
 layoutCats();
-$("#q").addEventListener("input", filter);
+/* Sur téléphone, le champ est étroit : un indice court y tient en entier */
+if (matchMedia("(max-width: 600px)").matches) $("#q").placeholder = "Rechercher";
 window.addEventListener("hashchange", fromHash);
 fromHash();
 updateArrows();
