@@ -487,7 +487,7 @@ tbody tr:hover td,tbody tr:hover th{background:var(--surface-soft)}
 
 <footer>
   <div class="wrap foot-in">
-    <span><b>Contino Sport</b>, marque du Groupe Contino IFS · Catalogue sublimation 2026 · Photos d'illustration non contractuelles</span>
+    <span><b>Contino Sport</b>, marque du Groupe Contino IFS · Catalogue sublimation 2026 · Photos non contractuelles</span>
     <span class="eu">Made in Europe</span>
   </div>
 </footer>
@@ -649,8 +649,12 @@ $$(".sw").forEach(b => b.addEventListener("click", () => setKit(Number(b.dataset
 /* ---------- Rendu ---------- */
 const CARD_SIZES = "(max-width: 760px) 46vw, (max-width: 1100px) 31vw, 316px";
 const TILE_SIZES = "(max-width: 600px) 96px, 140px";
-/* Photos d'un produit : la principale, puis les vues supplémentaires (« more ») */
+/* Photos d'un produit : la principale, puis les vues supplémentaires (« more »).
+   « reel » : photo de Contino Sport, sans la mention « Photo d'illustration ». */
 const photosOf = p => p.photo ? [p.photo, ...(p.more || [])] : [];
+const noteOf = p => p.reel ? "" : `<p class="gal-note">Photo d'illustration</p>`;
+/* Vignette de catégorie : la photo du produit désigné par « cover », ou le pictogramme */
+const coverOf = c => byId[c.cover] && byId[c.cover].photo;
 function media(p) {
   const inner = p.photo
     ? `<img src="${imgSrc(p.photo)}" srcset="${imgSet(p.photo)}" sizes="${CARD_SIZES}" width="640" height="800" alt="" loading="lazy" decoding="async" data-icon="${p.icon}">`
@@ -685,8 +689,8 @@ function card(p) {
 
 function render() {
   $("#ref-count").textContent = plural(DATA.products.length, "référence", "références");
-  $("#tiles").innerHTML = DATA.cats.map(c => `<li><a class="tile" href="#cat-${c.id}">${c.cover
-      ? `<span class="tile-img"><img src="${imgSrc(c.cover)}" srcset="${imgSet(c.cover)}" sizes="${TILE_SIZES}" width="640" height="800" alt="" loading="lazy" decoding="async" data-icon="${c.icon}"></span>`
+  $("#tiles").innerHTML = DATA.cats.map(c => `<li><a class="tile" href="#cat-${c.id}">${coverOf(c)
+      ? `<span class="tile-img"><img src="${imgSrc(coverOf(c))}" srcset="${imgSet(coverOf(c))}" sizes="${TILE_SIZES}" width="640" height="800" alt="" loading="lazy" decoding="async" data-icon="${c.icon}"></span>`
       : `<span class="tile-img tile-pat">${icon(c.icon)}</span>`}<span class="tile-name">${esc(c.name)}</span></a></li>`).join("");
   $("#nav").innerHTML = DATA.cats.map(c => `<li><a href="#cat-${c.id}" data-cat="${c.id}" draggable="false">${esc(c.name)}</a></li>`).join("");
   $("#cats").insertAdjacentHTML("afterbegin", DATA.cats.map(c => {
@@ -840,12 +844,12 @@ function galHTML(p) {
   const ph = photosOf(p), n = ph.length;
   let g;
   if (!n) g = `<div class="gal-main ph">${icon(p.icon)}</div><p class="gal-note">Visuel à venir</p>`;
-  else if (n === 1) g = `<div class="gal-main"><img src="${imgSrc(p.photo)}" width="640" height="800" alt="Photo d'illustration : ${esc(p.name)}" data-icon="${p.icon}"></div><p class="gal-note">Photo d'illustration</p>`;
+  else if (n === 1) g = `<div class="gal-main"><img src="${imgSrc(p.photo)}" width="640" height="800" alt="${p.reel ? "Photo" : "Photo d'illustration"} : ${esc(p.name)}" data-icon="${p.icon}"></div>${noteOf(p)}`;
   else g = `<div class="gal-main gal-track" id="gal-track" tabindex="0" role="region" aria-label="Photos du produit, ${n} vues. Flèches gauche et droite pour changer de vue.">${ph.map((name, i) =>
       `<img src="${imgSrc(name)}" width="640" height="800" alt="Photo ${i + 1} sur ${n} : ${esc(p.name)}" data-icon="${p.icon}"${i ? ' loading="lazy"' : ""}>`).join("")}</div>
     <div class="gal-thumbs" role="group" aria-label="Choisir une vue">${ph.map((name, i) =>
       `<button class="gal-th" type="button" data-gal="${i}" aria-label="Vue ${i + 1} sur ${n}" aria-pressed="${i === 0}"><img src="${imgSrc(name)}" srcset="${imgSet(name)}" sizes="56px" alt=""></button>`).join("")}</div>
-    <p class="gal-note">Photo d'illustration</p>`;
+    ${noteOf(p)}`;
   return g + (hasStudio(p) ? `<a class="btn btn-line viz-open" href="${studioUrl(p.id)}">Personnaliser ce produit</a>` : "");
 }
 /* Galerie : miniatures, glissement au doigt et flèches du clavier restent synchronisés */

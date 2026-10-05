@@ -39,4 +39,15 @@ Toutes les couleurs sont des jetons dans `site/base.css`, partagés par le catal
 
 ## Remplacer une photo
 
-Déposer deux fichiers WebP en 4:5 dans `site/img/` : `nom.webp` (640 × 800) et `nom-360.webp` (360 × 450), puis renseigner `"photo": "nom"` sur le produit dans `site/donnees.js`. Pour d'autres vues dans la galerie de la fiche (dos, détail), ajouter les fichiers `nom-2.webp` et `nom-2-360.webp`, puis `"more": ["nom-2"]` sur le produit.
+Passer par l'outil, qui recadre en 4:5, crée les versions WebP 640 × 800 et 360 × 450, donne au fichier un nom unique et branche la photo sur la fiche :
+
+```
+python3 outils/photos.py ajouter image.png set-football            photo principale
+python3 outils/photos.py ajouter dos.png set-football --vue 2      vue suivante de la galerie
+python3 outils/photos.py ajouter image.png bob --illustration      photo de banque ou d'IA
+python3 outils/fichier-unique.py                                   puis régénérer le fichier unique
+```
+
+- Le nom du fichier contient une empreinte de son contenu (`set-football-b63550d8.webp`) : une photo remplacée change de nom, et aucun navigateur ne garde l'ancienne en cache. Les photos de `site/img/` sont donc mises en cache un an (`site/_headers`).
+- Sans `--illustration`, la photo compte comme une photo réelle de Contino Sport (`"reel": true` dans `site/donnees.js`) : la fiche n'affiche pas la mention « Photo d'illustration ».
+- Les vignettes de catégories reprennent la photo du produit désigné par `cover` dans `site/donnees.js`.

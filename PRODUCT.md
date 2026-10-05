@@ -57,7 +57,7 @@ Les produits de ce catalogue sont fabriqués en Europe par un partenaire ; IFS c
 
 - **Prix et caractéristiques** : réels, dans `DATA` (`site/index.html`).
 - **Photos actuelles** : illustrations de banque d'images, signalées comme non contractuelles dans le pied de page.
-- **Photos de réalisations** : le set football montre une vraie pièce, face et dos, avec les sponsors du club (Vittel, Casino Contrexéville, Ville de Contrexéville, Handball Contrex). Le club et ses sponsors ont donné leur accord à Antoine le 05/10/2026. Les maillots de basket et le tapis de yoga viennent aussi de vraies pièces. Les autres photos de réalisations arriveront avec les images retouchées par IA.
+- **Photos de réalisations** : le set football montre une vraie pièce, face et dos, avec les sponsors du club (Vittel, Casino Contrexéville, Ville de Contrexéville, Handball Contrex). Le club et ses sponsors ont donné leur accord à Antoine le 05/10/2026. Les maillots de basket viennent aussi de vraies pièces. Ces trois produits n'affichent pas la mention « Photo d'illustration » (`"reel": true`). Le tapis de yoga montre une vraie pièce du partenaire : il garde la mention. Les autres photos de réalisations arriveront avec les images retouchées par IA.
 - **Absent, à ne pas fabriquer** : références clients citées ou logos de clients sans leur accord, avis et témoignages, photos de l'atelier, chiffres de volume ou de délai présentés comme des résultats.
 
 ## Product Principles
