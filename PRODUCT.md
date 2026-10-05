@@ -47,7 +47,8 @@ Les produits de ce catalogue sont fabriqués en Europe par un partenaire ; IFS c
 
 ## Brand Commitments
 
-- Nom : **IFS · Industrie Française de Sellerie**, entité du Groupe CONTINO.
+- Nom : **Contino Sport**, marque du Groupe Contino, en ligne sur continosport.fr depuis le 05/10/2026. Le favicon est le monogramme « C SPORT », l'en-tête montre le logo Contino Sport avec « Sublimation textile ».
+- IFS (Industrie Française de Sellerie), l'entité du groupe qui chiffre et coordonne, n'apparaît plus sur le site, sauf dans la mention de pied de page voulue par Antoine : « Contino Sport, marque du Groupe Contino IFS ».
 - L'Usinier Français (jeans et vêtements de travail) est une marque sœur, hors de ce catalogue.
 - Voix : français, vouvoiement, phrases courtes et factuelles, promesse concrète (« Vous l'imaginez. Nous l'imprimons. »).
 - Le catalogue a quitté le bleu et le vert, jugés génériques dans le secteur ; Antoine a choisi la palette magenta encre le 27/09/2026 (détail dans le code).
@@ -56,7 +57,7 @@ Les produits de ce catalogue sont fabriqués en Europe par un partenaire ; IFS c
 
 - **Prix et caractéristiques** : réels, dans `DATA` (`site/index.html`).
 - **Photos actuelles** : illustrations de banque d'images, signalées comme non contractuelles dans le pied de page.
-- **Photos de réalisations** : le set football montre une vraie pièce, face et dos, avec les sponsors du club (Vittel, Casino Contrexéville, Ville de Contrexéville, Handball Contrex). Le club et ses sponsors ont donné leur accord à Antoine le 05/10/2026. Les maillots de basket et le tapis de yoga viennent aussi de vraies pièces. Les autres photos de réalisations arriveront avec les images retouchées par IA.
+- **Photos de réalisations** : le set football montre une vraie pièce, face et dos, avec les sponsors du club (Vittel, Casino Contrexéville, Ville de Contrexéville, Handball Contrex). Le club et ses sponsors ont donné leur accord à Antoine le 05/10/2026. Les maillots de basket viennent aussi de vraies pièces. Ces trois produits n'affichent pas la mention « Photo d'illustration » (`"reel": true`). Le tapis de yoga montre une vraie pièce du partenaire : il garde la mention. Les autres photos de réalisations arriveront avec les images retouchées par IA.
 - **Absent, à ne pas fabriquer** : références clients citées ou logos de clients sans leur accord, avis et témoignages, photos de l'atelier, chiffres de volume ou de délai présentés comme des résultats.
 
 ## Product Principles

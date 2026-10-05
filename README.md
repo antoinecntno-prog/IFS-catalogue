@@ -1,6 +1,6 @@
 # IFS-catalogue
 
-Catalogue sublimation 2026 d'IFS, site statique prêt pour Netlify.
+Catalogue sublimation 2026 de Contino Sport (continosport.fr), marque du Groupe Contino. Site statique prêt pour Netlify.
 
 ## Contenu
 
@@ -11,6 +11,7 @@ Catalogue sublimation 2026 d'IFS, site statique prêt pour Netlify.
 - `site/stockage.js` : mémoire locale du navigateur qui porte le visuel du studio jusqu'au devis.
 - `site/img/` : photos des produits, chacune en 640 px et en 360 px (`-360.webp`) pour les petits écrans.
 - `site/fonts/` : Archivo et Hanken Grotesk, plus les 13 polices du studio (`studio-*.woff2`), toutes libres, avec leurs licences.
+- `site/logo-contino-sport.webp` et `site/logo-contino-sport-blanc.webp` : logo de l'en-tête, en thème clair et en thème sombre. `site/c-sport-32.png`, `-192.png` et `-180.png` : favicon C SPORT et icône d'écran d'accueil.
 - `site/_headers` : cache des photos et des polices, en-têtes de sécurité.
 - `netlify.toml` : publie le dossier `site/`.
 
@@ -20,7 +21,7 @@ Relier le dépôt à Netlify, ou glisser le dossier `site/` sur Netlify Drop. Le
 
 ## Ouvrir la page seule
 
-`site/index.html` a besoin des fichiers de son dossier (`base.css`, `donnees.js`, `img/`, `fonts/`). Ouverte seule, elle affiche un message qui renvoie vers le site en ligne ou la version fichier unique. Pour un aperçu, une pièce jointe ou une clé USB, utiliser `2026-09-27_catalogue-sublimation-ifs.html` : photos et polices sont incluses dans le fichier. Après toute modification de `site/`, le régénérer avec `python3 outils/fichier-unique.py`.
+`site/index.html` a besoin des fichiers de son dossier (`base.css`, `donnees.js`, `img/`, `fonts/`). Ouverte seule, elle affiche un message qui renvoie vers le site en ligne ou la version fichier unique. Pour un aperçu, une pièce jointe ou une clé USB, utiliser `2026-10-05_catalogue-sublimation-contino-sport.html` : photos et polices sont incluses dans le fichier. Après toute modification de `site/`, le régénérer avec `python3 outils/fichier-unique.py`.
 
 ## Studio de personnalisation
 
@@ -38,4 +39,15 @@ Toutes les couleurs sont des jetons dans `site/base.css`, partagés par le catal
 
 ## Remplacer une photo
 
-Déposer deux fichiers WebP en 4:5 dans `site/img/` : `nom.webp` (640 × 800) et `nom-360.webp` (360 × 450), puis renseigner `"photo": "nom"` sur le produit dans `site/donnees.js`. Pour d'autres vues dans la galerie de la fiche (dos, détail), ajouter les fichiers `nom-2.webp` et `nom-2-360.webp`, puis `"more": ["nom-2"]` sur le produit.
+Passer par l'outil, qui recadre en 4:5, crée les versions WebP 640 × 800 et 360 × 450, donne au fichier un nom unique et branche la photo sur la fiche :
+
+```
+python3 outils/photos.py ajouter image.png set-football            photo principale
+python3 outils/photos.py ajouter dos.png set-football --vue 2      vue suivante de la galerie
+python3 outils/photos.py ajouter image.png bob --illustration      photo de banque ou d'IA
+python3 outils/fichier-unique.py                                   puis régénérer le fichier unique
+```
+
+- Le nom du fichier contient une empreinte de son contenu (`set-football-b63550d8.webp`) : une photo remplacée change de nom, et aucun navigateur ne garde l'ancienne en cache. Les photos de `site/img/` sont donc mises en cache un an (`site/_headers`).
+- Sans `--illustration`, la photo compte comme une photo réelle de Contino Sport (`"reel": true` dans `site/donnees.js`) : la fiche n'affiche pas la mention « Photo d'illustration ».
+- Les vignettes de catégories reprennent la photo du produit désigné par `cover` dans `site/donnees.js`.

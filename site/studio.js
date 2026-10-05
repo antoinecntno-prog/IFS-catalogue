@@ -850,7 +850,7 @@
     }
     syncProductSelect();
     renderAll(); updateUrl();
-    document.title = `Personnaliser : ${byId[pid].name} | IFS`;
+    document.title = `Personnaliser : ${byId[pid].name} | Contino Sport`;
   }
   $("#st-reset").addEventListener("click", async e => {
     const b = e.currentTarget;
@@ -936,7 +936,7 @@
     } catch (err) {
       b.disabled = false;
       const url = await exporter().then(bl => URL.createObjectURL(bl)).catch(() => "");
-      msg.innerHTML = `Votre navigateur bloque l'enregistrement local. ${url ? `<a href="${url}" download="apercu-ifs.jpg">Téléchargez l'aperçu</a> et joignez-le à votre demande de devis.` : ""}`;
+      msg.innerHTML = `Votre navigateur bloque l'enregistrement local. ${url ? `<a href="${url}" download="apercu-contino-sport.jpg">Téléchargez l'aperçu</a> et joignez-le à votre demande de devis.` : ""}`;
     }
   });
 
