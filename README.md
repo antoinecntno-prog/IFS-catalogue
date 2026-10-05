@@ -11,7 +11,7 @@ Catalogue sublimation 2026 de Contino Sport (continosport.fr), marque du Groupe 
 - `site/stockage.js` : mémoire locale du navigateur qui porte le visuel du studio jusqu'au devis.
 - `site/img/` : photos des produits, chacune en 640 px et en 360 px (`-360.webp`) pour les petits écrans.
 - `site/fonts/` : Archivo et Hanken Grotesk, plus les 13 polices du studio (`studio-*.woff2`), toutes libres, avec leurs licences.
-- `site/logo-contino-sport.webp` et `site/logo-contino-sport-blanc.webp` : logo de l'en-tête, en thème clair et en thème sombre. `site/c-sport-32.png`, `-192.png` et `-180.png` : favicon C SPORT et icône d'écran d'accueil. `site/partage-contino-sport.jpg` (1200 × 630) : image d'aperçu affichée quand le lien du site est partagé (WhatsApp, Messenger, LinkedIn), déclarée dans les balises `og:image` des deux pages.
+- `site/logo-contino-sport.webp` et `site/logo-contino-sport-blanc.webp` : logo de l'en-tête, en thème clair et en thème sombre. `site/c-sport-32.png`, `-192.png` et `-180.png` : favicon C SPORT et icône d'écran d'accueil. `site/partage-contino-sport-v2.jpg` (1200 × 630, moins de 300 Ko pour WhatsApp) : image d'aperçu affichée quand le lien du site est partagé (WhatsApp, Messenger, LinkedIn), déclarée dans les balises `og:image` des deux pages. Pour la remplacer, changer son numéro de version dans le nom et dans les deux pages : les réseaux gardent en cache une image par adresse.
 - `site/_headers` : cache des photos et des polices, en-têtes de sécurité.
 - `netlify.toml` : publie le dossier `site/`.
 
