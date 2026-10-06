@@ -204,22 +204,6 @@
       const view = { shapes: [["M86 40H314V440H86Z"]], under: `<path d="M86 40H314V64H86Z" fill="${c.t}"/>`, over: `<path d="M98 52L66 440M302 52L334 440" stroke="${c.t}" stroke-width="5" stroke-linecap="round"/><circle cx="94" cy="424" r="7" fill="${c.t}"/><circle cx="306" cy="424" r="7" fill="${c.t}"/>` };
       return { vb: [400, 460], views: { face: view, dos: { ...view } }, zones: [Z("centre", "Centre", "face", 112, 96, 176, 300), Z("centre-dos", "Centre du verso", "dos", 112, 96, 176, 300)] };
     },
-    pennant(p, c) {
-      return { vb: [440, 240], views: { face: { shapes: [["M40 20L420 120L40 220Z"]], under: `<path d="M40 20H66V220H40Z" fill="${c.t}"/>` } }, zones: [Z("centre", "Centre", "face", 84, 90, 180, 60)] };
-    },
-    clubpennant(p, c, k) {
-      let fringe = "";
-      for (let i = 0; i <= 10; i++) { const t = i / 10; fringe += `M${44 + 106 * t} ${310 + 90 * t}l-10 14M${150 + 106 * t} ${400 - 90 * t}l10 14`; }
-      const view = { shapes: [["M44 40H256V310L150 400L44 310Z"]], over: `<path d="${fringe}" stroke="${c.t}" stroke-width="3" stroke-linecap="round"/><path d="M44 32L150 8L256 32" fill="none" stroke="${c.t}" stroke-width="2"/><path d="M20 34H280" stroke="${k.wood}" stroke-width="8" stroke-linecap="round"/><circle cx="16" cy="34" r="9" fill="${k.wood}"/><circle cx="284" cy="34" r="9" fill="${k.wood}"/>` };
-      return { vb: [300, 440], views: { face: view, dos: { ...view } }, names: { dos: "Verso" }, zones: [Z("centre", "Centre", "face", 72, 76, 156, 196), Z("centre-dos", "Centre du verso", "dos", 72, 76, 156, 196)] };
-    },
-    beachflag(p, c, k) {
-      return {
-        vb: [300, 540],
-        views: { face: { shapes: [["M76 30C196 26 252 120 244 330L232 478H76Z"]], over: `<path d="M70 18V512" stroke="${k.metal}" stroke-width="8" stroke-linecap="round"/><path d="M36 520H104M70 512 48 532M70 512 92 532" stroke="${k.metal}" stroke-width="5" stroke-linecap="round"/>` } },
-        zones: [Z("centre", "Centre", "face", 96, 140, 124, 260), Z("haut", "Haut", "face", 96, 60, 120, 70)]
-      };
-    },
     bob(p, c) {
       return { vb: [400, 280], views: { face: { shapes: [["M122 150C122 64 160 34 200 34S278 64 278 150Z"], ["M40 172C84 138 316 138 360 172C318 210 82 210 40 172Z"]], under: `<path d="M122 130H278V152H122Z" fill="${c.t}"/>`, over: `<path d="M66 172C106 152 294 152 334 172" fill="none" stroke="${c.t}" stroke-width="2" stroke-dasharray="5 4"/>` } }, zones: [Z("devant", "Devant", "face", 150, 64, 100, 62), Z("bord", "Bord", "face", 90, 160, 220, 24)] };
     },
