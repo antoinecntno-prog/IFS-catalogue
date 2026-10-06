@@ -19,7 +19,7 @@ Leur tâche sur le catalogue : trouver le produit au prix de leur palier de quan
 
 ## Product Purpose
 
-Le catalogue sublimation 2026 présente 31 références personnalisables en 9 catégories, avec les prix unitaires hors taxes par palier de quantité, et transforme la consultation en demande de devis. Une visite réussie se termine par un devis envoyé avec un produit chiffrable et des coordonnées exploitables.
+Le catalogue sublimation 2026 présente 30 références personnalisables en 9 catégories, avec les prix unitaires hors taxes par palier de quantité, et transforme la consultation en demande de devis. Une visite réussie se termine par un devis envoyé avec un produit chiffrable et des coordonnées exploitables.
 
 ## Positioning
 
@@ -39,9 +39,9 @@ Les produits de ce catalogue sont fabriqués en Europe par un partenaire ; IFS c
 - Site statique hébergé sur Netlify (`site/`), demandes de devis par Netlify Forms (formulaire « devis ») avec un lien email prérempli de secours vers antoine.contino@groupecontino.com.
 - Le catalogue s'affiche par JavaScript à partir des données `DATA` de `site/index.html` ; sans JavaScript, un message renvoie vers l'email.
 - **Origine** : la mention exacte pour ces produits est « Fabriqué en Europe ». Aucune page du catalogue ne revendique « fabriqué en France » ou « Made in France » pour ces références, même si l'atelier IFS fabrique en France pour ses autres activités.
-- 8 produits sur 31 n'ont pas encore de visuel et affichent « Visuel à venir ». Le coussin de stade en fait partie depuis le retrait de sa photo trompeuse, le 27/09/2026. Le tapis de yoga a reçu le 29/09/2026 la photo d'une vraie pièce, tirée du catalogue Word du Drive.
+- Depuis le 06/10/2026, les 30 produits ont un visuel. Plus aucune fiche n'affiche « Visuel à venir ».
 - Retirés du catalogue le 27/09/2026 : poncho adulte, sac t-shirt, sac banane, serviette microfibre, cordon tour de cou, brassard de capitaine, maintien-chaussettes, mini beachflag de table.
-- Retirés du catalogue le 06/10/2026 : les deux fanions (de club et triangle) et le beachflag. La catégorie Drapeaux ne garde que le drapeau supporter.
+- Retirés du catalogue le 06/10/2026 : les deux fanions (de club et triangle) et le beachflag. La catégorie Drapeaux ne garde que le drapeau supporter. La trousse imprimée est retirée le même jour, la catégorie Objets ne garde que le tapis de yoga.
 - **Studio de personnalisation** (`site/personnaliser.html`) : page à part, ouverte depuis chaque fiche et depuis le devis. Le client place autant de logos et de textes qu'il veut (bibliothèque de 15 polices libres), sur la face et le dos, dans la couleur de produit de son choix. Pour les maillots, il peut partir d'un design prêt (les quatre motifs de la page d'accueil) et en changer les couleurs. L'aperçu face et dos, la description du placement et les fichiers des logos partent avec la demande de devis. Règle : chaque aperçu porte la mention « Aperçu indicatif », le rendu définitif est celui du BAT officiel. Les fichiers restent dans le navigateur du client jusqu'à l'envoi.
 - Vocabulaire du métier : BAT, HT, palier, pièces (pcs), sublimation intégrale, recto verso, marquage DTF, flocage, frais de lancement.
 - À décider : ajout d'un contact visible (téléphone, adresse de l'atelier) hors formulaire.
@@ -57,8 +57,8 @@ Les produits de ce catalogue sont fabriqués en Europe par un partenaire ; IFS c
 ## Evidence on Hand
 
 - **Prix et caractéristiques** : réels, dans `DATA` (`site/index.html`).
-- **Photos actuelles** : illustrations de banque d'images, signalées comme non contractuelles dans le pied de page.
-- **Photos de réalisations** : le set football montre une vraie pièce, face et dos, avec les sponsors du club (Vittel, Casino Contrexéville, Ville de Contrexéville, Handball Contrex). Le club et ses sponsors ont donné leur accord à Antoine le 05/10/2026. Une troisième vue montre le même set sans sponsors. Les maillots de basket montrent des designs Contino Sport : simple face pour le club d'Eschau, double face pour Schirmeck (sponsor Teixeira AGO), chacun suivi d'une vue du set uni avec short. Accord des clubs d'Eschau et de Schirmeck à confirmer. Ces trois produits n'affichent pas la mention « Photo d'illustration » (`"reel": true`). Le tapis de yoga montre une vraie pièce du partenaire : il garde la mention. Les autres photos de réalisations arriveront avec les images retouchées par IA.
+- **Photos actuelles** : images de référence produites par Antoine, ajoutées le 06/10/2026 pour 26 produits (produits en situation ou sur fond neutre). À sa demande, elles s'affichent sans mention « Photo d'illustration » ; le pied de page indique « Photos non contractuelles ». Seul le bob garde une photo de banque d'images, avec la mention.
+- **Photos de réalisations** : le set football montre une vraie pièce, face et dos, avec les sponsors du club (Vittel, Casino Contrexéville, Ville de Contrexéville, Handball Contrex). Le club et ses sponsors ont donné leur accord à Antoine le 05/10/2026. Une troisième vue montre le même set sans sponsors. Les maillots de basket montrent des designs Contino Sport : simple face pour le club d'Eschau, double face pour Schirmeck (sponsor Teixeira AGO), chacun suivi d'une vue du set uni avec short. Accord des clubs d'Eschau et de Schirmeck à confirmer. Ces trois produits n'affichent pas la mention « Photo d'illustration » (`"reel": true`). Le tapis de yoga garde en troisième vue la photo d'une vraie pièce du partenaire. Le tote jute garde, après ses deux visuels de référence, les sept photos de sacs vierges du catalogue Word.
 - **Absent, à ne pas fabriquer** : références clients citées ou logos de clients sans leur accord, avis et témoignages, photos de l'atelier, chiffres de volume ou de délai présentés comme des résultats.
 
 ## Product Principles
@@ -66,7 +66,7 @@ Les produits de ce catalogue sont fabriqués en Europe par un partenaire ; IFS c
 1. **Le prix se montre** : chaque fiche donne la grille complète par palier, HT, avec le minimum et le transport.
 2. **L'origine annoncée est l'origine réelle** : « Fabriqué en Europe » pour ce catalogue, la France seulement pour ce que l'atelier fait lui-même.
 3. **Un chemin court vers le devis** : le club comme l'entreprise passe du produit au devis en deux étapes, depuis n'importe quelle page et sur téléphone.
-4. **Rien d'inventé** : une photo d'illustration est signalée comme telle, et aucune preuve (avis ou référence client) n'est publiée sans source réelle.
+4. **Rien d'inventé** : aucune preuve (avis ou référence client) n'est publiée sans source réelle. Une photo de banque d'images est signalée comme illustration ; les visuels de référence d'Antoine s'affichent sans mention depuis le 06/10/2026, à sa demande, sous le « Photos non contractuelles » du pied de page.
 
 ## Accessibility & Inclusion
 
