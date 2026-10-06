@@ -19,7 +19,7 @@ Leur tâche sur le catalogue : trouver le produit au prix de leur palier de quan
 
 ## Product Purpose
 
-Le catalogue sublimation 2026 présente 31 références personnalisables en 9 catégories, avec les prix unitaires hors taxes par palier de quantité, et transforme la consultation en demande de devis. Une visite réussie se termine par un devis envoyé avec un produit chiffrable et des coordonnées exploitables.
+Le catalogue sublimation 2026 présente 30 références personnalisables en 9 catégories, avec les prix unitaires hors taxes par palier de quantité, et transforme la consultation en demande de devis. Une visite réussie se termine par un devis envoyé avec un produit chiffrable et des coordonnées exploitables.
 
 ## Positioning
 
@@ -39,9 +39,9 @@ Les produits de ce catalogue sont fabriqués en Europe par un partenaire ; IFS c
 - Site statique hébergé sur Netlify (`site/`), demandes de devis par Netlify Forms (formulaire « devis ») avec un lien email prérempli de secours vers antoine.contino@groupecontino.com.
 - Le catalogue s'affiche par JavaScript à partir des données `DATA` de `site/index.html` ; sans JavaScript, un message renvoie vers l'email.
 - **Origine** : la mention exacte pour ces produits est « Fabriqué en Europe ». Aucune page du catalogue ne revendique « fabriqué en France » ou « Made in France » pour ces références, même si l'atelier IFS fabrique en France pour ses autres activités.
-- 8 produits sur 31 n'ont pas encore de visuel et affichent « Visuel à venir ». Le coussin de stade en fait partie depuis le retrait de sa photo trompeuse, le 27/09/2026. Le tapis de yoga a reçu le 29/09/2026 la photo d'une vraie pièce, tirée du catalogue Word du Drive.
+- 8 produits sur 30 n'ont pas encore de visuel et affichent « Visuel à venir ». Le coussin de stade en fait partie depuis le retrait de sa photo trompeuse, le 27/09/2026. Le tapis de yoga a reçu le 29/09/2026 la photo d'une vraie pièce, tirée du catalogue Word du Drive.
 - Retirés du catalogue le 27/09/2026 : poncho adulte, sac t-shirt, sac banane, serviette microfibre, cordon tour de cou, brassard de capitaine, maintien-chaussettes, mini beachflag de table.
-- Retirés du catalogue le 06/10/2026 : les deux fanions (de club et triangle) et le beachflag. La catégorie Drapeaux ne garde que le drapeau supporter.
+- Retirés du catalogue le 06/10/2026 : les deux fanions (de club et triangle) et le beachflag. La catégorie Drapeaux ne garde que le drapeau supporter. La trousse imprimée est retirée le même jour, la catégorie Objets ne garde que le tapis de yoga.
 - **Studio de personnalisation** (`site/personnaliser.html`) : page à part, ouverte depuis chaque fiche et depuis le devis. Le client place autant de logos et de textes qu'il veut (bibliothèque de 15 polices libres), sur la face et le dos, dans la couleur de produit de son choix. Pour les maillots, il peut partir d'un design prêt (les quatre motifs de la page d'accueil) et en changer les couleurs. L'aperçu face et dos, la description du placement et les fichiers des logos partent avec la demande de devis. Règle : chaque aperçu porte la mention « Aperçu indicatif », le rendu définitif est celui du BAT officiel. Les fichiers restent dans le navigateur du client jusqu'à l'envoi.
 - Vocabulaire du métier : BAT, HT, palier, pièces (pcs), sublimation intégrale, recto verso, marquage DTF, flocage, frais de lancement.
 - À décider : ajout d'un contact visible (téléphone, adresse de l'atelier) hors formulaire.

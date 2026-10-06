@@ -220,20 +220,19 @@
       if (p.v === "knee") return { vb: [300, 400], views: { face: { shapes: [["M70 40H230L220 360H80Z"]], under: `<path d="M70 40H230L229 64H71ZM76 336H224L220 360H80Z" fill="${c.t}"/>` } }, zones: [Z("centre", "Centre", "face", 96, 90, 108, 220)] };
       return { vb: [300, 440], views: { face: { shapes: [["M60 50H240V390H60Z"]], over: `<path d="M60 50C60 30 240 30 240 50C240 70 60 70 60 50Z" fill="${c.t}"/><path d="M60 390C60 410 240 410 240 390" fill="none" stroke="${c.t}" stroke-width="3"/>` } }, zones: [Z("centre", "Centre", "face", 80, 90, 140, 260)] };
     },
-    /* Surface à plat : drapeau, serviette, tapis, trousse, coussin, bandana, écharpe, bandeau, bracelet, dossard */
+    /* Surface à plat : drapeau, serviette, tapis, coussin, bandana, écharpe, bandeau, bracelet, dossard */
     panel(p, c, k) {
       const [rw, rh] = p.r || [1, 1];
       const m = 20, big = 380, W = rw >= rh ? big : big * rw / rh, H = rw >= rh ? big * rh / rw : big;
       const d = p.d || "";
       const x0 = d === "flag" ? m + 14 : m, y0 = m, vw = x0 + W + m, vh = H + 2 * m;
-      const rx = { towel: 16, mat: 12, cushion: 20, band: H / 2, pouch: H * .35, numbib: 6 }[d] || 3;
+      const rx = { towel: 16, mat: 12, cushion: 20, band: H / 2, numbib: 6 }[d] || 3;
       const rect = (x, y, w, h, r) => `M${x + r} ${y}H${x + w - r}Q${x + w} ${y} ${x + w} ${y + r}V${y + h - r}Q${x + w} ${y + h} ${x + w - r} ${y + h}H${x + r}Q${x} ${y + h} ${x} ${y + h - r}V${y + r}Q${x} ${y} ${x + r} ${y}Z`;
       const shape = d === "triangle" ? `M${x0} ${y0}H${x0 + W}L${x0 + W / 2} ${y0 + H}Z` : rect(x0, y0, W, H, Math.min(rx, W / 2, H / 2));
       let over = "";
       if (d === "towel" || d === "bandana" || d === "cushion") { const i = d === "cushion" ? 10 : 7; over = `<path d="${rect(x0 + i, y0 + i, W - 2 * i, H - 2 * i, Math.max(2, rx - i))}" fill="none" stroke="${c.t}" stroke-width="3"${d === "cushion" ? ' stroke-dasharray="6 5"' : ""}/>`; }
       if (d === "triangle") over = `<path d="M${x0 + 8} ${y0 + 6}H${x0 + W - 8}L${x0 + W / 2} ${y0 + H - 12}Z" fill="none" stroke="${c.t}" stroke-width="3"/>`;
       if (d === "scarf") { let f = ""; for (let y = y0 + 2; y <= y0 + H - 2; y += 5) f += `M${x0} ${y}h-14M${x0 + W} ${y}h14`; over = `<path d="${f}" stroke="${c.t}" stroke-width="2"/>`; }
-      if (d === "pouch") over = `<path d="M${x0 + 14} ${y0 + 9}H${x0 + W - 14}" stroke="${c.t}" stroke-width="4"/><rect x="${x0 + W - 30}" y="${y0 + 4}" width="12" height="18" rx="2" fill="${c.t}"/>`;
       if (d === "numbib") over = [[12, 12], [W - 12, 12], [12, H - 12], [W - 12, H - 12]].map(([a, b]) => `<circle cx="${x0 + a}" cy="${y0 + b}" r="5" fill="${k.hole}" stroke="${c.t}" stroke-width="1.5"/>`).join("");
       if (d === "flag") over = `<path d="M${x0 - 8} ${y0 - 10}V${y0 + H + 16}" stroke="${k.metal}" stroke-width="7" stroke-linecap="round"/>`;
       return {
