@@ -352,6 +352,8 @@ main:focus{outline:none}
 footer{background:var(--foot-bg);color:var(--foot-text);font-size:14px}
 .foot-in{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px 32px;padding-block:28px}
 footer b{color:var(--foot-strong);font-family:var(--f-head)}
+.cs-lien{display:inline-flex;align-items:center;min-height:44px;padding:0;border:0;background:none;color:inherit;font:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.cs-lien:hover{color:var(--foot-strong)}
 .eu{display:inline-flex;align-items:center;padding:7px 11px;border:1.5px solid currentColor;border-radius:var(--r);font:700 13px/1 var(--f-body);color:var(--spark)}
 
 /* Fenêtres */
@@ -624,7 +626,7 @@ tbody tr:hover td,tbody tr:hover th{background:var(--surface-soft)}
 
 <footer>
   <div class="wrap foot-in">
-    <span><b>Contino Sport</b>, marque du Groupe Contino IFS · Catalogue sublimation 2026 · Photos non contractuelles</span>
+    <span><b>Contino Sport</b>, marque du Groupe Contino IFS · Catalogue sublimation 2026 · Photos non contractuelles · <button type="button" class="cs-lien" id="cs-ouvrir" hidden>Cookies</button></span>
     <span class="eu">Made in Europe</span>
   </div>
 </footer>
@@ -1045,6 +1047,7 @@ function setupGallery() {
 function openSheet(id, push = true) {
   const p = byId[id]; if (!p) return false;
   currentProduct = p;
+  if (window.csTrack) csTrack("ViewContent", { content_ids: [p.id], content_name: p.name, content_type: "product", value: p.entry.price, currency: "EUR" });
   $("#sheet-cat").textContent = catById[p.cat].name;
   const gal = galHTML(p);
   const chips = [`<span class="chip spark">${esc(p.origin)}</span>`];
@@ -1298,6 +1301,7 @@ $("#quote-form").addEventListener("submit", async e => {
     form.reset(); showFileName(); syncOther();
     if (visuel) { visuel = null; IFSStore.del("devis"); showVisuel(); }
     $("#q-form-wrap").hidden = true; $("#q-sent").hidden = false; $("#q-sent-title").focus();
+    if (window.csTrack) csTrack("Lead");
   } catch (err) {
     btn.disabled = false;
     const why = err.message === "offline" ? "Vous semblez hors connexion."
