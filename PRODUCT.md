@@ -37,6 +37,7 @@ Les produits de ce catalogue sont fabriqués en Europe par un partenaire ; IFS c
 ## Capabilities and Constraints
 
 - Site statique hébergé sur Netlify (`site/`), demandes de devis par Netlify Forms (formulaire « devis ») avec un lien email prérempli de secours vers antoine.contino@groupecontino.com.
+- **Mesure publicitaire** (08/10/2026) : pixel Meta pour les campagnes Facebook et Instagram, chargé seulement après consentement (bandeau avec « Refuser » et « Accepter » de même poids, choix gardé 6 mois). L'événement d'optimisation est `Lead`, envoyé à chaque demande de devis réussie.
 - Le catalogue s'affiche par JavaScript à partir des données `DATA` de `site/index.html` ; sans JavaScript, un message renvoie vers l'email.
 - **Origine** : la mention exacte pour ces produits est « Fabriqué en Europe ». Aucune page du catalogue ne revendique « fabriqué en France » ou « Made in France » pour ces références, même si l'atelier IFS fabrique en France pour ses autres activités.
 - Depuis le 06/10/2026, les 30 produits ont un visuel. Plus aucune fiche n'affiche « Visuel à venir ».
