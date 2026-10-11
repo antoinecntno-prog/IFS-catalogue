@@ -1,7 +1,31 @@
 {
   "statut": "provisoire : estimation avant génération de la voix off",
-  "plans": { "s1": 0, "s2": 3.8, "s3": 6.8, "s4": 11.4, "s5": 18.4, "s6": 22.2 },
-  "voix": { "p1a": 0.15, "p1b": 2.75, "p2a": 3.9, "p2b": 5.4, "p3a": 6.9, "p3b": 8.6, "p4a": 11.5, "p4b": 12.6, "p4c": 14.4, "p4d": 16.6, "p5a": 18.5, "p5b": 20.1, "p6a": 22.4, "voEnd": 24.8 },
+  "plans": {
+    "s1": 0,
+    "s2": 3.8,
+    "s3": 6.8,
+    "s4": 11.4,
+    "s5": 18.4,
+    "s6": 22.4
+  },
+  "voix": {
+    "p1a": 0.15,
+    "p1b": 2.75,
+    "p2a": 3.9,
+    "p2b": 5.4,
+    "p3a": 6.9,
+    "p3b": 8.6,
+    "p4a": 11.5,
+    "p4b": 12.6,
+    "p4c": 14.4,
+    "p4d": 16.6,
+    "p5a": 18.5,
+    "p5b": 20.5,
+    "p6a": 22.55,
+    "voEnd": 25.0
+  },
   "fichierVoix": null,
-  "debutVoix": 0
+  "debutVoix": 0,
+  "segmentsVoix": [],
+  "note": "Quand la voix existe : segmentsVoix = [{id, de, a, place}] en secondes (de/a dans le fichier, place sur la timeline). Un segment par plan."
 }

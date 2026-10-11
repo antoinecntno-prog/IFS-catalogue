@@ -1,15 +1,15 @@
 """Recale index.html sur minutage.json : objet T, durées racine, départs des bruitages, fondu de la musique, piste voix.
 
 Usage : python3 outils/minutage.py   (depuis le dossier du projet)
-Règles : le ballon du plan 6 se pose à T6 + 2,85 s ; la pose finale commence après la fin de la voix
+Règles : le ballon du plan 6 se pose à T6 + 3,00 s ; la pose finale commence après la fin de la voix
 et après la pose du ballon, puis tient HOLD secondes sans voix.
 """
 import json, re, pathlib
 
 HOLD = 1.25          # pose finale tenue sans voix
 B1_CONTACT = 0.42    # contact du ballon à l'accroche
-B2_CONTACT = 2.40    # contact du ballon sur le bouton, relatif à T6
-B2_SETTLE = 2.85     # fin de la stabilisation du ballon, relatif à T6
+B2_CONTACT = 2.55    # contact du ballon sur le bouton, relatif à T6
+B2_SETTLE = 3.00     # fin de la stabilisation du ballon, relatif à T6
 FPS = 30
 
 root = pathlib.Path(__file__).resolve().parent.parent
@@ -18,7 +18,7 @@ p, v = m["plans"], m["voix"]
 end_motion = max(v["voEnd"], p["s6"] + B2_SETTLE)
 total = round((end_motion + HOLD) * FPS) / FPS
 total = round(total, 3)
-T = dict(p); T["total"] = total; T["v"] = v
+T = dict(p); T["total"] = total; T["final"] = round(end_motion, 3); T["v"] = v
 
 html = (root / "index.html").read_text()
 html = re.sub(r"(/\* MINUTAGE:DEBUT[^\n]*\n\s*const T = ).*?;\n", lambda mo: mo.group(1) + json.dumps(T, separators=(",", ":")) + ";\n", html, flags=re.S)
@@ -39,14 +39,15 @@ html = set_attr(html, "sfx-ballon-contact", "data-start", B1_CONTACT)
 html = set_attr(html, "sfx-ballon-reception", "data-start", round(p["s6"] + B2_CONTACT, 3))
 html = set_attr(html, "sfx-bouton", "data-start", round(p["s6"] + B2_CONTACT + 0.02, 3))
 
-# Piste voix : ajoutée ou mise à jour quand minutage.json nomme le fichier
-if m.get("fichierVoix"):
-    dur = m["dureeVoix"]
-    tag = f'<audio id="voix-off" src="{m["fichierVoix"]}" data-start="{m.get("debutVoix", 0)}" data-duration="{dur}" data-track-index="1" data-audio-group="voiceover"></audio>'
-    if 'id="voix-off"' in html:
-        html = re.sub(r'<audio id="voix-off"[^>]*></audio>', tag, html)
-    else:
-        html = html.replace('      <audio id="musique"', "      " + tag + '\n      <audio id="musique"', 1)
+# Voix off : un segment <audio> par plan, tous dans le groupe "voiceover" (carve de la musique contre le groupe)
+import re as _re
+html = _re.sub(r'\n\s*<audio id="vo-[^"]*"[^>]*></audio>', "", html)
+if m.get("fichierVoix") and m.get("segmentsVoix"):
+    tags = []
+    for sgt in m["segmentsVoix"]:
+        dur = round(sgt["a"] - sgt["de"], 3)
+        tags.append(f'<audio id="{sgt["id"]}" src="{m["fichierVoix"]}" data-start="{sgt["place"]}" data-duration="{dur}" data-media-start="{sgt["de"]}" data-track-index="1" data-audio-group="voiceover"></audio>')
+    html = html.replace('      <audio id="musique"', "".join("      " + x + "\n" for x in tags) + '      <audio id="musique"', 1)
 
 (root / "index.html").write_text(html)
 print(f"total {total} s, fin du mouvement {end_motion:.2f} s, pose finale tenue {total - end_motion:.2f} s")
