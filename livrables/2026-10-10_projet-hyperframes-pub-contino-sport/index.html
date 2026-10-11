@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="fr" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Contino Sport, set football</title>
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      /* Polices du site continosport.fr, livrées avec le projet */
+      @font-face { font-family: "Archivo"; font-style: normal; font-weight: 700 900; font-stretch: 75% 100%; src: url(assets/fonts/archivo-latin.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+      @font-face { font-family: "Archivo"; font-style: normal; font-weight: 700 900; font-stretch: 75% 100%; src: url(assets/fonts/archivo-latin-ext.woff2) format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+      @font-face { font-family: "Hanken Grotesk"; font-style: normal; font-weight: 400 700; src: url(assets/fonts/hanken-grotesk-latin.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+      @font-face { font-family: "Hanken Grotesk"; font-style: normal; font-weight: 400 700; src: url(assets/fonts/hanken-grotesk-latin-ext.woff2) format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+
+      /* Jetons de site/base.css */
+      :root {
+        --magenta: #b3125f;
+        --magenta-deep: #940e4e;
+        --magenta-lit: #c2186b;
+        --yellow: #ffe45c;
+        --ink: #1a1320;
+        --ink-2: #2a2030;
+        --white: #ffffff;
+        --r: 3px;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ink); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--ink); font-family: "Hanken Grotesk", sans-serif; color: var(--white); }
+      .clip { position: absolute; inset: 0; }
+      .scene { position: absolute; inset: 0; }
+      .later { visibility: hidden; }
+      .abs { position: absolute; }
+      .display { font-family: "Archivo", sans-serif; font-weight: 900; font-stretch: 84%; line-height: 1.02; letter-spacing: -0.005em; }
+      .label { font-family: "Hanken Grotesk", sans-serif; font-weight: 600; }
+      .card { overflow: hidden; border-radius: var(--r); background: var(--white); }
+      .card img { display: block; width: 100%; height: 100%; object-fit: cover; }
+      .fill { position: absolute; inset: 0; }
+
+      /* Fond : deux bandes sublimées en diagonale, comme le studio du site */
+      #bg { position: absolute; inset: 0; overflow: hidden; }
+      .band-rot { position: absolute; left: -400px; width: 1900px; transform: rotate(-24deg); }
+      #band-rot-a { top: 1240px; height: 230px; }
+      #band-rot-b { top: 1540px; height: 70px; }
+      .band { width: 100%; height: 100%; }
+      #band-a { background: var(--magenta-deep); opacity: 0.55; }
+      #band-b { background: var(--magenta); opacity: 0.6; }
+
+      /* Plan 1 */
+      #s1-kicker { left: 80px; top: 292px; width: 900px; font-size: 46px; line-height: 1.1; color: var(--white); }
+      #s1-price { left: 80px; top: 360px; height: 176px; padding: 0 30px; background: var(--yellow); border-radius: var(--r); display: flex; align-items: center; }
+      #s1-price-txt { display: block; font-size: 156px; line-height: 1; color: var(--ink); white-space: nowrap; }
+      #s1-des { left: 80px; top: 566px; width: 900px; font-size: 76px; line-height: 1.05; color: var(--white); }
+      #s1-photo { left: 240px; top: 684px; width: 600px; height: 750px; }
+      #s1-photo-in { width: 100%; height: 100%; }
+
+      /* Ballon : enveloppe (position) > corps (déformation) > vrille (rotation propre) */
+      .ball { position: absolute; }
+      .ball-body { position: absolute; inset: 0; transform-origin: 50% 100%; }
+      .ball-spin { position: absolute; inset: 0; }
+      .ball svg { display: block; width: 100%; height: 100%; overflow: visible; }
+      #b1 { left: 625px; top: 210px; width: 150px; height: 150px; }
+      #b2 { left: 810px; top: 890px; width: 120px; height: 120px; }
+      .hit { position: absolute; height: 6px; border-radius: var(--r); background: var(--white); opacity: 0; }
+      #b1-hit-a { left: 560px; top: 340px; width: 54px; transform-origin: 100% 50%; }
+      #b1-hit-b { left: 786px; top: 340px; width: 54px; transform-origin: 0% 50%; }
+      #b2-hit-a { left: 528px; top: 866px; width: 40px; transform-origin: 100% 50%; }
+      #b2-hit-b { left: 712px; top: 866px; width: 40px; transform-origin: 0% 50%; }
+      .shadow { position: absolute; border-radius: 50%; }
+      #b2-shadow { left: 820px; top: 1002px; width: 100px; height: 16px; background: rgba(179, 18, 95, 0.55); }
+      #b2-shadow-top { left: 590px; top: 872px; width: 100px; height: 14px; background: rgba(26, 19, 32, 0.35); opacity: 0; }
+
+      /* Plan 2 */
+      #s2-text { left: 80px; top: 296px; width: 920px; display: flex; flex-direction: column; gap: 30px; }
+      #s2-l1, #s2-l2 { font-size: 108px; }
+      #s2-l2 { color: var(--yellow); }
+      #s2-photo-a { left: 110px; top: 830px; width: 380px; height: 475px; }
+      #s2-photo-b { left: 590px; top: 812px; width: 380px; height: 475px; }
+
+      /* Plan 3 */
+      #s3-title { left: 80px; top: 292px; width: 920px; font-size: 96px; }
+      #s3-unit { left: 80px; top: 506px; width: 920px; font-size: 38px; line-height: 1.2; color: rgba(255, 255, 255, 0.86); }
+      #s3-grid { left: 80px; top: 580px; width: 920px; display: flex; flex-direction: column; gap: 14px; }
+      .row { position: relative; height: 104px; border-radius: var(--r); }
+      .row-bg { position: absolute; inset: 0; border-radius: var(--r); background: var(--ink-2); }
+      .row-in { position: absolute; inset: 0; padding: 0 36px; display: flex; align-items: center; justify-content: space-between; }
+      .row-q { font-family: "Archivo", sans-serif; font-weight: 800; font-stretch: 90%; font-size: 54px; color: rgba(255, 255, 255, 0.92); }
+      .row-p { font-family: "Archivo", sans-serif; font-weight: 900; font-stretch: 84%; font-size: 70px; color: var(--white); }
+
+      /* Plan 4 */
+      #s4-list { left: 80px; top: 330px; width: 920px; display: flex; flex-direction: column; gap: 62px; }
+      .pt { display: flex; align-items: center; gap: 40px; }
+      .pt-ico { flex: 0 0 140px; width: 140px; height: 140px; border-radius: var(--r); background: var(--magenta); display: flex; align-items: center; justify-content: center; }
+      .pt-ico svg { width: 88px; height: 88px; display: block; }
+      .pt-txt { flex: 1 1 auto; font-size: 76px; line-height: 1.04; }
+
+      /* Plan 5 */
+      #s5-kicker { left: 80px; top: 292px; width: 900px; font-size: 42px; line-height: 1.1; color: var(--yellow); }
+      #s5-title-a { left: 80px; top: 350px; width: 920px; font-size: 96px; }
+      #s5-studio { left: 300px; top: 586px; width: 480px; height: 563px; }
+      #s5-studio-in { position: absolute; inset: 0; }
+      #s5-studio-dos { opacity: 0; }
+      #s5-chip { left: 300px; top: 1170px; width: 480px; height: 64px; border-radius: var(--r); background: var(--magenta); display: flex; align-items: center; justify-content: center; font-size: 36px; color: var(--white); }
+      #s5-title-b { left: 80px; top: 296px; width: 920px; font-size: 96px; }
+      .club { top: 590px; width: 360px; height: 450px; box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35); }
+      #s5-club-a { left: 70px; }
+      #s5-club-b { left: 360px; z-index: 2; }
+      #s5-club-c { left: 650px; }
+
+      /* Plan 6 */
+      #s6-logo { left: 80px; top: 290px; width: 400px; height: 170px; }
+      #s6-logo img { display: block; width: 100%; height: 100%; }
+      #s6-tag-1, #s6-tag-2 { left: 80px; width: 920px; font-size: 78px; font-stretch: 80%; }
+      #s6-tag-1 { top: 500px; }
+      #s6-tag-2 { top: 584px; color: var(--yellow); }
+      #s6-btn { left: 80px; top: 880px; width: 620px; height: 130px; }
+      #s6-btn-bg { position: absolute; inset: 0; border-radius: var(--r); background: var(--magenta); }
+      #s6-btn-txt { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: "Archivo", sans-serif; font-weight: 800; font-stretch: 90%; font-size: 52px; color: var(--white); }
+      #s6-url { left: 80px; top: 1046px; width: 920px; font-family: "Archivo", sans-serif; font-weight: 800; font-stretch: 90%; font-size: 66px; line-height: 1.1; }
+      #s6-legal { left: 80px; top: 1196px; width: 920px; font-size: 30px; line-height: 1.2; font-weight: 400; color: rgba(255, 255, 255, 0.78); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="26.3" data-width="1080" data-height="1920">
+      <section id="stage" class="clip" data-start="0" data-duration="26.3" data-track-index="0">
+        <div id="bg" data-layout-ignore>
+          <div id="band-rot-a" class="band-rot"><div id="band-a" class="band"></div></div>
+          <div id="band-rot-b" class="band-rot"><div id="band-b" class="band"></div></div>
+        </div>
+
+        <!-- Plan 1 : accroche -->
+        <div id="s1" class="scene">
+          <div id="s1-photo" class="abs card"><div id="s1-photo-in" data-layout-allow-overflow><img id="s1-photo-img" src="assets/img/set-football-16cace25.webp" alt="Set football maillot et short sublimés, vraie pièce avec ses sponsors" /></div></div>
+          <p id="s1-kicker" class="abs label">Set maillot + short</p>
+          <div id="s1-price" class="abs"><span id="s1-price-txt" class="display">25,99 € HT</span></div>
+          <p id="s1-des" class="abs display">Dès 30 pièces</p>
+          <div id="b1-hit-a" class="hit"></div>
+          <div id="b1-hit-b" class="hit"></div>
+          <div id="b1" class="ball" data-layout-allow-overflow>
+            <div id="b1-body" class="ball-body">
+              <div id="b1-spin" class="ball-spin">
+                <svg viewBox="0 0 100 100" aria-hidden="true"><defs><clipPath id="b1-clip"><circle cx="50" cy="50" r="47" /></clipPath></defs><circle cx="50" cy="50" r="47" fill="#ffffff" /><g clip-path="url(#b1-clip)" fill="#1a1320"><polygon points="50.0,36.5 62.8,45.8 57.9,60.9 42.1,60.9 37.2,45.8" /><polygon points="66.5,27.3 61.4,11.7 74.7,2.0 88.0,11.7 82.9,27.3" /><polygon points="76.6,58.7 89.9,49.0 103.3,58.7 98.2,74.3 81.7,74.3" /><polygon points="50.0,78.0 63.3,87.7 58.2,103.3 41.8,103.3 36.7,87.7" /><polygon points="23.4,58.7 18.3,74.3 1.8,74.3 -3.3,58.7 10.1,49.0" /><polygon points="33.5,27.3 17.1,27.3 12.0,11.7 25.3,2.0 38.6,11.7" /><path d="M50.0 36.5L50.0 21.0 M62.8 45.8L77.6 41.0 M57.9 60.9L67.0 73.5 M42.1 60.9L33.0 73.5 M37.2 45.8L22.4 41.0" stroke="#1a1320" stroke-width="2.2" fill="none" /></g></svg>
+              </div>
+              <svg class="fill" viewBox="0 0 100 100" aria-hidden="true"><defs><radialGradient id="b1-shade" cx="0.36" cy="0.3" r="0.75"><stop offset="0.45" stop-color="#1a1320" stop-opacity="0" /><stop offset="1" stop-color="#1a1320" stop-opacity="0.28" /></radialGradient></defs><circle cx="50" cy="50" r="47" fill="url(#b1-shade)" /><circle cx="50" cy="50" r="46.5" fill="none" stroke="#ffffff" stroke-width="4" /><circle cx="50" cy="50" r="48.6" fill="none" stroke="#3a2c40" stroke-width="1.2" /><ellipse cx="34" cy="27" rx="11" ry="6" fill="#ffffff" opacity="0.55" /></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plan 2 : le besoin du club -->
+        <div id="s2" class="scene later">
+          <div id="s2-photo-a" class="abs card"><img id="s2-photo-a-img" src="assets/img/survetement-d5776d6b.webp" alt="Survêtement sublimé" /></div>
+          <div id="s2-photo-b" class="abs card"><img id="s2-photo-b-img" src="assets/img/hoodie-10c1d5f7.webp" alt="Sweat à capuche sublimé" /></div>
+          <div id="s2-text" class="abs">
+            <p id="s2-l1" class="display">Votre bureau vote un budget.</p>
+            <p id="s2-l2" class="display">Il veut un prix clair.</p>
+          </div>
+        </div>
+
+        <!-- Plan 3 : la grille des cinq paliers -->
+        <div id="s3" class="scene later">
+          <p id="s3-title" class="abs display">Chaque palier affiche son prix</p>
+          <p id="s3-unit" class="abs label">Set maillot + short, € HT / pièce</p>
+          <div id="s3-grid" class="abs">
+            <div id="s3-row-1" class="row"><div id="s3-row-1-bg" class="row-bg"></div><div class="row-in"><span id="s3-q-1" class="row-q">30 pcs</span><span id="s3-p-1" class="row-p">25,99 €</span></div></div>
+            <div id="s3-row-2" class="row"><div id="s3-row-2-bg" class="row-bg"></div><div class="row-in"><span id="s3-q-2" class="row-q">50 pcs</span><span id="s3-p-2" class="row-p">24,99 €</span></div></div>
+            <div id="s3-row-3" class="row"><div id="s3-row-3-bg" class="row-bg"></div><div class="row-in"><span id="s3-q-3" class="row-q">100 pcs</span><span id="s3-p-3" class="row-p">23,99 €</span></div></div>
+            <div id="s3-row-4" class="row"><div id="s3-row-4-bg" class="row-bg"></div><div class="row-in"><span id="s3-q-4" class="row-q">200 pcs</span><span id="s3-p-4" class="row-p">22,99 €</span></div></div>
+            <div id="s3-row-5" class="row"><div id="s3-row-5-bg" class="row-bg"></div><div class="row-in"><span id="s3-q-5" class="row-q">500 pcs</span><span id="s3-p-5" class="row-p">21,99 €</span></div></div>
+          </div>
+        </div>
+
+        <!-- Plan 4 : quatre points compris -->
+        <div id="s4" class="scene later">
+          <div id="s4-list" class="abs">
+            <div id="s4-pt-1" class="pt">
+              <div id="s4-ico-1" class="pt-ico"><svg viewBox="0 0 64 64" fill="none" stroke="#ffffff" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M5 17h32v26H5z" /><path d="M37 26h11l9 9v8H37z" /><circle cx="16" cy="47" r="5" fill="#b3125f" /><circle cx="47" cy="47" r="5" fill="#b3125f" /></svg></div>
+              <p id="s4-txt-1" class="pt-txt display">Transport inclus</p>
+            </div>
+            <div id="s4-pt-2" class="pt">
+              <div id="s4-ico-2" class="pt-ico"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="22" cy="22" r="13" fill="#ffe45c" /><circle cx="42" cy="22" r="13" fill="#ffffff" /><circle cx="22" cy="42" r="13" fill="#1a1320" /><circle cx="42" cy="42" r="13" fill="#ff7dba" /></svg></div>
+              <p id="s4-txt-2" class="pt-txt display">Toutes vos couleurs au même prix</p>
+            </div>
+            <div id="s4-pt-3" class="pt">
+              <div id="s4-ico-3" class="pt-ico"><svg viewBox="0 0 64 64" fill="none" stroke="#ffffff" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M14 6h26l12 12v40H14z" /><path d="M40 6v12h12" /><path d="M23 38l7 7 13-15" /></svg></div>
+              <p id="s4-txt-3" class="pt-txt display">Maquette à valider avant production</p>
+            </div>
+            <div id="s4-pt-4" class="pt">
+              <div id="s4-ico-4" class="pt-ico"><svg viewBox="0 0 64 64" fill="none" stroke="#ffffff" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M23 7l-12 5-8 11 7 6 5-4v32h34V25l5 4 7-6-8-11-12-5c-1 4-5 7-9 7s-8-3-9-7z" /></svg></div>
+              <p id="s4-txt-4" class="pt-txt display">Tailles enfant à XXL</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plan 5 : le studio en ligne, puis les vraies pièces -->
+        <div id="s5" class="scene later">
+          <p id="s5-kicker" class="abs label">Studio en ligne</p>
+          <p id="s5-title-a" class="abs display">Placez vos logos en ligne</p>
+          <div id="s5-studio" class="abs card">
+            <div id="s5-studio-in">
+              <img id="s5-studio-face" class="fill" src="assets/img/studio-face.webp" alt="Studio Contino Sport, vue de face" />
+              <img id="s5-studio-dos" class="fill" src="assets/img/studio-dos.webp" alt="Studio Contino Sport, vue de dos" />
+            </div>
+          </div>
+          <p id="s5-chip" class="abs label">Aperçu face et dos</p>
+          <p id="s5-title-b" class="abs display">Des clubs portent déjà nos maillots</p>
+          <div id="s5-club-a" class="abs card club"><img id="s5-club-a-img" src="assets/img/set-football-v2-0dbebe47.webp" alt="Set football livré, vue de dos" /></div>
+          <div id="s5-club-b" class="abs card club"><img id="s5-club-b-img" src="assets/img/basket-double-311197a4.webp" alt="Maillots de basket livrés, Schirmeck" /></div>
+          <div id="s5-club-c" class="abs card club"><img id="s5-club-c-img" src="assets/img/basket-simple-d58a86a6.webp" alt="Maillot de basket livré, Eschau" /></div>
+        </div>
+
+        <!-- Plan 6 : fin -->
+        <div id="s6" class="scene later">
+          <div id="s6-logo" class="abs"><img id="s6-logo-img" src="assets/img/logo-contino-sport-blanc.webp" alt="Contino Sport" /></div>
+          <p id="s6-tag-1" class="abs display">Vous l'imaginez.</p>
+          <p id="s6-tag-2" class="abs display">Nous l'imprimons.</p>
+          <div id="s6-btn" class="abs"><div id="s6-btn-bg"></div><p id="s6-btn-txt">Demandez votre devis</p></div>
+          <p id="s6-url" class="abs">continosport.fr</p>
+          <p id="s6-legal" class="abs label">Prix HT. Photos non contractuelles.</p>
+          <div id="b2-shadow" class="shadow"></div>
+          <div id="b2-shadow-top" class="shadow"></div>
+          <div id="b2-hit-a" class="hit"></div>
+          <div id="b2-hit-b" class="hit"></div>
+          <div id="b2" class="ball" data-layout-allow-overflow>
+            <div id="b2-body" class="ball-body">
+              <div id="b2-spin" class="ball-spin">
+                <svg viewBox="0 0 100 100" aria-hidden="true"><defs><clipPath id="b2-clip"><circle cx="50" cy="50" r="47" /></clipPath></defs><circle cx="50" cy="50" r="47" fill="#ffffff" /><g clip-path="url(#b2-clip)" fill="#1a1320"><polygon points="50.0,36.5 62.8,45.8 57.9,60.9 42.1,60.9 37.2,45.8" /><polygon points="66.5,27.3 61.4,11.7 74.7,2.0 88.0,11.7 82.9,27.3" /><polygon points="76.6,58.7 89.9,49.0 103.3,58.7 98.2,74.3 81.7,74.3" /><polygon points="50.0,78.0 63.3,87.7 58.2,103.3 41.8,103.3 36.7,87.7" /><polygon points="23.4,58.7 18.3,74.3 1.8,74.3 -3.3,58.7 10.1,49.0" /><polygon points="33.5,27.3 17.1,27.3 12.0,11.7 25.3,2.0 38.6,11.7" /><path d="M50.0 36.5L50.0 21.0 M62.8 45.8L77.6 41.0 M57.9 60.9L67.0 73.5 M42.1 60.9L33.0 73.5 M37.2 45.8L22.4 41.0" stroke="#1a1320" stroke-width="2.2" fill="none" /></g></svg>
+              </div>
+              <svg class="fill" viewBox="0 0 100 100" aria-hidden="true"><defs><radialGradient id="b2-shade" cx="0.36" cy="0.3" r="0.75"><stop offset="0.45" stop-color="#1a1320" stop-opacity="0" /><stop offset="1" stop-color="#1a1320" stop-opacity="0.28" /></radialGradient></defs><circle cx="50" cy="50" r="47" fill="url(#b2-shade)" /><circle cx="50" cy="50" r="46.5" fill="none" stroke="#ffffff" stroke-width="4" /><circle cx="50" cy="50" r="48.6" fill="none" stroke="#3a2c40" stroke-width="1.2" /><ellipse cx="34" cy="27" rx="11" ry="6" fill="#ffffff" opacity="0.55" /></svg>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Son : musique ElevenLabs Music, bruitages ElevenLabs. La voix off s'ajoute ici une fois générée. -->
+      <audio id="musique" src="assets/audio/musique.mp3" data-start="0" data-duration="26.3" data-track-index="2" data-audio-group="music" data-automation="{&quot;version&quot;:1,&quot;lanes&quot;:[{&quot;target&quot;:&quot;volume&quot;,&quot;points&quot;:[{&quot;t&quot;:0,&quot;v&quot;:0.55},{&quot;t&quot;:25.5,&quot;v&quot;:0.55},{&quot;t&quot;:26.3,&quot;v&quot;:0}]}]}"></audio>
+      <audio id="sfx-ballon-contact" src="assets/audio/sfx-ballon-contact.wav" data-start="0.42" data-duration="0.8" data-track-index="3" data-audio-group="sfx" data-volume="0.85"></audio>
+      <audio id="sfx-ballon-reception" src="assets/audio/sfx-ballon-reception.wav" data-start="24.6" data-duration="0.8" data-track-index="3" data-audio-group="sfx" data-volume="0.7"></audio>
+      <audio id="sfx-bouton" src="assets/audio/sfx-bouton.wav" data-start="24.62" data-duration="0.8" data-track-index="4" data-audio-group="sfx" data-volume="0.6"></audio>
+    </div>
+
+    <script>
+      /* MINUTAGE:DEBUT (généré par outils/minutage.py depuis minutage.json) */
+      const T = {"s1":0,"s2":3.8,"s3":6.8,"s4":11.4,"s5":18.4,"s6":22.2,"total":26.3,"v":{"p1a":0.15,"p1b":2.75,"p2a":3.9,"p2b":5.4,"p3a":6.9,"p3b":8.6,"p4a":11.5,"p4b":12.6,"p4c":14.4,"p4d":16.6,"p5a":18.5,"p5b":20.1,"p6a":22.4,"voEnd":24.8}};
+      /* MINUTAGE:FIN */
+
+      const vol = (sy) => ({ scaleY: sy, scaleX: 1 / sy });
+      const tl = gsap.timeline({ paused: true });
+
+      // Fond : dérive lente et continue des bandes
+      tl.fromTo("#band-a", { x: -120 }, { x: 160, duration: T.total, ease: "none" }, 0);
+      tl.fromTo("#band-b", { x: 140 }, { x: -180, duration: T.total, ease: "none" }, 0);
+
+      // Changements de plan : chaque plan s'affiche à son début et se masque au début du suivant
+      const scenes = ["#s1", "#s2", "#s3", "#s4", "#s5", "#s6"];
+      const starts = [T.s1, T.s2, T.s3, T.s4, T.s5, T.s6];
+      for (let i = 1; i < scenes.length; i++) {
+        tl.set(scenes[i], { autoAlpha: 1 }, starts[i]);
+        tl.set(scenes[i - 1], { autoAlpha: 0 }, starts[i]);
+      }
+      const exitAt = (t) => t - 0.28;
+
+      /* ---------- Plan 1 : accroche (registre éditorial + personnage) ---------- */
+      tl.addLabel("b1-chute", 0)
+        .addLabel("b1-contact", 0.42)
+        .addLabel("b1-decollage", 0.49)
+        .addLabel("b1-apex", 0.82)
+        .addLabel("b1-sortie", 1.24);
+
+      // Photo réelle visible dès la première image, poussée lente
+      tl.fromTo("#s1-photo-in", { scale: 1 }, { scale: 1.05, duration: T.s2, ease: "none" }, 0);
+      // Bloc prix : glisse juste avant le contact, le prix apparaît au contact
+      tl.fromTo("#s1-price", { x: -36, opacity: 0 }, { x: 0, opacity: 1, duration: 0.14, ease: "power2.out" }, 0.26);
+      tl.fromTo("#s1-price-txt", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.16, ease: "power2.out" }, "b1-contact");
+      tl.to("#s1-price", { keyframes: [{ y: 7, duration: 0.06, ease: "power2.out" }, { y: 0, duration: 0.22, ease: "sine.out" }] }, "b1-contact");
+      tl.fromTo("#s1-des", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.14, ease: "power2.out" }, 0.44);
+
+      // Ballon 1 : chute, écrasement, rebond en arc hors champ
+      tl.fromTo("#b1", { y: -460 }, { y: 0, duration: 0.42, ease: "power2.in" }, "b1-chute");
+      tl.fromTo("#b1-body", { ...vol(1), rotation: 0 }, { ...vol(1.2), duration: 0.3, ease: "power1.in" }, "b1-chute");
+      tl.to("#b1-body", { ...vol(0.62), duration: 0.06, ease: "power2.out" }, "b1-contact");
+      tl.fromTo("#b1-spin", { rotation: -60 }, { rotation: 0, duration: 0.42, ease: "none" }, "b1-chute");
+      tl.to("#b1", { x: 560, duration: 0.75, ease: "none" }, "b1-decollage");
+      tl.to("#b1", { y: -200, duration: 0.33, ease: "power2.out" }, "b1-decollage");
+      tl.to("#b1", { y: 300, duration: 0.42, ease: "power2.in" }, "b1-apex");
+      tl.to("#b1-body", { ...vol(1.22), rotation: 12, duration: 0.08, ease: "power2.out" }, "b1-decollage");
+      tl.to("#b1-body", { ...vol(1), rotation: 4, duration: 0.25, ease: "power1.inOut" }, "b1-decollage+=0.08");
+      tl.to("#b1-body", { ...vol(1.15), rotation: 18, duration: 0.3, ease: "power2.in" }, "b1-apex+=0.1");
+      tl.to("#b1-spin", { rotation: 260, duration: 0.75, ease: "none" }, "b1-decollage");
+      // Action secondaire : impacts au contact
+      tl.fromTo("#b1-hit-a", { scaleX: 0.2, opacity: 0 }, { scaleX: 1, opacity: 0.9, duration: 0.12, ease: "power2.out" }, "b1-contact");
+      tl.fromTo("#b1-hit-b", { scaleX: 0.2, opacity: 0 }, { scaleX: 1, opacity: 0.9, duration: 0.12, ease: "power2.out" }, "b1-contact");
+      tl.to(["#b1-hit-a", "#b1-hit-b"], { opacity: 0, duration: 0.2, ease: "power1.in" }, "b1-contact+=0.14");
+
+      // Sortie du plan 1
+      tl.to(["#s1-kicker", "#s1-price", "#s1-des"], { y: -30, opacity: 0, duration: 0.24, ease: "power2.in", stagger: 0.04 }, exitAt(T.s2));
+      tl.to("#s1-photo", { x: -80, opacity: 0, duration: 0.26, ease: "power2.in" }, exitAt(T.s2) + 0.02);
+
+      /* ---------- Plan 2 : le besoin du club ---------- */
+      tl.fromTo("#s2-l1", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.42, ease: "power3.out" }, T.s2 + 0.02);
+      tl.fromTo("#s2-photo-a", { y: 140, rotation: -9, opacity: 0 }, { y: 0, rotation: -4, opacity: 1, duration: 0.6, ease: "power3.out" }, T.s2 + 0.16);
+      tl.fromTo("#s2-photo-b", { y: 160, rotation: 9, opacity: 0 }, { y: 0, rotation: 3, opacity: 1, duration: 0.6, ease: "power3.out" }, T.s2 + 0.24);
+      tl.to("#s2-photo-a", { y: -14, duration: T.s3 - T.s2 - 1.1, ease: "none" }, T.s2 + 0.76);
+      tl.to("#s2-photo-b", { y: -22, duration: T.s3 - T.s2 - 1.16, ease: "none" }, T.s2 + 0.84);
+      tl.fromTo("#s2-l2", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, T.v.p2b - 0.06);
+      tl.to(["#s2-l1", "#s2-l2"], { y: -30, opacity: 0, duration: 0.24, ease: "power2.in", stagger: 0.05 }, exitAt(T.s3));
+      tl.to(["#s2-photo-a", "#s2-photo-b"], { y: 80, opacity: 0, duration: 0.26, ease: "power2.in", stagger: 0.04 }, exitAt(T.s3));
+
+      /* ---------- Plan 3 : la grille des cinq paliers ---------- */
+      tl.fromTo("#s3-title", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.42, ease: "power3.out" }, T.s3 + 0.02);
+      tl.fromTo("#s3-unit", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.36, ease: "power3.out" }, T.s3 + 0.12);
+      tl.fromTo(".row", { x: 90, opacity: 0 }, { x: 0, opacity: 1, duration: 0.45, ease: "power3.out", stagger: 0.08 }, T.s3 + 0.26);
+      // Le palier de 500 pièces s'allume quand la voix dit son prix
+      tl.to("#s3-row-5-bg", { backgroundColor: "#ffe45c", duration: 0.24, ease: "power2.out" }, T.v.p3b);
+      tl.to(["#s3-q-5", "#s3-p-5"], { color: "#1a1320", duration: 0.24, ease: "power2.out" }, T.v.p3b);
+      tl.to("#s3-row-5", { keyframes: [{ scale: 1.03, duration: 0.18, ease: "power2.out" }, { scale: 1, duration: 0.3, ease: "sine.inOut" }] }, T.v.p3b);
+      tl.to(["#s3-row-1", "#s3-row-2", "#s3-row-3", "#s3-row-4"], { opacity: 0.55, duration: 0.3, ease: "power1.out" }, T.v.p3b);
+      tl.to(["#s3-title", "#s3-unit", "#s3-grid"], { y: -30, opacity: 0, duration: 0.24, ease: "power2.in", stagger: 0.04 }, exitAt(T.s4));
+
+      /* ---------- Plan 4 : quatre points compris ---------- */
+      const pts = [T.v.p4a, T.v.p4b, T.v.p4c, T.v.p4d];
+      pts.forEach((t, i) => {
+        const n = i + 1;
+        tl.fromTo(`#s4-ico-${n}`, { scale: 0.86, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.32, ease: "power3.out" }, t - 0.08);
+        tl.fromTo(`#s4-txt-${n}`, { x: 40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.36, ease: "power3.out" }, t - 0.02);
+        if (i > 0) tl.to(`#s4-pt-${i}`, { opacity: 0.5, duration: 0.3, ease: "power1.out" }, t - 0.08);
+      });
+      tl.to(["#s4-pt-1", "#s4-pt-2", "#s4-pt-3"], { opacity: 1, duration: 0.3, ease: "power1.out" }, T.v.p4d + 1.2);
+      tl.to("#s4-list", { y: -30, opacity: 0, duration: 0.26, ease: "power2.in" }, exitAt(T.s5));
+
+      /* ---------- Plan 5 : le studio, puis les vraies pièces ---------- */
+      const flipAt = T.s5 + Math.max(0.9, (T.v.p5b - T.s5) * 0.55);
+      tl.fromTo("#s5-kicker", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.34, ease: "power3.out" }, T.s5 + 0.02);
+      tl.fromTo("#s5-title-a", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.42, ease: "power3.out" }, T.s5 + 0.08);
+      tl.fromTo("#s5-studio", { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, T.s5 + 0.18);
+      tl.fromTo("#s5-chip", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out" }, T.s5 + 0.42);
+      // Retournement face vers dos
+      tl.to("#s5-studio-in", { scaleX: 0, duration: 0.15, ease: "power2.in" }, flipAt);
+      tl.set("#s5-studio-dos", { opacity: 1 }, flipAt + 0.15);
+      tl.to("#s5-studio-in", { scaleX: 1, duration: 0.17, ease: "power2.out" }, flipAt + 0.15);
+      // Bascule vers les vraies pièces quand la voix les annonce
+      const clubsAt = T.v.p5b - 0.12;
+      tl.to(["#s5-kicker", "#s5-title-a", "#s5-studio", "#s5-chip"], { y: -30, opacity: 0, duration: 0.22, ease: "power2.in", stagger: 0.03 }, clubsAt - 0.22);
+      tl.fromTo("#s5-title-b", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, clubsAt);
+      tl.fromTo("#s5-club-a", { y: 90, rotation: -10, opacity: 0 }, { y: 0, rotation: -5, opacity: 1, duration: 0.5, ease: "power3.out" }, clubsAt + 0.1);
+      tl.fromTo("#s5-club-b", { y: 90, rotation: 0, opacity: 0 }, { y: 0, rotation: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, clubsAt + 0.18);
+      tl.fromTo("#s5-club-c", { y: 90, rotation: 10, opacity: 0 }, { y: 0, rotation: 5, opacity: 1, duration: 0.5, ease: "power3.out" }, clubsAt + 0.26);
+      tl.to(".club", { y: -16, duration: T.s6 - clubsAt - 1.2, ease: "none", stagger: 0.04 }, clubsAt + 0.78);
+      tl.to(["#s5-title-b", "#s5-club-a", "#s5-club-b", "#s5-club-c"], { y: -30, opacity: 0, duration: 0.22, ease: "power2.in", stagger: 0.03 }, exitAt(T.s6));
+
+      /* ---------- Plan 6 : fin (registre éditorial puis personnage) ---------- */
+      const t6 = T.s6;
+      tl.fromTo("#s6-logo", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.38, ease: "power3.out" }, t6 + 0.02);
+      tl.fromTo("#s6-tag-1", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.38, ease: "power3.out" }, t6 + 0.1);
+      tl.fromTo("#s6-tag-2", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.38, ease: "power3.out" }, t6 + 0.18);
+      tl.fromTo("#s6-btn", { scale: 0.96, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.36, ease: "power3.out" }, t6 + 0.26);
+      tl.fromTo("#s6-url", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.34, ease: "power3.out" }, t6 + 0.34);
+      tl.fromTo("#s6-legal", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.out" }, t6 + 0.42);
+
+      tl.addLabel("b2-entree", t6 + 0.5)
+        .addLabel("b2-arret", t6 + 1.05)
+        .addLabel("b2-retour", t6 + 1.25)
+        .addLabel("b2-anticipation", t6 + 1.55)
+        .addLabel("b2-decollage", t6 + 1.95)
+        .addLabel("b2-apex", t6 + 2.17)
+        .addLabel("b2-contact", t6 + 2.4)
+        .addLabel("b2-stabilisation", t6 + 2.48);
+
+      const R = 60; // rayon du ballon 2, pour un roulement sans glissement
+      const deg = (px) => (px / R) * (180 / Math.PI);
+      // Arrivée en roulant, arrêt avec dépassement
+      tl.fromTo("#b2", { x: 420, y: 0 }, { x: -25, duration: 0.55, ease: "power2.out" }, "b2-entree");
+      tl.fromTo("#b2-spin", { rotation: 0 }, { rotation: -deg(445), duration: 0.55, ease: "power2.out" }, "b2-entree");
+      tl.fromTo("#b2-body", { ...vol(1), rotation: -6 }, { rotation: -6, duration: 0.01 }, "b2-entree");
+      tl.to("#b2-body", { rotation: -10, duration: 0.12, ease: "power2.out" }, "b2-arret-=0.06");
+      tl.to("#b2", { x: 0, duration: 0.2, ease: "sine.inOut" }, "b2-arret");
+      tl.to("#b2-spin", { rotation: -deg(445) + deg(25), duration: 0.2, ease: "sine.inOut" }, "b2-arret");
+      tl.to("#b2-body", { keyframes: [{ rotation: 5, duration: 0.14, ease: "sine.inOut" }, { rotation: -2, duration: 0.12, ease: "sine.inOut" }, { rotation: 0, duration: 0.1, ease: "sine.out" }] }, "b2-arret+=0.06");
+      tl.fromTo("#b2-shadow", { x: 420, opacity: 1, scale: 1 }, { x: -25, duration: 0.55, ease: "power2.out" }, "b2-entree");
+      tl.to("#b2-shadow", { x: 0, duration: 0.2, ease: "sine.inOut" }, "b2-arret");
+      // Anticipation : s'écrase, se penche à l'opposé du saut, recule
+      tl.to("#b2-body", { ...vol(0.72), rotation: 10, duration: 0.4, ease: "power2.inOut" }, "b2-anticipation");
+      tl.to("#b2", { x: 12, duration: 0.4, ease: "power2.inOut" }, "b2-anticipation");
+      tl.to("#b2-shadow", { x: 12, scaleX: 1.12, duration: 0.4, ease: "power2.inOut" }, "b2-anticipation");
+      // Saut en arc vers le haut du bouton
+      tl.to("#b2", { x: -230, duration: 0.45, ease: "none" }, "b2-decollage");
+      tl.to("#b2", { y: -210, duration: 0.22, ease: "power2.out" }, "b2-decollage");
+      tl.to("#b2", { y: -130, duration: 0.23, ease: "power2.in" }, "b2-apex");
+      tl.to("#b2-body", { ...vol(1.25), rotation: -12, duration: 0.09, ease: "power2.out" }, "b2-decollage");
+      tl.to("#b2-body", { ...vol(1), rotation: -4, duration: 0.15, ease: "power1.inOut" }, "b2-decollage+=0.09");
+      tl.to("#b2-body", { ...vol(1.12), rotation: -8, duration: 0.13, ease: "power2.in" }, "b2-apex+=0.1");
+      tl.to("#b2-spin", { rotation: -deg(445) + deg(25) - 140, duration: 0.45, ease: "none" }, "b2-decollage");
+      tl.to("#b2-shadow", { scale: 0.5, opacity: 0, duration: 0.24, ease: "power2.out" }, "b2-decollage");
+      // Réception amortie sur le bouton
+      tl.to("#b2-body", { ...vol(0.8), rotation: 0, duration: 0.08, ease: "power2.out" }, "b2-contact");
+      tl.to("#b2-body", { keyframes: [{ ...vol(1.06), duration: 0.14, ease: "power2.out" }, { ...vol(0.98), duration: 0.12, ease: "sine.inOut" }, { ...vol(1), duration: 0.11, ease: "sine.out" }] }, "b2-stabilisation");
+      tl.fromTo("#b2-shadow-top", { scaleX: 0.6, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.12, ease: "power2.out" }, "b2-contact-=0.04");
+      // Réaction du bouton (éditorial : pression et éclat)
+      tl.to("#s6-btn", { keyframes: [{ y: 8, scale: 0.98, duration: 0.08, ease: "power2.out" }, { y: 0, scale: 1, duration: 0.28, ease: "sine.out" }] }, "b2-contact");
+      tl.to("#s6-btn-bg", { keyframes: [{ backgroundColor: "#c2186b", duration: 0.08, ease: "power2.out" }, { backgroundColor: "#b3125f", duration: 0.4, ease: "power1.out" }] }, "b2-contact");
+      tl.fromTo("#b2-hit-a", { scaleX: 0.2, opacity: 0 }, { scaleX: 1, opacity: 0.85, duration: 0.1, ease: "power2.out" }, "b2-contact");
+      tl.fromTo("#b2-hit-b", { scaleX: 0.2, opacity: 0 }, { scaleX: 1, opacity: 0.85, duration: 0.1, ease: "power2.out" }, "b2-contact");
+      tl.to(["#b2-hit-a", "#b2-hit-b"], { opacity: 0, duration: 0.18, ease: "power1.in" }, "b2-contact+=0.12");
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "2026-10-10_projet-hyperframes-pub-contino-sport",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx --yes hyperframes@0.8.145 preview",
+    "check": "npx --yes hyperframes@0.8.145 check",
+    "render": "npx --yes hyperframes@0.8.145 render",
+    "publish": "npx --yes hyperframes@0.8.145 publish"
+  },
+  "devDependencies": {
+    "@hyperframes/core": "^0.8.145"
+  }
+}
