@@ -159,6 +159,9 @@
         </div>
       </div>
 
+      <!-- Son : musique composée pour la grille de 128 BPM et bruitages calés sur le mouvement (outils/sound_design.py) -->
+      <audio id="son-mix" src="assets/audio/mix.wav" data-start="0" data-duration="22.5" data-track-index="10" data-volume="1.1"></audio>
+
       <!-- Le ballon dessiné, fil rouge entre les scènes -->
       <div id="ballon-calque">
         <svg id="encre-svg" class="plein" viewBox="0 0 1080 1920" width="1080" height="1920"></svg>
@@ -1120,6 +1123,8 @@
           entre("adresse", L.b11_cta + 0.08);
 
           rendu(0);
+          // repères exposés pour le sound design (outils/son.py) ; le rendu ne les lit pas
+          window.__reperes = { feutreA, feutreB, ballon, centreBallon, contacts: CONTACTS, accroche: ACCROCHE, L, ST_A, H_A, PASS_B, COCHE, ECRIT, nbLignes: LIGNES.length, finFlamme: FIN_FLAMME };
           window.__timelines["le-dessin"] = tl;
         }
         document.fonts.ready.then(() => Promise.all([document.fonts.load('900 84px "Archivo"'), document.fonts.load('700 44px "Hanken Grotesk"')])).then(construire).catch((e) => console.error("construction", e && e.message, e && e.stack));

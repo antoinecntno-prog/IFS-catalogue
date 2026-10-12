@@ -1,6 +1,6 @@
 # Contrôles avant livraison, pub « Le dessin »
 
-Rendu contrôlé : `rendu.mp4`, H.264, 1080 × 1920 px, 30 i/s, 675 images, 22,500 s.
+Rendu contrôlé : `rendu.mp4`, H.264, 1080 × 1920 px, 30 i/s, 675 images, 22,500 s, son AAC 48 kHz stéréo.
 
 ## a) `npx hyperframes check`
 
@@ -53,6 +53,8 @@ Commande du brief, 24 instants : `controles/2026-10-12_planche-snapshots.jpg`. C
 | Secondes figées hors CTA | aucune | aucune |
 | Raccord de boucle, images 674 et 0 | YAVG 1,055 | sous 1,5 |
 | Lignes `black_start` | 0 | 0 |
+| Son : loudness intégrée, crête vraie | −14,8 LUFS, −1,5 dBFS | autour de −14 LUFS, crête sous −1 dBFS |
+| Son : décalage avec l'image | 0 ms (corrélation avec la source) | 0 |
 
 Sorties brutes : `controles/mesures.txt`.
 
@@ -74,7 +76,7 @@ Sorties brutes : `controles/mesures.txt`.
 
 ## Ce qui reste ouvert
 
-- Logo HD, set HD, musique, avis et nombre de clubs équipés : [à fournir], laissés vides (détail dans `README.md`).
+- Logo HD, set HD, avis et nombre de clubs équipés : [à fournir], laissés vides (détail dans `README.md`).
 - Feuille de match fournie en 2000 px de haut, sous les 2400 px demandés.
 - Objection traitée (maquette validée, prix par palier) : déduite de `PRODUCT.md`, à confirmer.
 - Avertissement lint sur la taille du fichier : découper la composition en sous-compositions si la vidéo doit évoluer.
