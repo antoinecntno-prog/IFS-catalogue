@@ -22,7 +22,7 @@ IDENTITE = {
     "rcs": "RCS Épinal 537 679 441",                   # « RCS Épinal 123 456 789 »
     "tva": "FR18537679441",                   # numéro de TVA intracommunautaire
     "directeur": "Elodie Contino, gérante",             # directeur de la publication : représentant légal
-    "telephone": None,
+    "telephone": "03 29 30 30 06",
     "email": "antoine.contino@groupecontino.com",
     "tribunal": "Épinal",          # tribunal de commerce du siège social
 }
