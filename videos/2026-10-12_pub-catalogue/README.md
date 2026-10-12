@@ -55,7 +55,6 @@ Si l'aperçu Reels masque le titre, le texte principal commence par « Comment h
 
 - Logo HD (SVG ou PNG de 1 200 px de large) : le logo du site s'affiche à 240 × 102 px dans le bon.
 - Confirmation que « Foulées des Sapins », sur la photo des dossards, est une course inventée : l'inscription reste floutée en attendant.
-- Accord sur la mention du bon : « Photos non contractuelles » (pied de page du site) ou « Photos d'exemple ».
 - Libellé exact du bouton Meta.
 - Accord des clubs d'Eschau et de Schirmeck, utile pour une version avec les vues principales des maillots de basket (le film montre les vues sans nom de club).
 - Objection traitée (fournisseurs « sur devis ») : déduite de `PRODUCT.md`, à confirmer.

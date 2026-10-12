@@ -1,9 +1,9 @@
 == mouvement (outils/mesure_mouvement.py)
-quasi figees 20.7 %
-plus longue suite figee 1.57 s
+quasi figees 20.8 %
+plus longue suite figee 1.60 s
 secondes figees hors CTA : []
 == raccord de boucle, images 899 et 0
-YAVG=2.41071
+YAVG=2.41255
 == lignes black_start
 0
 == son du rendu (ebur128)
@@ -13,5 +13,5 @@ YAVG=2.41071
 stream|codec_name=h264|width=1080|height=1920|r_frame_rate=30/1|duration=30.000000|nb_frames=900
 stream|codec_name=aac|sample_rate=48000|channels=2|r_frame_rate=0/0|duration=30.000000|nb_frames=1408
 == écarts entre images voisines (même chaîne tblend)
-images 0-1 2.096 · 897-898 3.403 · 898-899 3.477 · médiane du film 2.868
-plus longue suite figée : images 678 à 725, 22.600 à 24.167 s
+images 0-1 2.096 · 897-898 3.410 · 898-899 3.476 · médiane du film 2.868
+plus longue suite figée : images 677 à 725, 22.567 à 24.167 s

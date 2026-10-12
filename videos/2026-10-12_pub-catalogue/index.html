@@ -72,14 +72,13 @@
       .surligne { position: absolute; background: var(--jaune); transform-origin: 0 50%; border-radius: 4px; }
 
       /* Bon à détacher */
-      #bon { position: absolute; left: 110px; top: 845px; width: 860px; height: 445px; }
-      #bon-papier { position: absolute; left: 0; top: 0; width: 860px; height: 445px; background: var(--blanc); border-radius: 0 0 6px 6px; filter: drop-shadow(0 10px 16px rgba(26, 19, 32, 0.3));
+      #bon { position: absolute; left: 110px; top: 845px; width: 860px; height: 405px; }
+      #bon-papier { position: absolute; left: 0; top: 0; width: 860px; height: 405px; background: var(--blanc); border-radius: 0 0 6px 6px; filter: drop-shadow(0 10px 16px rgba(26, 19, 32, 0.3));
         -webkit-mask: radial-gradient(circle 7px at 10px 0, transparent 6.5px, #000 7px) 0 0 / 20px 100% repeat-x; mask: radial-gradient(circle 7px at 10px 0, transparent 6.5px, #000 7px) 0 0 / 20px 100% repeat-x; }
       #bon-pointilles { position: absolute; left: 16px; top: 14px; width: 828px; height: 0; border-top: 3px dashed rgba(26, 19, 32, 0.35); }
       #bon-logo { position: absolute; left: 310px; top: 17px; width: 240px; height: 102px; background: url(assets/logo-contino-sport.webp) 0 0 / 100% 100% no-repeat; }
       #bouton { position: absolute; left: 70px; top: 183px; width: 720px; height: 140px; display: flex; align-items: center; justify-content: center; background: var(--magenta); color: var(--blanc); border-radius: 6px; font-family: "Archivo", sans-serif; font-weight: 900; font-stretch: 80%; font-size: 56px; white-space: nowrap; transform-origin: 50% 50%; }
       .adresse { font-family: "Hanken Grotesk", sans-serif; font-weight: 500; font-size: 40px; line-height: 1; color: var(--encre); }
-      .mention { font-family: "Hanken Grotesk", sans-serif; font-weight: 500; font-size: 26px; line-height: 1; color: var(--encre); }
 
       /* Ballon */
       #ballon-calque { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
@@ -118,7 +117,6 @@
         <div id="bon-l1" class="ligne secondaire" style="left: -110px; top: 129px"><span id="bon-l1-t">Devis gratuit en deux étapes</span></div>
         <div id="bouton">Recevoir mon devis</div>
         <div id="bon-adresse" class="ligne adresse" style="left: -110px; top: 331px"><span id="bon-adresse-t">continosport.fr</span></div>
-        <div id="bon-mention" class="ligne mention" style="left: -110px; top: 375px"><span id="bon-mention-t">Photos non contractuelles</span></div>
       </div>
 
       <!-- Son : musique composée pour la grille de 128 BPM et bruitages calés sur le mouvement (outils/sound_design.py) -->
@@ -1039,12 +1037,11 @@
           entre("pr-l1", TP(40)); entre("pr-l2", TP(40.5));
           sort("pr-l2", TP(46)); sort("pr-l1", TP(46) + 0.08);
           // bon : contenu ligne après ligne, bouton avec un léger scale
-          gsap.set(["#bon-logo", "#bon-l1", "#bon-adresse", "#bon-mention"], { clipPath: "inset(0% 0% 100% 0%)" });
+          gsap.set(["#bon-logo", "#bon-l1", "#bon-adresse"], { clipPath: "inset(0% 0% 100% 0%)" });
           tl.fromTo("#bon-logo", { clipPath: "inset(0% 0% 100% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.35, ease: "power3.out", immediateRender: false }, TP(47.2));
           entre("bon-l1", TP(47.4));
           tl.fromTo("#bouton", { scale: 0.97, clipPath: "inset(0% 0% 100% 0% round 6px)" }, { scale: 1, clipPath: "inset(0% 0% 0% 0% round 6px)", duration: 0.3, ease: "power2.out", immediateRender: true }, TP(47.6));
           entre("bon-adresse", TP(47.9));
-          entre("bon-mention", TP(48));
           // le ballon appuie sur le bouton
           tl.to("#bouton", { scale: 0.96, duration: 0.08, ease: "power2.out" }, TP(56));
           tl.to("#bouton", { scale: 1, duration: 0.25, ease: "power2.out" }, TP(56) + 0.08);
