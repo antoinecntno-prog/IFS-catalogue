@@ -218,6 +218,9 @@ main:focus{outline:none}
 footer{background:var(--foot-bg);color:var(--foot-text);font-size:14px}
 .foot-in{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px 32px;padding-block:28px}
 footer b{color:var(--foot-strong);font-family:var(--f-head)}
+.foot-legal{display:flex;flex-wrap:wrap;gap:0 18px}
+.foot-legal a{display:inline-flex;align-items:center;min-height:44px;color:inherit;text-underline-offset:3px}
+.foot-legal a:hover{color:var(--foot-strong)}
 .cs-lien{display:inline-flex;align-items:center;min-height:44px;padding:0;border:0;background:none;color:inherit;font:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 .cs-lien:hover{color:var(--foot-strong)}
 .eu{display:inline-flex;align-items:center;padding:7px 11px;border:1.5px solid currentColor;border-radius:var(--r);font:700 13px/1 var(--f-body);color:var(--spark)}
@@ -317,6 +320,8 @@ tbody tr:hover td,tbody tr:hover th{background:var(--surface-soft)}
 .q-body .q-visuel-act .btn{width:auto}
 .form-status{margin:14px 0 0;font-size:14.5px}
 .form-status a{color:var(--accent-text);font-weight:700}
+.q-rgpd{margin:14px 0 0;font-size:13.5px;line-height:1.5;color:var(--text-3)}
+.q-rgpd a{color:inherit;text-underline-offset:2px}
 .q-pane{border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:22px;min-width:0}
 .f.bad input,.f.bad textarea,.f.bad select,.f.bad .pick b,.f.bad .file{border-color:var(--err)}
 .q-err{display:flex;align-items:flex-start;gap:6px;margin:0;color:var(--err);font-size:14px;font-weight:600}
@@ -492,7 +497,8 @@ tbody tr:hover td,tbody tr:hover th{background:var(--surface-soft)}
 
 <footer>
   <div class="wrap foot-in">
-    <span><b>Contino Sport</b>, marque du Groupe Contino IFS · Catalogue sublimation 2026 · Photos non contractuelles · <button type="button" class="cs-lien" id="cs-ouvrir" hidden>Cookies</button></span>
+    <span><b>Contino Sport</b>, marque du Groupe Contino IFS · Catalogue sublimation 2026 · Photos non contractuelles</span>
+    <nav class="foot-legal" aria-label="Informations légales"><a href="mentions-legales.html">Mentions légales</a><a href="confidentialite.html">Confidentialité</a><a href="cgv.html">CGV</a><button type="button" class="cs-lien" id="cs-ouvrir" hidden>Cookies</button></nav>
     <span class="eu">Made in Europe</span>
   </div>
 </footer>
@@ -593,6 +599,7 @@ tbody tr:hover td,tbody tr:hover th{background:var(--surface-soft)}
             <button class="btn btn-primary" type="submit" id="q-submit">Recevoir mon devis</button>
           </div>
           <p class="form-status" id="q-status" role="status" aria-live="polite"></p>
+          <p class="q-rgpd">Vos coordonnées servent à établir et suivre votre devis. Détails et droits dans la <a href="confidentialite.html">politique de confidentialité</a>. La demande est gratuite et sans engagement ; une commande est régie par nos <a href="cgv.html">conditions générales de vente</a>.</p>
         </fieldset>
       </form>
     </div>

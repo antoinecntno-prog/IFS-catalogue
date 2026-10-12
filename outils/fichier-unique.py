@@ -29,6 +29,9 @@ def inline(tag, contenu, balise):
 
 # Pixel Meta et bandeau cookies : inutiles hors ligne, le lien « Cookies » reste masqué
 html = html.replace('<script src="consentement.js"></script>\n', "")
+# Pages légales : adresses complètes, le fichier unique s'ouvre hors du site
+for page in ("mentions-legales.html", "confidentialite.html", "cgv.html"):
+    html = html.replace(f'href="{page}', f'href="https://continosport.fr/{page}')
 html = inline('<link rel="stylesheet" href="base.css">', (SITE / "base.css").read_text(encoding="utf-8"), "style")
 html = inline('<script src="donnees.js"></script>', (SITE / "donnees.js").read_text(encoding="utf-8"), "script")
 html = inline('<script src="stockage.js"></script>', (SITE / "stockage.js").read_text(encoding="utf-8") + "\n/* Fichier unique : pas de studio (page à part), le lien Personnaliser est masqué */\nwindow.IFS_FICHIER_UNIQUE = true;", "script")

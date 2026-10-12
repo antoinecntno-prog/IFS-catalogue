@@ -9,6 +9,8 @@ Catalogue sublimation 2026 de Contino Sport (continosport.fr), marque du Groupe 
 - `site/base.css` : polices, couleurs et composants communs aux deux pages.
 - `site/donnees.js` : les produits, leurs prix et leur gabarit dans le studio.
 - `site/stockage.js` : mémoire locale du navigateur qui porte le visuel du studio jusqu'au devis.
+- `site/mentions-legales.html`, `site/confidentialite.html`, `site/cgv.html` (style `site/legal.css`) : pages légales, générées par `python3 outils/pages-legales.py`. L'identité de la société et les conditions de paiement se règlent dans les dictionnaires `IDENTITE` et `CGV` en tête du script ; une valeur manquante s'affiche en jaune « à compléter » et le script la liste.
+- `site/_headers` : en plus du cache, en-têtes de sécurité pour toutes les pages (HTTPS forcé, CSP limitée au site et au pixel Meta, affichage dans un cadre interdit, caméra, micro et position désactivés).
 - `site/consentement.js` : bandeau cookies et pixel Meta (identifiant 1636636314482269), chargé dans les deux pages. Le pixel ne se charge qu'après « Accepter » ; le choix est gardé 6 mois et se modifie par le lien « Cookies » du pied de page. Événements : `PageView`, `ViewContent` à l'ouverture d'une fiche (identifiant, nom, prix d'entrée), `Lead` quand une demande de devis part. Le fichier unique n'embarque ni le bandeau ni le pixel.
 - `site/img/` : photos des produits, chacune en 640 px et en 360 px (`-360.webp`) pour les petits écrans.
 - `site/fonts/` : Archivo et Hanken Grotesk, plus les 13 polices du studio (`studio-*.woff2`), toutes libres, avec leurs licences.
