@@ -15,22 +15,22 @@ SITE = Path(__file__).resolve().parent.parent / "site"
 MAJ = "12 octobre 2026"
 
 IDENTITE = {
-    "raison_sociale": None,        # dénomination exacte au registre, par exemple « I.F.S »
-    "forme": None,                 # SAS, SARL…
-    "capital": None,               # en euros
-    "siege": None,                 # adresse complète du siège social
-    "rcs": None,                   # « RCS Épinal 123 456 789 »
-    "tva": None,                   # numéro de TVA intracommunautaire
-    "directeur": None,             # directeur de la publication : représentant légal
+    "raison_sociale": "Industrie Française de Sellerie (IFS)",        # dénomination exacte au registre, par exemple « I.F.S »
+    "forme": "SARL",                 # SAS, SARL…
+    "capital": "5 000",               # en euros
+    "siege": "74 route d'Épinal, 88390 Uxegney",                 # adresse complète du siège social
+    "rcs": "RCS Épinal 537 679 441",                   # « RCS Épinal 123 456 789 »
+    "tva": "FR18537679441",                   # numéro de TVA intracommunautaire
+    "directeur": "Elodie Contino, gérante",             # directeur de la publication : représentant légal
     "telephone": None,
     "email": "antoine.contino@groupecontino.com",
     "tribunal": "Épinal",          # tribunal de commerce du siège social
 }
 CGV = {
-    "validite_devis": None,        # durée de validité d'un devis, par exemple « 30 jours »
-    "acompte": None,               # acompte à la commande, par exemple « 30 % du montant TTC »
-    "paiement": None,              # échéance du solde, par exemple « 30 jours à compter de la date de facture »
-    "moyens": None,                # moyens de paiement acceptés, par exemple « virement »
+    "validite_devis": "30 jours",        # durée de validité d'un devis, par exemple « 30 jours »
+    "acompte": "30 % du montant TTC",               # acompte à la commande, par exemple « 30 % du montant TTC »
+    "paiement": "à 30 jours à compter de la date de facture",              # échéance du solde, par exemple « 30 jours à compter de la date de facture »
+    "moyens": "virement bancaire",                # moyens de paiement acceptés, par exemple « virement »
 }
 
 
