@@ -1,0 +1,56 @@
+# Contrôles du rendu 2026-10-12_contino-sport_foot-maillot-short_v2.mp4
+
+## npx hyperframes check (0.8.149)
+Lint
+  ⚠ composition_file_too_large: This HTML composition file has 1118 lines. Smaller sub-compositions are easier to read, iterate on, and diff.
+    /home/user/IFS-catalogue/videos/2026-10-12_pub-le-dessin/index.html [data-composition-id] t=0s
+    Fix: Split coherent scenes or layers into separate .html files under compositions/, then mount them from the parent with data-composition-src so each file stays small enough to inspect, revise, and validate independently.
+  0 error(s), 1 warning(s), 0 info(s)
+Runtime
+  ◇ 0 errors, 0 warnings
+Layout
+  ℹ t=1.25, 3.75, 6.25, 18.75, 21.25s container_overflow #s1-cam inside #s1 overflowed left 53.3px, right 53.3px, top 92.98px, bottom 92.98px — Element extends outside a clipping layout container.
+        Fix: Resize/reposition the child or container, or mark intentional overflow with data-layout-allow-overflow.
+  ℹ t=11.25, 13.75s container_overflow #s2-cam inside #s2 overflowed left 21.6px, right 21.6px, top 38.4px, bottom 38.4px — Element extends outside a clipping layout container.
+        Fix: Resize/reposition the child or container, or mark intentional overflow with data-layout-allow-overflow.
+  0 error(s), 0 warning(s), 2 info(s)
+Motion
+  ◇ 0 errors, 0 warnings
+Contrast
+  ◇ 5/5 text checks pass WCAG AA
+Snapshots
+  ◇ disabled
+◇  Check passed
+
+## ffprobe, son et écarts avec rendu.mp4 (seuil 40 niveaux de gris)
+rendu.mp4 1080x1920 30/1 images 675 durée vidéo 22.500000 durée fichier 22.500000 son ('aac', '48000', 2, '22.500000')
+2026-10-12_contino-sport_foot-maillot-short_v2.mp4 1080x1920 30/1 images 675 durée vidéo 22.500000 durée fichier 22.500000 son ('aac', '48000', 2, '22.500000')
+son décodé : octets 4321280 4321280 identique md5 4cf0067d0f 4cf0067d0f
+images comparées 675 images avec un écart 574
+  images    0- 403 ( 0.000 à 13.433 s)  boîte x   94- 988  y  292-1246
+  images  494- 560 (16.467 à 18.667 s)  boîte x   64- 992  y  928-1070
+  images  568- 661 (18.933 à 22.033 s)  boîte x  402- 676  y 1104-1150
+  images  666- 674 (22.200 à 22.467 s)  boîte x   94- 986  y  292- 444
+ 0.000 à  6.200 s  feuille                  écart : [np.int64(95), np.int64(292), np.int64(987), np.int64(1170)]
+ 6.233 à  6.533 s  ouverture du vestiaire   écart : [np.int64(95), np.int64(599), np.int64(987), np.int64(1245)]
+ 6.567 à 13.433 s  vestiaire                écart : [np.int64(271), np.int64(1151), np.int64(810), np.int64(1245)]
+13.467 à 16.433 s  étiquette                écart : [np.int64(306), np.int64(946), np.int64(882), np.int64(1073)]
+16.467 à 18.700 s  carton 2                 écart : [np.int64(65), np.int64(929), np.int64(993), np.int64(1071)]
+18.733 à 21.533 s  écran final              écart : [np.int64(405), np.int64(1112), np.int64(675), np.int64(1149)]
+21.567 à 22.467 s  tour de page             écart : [np.int64(95), np.int64(292), np.int64(987), np.int64(1148)]
+Image 101 (3,367 s) : écart de codage sur les bords du dessin, contenu identique.
+
+## Textes visibles, image par image (boîtes des glyphes, zone sûre y 269 à 1248, x 65 à 1015)
+  0.000- 22.467  x    91-  989  y   283-  668  hors zone:   0 img  ach-l1-t | Maillot + short à vos couleurs
+  0.000- 22.467  x   164-  388  y   367-  752  hors zone:   0 img  ach-prix | 25,99 €
+  0.000- 22.467  x   388-  916  y   367-  752  hors zone:   0 img  ach-l2-t | HT dès 30 pièces
+  6.233- 13.433  x   269-  811  y  1152- 1198  hors zone:   0 img  acb-l1-t | Maillot + short à vos couleurs
+  6.233- 13.367  x   312-  448  y  1200- 1246  hors zone:   0 img  acb-prix | 25,99 €
+  6.233- 13.367  x   448-  768  y  1200- 1246  hors zone:   0 img  acb-l2-t | HT dès 30 pièces
+ 13.467- 15.700  x    85-  337  y   920- 1025  hors zone:   0 img  c1-prix | 25,99 €
+ 13.467- 15.700  x   335-  926  y   923- 1024  hors zone:   0 img  c1-l1-t | HT dès 30 pièces
+ 14.667- 15.633  x   168-  842  y  1037- 1095  hors zone:   0 img  c1-l2-t | 21,99 € HT à 500, transport inclus
+ 16.467- 18.700  x    75-  984  y   930-  997  hors zone:   0 img  c2-l1-t | Toutes les couleurs au même prix
+ 17.867- 18.600  x    88-  971  y  1018- 1074  hors zone:   0 img  c2-l2-t | Vous validez la maquette avant productio
+ 18.800- 22.467  x   299-  792  y   963- 1035  hors zone:   0 img  bouton | Recevoir mon devis
+ 18.900- 22.467  x   421-  682  y  1086- 1153  hors zone:   0 img  adresse-t | Devis gratuit

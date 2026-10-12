@@ -1,0 +1,47 @@
+# Contrôles du rendu 2026-10-12_contino-sport_catalogue_v2.mp4
+
+## npx hyperframes check (0.8.149)
+Lint
+  ⚠ composition_file_too_large: This HTML composition file has 977 lines. Smaller sub-compositions are easier to read, iterate on, and diff.
+    /home/user/IFS-catalogue/videos/2026-10-12_pub-catalogue/index.html [data-composition-id] t=0s
+    Fix: Split coherent scenes or layers into separate .html files under compositions/, then mount them from the parent with data-composition-src so each file stays small enough to inspect, revise, and validate independently.
+  0 error(s), 1 warning(s), 0 info(s)
+Runtime
+  ◇ 0 errors, 0 warnings
+Layout
+  ◇ 0 issues across 9 sample(s)
+Motion
+  ◇ 0 errors, 0 warnings
+Contrast
+  ◇ 0/0 text checks pass WCAG AA
+Snapshots
+  ◇ disabled
+◇  Check passed
+
+## ffprobe, son et écarts avec rendu.mp4 (seuil 40 niveaux de gris)
+rendu.mp4 1080x1920 30/1 images 900 durée vidéo 30.000000 durée fichier 30.000000 son ('aac', '48000', 2, '30.000000')
+2026-10-12_contino-sport_catalogue_v2.mp4 1080x1920 30/1 images 900 durée vidéo 30.000000 durée fichier 30.000000 son ('aac', '48000', 2, '30.000000')
+son décodé : octets 5763072 5763072 identique md5 9f339b5d2f 9f339b5d2f
+images comparées 900 images avec un écart 385
+  images   30- 147 ( 1.000 à  4.900 s)  boîte x  148- 984  y 1058-1208
+  images  565- 656 (18.833 à 21.867 s)  boîte x  126- 954  y 1074-1222
+  images  669- 843 (22.300 à 28.100 s)  boîte x  258- 820  y  978-1796
+
+## Textes visibles, image par image (boîtes des glyphes, zone sûre y 269 à 1248, x 65 à 1015)
+  0.000- 29.967  x   210-  870  y   423-  519  hors zone:   0 img  acc-l1-t | Club ou entreprise
+  0.000- 29.967  x   282-  798  y   517-  613  hors zone:   0 img  acc-l2-t | à vos couleurs
+  0.000-  0.000  x   156-  238  y   298-  379  hors zone:   0 img  chiffre-b | 00
+  0.000- 29.967  x   232-  335  y   295-  376  hors zone:   0 img  compteur-total | /30
+  0.000- 29.967  x   159-  265  y   364-  404  hors zone:   0 img  compteur-mot | produits
+  1.000-  3.133  x   145-  397  y  1055- 1148  hors zone:   0 img  prix-a | 25,99 €
+  1.000-  3.133  x   395-  986  y  1057- 1155  hors zone:   0 img  ea-l1-t | HT dès 30 pièces
+  1.100-  3.033  x   249-  880  y  1157- 1209  hors zone:   0 img  ea-l2-t | maillot + short, transport inclus
+  3.133-  4.900  x   144-  353  y  1058- 1148  hors zone:   0 img  prix-b | 5,59 €
+  3.133-  4.900  x   352-  985  y  1055- 1150  hors zone:   0 img  eb-l1-t | HT dès 100 pièces
+  3.200-  4.867  x   179-  951  y  1152- 1213  hors zone:   0 img  eb-l2-t | tote bag tout imprimé, transport inclus
+ 18.800- 21.867  x   123-  957  y  1073- 1169  hors zone:   0 img  pr-l1-t | produits à vos couleurs
+ 19.033- 21.800  x   296-  784  y  1172- 1224  hors zone:   0 img  pr-l2-t | Prix HT selon la quantité
+ 22.367- 28.100  x   303-  777  y  1068- 1699  hors zone:   3 img  bouton | Recevoir mon devis
+        hors zone de [28.033, 303, 1248, 777, 1309] à [28.1, 303, 1638, 777, 1699]
+ 22.500- 28.100  x   414-  666  y  1177- 1800  hors zone:   5 img  bon-devis-t | Devis gratuit
+        hors zone de [27.967, 414, 1204, 666, 1257] à [28.1, 414, 1747, 666, 1800]
