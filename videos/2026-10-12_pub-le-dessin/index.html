@@ -75,6 +75,11 @@
       #etiq-corps { position: absolute; transform-origin: 92% 50%; }
       #surligne { position: absolute; background: var(--jaune); transform-origin: 0 50%; border-radius: 4px; }
 
+      /* Accroche : de la première image à l'étiquette de prix */
+      .accroche { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 540px 960px; pointer-events: none; }
+      .ac-surligne { position: absolute; background: var(--jaune); border-radius: 4px; }
+      .ac-produit { color: var(--magenta); }
+
       /* Ballon */
       #ballon-calque { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; pointer-events: none; }
       #ball { position: absolute; left: 0; top: 0; width: 0; height: 0; }
@@ -89,6 +94,12 @@
         <div id="s1-cam" class="cam">
           <div id="s1-table" class="couche"><img id="s1-table-img" src="assets/fond-anthracite.jpg" alt="" /></div>
           <div id="s1-feuilleA" class="couche"><img id="s1-papierA" class="papier" src="assets/feuille-dos.png" alt="" /></div>
+          <!-- Accroche, version feuille : sur le papier, sous le dessin et sous la page B qui la découvre en tournant -->
+          <div id="ac-haut" class="accroche">
+            <div id="ach-surligne" class="ac-surligne"></div>
+            <div id="ach-l1" class="ligne principal ac-produit"><span id="ach-l1-t">Maillot + short à vos couleurs</span></div>
+            <div id="ach-l2" class="ligne principal"><span id="ach-l2-t"><span id="ach-prix">25,99&nbsp;€</span> HT dès 30 pièces</span></div>
+          </div>
           <div id="s1-dessinA" class="couche">
             <img id="setA-ombre" src="assets/set-complet.png" alt="" />
             <svg id="croquisA-dessous" class="plein" viewBox="0 0 1080 1920" width="1080" height="1920"></svg>
@@ -113,7 +124,7 @@
                 <div id="c2-l1" class="ligne principal"><span id="c2-l1-t">Toutes les couleurs au même prix</span></div>
                 <div id="c2-l2" class="ligne secondaire"><span id="c2-l2-t">Vous validez la maquette avant production</span></div>
                 <div id="bouton">Recevoir mon devis</div>
-                <div id="adresse" class="ligne"><span id="adresse-t">continosport.fr</span></div>
+                <div id="adresse" class="ligne"><span id="adresse-t">Devis gratuit</span></div>
                 <div id="reflet-boite" data-layout-ignore><div id="reflet" data-layout-ignore></div></div>
                 <div id="feutreB" class="feutre"><div class="feutre-img"></div></div>
               </div>
@@ -143,6 +154,12 @@
             <div id="sets"></div>
           </div>
           <div id="s2-banc" class="couche"><img id="s2-banc-img" src="assets/vestiaire-banc.png" alt="" data-layout-allow-overflow /></div>
+        </div>
+        <!-- Accroche, version vestiaire : sous les sets, révélée avec la scène à travers le ballon -->
+        <div id="ac-bas" class="accroche">
+          <div id="acb-surligne" class="ac-surligne"></div>
+          <div id="acb-l1" class="ligne principal ac-produit"><span id="acb-l1-t">Maillot + short à vos couleurs</span></div>
+          <div id="acb-l2" class="ligne principal"><span id="acb-l2-t"><span id="acb-prix">25,99&nbsp;€</span> HT dès 30 pièces</span></div>
         </div>
       </section>
 
@@ -998,6 +1015,9 @@
 
           // ---- étiquette de prix (carton 1)
           rendEtiquette(t, cv);
+
+          // ---- accroche
+          rendAccroche(t, cf);
         }
 
         // ---------------------------------------------------------------- étiquette
@@ -1046,6 +1066,32 @@
           $("fil").setAttribute("opacity", (seg(t, 13.25, 13.4) * sortie).toFixed(3));
         }
 
+        // ---------------------------------------------------------------- accroche, fonction pure de t
+        // Version feuille : dans la caméra de la scène 1, qu'elle annule ; elle suit le papier pendant le
+        // panoramique de b04, s'efface sous le vestiaire qui s'ouvre dans le ballon, et revient sous la page B :
+        // le tour de page la découvre et l'image 0 la montre entière. Version vestiaire : sous les sets, sortie
+        // quand l'étiquette commence son tracé (b09_prix).
+        const AC_SORTIE = L.b09_prix;
+        function rendAccroche(t, cf) {
+          const haut = t < L.b05_vestiaire || t >= L.b12_page;
+          $("ac-haut").style.visibility = haut ? "inherit" : "hidden";
+          if (haut) {
+            const s = +cf.s.toFixed(5), r = +cf.r.toFixed(3);
+            const dy = t >= L.b04_envol && t < L.b05_vestiaire ? 0.6 * cf.y * s : 0;
+            $("ac-haut").style.transform = `scale(${(1 / s).toFixed(6)}) rotate(${(-r).toFixed(3)}deg) translateY(${dy.toFixed(2)}px)`;
+          }
+          const bas = t < AC_SORTIE + 0.35;
+          $("ac-bas").style.visibility = bas ? "inherit" : "hidden";
+          if (bas) {
+            for (const [id, at] of [["acb-l2", AC_SORTIE], ["acb-l1", AC_SORTIE + 0.08]]) {
+              const q = e2i(seg(t, at, at + 0.25));
+              $(id).style.clipPath = `inset(0% 0% ${(100 * q).toFixed(2)}% 0%)`;
+              $(id + "-t").style.transform = `translateY(${(-40 * q).toFixed(2)}%)`;
+            }
+            $("acb-surligne").style.transform = `scaleX(${(1 - e2i(seg(t, AC_SORTIE, AC_SORTIE + 0.25))).toFixed(4)})`;
+          }
+        }
+
         // ---------------------------------------------------------------- textes : tailles, places, tweens éditoriaux
         function ajuste(id, base, max, min) {
           const n = $(id);
@@ -1054,6 +1100,20 @@
           const taille = w > max ? Math.max(min, (base * max) / w) : base;
           n.parentNode.style.fontSize = taille.toFixed(1) + "px";
           return taille;
+        }
+        // place les deux lignes d'une accroche entre haut et bas (repère écran), marges de 65 px
+        function placeAccroche(pre, base, haut, bas) {
+          const f1 = ajuste(pre + "-l1-t", base, 950, 30), f2 = ajuste(pre + "-l2-t", base, 950, 30);
+          const h1 = f1 * 1.05, h2 = f2 * 1.05, ecart = base > 60 ? 8 : 2;
+          const y1 = haut !== null ? haut : bas - h2 - ecart - h1;
+          const y2 = y1 + h1 + ecart;
+          $(pre + "-l1").style.top = y1 + "px";
+          $(pre + "-l2").style.top = y2 + "px";
+          const prix = $(pre + "-prix"), sl = $(pre + "-surligne");
+          sl.style.left = prix.offsetLeft - 10 + "px"; sl.style.top = y2 + f2 * 0.2 + "px";
+          sl.style.width = prix.offsetWidth + 20 + "px"; sl.style.height = f2 * 0.78 + "px";
+          // le surlignage se replie vers la droite à la sortie, comme sur l'étiquette
+          sl.style.transformOrigin = "100% 50%";
         }
         function construire() {
           // carton 1, sur l'étiquette (repère écran)
@@ -1072,8 +1132,13 @@
           sl.style.left = x0 - 10 + "px"; sl.style.top = 34 + f1 * 0.2 + "px";
           sl.style.width = prix.offsetWidth + 20 + "px"; sl.style.height = f1 * 0.78 + "px";
 
-          // carton 2, sur la feuille B (repère monde, caméra autour de 1,04)
-          const g1 = ajuste("c2-l1-t", 84 / 1.04, 900 / 1.04, 40 / 1.04), g2 = ajuste("c2-l2-t", 44 / 1.04, 900 / 1.04, 40 / 1.04);
+          // accroche : deux lignes Archivo 900, la première en magenta, le prix surligné comme sur l'étiquette
+          placeAccroche("ach", 72, 285, null);
+          placeAccroche("acb", 44, null, 1246);
+
+          // carton 2, sur la feuille B (repère monde, caméra autour de 1,04) ; la première ligne tient dans 880 px
+          // pour garder 65 px de marge quand la caméra pousse à 1,08 pendant sa sortie
+          const g1 = ajuste("c2-l1-t", 84 / 1.04, 880 / 1.04, 40 / 1.04), g2 = ajuste("c2-l2-t", 44 / 1.04, 900 / 1.04, 40 / 1.04);
           const m1 = $("c2-l1"), m2 = $("c2-l2");
           m1.style.left = m2.style.left = "20px";
           m1.style.top = 965 - g1 * 0.55 + "px";

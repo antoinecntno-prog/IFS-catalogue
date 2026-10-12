@@ -5,7 +5,8 @@ Vidéo verticale HyperFrames, 1080 × 1920 px à 30 i/s, 30 s (64 temps à 128 B
 ## Fichiers
 
 - `index.html` : la composition. Une seule timeline GSAP en pause, enregistrée sous `le-carnet`, avec les labels `b01_hook` à `fin` tirés de `TEMPS` et `OFFSET`. Caméra, feutre, ballon, révélations, compteur, étiquette et tour de page se calculent en fonctions pures du temps à partir d'une horloge ; cartons, bon et bouton sont des tweens éditoriaux.
-- `rendu.mp4` : le rendu livré, avec le son.
+- `rendu.mp4` : le premier rendu livré, avec le son (version 1).
+- `2026-10-12_contino-sport_catalogue_v2.mp4` : le rendu de la composition actuelle (version 2).
 - `2026-10-12_miniature-meta.jpg` : l'image 618 (20,6 s), le « 30 » entier avec sa ligne, pour la miniature Meta.
 - `assets/produits/` : les 30 photos du site (copies exactes) et les 11 détourés ; `assets/produits.json` : boîtes et contours des détourés.
 - `assets/tailles/` : chaque photo en 480 × 600 (vue rapprochée) et 192 × 240 (vue large) ; inscription des dossards floutée.
@@ -13,6 +14,14 @@ Vidéo verticale HyperFrames, 1080 × 1920 px à 30 i/s, 30 s (64 temps à 128 B
 - `outils/preparer_produits.py` : copie et détourage (fond modélisé par une surface polynomiale, ombres neutres retirées, masque u2net de `hyperframes remove-background` ajouté pour les blancs des maillots de basket).
 - `outils/preparer_fond.py`, `outils/preparer_tailles.py`, `outils/exporter_donnees.py` (s'arrête en erreur si un prix de la composition diffère du site), `outils/reperes.js`, `outils/sound_design.py`, `outils/planche.py`, `outils/mesure_mouvement.py`, `outils/raccord.sh`.
 - `controles/` : sorties des quatre contrôles et rapport.
+
+## Version 2 : campagne Meta en formulaire instantané (12/10)
+
+- Étiquettes : « 25,99 € HT dès 30 pièces » (1,0 à 3,1 s) et « 5,59 € HT dès 100 pièces » (3,1 à 4,9 s).
+- Sous le « 30 » formé par les photos : « produits à vos couleurs », puis « Prix HT selon la quantité » en magenta (18,8 à 21,9 s). L'écran se lit « 30 produits à vos couleurs ».
+- Bon final : le logo, le bouton « Recevoir mon devis », puis « Devis gratuit » sous le bouton, qui entre à 22,45 s. La phrase au-dessus du bouton et la ligne continosport.fr sont retirées.
+- Zone sûre Meta 9:16 : chaque texte reste entre 269 et 1 248 px de haut et à 65 px des bords sur chaque image où il est posé. Le bon sort par le bas de 27,89 à 28,13 s : pendant cette sortie, le bouton et « Devis gratuit » passent sous 1 248 px sur 5 images, avec le bon.
+- Animations, images, musique et bruitages restent ceux de la version 1 ; le son est le même `mix.wav`.
 
 ## Décor
 
@@ -25,7 +34,7 @@ Les 30 produits passent dans l'ordre de la section 6 du brief : le « 3 » (mail
 ## Son
 
 - `assets/audio/mix.wav` : le mix lu par la composition (`<audio id="son-mix">`, volume 1). Dans le MP4 : −14,1 LUFS intégrés, crête vraie −1,7 dBFS, décalage nul avec l'image.
-- Musique : composée et synthétisée par `../son/musique.py`, mêmes tempo et accords que la pub foot, sur 16 mesures. Intro légère pendant les héros, groove plein au temps 8 quand le feutre passe à un produit par temps, pause sous le 30/30 et le recul, retour du groove sur « produits, prix en ligne », groove de base sous le bouton, filtre qui se ferme pendant la plongée finale. Deux motifs de marimba ajoutés (« e » et « f »), une note par révélation. Tampon circulaire : la boucle reste sans couture. La musique appartient au projet, libre de droits pour la publicité.
+- Musique : composée et synthétisée par `../son/musique.py`, mêmes tempo et accords que la pub foot, sur 16 mesures. Intro légère pendant les héros, groove plein au temps 8 quand le feutre passe à un produit par temps, pause sous le 30/30 et le recul, retour du groove sur « produits à vos couleurs », groove de base sous le bouton, filtre qui se ferme pendant la plongée finale. Deux motifs de marimba ajoutés (« e » et « f »), une note par révélation. Tampon circulaire : la boucle reste sans couture. La musique appartient au projet, libre de droits pour la publicité.
 - Bruitages : synthétisés par `../son/moteur.py` et calés sur les repères réels. Le feutre ne s'entend que sur l'accroche et les héros, les passes du bob et le cercle du compteur, avec un grain sourd placé bas dans le mix ; pendant la série d'un produit par temps, la musique et les notes de révélation portent le rythme. Chaque détouré naît sur un froissement et un pop ; chaque photo en cadre sonne une note pincée de la gamme pentatonique de la majeur, qui monte case après case et repart au début du « 0 » ; la rafale monte d'un ton à chaque rebond. S'y ajoutent des bruitages Pixabay livrés avec HyperFrames (sparkle, pop, clics, whoosh, impact), sous licence Pixabay : usage commercial sans attribution.
 - `assets/audio/stem-musique.m4a` et `stem-bruitages.m4a` : les deux pistes séparées.
 - Refaire le son : `NODE_PATH=$(npm root -g) node outils/reperes.js . controles/reperes.json` puis `python3 outils/sound_design.py controles/reperes.json`.
@@ -38,7 +47,7 @@ python3 outils/preparer_produits.py
 python3 outils/preparer_tailles.py
 python3 outils/exporter_donnees.py
 npx hyperframes check
-npx hyperframes render --output rendu.mp4
+npx hyperframes render --output 2026-10-12_contino-sport_catalogue_v2.mp4
 ```
 
 ## Texte Meta (écrit avec /alex, mécanisme Ad 6 Direct Benefit)

@@ -34,7 +34,7 @@ PLAN = [
     ("E", "plein+lead+inverse"),       # m8  28 à 32  cymbale inversée vers le contact du temps 30
     ("F#m", "plein+lead+montee"),      # m9  32 à 36  rafale
     ("D", "pause+impact+montee"),      # m10 36 à 40  30/30, recul
-    ("A", "plein+impact+lead"),        # m11 40 à 44  « produits, prix en ligne »
+    ("A", "plein+impact+lead"),        # m11 40 à 44  « produits à vos couleurs »
     ("E", "cta"),                      # m12 44 à 48  sortie des cartons, bon
     ("F#m", "cta"),                    # m13 48 à 52
     ("D", "cta"),                      # m14 52 à 56  dribble à 52

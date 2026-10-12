@@ -78,7 +78,6 @@
       #bon-pointilles { position: absolute; left: 16px; top: 14px; width: 828px; height: 0; border-top: 3px dashed rgba(26, 19, 32, 0.35); }
       #bon-logo { position: absolute; left: 310px; top: 17px; width: 240px; height: 102px; background: url(assets/logo-contino-sport.webp) 0 0 / 100% 100% no-repeat; }
       #bouton { position: absolute; left: 70px; top: 183px; width: 720px; height: 140px; display: flex; align-items: center; justify-content: center; background: var(--magenta); color: var(--blanc); border-radius: 6px; font-family: "Archivo", sans-serif; font-weight: 900; font-stretch: 80%; font-size: 56px; white-space: nowrap; transform-origin: 50% 50%; }
-      .adresse { font-family: "Hanken Grotesk", sans-serif; font-weight: 500; font-size: 40px; line-height: 1; color: var(--encre); }
 
       /* Ballon */
       #ballon-calque { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
@@ -114,9 +113,8 @@
         <div id="bon-papier"></div>
         <div id="bon-pointilles"></div>
         <div id="bon-logo"></div>
-        <div id="bon-l1" class="ligne secondaire" style="left: -110px; top: 129px"><span id="bon-l1-t">Devis gratuit en deux étapes</span></div>
         <div id="bouton">Recevoir mon devis</div>
-        <div id="bon-adresse" class="ligne adresse" style="left: -110px; top: 331px"><span id="bon-adresse-t">continosport.fr</span></div>
+        <div id="bon-devis" class="ligne secondaire" style="left: -110px; top: 336px"><span id="bon-devis-t">Devis gratuit</span></div>
       </div>
 
       <!-- Son : musique composée pour la grille de 128 BPM et bruitages calés sur le mouvement (outils/sound_design.py) -->
@@ -162,20 +160,20 @@
         <svg id="etiq-svg" class="abs" width="970" height="248" style="left: -10px; top: -10px"><path id="etiq-fond" d="" fill="#ffffff" /><path id="etiq-trait" d="" fill="none" stroke="#b3125f" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" /><circle id="etiq-trou" r="12" fill="none" stroke="#b3125f" stroke-width="5" /></svg>
         <div id="etiq-a" class="etiq-texte">
           <div id="surligne-a" class="surligne"></div>
-          <div id="ea-l1" class="ligne principal"><span id="ea-l1-t"><span id="prix-a">25,99&nbsp;€</span> hors taxes dès 30 pièces</span></div>
+          <div id="ea-l1" class="ligne principal"><span id="ea-l1-t"><span id="prix-a">25,99&nbsp;€</span> HT dès 30 pièces</span></div>
           <div id="ea-l2" class="ligne secondaire"><span id="ea-l2-t">maillot + short, transport inclus</span></div>
         </div>
         <div id="etiq-b" class="etiq-texte">
           <div id="surligne-b" class="surligne"></div>
-          <div id="eb-l1" class="ligne principal"><span id="eb-l1-t"><span id="prix-b">5,59&nbsp;€</span> hors taxes dès 100 pièces</span></div>
+          <div id="eb-l1" class="ligne principal"><span id="eb-l1-t"><span id="prix-b">5,59&nbsp;€</span> HT dès 100 pièces</span></div>
           <div id="eb-l2" class="ligne secondaire"><span id="eb-l2-t">tote bag tout imprimé, transport inclus</span></div>
         </div>
       </div>
       <!-- le fil passe devant l'étiquette : il part de son trou -->
       <svg id="fil-svg" class="plein" viewBox="0 0 1080 1920" width="1080" height="1920"><path id="fil" d="" fill="none" stroke="#1a1320" stroke-width="3" stroke-linecap="round" /></svg>
       <div id="promesse">
-        <div id="pr-l1" class="ligne principal" style="top: 1080px"><span id="pr-l1-t">produits, prix en ligne</span></div>
-        <div id="pr-l2" class="ligne secondaire magenta" style="top: 1176px"><span id="pr-l2-t">Hors taxes, selon la quantité</span></div>
+        <div id="pr-l1" class="ligne principal" style="top: 1080px"><span id="pr-l1-t">produits à vos couleurs</span></div>
+        <div id="pr-l2" class="ligne secondaire magenta" style="top: 1176px"><span id="pr-l2-t">Prix HT selon la quantité</span></div>
       </div>
 
       <!-- Feutre -->
@@ -997,7 +995,7 @@
           }
           ajuste("acc-l1-t", 84, 950, 40); ajuste("acc-l2-t", 84, 950, 40);
           ajuste("pr-l1-t", 84, 950, 40); ajuste("pr-l2-t", 44, 950, 40);
-          ajuste("bon-l1-t", 44, 800, 40);
+          ajuste("bon-devis-t", 44, 800, 40);
 
           const tl = gsap.timeline({ paused: true });
           for (const [k, n] of Object.entries(BEATS)) tl.addLabel(k, TP(n));
@@ -1036,12 +1034,11 @@
           gsap.set(["#pr-l1", "#pr-l2"], { clipPath: "inset(0% 0% 100% 0%)" });
           entre("pr-l1", TP(40)); entre("pr-l2", TP(40.5));
           sort("pr-l2", TP(46)); sort("pr-l1", TP(46) + 0.08);
-          // bon : contenu ligne après ligne, bouton avec un léger scale
-          gsap.set(["#bon-logo", "#bon-l1", "#bon-adresse"], { clipPath: "inset(0% 0% 100% 0%)" });
+          // bon : logo, bouton avec un léger scale, puis « Devis gratuit » sous le bouton
+          gsap.set(["#bon-logo", "#bon-devis"], { clipPath: "inset(0% 0% 100% 0%)" });
           tl.fromTo("#bon-logo", { clipPath: "inset(0% 0% 100% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.35, ease: "power3.out", immediateRender: false }, TP(47.2));
-          entre("bon-l1", TP(47.4));
           tl.fromTo("#bouton", { scale: 0.97, clipPath: "inset(0% 0% 100% 0% round 6px)" }, { scale: 1, clipPath: "inset(0% 0% 0% 0% round 6px)", duration: 0.3, ease: "power2.out", immediateRender: true }, TP(47.6));
-          entre("bon-adresse", TP(47.9));
+          entre("bon-devis", TP(47.9));
           // le ballon appuie sur le bouton
           tl.to("#bouton", { scale: 0.96, duration: 0.08, ease: "power2.out" }, TP(56));
           tl.to("#bouton", { scale: 1, duration: 0.25, ease: "power2.out" }, TP(56) + 0.08);

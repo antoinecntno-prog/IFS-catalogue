@@ -4,8 +4,9 @@ Vidéo verticale HyperFrames, 1080 × 1920 px à 30 i/s, 22,5 s (48 temps à 128
 
 ## Fichiers
 
-- `index.html` : la composition. Une seule timeline GSAP en pause, enregistrée sous `le-dessin`, avec les labels `b01_hook` à `fin` tirés de `TEMPS` et `OFFSET`. Caméra, ballon, feutre, sets du vestiaire et pliage de la page se calculent en fonctions pures du temps à partir d'une horloge ; cartons, bouton, adresse et envol du set sont des tweens éditoriaux.
-- `rendu.mp4` : le rendu livré.
+- `index.html` : la composition. Une seule timeline GSAP en pause, enregistrée sous `le-dessin`, avec les labels `b01_hook` à `fin` tirés de `TEMPS` et `OFFSET`. Caméra, ballon, feutre, sets du vestiaire, accroche et pliage de la page se calculent en fonctions pures du temps à partir d'une horloge ; cartons, bouton, ligne « Devis gratuit » et envol du set sont des tweens éditoriaux.
+- `rendu.mp4` : le premier rendu livré, sans accroche.
+- `2026-10-12_contino-sport_foot-maillot-short_v2.mp4` : le rendu de la composition actuelle (version 2).
 - `assets/` : images préparées et données du dessin (`donnees.js`).
 - `sources/` : les photos d'origine, gardées pour refaire les détourages.
 - `outils/preparer_set.py` : détoure le set (photo réelle sans sponsors), le coupe en maillot et short, vectorise le contour du maillot, celui du short, le bord de la flamme et les deux bandes.
@@ -14,6 +15,13 @@ Vidéo verticale HyperFrames, 1080 × 1920 px à 30 i/s, 22,5 s (48 temps à 128
 - `outils/exporter_donnees.py` : écrit `assets/donnees.js`.
 - `outils/mesure_mouvement.py` et `outils/planche.py` : contrôles c) et b).
 - `controles/` : sorties des quatre contrôles.
+
+## Version 2 : campagne Meta en formulaire instantané (12/10)
+
+- Accroche dès l'image 0, en Archivo 900 comme l'étiquette : « Maillot + short à vos couleurs » en magenta, puis « 25,99 € HT dès 30 pièces » avec le prix surligné en jaune. Sur la feuille, elle tient en 72 px de 283 à 445 px, sous le dessin et le ballon, et suit le papier pendant le panoramique de 4,69 à 6,09 s. Le vestiaire s'ouvre dans le ballon à 6,2 s avec sa propre version en 44 px, sous les sets (1 152 à 1 246 px). Elle sort quand l'étiquette commence son tracé (13,125 s). Au tour de page final, la page B la découvre : l'image 0 la montre entière et la boucle garde son raccord.
+- Écran final : « Devis gratuit » remplace « continosport.fr » sous le bouton.
+- Zone sûre Meta 9:16 : chaque texte reste entre 269 et 1 248 px de haut et à 65 px des bords, sur chaque image. « Toutes les couleurs au même prix » passe de 60,8 à 59,4 px : à 900 px de large, elle touchait 64 px du bord gauche de 18,5 à 18,7 s, pendant la poussée de la caméra.
+- Animations, images, musique et bruitages restent ceux de la version 1 ; le son est le même `mix.wav`.
 
 ## Décor
 
@@ -35,7 +43,7 @@ python3 outils/preparer_decors.py
 python3 outils/preparer_fond.py
 python3 outils/exporter_donnees.py
 npx hyperframes check
-npx hyperframes render --output rendu.mp4
+npx hyperframes render --output 2026-10-12_contino-sport_foot-maillot-short_v2.mp4
 ```
 
 ## Remplacer la musique
