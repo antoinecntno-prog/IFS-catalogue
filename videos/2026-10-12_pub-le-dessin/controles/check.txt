@@ -1,0 +1,29 @@
+◆  Checking 2026-10-12_pub-le-dessin
+[hyperframes] browserGpuMode probe → software (WebGL unavailable)
+
+Lint
+  ⚠ composition_file_too_large: This HTML composition file has 1054 lines. Smaller sub-compositions are easier to read, iterate on, and diff.
+    /home/user/IFS-catalogue/videos/2026-10-12_pub-le-dessin/index.html [data-composition-id] t=0s
+    Fix: Split coherent scenes or layers into separate .html files under compositions/, then mount them from the parent with data-composition-src so each file stays small enough to inspect, revise, and validate independently.
+  0 error(s), 1 warning(s), 0 info(s)
+
+Runtime
+  ◇ 0 errors, 0 warnings
+
+Layout
+  ℹ t=1.25, 3.75, 6.25, 18.75, 21.25s container_overflow #s1-cam inside #s1 overflowed left 53.3px, right 53.3px, top 92.98px, bottom 92.98px — Element extends outside a clipping layout container.
+        Fix: Resize/reposition the child or container, or mark intentional overflow with data-layout-allow-overflow.
+  ℹ t=11.25, 13.75s container_overflow #s2-cam inside #s2 overflowed left 21.6px, right 21.6px, top 38.4px, bottom 38.4px — Element extends outside a clipping layout container.
+        Fix: Resize/reposition the child or container, or mark intentional overflow with data-layout-allow-overflow.
+  0 error(s), 0 warning(s), 2 info(s)
+
+Motion
+  ◇ 0 errors, 0 warnings
+
+Contrast
+  ◇ 1/1 text checks pass WCAG AA
+
+Snapshots
+  ◇ disabled
+
+◇  Check passed

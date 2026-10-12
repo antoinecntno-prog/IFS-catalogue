@@ -1,0 +1,24 @@
+# ffprobe
+codec_name=h264
+width=1080
+height=1920
+r_frame_rate=30/1
+duration=22.500000
+nb_frames=675
+
+# Mesure de mouvement (commande ffmpeg du brief + script python du brief)
+quasi figees 12.2 %
+plus longue suite figee 2.50 s
+secondes figees hors CTA : []
+
+# Raccord de boucle, images 674 et 0
+[Parsed_metadata_5 @ 0x55f62c2adc40] lavfi.signalstats.YAVG=1.05502
+
+# Images noires (aucune ligne black_start attendue)
+lignes black_start : 0
+
+# Suites figées les plus longues (paires d'images n-1 -> n, en secondes)
+  de 19.07 s à 21.53 s : 2.50 s
+  de 4.60 s à 4.67 s : 0.10 s
+  de 6.13 s à 6.20 s : 0.10 s
+  de 4.47 s à 4.47 s : 0.03 s

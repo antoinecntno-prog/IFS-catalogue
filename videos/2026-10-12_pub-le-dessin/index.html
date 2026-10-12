@@ -1,0 +1,1129 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Le dessin</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="assets/donnees.js"></script>
+    <style>
+      @font-face{font-family:"Archivo";font-style:normal;font-weight:700 900;font-stretch:75% 100%;font-display:block;src:url(fonts/archivo-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+      @font-face{font-family:"Archivo";font-style:normal;font-weight:700 900;font-stretch:75% 100%;font-display:block;src:url(fonts/archivo-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+      @font-face{font-family:"Hanken Grotesk";font-style:normal;font-weight:400 700;font-display:block;src:url(fonts/hanken-grotesk-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+      @font-face{font-family:"Hanken Grotesk";font-style:normal;font-weight:400 700;font-display:block;src:url(fonts/hanken-grotesk-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+
+      :root {
+        --magenta: #b3125f;
+        --jaune: #ffe45c;
+        --encre: #1a1320;
+        --blanc: #ffffff;
+      }
+      html, body { margin: 0; background: var(--blanc); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--blanc); }
+      .plein { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+      .scene { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: hidden; }
+      .cam { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 540px 960px; }
+      .couche { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+      .abs { position: absolute; left: 0; top: 0; }
+      img { display: block; }
+      /* seuls les textes reçoivent les points de mesure : décors et calques transparents sont ignorés */
+      #root * { pointer-events: none; }
+      .ligne, .ligne *, #bouton { pointer-events: auto; }
+      svg { overflow: visible; }
+
+      /* Scène feuille de match */
+      #s1-table { overflow: visible; }
+      #s1-table-img { position: absolute; left: -205px; top: -373.5px; width: 1587px; height: 2760px; filter: blur(6px); }
+      .papier { position: absolute; width: 1000px; height: 1441px; }
+      #s1-papierA { left: 40px; top: 250px; filter: drop-shadow(0 8px 16px rgba(26, 19, 32, 0.32)); }
+      #pageB { position: absolute; left: 40px; top: 250px; width: 1000px; height: 1441px; }
+      #pageB-papier { left: 0; top: 0; background: url(assets/feuille-dos.png) 0 0 / 100% 100% no-repeat; }
+      #pageB-contenu { position: absolute; left: -40px; top: -250px; width: 1080px; height: 1920px; }
+      #flap-ombre { position: absolute; left: 40px; top: 250px; width: 1000px; height: 1441px; filter: drop-shadow(-10px 12px 18px rgba(26, 19, 32, 0.38)); }
+      #flap { position: absolute; left: 0; top: 0; width: 1000px; height: 1441px; transform-origin: 0 0; }
+      #flap img { width: 1000px; height: 1441px; }
+      #gobelets { position: absolute; left: -90px; top: 1330px; width: 374px; height: 687px; filter: blur(12px); opacity: 0.95; }
+      .feutre { position: absolute; left: 0; top: 0; width: 545px; height: 394px; transform-origin: 0 0; }
+      .feutre img, .feutre-img { width: 545px; height: 394px; }
+      .feutre-img { background: url(assets/feutre.png) 0 0 / 100% 100% no-repeat; }
+      #setA-ombre { position: absolute; left: 0; top: 0; opacity: 0; filter: brightness(0) blur(4px); transform-origin: 50% 50%; }
+      #setA-lift { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 540px 895px; }
+      .set-photo { position: absolute; width: 640px; height: 800px; }
+      .carte { position: absolute; background: var(--blanc); box-shadow: 0 6px 14px rgba(26, 19, 32, 0.28); transform-origin: 50% 50%; }
+      #carteB-img { position: absolute; background: url(assets/set-complet.png) 0 0 / 100% 100% no-repeat; }
+      #reflet-boite { position: absolute; left: 40px; top: 250px; width: 1000px; height: 1441px; overflow: hidden; pointer-events: none; }
+      #reflet { position: absolute; left: 0; top: -100px; width: 700px; height: 1700px; background: linear-gradient(100deg, rgba(255,255,255,0) 25%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 75%); }
+
+      /* Textes */
+      .ligne { position: absolute; left: 0; width: 1080px; text-align: center; white-space: nowrap; }
+      .ligne > span { display: inline-block; }
+      .principal { font-family: "Archivo", sans-serif; font-weight: 900; font-stretch: 80%; font-size: 84px; line-height: 1.05; color: var(--encre); letter-spacing: -0.5px; }
+      .secondaire { font-family: "Hanken Grotesk", sans-serif; font-weight: 700; font-size: 44px; line-height: 1.2; color: var(--encre); }
+      #bouton { position: absolute; display: flex; align-items: center; justify-content: center; background: var(--magenta); color: var(--blanc); border-radius: 5.6px; font-family: "Archivo", sans-serif; font-weight: 900; font-stretch: 80%; white-space: nowrap; transform-origin: 50% 50%; }
+      #adresse { font-family: "Hanken Grotesk", sans-serif; font-weight: 700; color: var(--encre); }
+
+      /* Scène vestiaire */
+      #s2-mur-img { position: absolute; left: -264px; top: -420px; width: 2444px; height: 2568px; }
+      #s2-barre { position: absolute; left: 60px; top: 549.6px; width: 2120px; height: 101px; filter: drop-shadow(0 10px 8px rgba(26, 19, 32, 0.28)); }
+      .patere { position: absolute; width: 101px; height: 166px; filter: drop-shadow(4px 8px 5px rgba(26, 19, 32, 0.30)); }
+      .set { position: absolute; left: 0; top: 0; width: 640px; height: 800px; transform-origin: 0 0; filter: drop-shadow(10px 16px 12px rgba(26, 19, 32, 0.30)); }
+      .set img { position: absolute; }
+      #s2-banc-img { position: absolute; left: -264px; top: 1605.6px; width: 2444px; height: 542px; filter: blur(5px); }
+      #logo-boite { position: absolute; }
+
+      /* Étiquette de prix (carton 1) */
+      #etiquette { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; pointer-events: none; }
+      #etiq-corps { position: absolute; transform-origin: 92% 50%; }
+      #surligne { position: absolute; background: var(--jaune); transform-origin: 0 50%; border-radius: 4px; }
+
+      /* Ballon */
+      #ballon-calque { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; pointer-events: none; }
+      #ball { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+      #ball-body { position: absolute; left: -64px; top: -64px; width: 128px; height: 128px; transform-origin: 64px 64px; }
+      #ball-ombre { position: absolute; left: 0; top: 0; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(closest-side, rgba(26,19,32,0.9), rgba(26,19,32,0)); transform-origin: 0 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="le-dessin" data-start="0" data-width="1080" data-height="1920" data-duration="22.5" data-fps="30">
+      <!-- Scène 1 : la feuille de match sur la table de la buvette -->
+      <section id="s1" class="scene">
+        <div id="s1-cam" class="cam">
+          <div id="s1-table" class="couche"><img id="s1-table-img" src="assets/table.jpg" alt="" /></div>
+          <div id="s1-feuilleA" class="couche"><img id="s1-papierA" class="papier" src="assets/feuille-dos.png" alt="" /></div>
+          <div id="s1-dessinA" class="couche">
+            <img id="setA-ombre" src="assets/set-complet.png" alt="" />
+            <svg id="croquisA-dessous" class="plein" viewBox="0 0 1080 1920" width="1080" height="1920"></svg>
+            <div id="setA-lift">
+              <div id="setA-photos" class="plein">
+                <img id="setA-short" class="set-photo" src="assets/set-short.png" alt="" />
+                <img id="setA-maillot" class="set-photo" src="assets/set-maillot.png" alt="" />
+              </div>
+            </div>
+            <svg id="croquisA-dessus" class="plein" viewBox="0 0 1080 1920" width="1080" height="1920"></svg>
+            <div id="feutreA" class="feutre"><img src="assets/feutre.png" alt="" /></div>
+          </div>
+          <div id="s1-pageB" class="couche">
+            <div id="pageB">
+              <div id="pageB-papier" class="papier"></div>
+              <div id="pageB-contenu">
+                <svg id="croquisB" class="plein" viewBox="0 0 1080 1920" width="1080" height="1920"></svg>
+                <div id="carteB" class="carte"><div id="carteB-img"></div></div>
+                <svg id="coche-svg" class="plein" viewBox="0 0 1080 1920" width="1080" height="1920">
+                  <path id="coche" d="M872 732 L907 776 L978 676" fill="none" stroke="#ffe45c" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <div id="c2-l1" class="ligne principal"><span id="c2-l1-t">Toutes les couleurs au même prix</span></div>
+                <div id="c2-l2" class="ligne secondaire"><span id="c2-l2-t">Vous validez la maquette avant production</span></div>
+                <div id="bouton">Recevoir mon devis</div>
+                <div id="adresse" class="ligne"><span id="adresse-t">continosport.fr</span></div>
+                <div id="reflet-boite" data-layout-ignore><div id="reflet" data-layout-ignore></div></div>
+                <div id="feutreB" class="feutre"><div class="feutre-img"></div></div>
+              </div>
+            </div>
+            <div id="flap-ombre"><div id="flap"><img src="assets/feuille-recto.png" alt="" /></div></div>
+          </div>
+          <div id="s1-avant" class="couche"><img id="gobelets" src="assets/gobelets.png" alt="" /></div>
+        </div>
+      </section>
+
+      <!-- Scène 2 : le vestiaire du club -->
+      <section id="s2" class="scene">
+        <div id="s2-cam" class="cam">
+          <div id="s2-mur" class="couche"><img id="s2-mur-img" src="assets/vestiaire-mur.jpg" alt="" /></div>
+          <div id="s2-rangee" class="couche">
+            <div id="logo-boite">
+              <svg id="logo-svg" width="240" height="102" viewBox="0 0 240 102">
+                <defs>
+                  <mask id="logo-masque" maskUnits="userSpaceOnUse" x="-20" y="-20" width="280" height="142">
+                    <path id="logo-trace" d="" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" />
+                  </mask>
+                </defs>
+                <image id="logo-img" href="assets/logo-contino-sport.webp" x="0" y="0" width="240" height="102" mask="url(#logo-masque)" />
+              </svg>
+            </div>
+            <img id="s2-barre" src="assets/vestiaire-barre.png" alt="" />
+            <div id="pateres"></div>
+            <div id="sets"></div>
+          </div>
+          <div id="s2-banc" class="couche"><img id="s2-banc-img" src="assets/vestiaire-banc.png" alt="" data-layout-allow-overflow /></div>
+        </div>
+      </section>
+
+      <!-- Carton 1 : l'étiquette de prix dessinée au feutre -->
+      <div id="etiquette">
+        <svg id="etiq-fil" class="plein" viewBox="0 0 1080 1920" width="1080" height="1920"><path id="fil" d="" fill="none" stroke="#1a1320" stroke-width="3" stroke-linecap="round" /></svg>
+        <div id="etiq-corps">
+          <svg id="etiq-svg" class="abs" width="10" height="10"><path id="etiq-fond" d="" fill="#ffffff" /><path id="etiq-trait" d="" fill="none" stroke="#b3125f" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" /><circle id="etiq-trou" r="12" fill="none" stroke="#b3125f" stroke-width="5" /></svg>
+          <div id="surligne"></div>
+          <div id="c1-l1" class="ligne principal"><span id="c1-l1-t"><span id="c1-prix">25,99&nbsp;€</span> HT dès 30 pièces</span></div>
+          <div id="c1-l2" class="ligne secondaire"><span id="c1-l2-t">21,99&nbsp;€ HT à 500, transport inclus</span></div>
+        </div>
+      </div>
+
+      <!-- Le ballon dessiné, fil rouge entre les scènes -->
+      <div id="ballon-calque">
+        <svg id="encre-svg" class="plein" viewBox="0 0 1080 1920" width="1080" height="1920"></svg>
+        <div id="ball-ombre"></div>
+        <svg id="ball-trail" class="plein" viewBox="0 0 1080 1920" width="1080" height="1920">
+          <path id="trail-1" d="" fill="none" stroke="#b3125f" stroke-width="6" stroke-linecap="round" />
+          <path id="trail-2" d="" fill="none" stroke="#b3125f" stroke-width="5" stroke-linecap="round" />
+        </svg>
+        <div id="ball">
+          <div id="ball-body">
+            <svg width="128" height="128" viewBox="-64 -64 128 128">
+              <defs><clipPath id="ball-clip"><path id="ball-clip-d" d="" /></clipPath></defs>
+              <path id="ball-fond" d="" fill="#ffffff" />
+              <g id="ball-hachures" clip-path="url(#ball-clip)" stroke="#b3125f" stroke-width="3.5" stroke-linecap="round" opacity="0.55"></g>
+              <g clip-path="url(#ball-clip)"><g id="ball-motif"></g></g>
+              <path id="ball-trait" d="" fill="none" stroke="#b3125f" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        "use strict";
+        const D = window.DESSIN;
+        const DEC = window.DECORS;
+        const NS = "http://www.w3.org/2000/svg";
+        const CX = 540, CY = 960;
+
+        // Grille de poses : 128 BPM, un temps = 0,46875 s. À l'arrivée de la piste, ajuster TEMPS et OFFSET.
+        const TEMPS = 60 / 128, OFFSET = 0;
+        const BEATS = { b01_hook: 0, b02_hachures: 4, b03_contact: 8, b04_envol: 10, b05_vestiaire: 14, b06_tailles: 18, b07_rang: 22, b08_signature: 24, b09_prix: 28, b10_maquette: 34, b11_cta: 40, b12_page: 46, fin: 48 };
+        const L = {};
+        for (const [k, n] of Object.entries(BEATS)) L[k] = OFFSET + n * TEMPS;
+        const TP = (n) => OFFSET + n * TEMPS;
+        const DUREE = L.fin;
+
+        const E = (n) => gsap.parseEase(n);
+        const e2o = E("power2.out"), e2i = E("power2.in"), e2io = E("power2.inOut"), e1io = E("power1.inOut");
+        const e3i = E("power3.in"), eso = E("sine.out"), esio = E("sine.inOut");
+        const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+        const seg = (t, a, b) => clamp((t - a) / (b - a));
+        const lerp = (a, b, u) => a + (b - a) * u;
+        const lp = (p, q, u) => ({ x: lerp(p.x, q.x, u), y: lerp(p.y, q.y, u) });
+        const herm = (p0, p1, m0, m1, u) => {
+          const u2 = u * u, u3 = u2 * u;
+          return (2 * u3 - 3 * u2 + 1) * p0 + (u3 - 2 * u2 + u) * m0 + (-2 * u3 + 3 * u2) * p1 + (u3 - u2) * m1;
+        };
+        const $ = (id) => document.getElementById(id);
+        const el = (tag, attrs, parent) => {
+          const n = document.createElementNS(NS, tag);
+          for (const k in attrs) n.setAttribute(k, attrs[k]);
+          if (parent) parent.appendChild(n);
+          return n;
+        };
+        // PRNG à graine fixe (mulberry32)
+        const prng = (seed) => () => {
+          seed |= 0; seed = (seed + 0x6d2b79f5) | 0;
+          let r = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+          r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
+          return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+        };
+
+        // ---------------------------------------------------------------- caméras
+        function camF(t) {
+          let s = 1, r = 0, x = 0, y = 0;
+          if (t < L.b02_hachures) {
+            // push-in power2.out, précédé d'une prise de vitesse de 0,22 s : la caméra est immobile au raccord de boucle
+            const v = seg(t, 0, L.b02_hachures), w = clamp(v / 0.12);
+            const u = e2o(v) * (w * w * (3 - 2 * w));
+            s = 1 + 0.1 * u; r = -2 + 2 * u; x = -40 * u;
+          } else if (t < L.b03_contact) {
+            const u = seg(t, L.b02_hachures, L.b03_contact);
+            s = 1.1 + 0.06 * u; x = -40 - 70 * u;
+          } else if (t < L.b04_envol) {
+            const u = e2o(seg(t, L.b03_contact, L.b04_envol));
+            s = 1.16 + 0.06 * u; x = -110;
+            const tau = t - L.b03_contact;
+            y = tau < 0.08 ? 8 * e2o(tau / 0.08) : 8 * (1 - eso(clamp((tau - 0.08) / 0.32)));
+          } else if (t < L.b10_maquette) {
+            s = 1.22; x = -110; y = 420 * e2io(seg(t, L.b04_envol, L.b04_envol + 1.4));
+          } else if (t < L.b11_cta) {
+            const u = e1io(seg(t, L.b10_maquette, L.b11_cta));
+            s = 1 + 0.08 * u; x = -30 * u;
+          } else if (t < L.b12_page) {
+            s = 1.08; x = -30;
+          } else {
+            // retour à l'état de l'image 0, vitesse d'arrivée égale à celle du départ de b01
+            const T12 = DUREE - L.b12_page, u = seg(t, L.b12_page, DUREE);
+            s = herm(1.08, 1.0, 0, 0, u);
+            r = herm(0, -2, 0, 0, u);
+            x = herm(-30, 0, 0, 0, u);
+          }
+          return { s, r, x, y };
+        }
+        function camV(t) {
+          let s = 1, x = 0;
+          const t5 = L.b05_vestiaire, t7 = L.b07_rang, t8 = L.b08_signature, t9 = L.b09_prix, t10 = L.b10_maquette;
+          if (t < t5) x = 0;
+          else if (t < t7) x = (-260 * (t - t5)) / (t7 - t5);
+          else if (t < t8) { const u = e2o(seg(t, t7, t8)); x = -260 - 32.5 * u; s = 1 + 0.04 * u; }
+          else if (t < t9) { x = -292.5; s = 1.04 + 0.06 * seg(t, t8, t9); }
+          else { const u = e2io(seg(t, t9, t10)); x = -292.5 + 80 * u; s = 1.1 - 0.28 * u; }
+          return { s, r: 0, x, y: 0 };
+        }
+        function versEcran(p, cam, k) {
+          const px = p.x + cam.x * k - CX, py = p.y + cam.y * k - CY;
+          const a = (cam.r * Math.PI) / 180, c = Math.cos(a), sn = Math.sin(a);
+          return { x: CX + (px * c - py * sn) * cam.s, y: CY + (px * sn + py * c) * cam.s };
+        }
+
+        // ---------------------------------------------------------------- géométrie du dessin
+        const S_A = 0.64, S_B = 0.555;
+        const SETC = { x: 323, y: 413.5 }; // centre du set dans la photo source
+        const A0 = { x: 540 - SETC.x * S_A, y: 895 - SETC.y * S_A };
+        const B0 = { x: 344.5 - SETC.x * S_B, y: 640 - SETC.y * S_B };
+        const vers = (o, s) => (p) => ({ x: o.x + p.x * s, y: o.y + p.y * s });
+        const versA = vers(A0, S_A), versB = vers(B0, S_B);
+
+        function cheminCR(pts, ferme) {
+          const n = pts.length, f = (p) => p[0].toFixed(1) + "," + p[1].toFixed(1);
+          let d = "M" + f(pts[0]);
+          const last = ferme ? n : n - 1;
+          for (let i = 0; i < last; i++) {
+            const p0 = pts[(i - 1 + n) % n], p1 = pts[i], p2 = pts[(i + 1) % n], p3 = pts[(i + 2) % n];
+            const q0 = ferme || i > 0 ? p0 : p1, q3 = ferme || i + 2 < n ? p3 : p2;
+            const c1 = [p1[0] + (p2[0] - q0[0]) / 6, p1[1] + (p2[1] - q0[1]) / 6];
+            const c2 = [p2[0] - (q3[0] - p1[0]) / 6, p2[1] - (q3[1] - p1[1]) / 6];
+            d += "C" + f(c1) + " " + f(c2) + " " + f(p2);
+          }
+          return d + (ferme ? "Z" : "");
+        }
+        // contour fermé qui démarre au point le plus proche de `q`, avec un léger dépassement final (trait à main levée)
+        function depuis(pts, q) {
+          let best = 0, bd = 1e9;
+          pts.forEach((p, i) => { const d = (p[0] - q[0]) ** 2 + (p[1] - q[1]) ** 2; if (d < bd) { bd = d; best = i; } });
+          const r = pts.slice(best).concat(pts.slice(0, best));
+          return r.concat([r[0], r[1], r[2]].map((p) => [p[0] + 2, p[1] + 3]));
+        }
+        function dansPoly(x, y, poly) {
+          let c = false;
+          for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+            const xi = poly[i][0], yi = poly[i][1], xj = poly[j][0], yj = poly[j][1];
+            if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) c = !c;
+          }
+          return c;
+        }
+        // hachures à 45° rognées à la silhouette, sens alterné (zigzag du feutre)
+        function hachures(poly, pas) {
+          const xs = poly.map((p) => p[0]), ys = poly.map((p) => p[1]);
+          const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+          const d = [Math.SQRT1_2, -Math.SQRT1_2], n = [Math.SQRT1_2, Math.SQRT1_2];
+          const coins = [[x0, y0], [x1, y0], [x0, y1], [x1, y1]];
+          const cn = coins.map((c) => c[0] * n[0] + c[1] * n[1]), cd = coins.map((c) => c[0] * d[0] + c[1] * d[1]);
+          const lignes = [];
+          let k = 0;
+          for (let c = Math.min(...cn) + pas * 0.6; c < Math.max(...cn); c += pas) {
+            let a = null, b = null;
+            for (let s = Math.min(...cd); s <= Math.max(...cd); s += 2) {
+              const x = c * n[0] + s * d[0], y = c * n[1] + s * d[1];
+              if (dansPoly(x, y, poly)) { if (!a) a = [x, y]; b = [x, y]; }
+            }
+            if (a && Math.hypot(b[0] - a[0], b[1] - a[1]) > 18) {
+              lignes.push(k % 2 ? { a: b, b: a } : { a, b });
+              k++;
+            }
+          }
+          return lignes;
+        }
+        const LIGNES = hachures(D.maillot.pts, 52).concat(hachures(D.short.pts, 52));
+        const FLAMME_D = cheminCR(D.flamme_bord.pts, false);
+        const POLY_FLAMME = D.flamme_poly.d;
+
+        // construit un croquis complet dans un <svg> ; renvoie les tracés à animer
+        function croquis(svgDessous, svgDessus, pre, origine, echelle, passes) {
+          const tr = `translate(${origine.x.toFixed(2)} ${origine.y.toFixed(2)}) scale(${echelle})`;
+          const sw = 7 / echelle;
+          const defs = el("defs", {}, svgDessous);
+          const f = el("filter", { id: pre + "-tremble", x: "-5%", y: "-5%", width: "110%", height: "110%" }, defs);
+          el("feTurbulence", { type: "fractalNoise", baseFrequency: "0.035", numOctaves: "2", seed: "7", result: "bruit" }, f);
+          el("feDisplacementMap", { in: "SourceGraphic", in2: "bruit", scale: "5", xChannelSelector: "R", yChannelSelector: "G" }, f);
+          const cf = el("clipPath", { id: pre + "-clip-flamme" }, defs);
+          el("path", { d: POLY_FLAMME }, cf);
+          const m = el("mask", { id: pre + "-masque-reste", maskUnits: "userSpaceOnUse", x: "0", y: "0", width: "640", height: "800" }, defs);
+          el("path", { d: cheminCR(D.maillot.pts, true), fill: "#fff" }, m);
+          el("path", { d: cheminCR(D.short.pts, true), fill: "#fff" }, m);
+          el("path", { d: POLY_FLAMME, fill: "#000" }, m);
+          D.bandes.forEach((b) => el("rect", { x: b.x0 - 3, y: b.y0 - 4, width: b.x1 - b.x0 + 6, height: b.y1 - b.y0 + 8, fill: "#000" }, m));
+          const gD = el("g", { transform: tr, filter: `url(#${pre}-tremble)`, "stroke-linecap": "round", "stroke-linejoin": "round", fill: "none" }, svgDessous);
+          const gU = svgDessus ? el("g", { transform: tr, filter: `url(#${pre}-tremble)`, "stroke-linecap": "round", "stroke-linejoin": "round", fill: "none" }, svgDessus) : gD;
+          const couleurs = [["#b3125f", "#1a1320"]].concat(passes || []);
+          const groupes = couleurs.map(([cFlamme, cReste]) => {
+            const gr = el("g", { mask: `url(#${pre}-masque-reste)`, stroke: cReste, "stroke-width": sw * 0.8 }, gD);
+            const gf = el("g", { "clip-path": `url(#${pre}-clip-flamme)`, stroke: cFlamme, "stroke-width": sw * 0.8 }, gD);
+            return LIGNES.map(({ a, b }) => {
+              const d = `M${a[0].toFixed(1)},${a[1].toFixed(1)} L${b[0].toFixed(1)},${b[1].toFixed(1)}`;
+              const len = Math.hypot(b[0] - a[0], b[1] - a[1]);
+              return { a, b, len, els: [el("path", { d }, gr), el("path", { d }, gf)] };
+            });
+          });
+          const trait = (d, g, w) => el("path", { d, stroke: "#b3125f", "stroke-width": w || sw }, g);
+          const traits = {
+            flamme: trait(FLAMME_D, gD),
+            b1: trait(`M${D.bandes[0].xc},${D.bandes[0].y1} L${D.bandes[0].xc},${D.bandes[0].y0}`, gD),
+            b2: trait(`M${D.bandes[1].xc},${D.bandes[1].y0} L${D.bandes[1].xc},${D.bandes[1].y1}`, gD),
+            maillot: trait(cheminCR(depuis(D.maillot.pts, D.flamme_bord.pts[D.flamme_bord.pts.length - 1]), false), gU),
+            short: trait(cheminCR(depuis(D.short.pts, [340, 462]), false), gU),
+          };
+          for (const k in traits) {
+            const p = traits[k];
+            p.longueur = p.getTotalLength();
+            p.setAttribute("stroke-dasharray", p.longueur + " " + (p.longueur + 10));
+          }
+          groupes.forEach((g) => g.forEach((h) => h.els.forEach((e) => e.setAttribute("stroke-dasharray", h.len + " " + (h.len + 10)))));
+          return { traits, groupes, gD, gU };
+        }
+        const crA = croquis($("croquisA-dessous"), $("croquisA-dessus"), "A", A0, S_A, null);
+        const PASSES = [["#ffe45c", "#1a1320"], ["#1a1320", "#b3125f"], ["#b3125f", "#ffe45c"], ["#b3125f", "#1a1320"]];
+        const crB = croquis($("croquisB"), null, "B", B0, S_B, PASSES);
+
+        // échantillonnage des tracés à la construction : aucun appel de mesure pendant le rendu
+        function echantillons(p, pas = 1.5) {
+          const len = p.getTotalLength(), n = Math.max(2, Math.ceil(len / pas));
+          const pts = new Float32Array((n + 1) * 2);
+          for (let i = 0; i <= n; i++) { const q = p.getPointAtLength((len * i) / n); pts[2 * i] = q.x; pts[2 * i + 1] = q.y; }
+          return { len, n, pts };
+        }
+        function pointA(ec, u) {
+          const f = clamp(u) * ec.n, i = Math.min(ec.n - 1, Math.floor(f)), r = f - i;
+          return [lerp(ec.pts[2 * i], ec.pts[2 * i + 2], r), lerp(ec.pts[2 * i + 1], ec.pts[2 * i + 3], r)];
+        }
+        function trace(p, prog) {
+          const l = p.longueur;
+          p.setAttribute("stroke-dashoffset", (l * (1 - clamp(prog))).toFixed(2));
+          p.style.visibility = prog > 0 ? "inherit" : "hidden";
+        }
+        for (const k in crA.traits) crA.traits[k].ech = echantillons(crA.traits[k]);
+        const tete = (p, prog) => pointA(p.ech, prog);
+        function traceHachure(h, prog) {
+          h.els.forEach((e) => { e.setAttribute("stroke-dashoffset", (h.len * (1 - clamp(prog))).toFixed(2)); e.style.visibility = prog > 0 ? "inherit" : "hidden"; });
+        }
+        const pointHachure = (h, prog) => [lerp(h.a[0], h.b[0], clamp(prog)), lerp(h.a[1], h.b[1], clamp(prog))];
+
+        // ---------------------------------------------------------------- tracé du bord de flamme, raccord de boucle
+        // t' = t - 21,563 en fin de vidéo, t' = t + 0,937 au début : une seule fonction, positions et vitesses raccordées
+        const tPrime = (t) => (t >= L.b12_page ? t - L.b12_page : t + (DUREE - L.b12_page));
+        const T0F = 0.2, TBOUCLE = DUREE - L.b12_page;
+        // vitesse au raccord : 0,2 contour par seconde, puis accélération constante jusqu'au bout du bord
+        const V0F = 0.2;
+        const AF = ((0.85 - V0F * 0.75) * 2) / (0.75 * 0.75);
+        function flammeP(tp) {
+          if (tp < T0F) return 0;
+          if (tp < TBOUCLE) return herm(0, 0.15, 0, V0F * (TBOUCLE - T0F), (tp - T0F) / (TBOUCLE - T0F));
+          const tau = tp - TBOUCLE;
+          return Math.min(1, 0.15 + V0F * tau + 0.5 * AF * tau * tau);
+        }
+        const FIN_FLAMME = 0.75;
+
+        // Ordre des traits sur la feuille A (s) : flamme, maillot, short, bande 1, bande 2, hachures
+        const ST_A = { maillot: [0.87, 1.3], short: [1.42, 1.76], b1: [1.88, 1.95], b2: [2.01, 2.08] };
+        const H_A = { t0: 2.2, pas: 0.03, duree: 0.09 };
+        const FIN_HACH_A = H_A.t0 + (LIGNES.length - 1) * H_A.pas + H_A.duree;
+        // Feuille B : quatre passes de couleurs, puis la coche
+        const PASS_B = { t0: 16.3, ecart: 0.32, pas: 0.012, duree: 0.05 };
+        const COCHE = [17.66, 17.8];
+
+        // position de la pointe du feutre A (coordonnées monde, calque dessin), lever 0..1
+        function feutreA(t) {
+          const tp = tPrime(t);
+          const aA = (k, p) => versA({ x: tete(crA.traits[k], p)[0], y: tete(crA.traits[k], p)[1] });
+          const leve = (p0, p1, u) => ({ p: lp(p0, p1, e2io(u)), lift: Math.sin(Math.PI * u) * 0.6 + e2o(clamp(u * 2)) * 0.4 * (1 - u) });
+          const dehors = { x: 1250, y: 1780 };
+          if (t >= L.b12_page || t < FIN_FLAMME) {
+            if (tp < 0.05) return { p: dehors, lift: 1, vis: t >= L.b12_page };
+            if (tp < T0F) { const u = seg(tp, 0.05, T0F); return { p: lp(dehors, aA("flamme", 0), e2o(u)), lift: 1 - e2i(u) }; }
+            return { p: aA("flamme", flammeP(tp)), lift: 0 };
+          }
+          const fl = aA("flamme", 1);
+          if (t < ST_A.maillot[0]) return leve(fl, aA("maillot", 0), seg(t, FIN_FLAMME, ST_A.maillot[0]));
+          if (t < ST_A.maillot[1]) return { p: aA("maillot", seg(t, ...ST_A.maillot)), lift: 0 };
+          if (t < ST_A.short[0]) return leve(aA("maillot", 1), aA("short", 0), seg(t, ST_A.maillot[1], ST_A.short[0]));
+          if (t < ST_A.short[1]) return { p: aA("short", seg(t, ...ST_A.short)), lift: 0 };
+          if (t < ST_A.b1[0]) return leve(aA("short", 1), aA("b1", 0), seg(t, ST_A.short[1], ST_A.b1[0]));
+          if (t < ST_A.b1[1]) return { p: aA("b1", seg(t, ...ST_A.b1)), lift: 0 };
+          if (t < ST_A.b2[0]) return leve(aA("b1", 1), aA("b2", 0), seg(t, ST_A.b1[1], ST_A.b2[0]));
+          if (t < ST_A.b2[1]) return { p: aA("b2", seg(t, ...ST_A.b2)), lift: 0 };
+          const h0 = versA({ x: LIGNES[0].a[0], y: LIGNES[0].a[1] });
+          if (t < H_A.t0) return leve(aA("b2", 1), h0, seg(t, ST_A.b2[1], H_A.t0));
+          if (t < FIN_HACH_A) {
+            const i = clamp(Math.floor((t - H_A.t0) / H_A.pas), 0, LIGNES.length - 1);
+            const q = pointHachure(LIGNES[i], (t - H_A.t0 - i * H_A.pas) / H_A.duree);
+            return { p: versA({ x: q[0], y: q[1] }), lift: 0 };
+          }
+          const last = LIGNES[LIGNES.length - 1].b, pl = versA({ x: last[0], y: last[1] });
+          if (t < FIN_HACH_A + 0.12) return { p: pl, lift: e2o(seg(t, FIN_HACH_A, FIN_HACH_A + 0.12)) };
+          if (t < FIN_HACH_A + 0.6) return { p: lp(pl, dehors, e2i(seg(t, FIN_HACH_A + 0.12, FIN_HACH_A + 0.6))), lift: 1 };
+          return { p: dehors, lift: 1, vis: false };
+        }
+        function feutreB(t) {
+          const dehors = { x: 1250, y: 1700 };
+          const bB = (q) => versB({ x: q[0], y: q[1] });
+          const debutPasse = (j) => PASS_B.t0 + j * PASS_B.ecart;
+          const finPasse = (j) => debutPasse(j) + (LIGNES.length - 1) * PASS_B.pas + PASS_B.duree;
+          if (t < 15.98 || t > 18.5) return { p: dehors, lift: 1, vis: false };
+          if (t < PASS_B.t0) return { p: lp(dehors, bB(LIGNES[0].a), e2o(seg(t, 15.98, PASS_B.t0))), lift: 1 - e2i(seg(t, 16.15, PASS_B.t0)) };
+          for (let j = 0; j < 4; j++) {
+            if (t < finPasse(j)) {
+              const tt = Math.max(t, debutPasse(j));
+              const i = clamp(Math.floor((tt - debutPasse(j)) / PASS_B.pas), 0, LIGNES.length - 1);
+              const q = pointHachure(LIGNES[i], (tt - debutPasse(j) - i * PASS_B.pas) / PASS_B.duree);
+              return { p: bB(q), lift: t < debutPasse(j) ? 0.5 : 0 };
+            }
+          }
+          const fin = bB(LIGNES[LIGNES.length - 1].b);
+          const pc = (u) => { const q = pointA(COCHE_ECH, u); return { x: q[0], y: q[1] }; };
+          const c0 = pc(0);
+          if (t < COCHE[0]) { const u = seg(t, finPasse(3), COCHE[0]); return { p: lp(fin, c0, e2io(u)), lift: Math.sin(Math.PI * u) }; }
+          if (t < COCHE[1]) return { p: pc(seg(t, ...COCHE)), lift: 0 };
+          const q = pc(1);
+          if (t < COCHE[1] + 0.12) return { p: q, lift: e2o(seg(t, COCHE[1], COCHE[1] + 0.12)) };
+          return { p: lp(q, dehors, e2i(seg(t, COCHE[1] + 0.12, 18.4))), lift: 1 };
+        }
+        const PTE = DEC.feutre.pointe, ECH_F = 0.72;
+        function placeFeutre(node, st, t, decal) {
+          if (st.vis === false) { node.style.visibility = "hidden"; return; }
+          node.style.visibility = "inherit";
+          const lift = clamp(st.lift);
+          const rot = 3 * Math.sin(t * 7.3) + 2 * lift;
+          const sc = ECH_F * (1 + 0.025 * lift);
+          node.style.transform = `translate(${(st.p.x - decal.x).toFixed(2)}px, ${(st.p.y - decal.y - 12 * lift).toFixed(2)}px) rotate(${rot.toFixed(2)}deg) scale(${sc.toFixed(4)}) translate(${-PTE[0]}px, ${-PTE[1]}px)`;
+          const ox = 8 + 10 * lift, oy = 10 + 12 * lift, b = 5 + 6 * lift, o = 0.3 - 0.1 * lift;
+          node.style.filter = `drop-shadow(${ox}px ${oy}px ${b}px rgba(26,19,32,${o.toFixed(2)}))`;
+        }
+
+        // ---------------------------------------------------------------- vestiaire : patères, sets, logo
+        const V = 1.2;
+        const TAILLES = [0.62, 0.7, 0.78, 0.86, 0.93, 1.0, 1.0, 1.0, 1.0, 1.0];
+        const S_V = 0.64;
+        const HX = [150];
+        for (let i = 1; i < TAILLES.length; i++) {
+          const bw = (k) => 290 * S_V * k;
+          HX.push(HX[i - 1] + 0.82 * ((bw(TAILLES[i - 1]) + bw(TAILLES[i])) / 2));
+        }
+        const PAT_TOP = 549.6 - (668 - 612) * V;
+        const BOUCLE_Y = PAT_TOP + 13 * V;
+        const PIVOT_Y = PAT_TOP + 122 * V;
+        const PIVOT_DX = 22 * V;
+        const ACCROCHE = TAILLES.map((_, i) => (i < 8 ? TP(14 + i) : [14.6, 14.83][i - 8]));
+        const CINTRE = DEC.cintre, CINTRE_S = 300 / CINTRE.taille[0];
+        const PIV = { x: 323 - (CINTRE.taille[0] / 2) * CINTRE_S + 454 * CINTRE_S, y: 22 - 161 * CINTRE_S + 9 * CINTRE_S };
+        const pateres = [], sets = [];
+        HX.concat([HX[9] + 146, HX[9] + 292]).forEach((hx, i) => {
+          const im = document.createElement("img");
+          im.src = "assets/patere.png"; im.className = "patere"; im.setAttribute("data-layout-allow-overflow", ""); im.id = "patere-" + (i + 1); im.alt = "";
+          im.style.left = (hx - 42 * V).toFixed(1) + "px"; im.style.top = PAT_TOP.toFixed(1) + "px";
+          $("pateres").appendChild(im);
+          pateres.push(im);
+        });
+        TAILLES.forEach((k, i) => {
+          const d = document.createElement("div");
+          d.className = "set"; d.id = "set-" + (i + 1);
+          d.innerHTML = `<img src="assets/cintre.png" alt="" style="left:${(323 - (CINTRE.taille[0] / 2) * CINTRE_S).toFixed(1)}px;top:${(22 - 161 * CINTRE_S).toFixed(1)}px;width:300px">` +
+            `<img src="assets/set-short.png" alt="" style="left:0;top:-39px;width:640px;height:800px">` +
+            `<img src="assets/set-maillot.png" alt="" style="left:0;top:0;width:640px;height:800px">`;
+          $("sets").appendChild(d);
+          sets.push(d);
+        });
+        const keyRot = (tau, cles) => {
+          // cles : [[angle, durée], ...] depuis 0, chaque segment en sine.inOut
+          let a0 = 0, t0 = 0;
+          for (const [a1, du] of cles) {
+            if (tau < t0 + du) return lerp(a0, a1, esio((tau - t0) / du));
+            a0 = a1; t0 += du;
+          }
+          return a0;
+        };
+        const PENDULE = [[6, 0.225], [-3, 0.225], [1.5, 0.225], [0, 0.225]];
+        const ONDE = [[4, 0.2], [-2, 0.2], [1, 0.2], [0, 0.2]];
+        function etatSet(i, t) {
+          const th = ACCROCHE[i];
+          if (t < th - 0.32) return null;
+          let dy = 0, rot = 0;
+          if (t < th) { const u = seg(t, th - 0.32, th); dy = -820 * (1 - e2i(u)); rot = -5 * (1 - u); }
+          else rot = keyRot(t - th, PENDULE);
+          if (i < 8) { const tf = L.b07_rang + 0.06 * (7 - i); if (t >= tf) rot += keyRot(t - tf, ONDE); }
+          return { x: HX[i] + PIVOT_DX, y: PIVOT_Y + dy, rot, sc: S_V * TAILLES[i] };
+        }
+        // logo écrit par la traînée du ballon : masque qui suit la pointe
+        const LOGO_W = Math.min(520, 264) / 1.1, LOGO_H = (LOGO_W * 112) / 264;
+        const LOGO_C = { x: 745, y: 446 };
+        const LOGO_O = { x: LOGO_C.x - LOGO_W / 2, y: LOGO_C.y - LOGO_H / 2 };
+        $("logo-boite").style.left = LOGO_O.x + "px"; $("logo-boite").style.top = LOGO_O.y + "px";
+        const lsvg = $("logo-svg");
+        lsvg.setAttribute("width", LOGO_W); lsvg.setAttribute("height", LOGO_H); lsvg.setAttribute("viewBox", `0 0 ${LOGO_W} ${LOGO_H}`);
+        $("logo-img").setAttribute("width", LOGO_W); $("logo-img").setAttribute("height", LOGO_H);
+        const LOGO_PTS = [];
+        const NZ = 12;
+        for (let j = 0; j <= NZ; j++) LOGO_PTS.push([-8 + ((LOGO_W + 16) * j) / NZ, j === 0 ? LOGO_H * 0.5 : LOGO_H * (j % 2 ? 0.14 : 0.86)]);
+        const logoTrace = $("logo-trace");
+        logoTrace.setAttribute("d", cheminCR(LOGO_PTS, false));
+        logoTrace.setAttribute("stroke-width", (LOGO_W / NZ) * 1.9 + LOGO_H * 0.35);
+        const LOGO_ECH = echantillons(logoTrace);
+        const LOGO_LEN = LOGO_ECH.len;
+        logoTrace.setAttribute("stroke-dasharray", LOGO_LEN + " " + (LOGO_LEN + 10));
+        const ECRIT = [L.b08_signature, L.b08_signature + 1.4];
+        const logoPoint = (u) => { const q = pointA(LOGO_ECH, u); return { x: LOGO_O.x + q[0], y: LOGO_O.y + q[1] }; };
+
+        // ---------------------------------------------------------------- ballon : trajectoire en fonction pure du temps
+        const R = 52;
+        const BOUCLE = (k) => ({ x: HX[k - 1], y: BOUCLE_Y });
+        const P = {
+          R11: { x: 857, y: 1512 }, C1: { x: 900, y: 1210 }, C2: { x: 790, y: 1228 }, LAND1: { x: 700, y: 1185 },
+          J: { x: 540.2, y: 781.1 }, B1: { x: 870, y: 1010 }, B2: { x: 905, y: 1075 }, B3: { x: 930, y: 1110 },
+        };
+        const dirRecul = (() => { const dx = P.LAND1.x - P.J.x, dy = P.LAND1.y - P.J.y, n = Math.hypot(dx, dy); return { x: dx / n, y: dy / n }; })();
+        P.REC = { x: P.LAND1.x + 18 * dirRecul.x, y: P.LAND1.y + 18 * dirRecul.y };
+        const LOGO_DEBUT = logoPoint(0), LOGO_FIN = logoPoint(1);
+        const PCUT = { x: 720, y: 1150 };
+        // segments : arc, contact, repos, écriture du logo et trajets en espace écran ; repère F = feuille vue de dessus, V = vestiaire vu de face
+        const SEG = [];
+        const add = (o) => SEG.push(o);
+        const SQ = 0.07;
+        add({ type: "arc", t0: L.b12_page - DUREE, t1: TP(1), P0: P.R11, P1: P.C1, H: 1040, a: 0.6489, f: "F" });
+        add({ type: "contact", t0: TP(1), t1: TP(1) + SQ, P: P.C1, f: "F" });
+        add({ type: "arc", t0: TP(1) + SQ, t1: TP(3), P0: P.C1, P1: P.C2, H: 330, f: "F" });
+        add({ type: "contact", t0: TP(3), t1: TP(3) + SQ, P: P.C2, f: "F" });
+        add({ type: "arc", t0: TP(3) + SQ, t1: 1.8, P0: P.C2, P1: P.LAND1, H: 110, f: "F" });
+        add({ type: "repos", t0: 1.8, t1: 3.23, P: P.LAND1, f: "F", pose: 1.8, antic: [2.81, 3.23, dirRecul] });
+        add({ type: "arc", t0: 3.23, t1: L.b03_contact, P0: P.REC, P1: P.J, H: 240, f: "F", depuisAntic: true });
+        add({ type: "contact", t0: L.b03_contact, t1: L.b03_contact + SQ, P: P.J, f: "F" });
+        add({ type: "arc", t0: L.b03_contact + SQ, t1: 4.4, P0: P.J, P1: P.B1, H: 200, f: "F" });
+        add({ type: "repos", t0: 4.4, t1: 4.72, P: P.B1, f: "F", pose: 4.4 });
+        add({ type: "arc", t0: 4.72, t1: TP(11), P0: P.B1, P1: P.B2, H: 140, f: "F" });
+        add({ type: "contact", t0: TP(11), t1: TP(11) + SQ, P: P.B2, f: "F" });
+        add({ type: "arc", t0: TP(11) + SQ, t1: 5.6, P0: P.B2, P1: P.B3, H: 90, f: "F" });
+        add({ type: "repos", t0: 5.6, t1: 6.2125, P: P.B3, f: "F", pose: 5.6, antic: [5.73, 6.2125, { x: 0.45, y: 0.89 }] });
+        add({ type: "fonce", t0: 6.2125, t1: L.b05_vestiaire, P: P.B3, f: "F" });
+        add({ type: "arc", t0: L.b05_vestiaire, t1: 6.8, P0: BOUCLE(2), P1: BOUCLE(2), H: 700, a: 0, f: "V" });
+        for (let k = 2; k <= 8; k++) {
+          const tc = 6.8 + (k - 2) * TEMPS;
+          add({ type: "contact", t0: tc, t1: tc + SQ, P: BOUCLE(k), f: "V" });
+          if (k < 8) add({ type: "arc", t0: tc + SQ, t1: tc + TEMPS, P0: BOUCLE(k), P1: BOUCLE(k + 1), H: 75, f: "V" });
+        }
+        const t8 = 6.8 + 6 * TEMPS;
+        add({ type: "arc", t0: t8 + SQ, t1: L.b07_rang, P0: BOUCLE(8), P1: BOUCLE(8), H: 210, f: "V" });
+        add({ type: "repos", t0: L.b07_rang, t1: 10.66, P: BOUCLE(8), f: "V", pose: L.b07_rang, antic: [10.48, 10.66, { x: 0.9, y: 0.43 }] });
+        add({ type: "arc", t0: 10.66, t1: ECRIT[0], P0: BOUCLE(8), P1: LOGO_DEBUT, H: 170, f: "V", depuisAntic: true });
+        add({ type: "ecrit", t0: ECRIT[0], t1: ECRIT[1], f: "V" });
+        add({ type: "arc", t0: ECRIT[1], t1: 13.05, P0: LOGO_FIN, P1: BOUCLE(8), H: 90, f: "V" });
+        add({ type: "repos", t0: 13.05, t1: 15.55, P: BOUCLE(8), f: "V", pose: 13.05, antic: [15.33, 15.55, { x: 0, y: 1 }] });
+        add({ type: "vers-objectif", t0: 15.55, t1: L.b10_maquette, P: BOUCLE(8), f: "V" });
+        add({ type: "retombe", t0: L.b10_maquette, t1: 16.2, f: "F" });
+        add({ type: "contact", t0: 16.2, t1: 16.2 + SQ, P: P.R11, f: "F" });
+        add({ type: "arc", t0: 16.2 + SQ, t1: 16.5, P0: P.R11, P1: P.R11, H: 40, f: "F" });
+        add({ type: "repos", t0: 16.5, t1: L.b12_page, P: P.R11, f: "F", pose: 16.5 });
+        const CONTACTS = SEG.filter((s) => s.type === "contact").map((s, i) => ({ t: s.t0, P: s.P, f: s.f, i }));
+        CONTACTS.push({ t: 16.5, P: P.R11, f: "F", i: 99 });
+        const cams = { F: camF, V: camV }, coefs = { F: 1.0, V: 0.7 };
+
+        function hauteurArc(s, u) {
+          const a = s.a === undefined ? 0.5 : s.a;
+          if (a <= 0) return s.H * (1 - u * u);
+          return u < a ? s.H * (1 - ((a - u) / a) ** 2) : s.H * (1 - ((u - a) / (1 - a)) ** 2);
+        }
+        function trouveSeg(t) {
+          const tt = t >= L.b12_page ? t - DUREE : t;
+          for (const s of SEG) if (tt >= s.t0 && tt < s.t1) return [s, tt];
+          return [SEG[SEG.length - 1], tt];
+        }
+        // déformation k : scaleY du corps, avec scaleX = 1 / k pour garder le volume
+        function deformation(s, tt) {
+          if (s.type === "contact") return 0.7;
+          if (s.type === "arc") {
+            const tau = tt - s.t0, te = s.t1 - tt;
+            const k0 = s.depuisAntic ? 0.68 : 0.7;
+            let k = 1;
+            if (tau < 0.1) k = lerp(k0, 1.25, e2o(tau / 0.1));
+            else if (tau < 0.3) k = lerp(1.25, 1, e1io((tau - 0.1) / 0.2));
+            if (te < 0.1 && s.H > 30) k = Math.max(k, lerp(1, 1.18, e2i(1 - te / 0.1)));
+            return k;
+          }
+          if (s.type === "repos") {
+            let k = 1;
+            if (s.pose !== undefined) {
+              const tau = tt - s.pose;
+              if (tau < SQ) k = 0.7;
+              else { const q = tau - SQ; k = 1 - 0.3 * Math.exp(-q / 0.1) * Math.cos((2 * Math.PI * q) / 0.28); }
+            }
+            if (s.antic && tt >= s.antic[0]) k = Math.min(k, 1 - 0.32 * e2io(seg(tt, s.antic[0], s.antic[1])));
+            return k;
+          }
+          return 1;
+        }
+        // état du ballon : centre écran, échelle, déformation, repère, hauteur
+        function ballon(t) {
+          const [s, tt] = trouveSeg(t);
+          const out = { k: deformation(s, tt), f: s.f, h: 0, ecran: null, sigma: 1, vide: 0 };
+          let sol = null, h = 0;
+          if (s.type === "arc") { const u = seg(tt, s.t0, s.t1); sol = lp(s.P0, s.P1, u); h = hauteurArc(s, u); }
+          else if (s.type === "contact") sol = s.P;
+          else if (s.type === "repos") {
+            sol = s.P;
+            if (s.antic && tt >= s.antic[0]) { const u = e2io(seg(tt, s.antic[0], s.antic[1])); sol = { x: s.P.x + 18 * u * s.antic[2].x, y: s.P.y + 18 * u * s.antic[2].y }; }
+          } else if (s.type === "ecrit") { sol = logoPoint(seg(tt, s.t0, s.t1)); h = 6; }
+          if (sol) {
+            const cam = cams[s.f](t), z = s.f === "F" ? 1 + h / 1500 : 1;
+            const pied = versEcran({ x: sol.x, y: sol.y - h }, cam, coefs[s.f]);
+            out.sol = versEcran(sol, cam, coefs[s.f]);
+            out.sigma = cam.s * z;
+            out.pied = pied; out.h = h; out.rot = cam.r;
+            return out;
+          }
+          // trajectoires en espace écran, du passage vers l'objectif jusqu'à la retombée après le match cut
+          if (s.type === "fonce") {
+            const cam = camF(s.t0), dep = versEcran(s.P, cam, 1), s0 = cam.s;
+            const u = seg(tt, s.t0, s.t1);
+            const c0 = { x: dep.x, y: dep.y - R * s0 };
+            out.centre = lp(c0, { x: CX, y: CY }, e2i(u));
+            out.sigma = s0 + (24 - s0) * e3i(u);
+            out.vide = clamp((out.sigma - 1.6) / 2);
+            out.k = u < 0.12 ? lerp(0.68, 1.15, e2o(u / 0.12)) : lerp(1.15, 1, seg(u, 0.12, 0.4));
+            out.f = "ecran";
+            return out;
+          }
+          if (s.type === "vers-objectif") {
+            const cam = camV(s.t0), dep = versEcran(s.P, cam, 0.7);
+            const u = seg(tt, s.t0, s.t1);
+            const c0 = { x: dep.x, y: dep.y - R * cam.s };
+            out.centre = { x: lerp(c0.x, PCUT.x, e2io(u)), y: lerp(c0.y, PCUT.y, e2io(u)) - 160 * Math.sin(Math.PI * u) };
+            out.sigma = cam.s * Math.pow(2.4 / cam.s, e2i(u));
+            out.k = u < 0.15 ? lerp(0.68, 1.2, e2o(u / 0.15)) : lerp(1.2, 1, seg(u, 0.15, 0.5));
+            out.f = "ecran";
+            return out;
+          }
+          if (s.type === "retombe") {
+            const u = seg(tt, s.t0, s.t1);
+            const cam = camF(t), arr = versEcran(P.R11, cam, 1);
+            const fin = { x: arr.x, y: arr.y - R * cam.s };
+            // retombée en arc : bombé vers le haut, la vitesse augmente vers le contact
+            const q = lp(PCUT, fin, e2i(u));
+            out.centre = { x: q.x, y: q.y - 90 * Math.sin(Math.PI * u) };
+            out.sigma = lerp(2.4, cam.s, e2i(u));
+            out.k = u > 0.8 ? lerp(1, 1.15, (u - 0.8) / 0.2) : 1;
+            out.f = "ecran";
+            out.ombreF = { sol: arr, h: (1 - e2i(u)) * 500, s: cam.s };
+            return out;
+          }
+          return out;
+        }
+        const centreBallon = (b) => {
+          if (b.centre) return b.centre;
+          return { x: b.pied.x, y: b.pied.y - R * b.k * b.sigma };
+        };
+        // angle du motif : roule avec le déplacement, se tourne vers la cible avant chaque saut
+        const REGARDS = [
+          { t0: 2.78, t1: 3.23, cible: P.J, de: P.LAND1, f: "F" },
+          { t0: 5.76, t1: 6.2125, centre: true },
+          { t0: 10.41, t1: 10.66, cible: LOGO_DEBUT, de: BOUCLE(8), f: "V" },
+          { t0: 15.3, t1: 15.55, centre: true },
+        ];
+        const ANGLE_MOTIF0 = (Math.atan2(-8, 10) * 180) / Math.PI;
+        function angleMotif(t, b) {
+          const c = centreBallon(b);
+          let ang = (c.x / R) * (180 / Math.PI) * 0.6;
+          for (const g of REGARDS) {
+            if (t >= g.t0 - 0.01 && t < g.t1 + 0.25) {
+              const w = t < g.t1 ? e2io(seg(t, g.t0, g.t0 + 0.2)) : 1 - e2io(seg(t, g.t1, g.t1 + 0.25));
+              let cible;
+              if (g.centre) cible = (Math.atan2(CY - c.y, CX - c.x) * 180) / Math.PI - ANGLE_MOTIF0;
+              else {
+                const cam = cams[g.f](t), a = versEcran(g.de, cam, coefs[g.f]), q = versEcran(g.cible, cam, coefs[g.f]);
+                cible = (Math.atan2(q.y - a.y, q.x - a.x) * 180) / Math.PI - ANGLE_MOTIF0;
+              }
+              let dd = ((cible - ang + 540) % 360) - 180;
+              ang = ang + dd * w;
+            }
+          }
+          return ang;
+        }
+
+        // dessin du ballon : cercle un peu irrégulier, trait ouvert, motif décentré et hachures
+        (function dessineBallon() {
+          const pts = [];
+          for (let i = 0; i <= 40; i++) {
+            const a = (i / 40) * Math.PI * 2 - 0.4;
+            const r = R * (1 + 0.025 * Math.sin(3 * a + 0.7) + 0.015 * Math.sin(5 * a + 2));
+            pts.push([r * Math.cos(a), r * Math.sin(a)]);
+          }
+          const ferme = cheminCR(pts.slice(0, 40), true);
+          $("ball-fond").setAttribute("d", ferme);
+          $("ball-clip-d").setAttribute("d", ferme);
+          const ouvert = pts.concat([[pts[1][0] * 1.04, pts[1][1] * 1.04], [pts[2][0] * 1.06, pts[2][1] * 1.06]]);
+          $("ball-trait").setAttribute("d", cheminCR(ouvert, false));
+          const gh = $("ball-hachures");
+          for (let i = 0; i < 6; i++) { const c = 10 + i * 9; el("path", { d: `M${c - 60},${60 - c + 40} L${c + 10},${-c + 30}` }, gh); }
+          const m = $("ball-motif"), cx = 10, cy = -8, rp = 13;
+          const pent = [];
+          for (let i = 0; i < 5; i++) { const a = -Math.PI / 2 + (i * 2 * Math.PI) / 5; pent.push([cx + rp * Math.cos(a), cy + rp * Math.sin(a)]); }
+          el("path", { d: "M" + pent.map((p) => p.map((v) => v.toFixed(1)).join(",")).join(" L") + "Z", fill: "#b3125f", stroke: "#b3125f", "stroke-width": 3, "stroke-linejoin": "round" }, m);
+          const penta = (x, y, r, rot) => {
+            const q = [];
+            for (let i = 0; i < 5; i++) { const a = rot + (i * 2 * Math.PI) / 5; q.push([x + r * Math.cos(a), y + r * Math.sin(a)]); }
+            return "M" + q.map((p) => p.map((v) => v.toFixed(1)).join(",")).join(" L") + "Z";
+          };
+          pent.forEach((p, i) => {
+            const a = Math.atan2(p[1] - cy, p[0] - cx), l = i === 2 ? 20 : 24;
+            el("path", { d: `M${p[0].toFixed(1)},${p[1].toFixed(1)} L${(p[0] + l * Math.cos(a)).toFixed(1)},${(p[1] + l * Math.sin(a)).toFixed(1)}`, stroke: "#b3125f", "stroke-width": 4.5, "stroke-linecap": "round", fill: "none" }, m);
+            // pentagone de bord, entre deux rayons, en partie coupé par le cercle
+            const b = a + Math.PI / 5, dist = i === 3 ? 46 : 50;
+            el("path", { d: penta(cx + dist * Math.cos(b), cy + dist * Math.sin(b), 12, b), fill: "#b3125f", stroke: "#b3125f", "stroke-width": 3, "stroke-linejoin": "round" }, m);
+          });
+        })();
+
+        // points d'encre aux contacts (PRNG à graine fixe)
+        const encre = $("encre-svg");
+        const POINTS = CONTACTS.map((c) => {
+          const rnd = prng(1000 + c.i * 17);
+          return Array.from({ length: 4 }, () => {
+            const a = Math.PI * (0.05 + 0.9 * rnd()) * (rnd() < 0.5 ? 1 : -1) + (c.f === "V" ? -Math.PI / 2 : 0);
+            const d = R * (0.75 + 0.7 * rnd());
+            const n = el("circle", { r: (2.5 + 3.5 * rnd()).toFixed(1), fill: rnd() < 0.7 ? "#b3125f" : "#1a1320" }, encre);
+            return { n, dx: Math.cos(a) * d, dy: Math.sin(a) * d * (c.f === "F" ? 0.45 : 0.6) };
+          });
+        });
+
+        // ---------------------------------------------------------------- pliage de la page (b12)
+        const PW = 1000, PH = 1441;
+        const DIRP = (() => { const x = -0.8, y = -0.6; return { x, y }; })();
+        const QP = { x: PW, y: PH };
+        const FOLD_FIN = 2100;
+        function coupe(poly, garde) {
+          const out = [];
+          for (let i = 0; i < poly.length; i++) {
+            const a = poly[i], b = poly[(i + 1) % poly.length];
+            const ga = garde(a), gb = garde(b);
+            if (ga >= 0) out.push(a);
+            if (ga >= 0 !== gb >= 0) { const u = ga / (ga - gb); out.push({ x: lerp(a.x, b.x, u), y: lerp(a.y, b.y, u) }); }
+          }
+          return out;
+        }
+        const polyCss = (pts) => (pts.length < 3 ? "polygon(0px 0px, 0px 0px, 0px 0px)" : "polygon(" + pts.map((p) => p.x.toFixed(1) + "px " + p.y.toFixed(1) + "px").join(", ") + ")");
+        function pliage(f) {
+          const rect = [{ x: 0, y: 0 }, { x: PW, y: 0 }, { x: PW, y: PH }, { x: 0, y: PH }];
+          const g = (X) => (X.x - QP.x) * DIRP.x + (X.y - QP.y) * DIRP.y - f;
+          const reste = coupe(rect, g);
+          const plie = coupe(rect, (X) => -g(X));
+          const dx = DIRP.x, dy = DIRP.y;
+          const Dm = [[1 - 2 * dx * dx, -2 * dx * dy], [-2 * dx * dy, 1 - 2 * dy * dy]];
+          const A = [[-Dm[0][0], Dm[0][1]], [-Dm[1][0], Dm[1][1]]];
+          const k = 2 * (QP.x * dx + QP.y * dy + f);
+          const b = { x: Dm[0][0] * PW + k * dx, y: Dm[1][0] * PW + k * dy };
+          return { reste, plie: plie.map((X) => ({ x: PW - X.x, y: X.y })), m: `matrix(${A[0][0].toFixed(5)}, ${A[1][0].toFixed(5)}, ${A[0][1].toFixed(5)}, ${A[1][1].toFixed(5)}, ${b.x.toFixed(2)}, ${b.y.toFixed(2)})` };
+        }
+
+        // ---------------------------------------------------------------- éléments mis en place une fois
+        const placeSetPhoto = (o, s) => { for (const id of ["setA-short", "setA-maillot"]) { const n = $(id); n.style.left = o.x + "px"; n.style.top = o.y + "px"; n.style.width = 640 * s + "px"; n.style.height = 800 * s + "px"; } };
+        placeSetPhoto(A0, S_A);
+        const om = $("setA-ombre");
+        om.style.left = A0.x + 6 + "px"; om.style.top = A0.y + 8 + "px"; om.style.width = 640 * S_A + "px"; om.style.height = 800 * S_A + "px";
+        // carte photo du set sur la feuille B
+        (function () {
+          const bb = D.maillot.bbox, bs = D.short.bbox;
+          const x0 = Math.min(bb[0], bs[0]), y0 = bb[1], x1 = Math.max(bb[2], bs[2]), y1 = bs[3];
+          const h = 330, s = h / (y1 - y0), w = (x1 - x0) * s, pad = 18;
+          const c = $("carteB");
+          c.style.width = w + 2 * pad + "px"; c.style.height = h + 2 * pad + "px";
+          c.style.left = 735 - (w + 2 * pad) / 2 + "px"; c.style.top = 630 - (h + 2 * pad) / 2 + "px";
+          c.style.transform = "rotate(4deg)";
+          const im = $("carteB-img");
+          im.style.width = 640 * s + "px"; im.style.height = 800 * s + "px";
+          im.style.left = pad - x0 * s + "px"; im.style.top = pad - y0 * s + "px";
+        })();
+        const coche = $("coche"), COCHE_ECH = echantillons(coche), COCHE_LEN = COCHE_ECH.len;
+        coche.setAttribute("stroke-dasharray", COCHE_LEN + " " + (COCHE_LEN + 10));
+
+        const elsT = { s1: $("s1"), s2: $("s2"), s1cam: $("s1-cam"), s2cam: $("s2-cam") };
+        const couche = (id, k) => ({ n: $(id), k });
+        const COUCHES_F = [couche("s1-table", 0.3), couche("s1-feuilleA", 0.6), couche("s1-dessinA", 1.0), couche("s1-avant", 1.4)];
+        const COUCHES_V = [couche("s2-mur", 0.35), couche("s2-rangee", 0.7), couche("s2-banc", 1.5)];
+        const tr = (n, x, y) => { n.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px)`; };
+
+        // ---------------------------------------------------------------- rendu d'une image, fonction pure de t
+        function rendu(t) {
+          t = clamp(t, 0, DUREE);
+          const visF = t < L.b05_vestiaire || t >= L.b10_maquette;
+          const visV = t >= 6.2125 && t < L.b10_maquette;
+          elsT.s1.style.visibility = visF ? "inherit" : "hidden";
+          elsT.s2.style.visibility = visV ? "inherit" : "hidden";
+
+          // ---- scène feuille
+          const cf = camF(t);
+          elsT.s1cam.style.transform = `rotate(${cf.r.toFixed(3)}deg) scale(${cf.s.toFixed(5)})`;
+          let derive = 0;
+          if (t >= L.b11_cta && t < L.b12_page) derive = 6 * (t - L.b11_cta);
+          else if (t >= L.b12_page) derive = herm(6 * (L.b12_page - L.b11_cta), 0, 6 * (DUREE - L.b12_page), 0, seg(t, L.b12_page, DUREE));
+          COUCHES_F.forEach((c) => tr(c.n, cf.x * c.k + (c.k === 0.3 ? derive : 0), cf.y * c.k));
+
+          // croquis A
+          const tp = tPrime(t);
+          const actifA = t < 4.35 || t >= L.b12_page;
+          const pFl = t >= L.b12_page || t < FIN_FLAMME ? flammeP(tp) : t < 4.25 ? 1 : 0;
+          trace(crA.traits.flamme, pFl);
+          for (const k of ["maillot", "short", "b1", "b2"]) {
+            const p = t >= L.b12_page ? 0 : t < 4.35 ? seg(t, ...ST_A[k]) : 0;
+            trace(crA.traits[k], k === "b1" || k === "b2" ? (t < 4.25 ? p : 0) : p);
+          }
+          const fondu = 1 - seg(t, 4.0, 4.35);
+          crA.gU.style.opacity = t >= L.b12_page ? 1 : fondu.toFixed(3);
+          crA.groupes[0].forEach((h, i) => traceHachure(h, t >= L.b12_page || t >= 4.25 ? 0 : seg(t, H_A.t0 + i * H_A.pas, H_A.t0 + i * H_A.pas + H_A.duree)));
+          crA.gD.style.visibility = actifA ? "inherit" : "hidden";
+          placeFeutre($("feutreA"), feutreA(t), tPrime(t), { x: 0, y: 0 });
+
+          // set photo A : révélation radiale depuis le point de contact
+          const photos = $("setA-photos");
+          if (t < L.b03_contact) photos.style.visibility = "hidden";
+          else {
+            photos.style.visibility = t < 6.3 ? "inherit" : "hidden";
+            const rr = 560 * e2o(seg(t, L.b03_contact, L.b03_contact + 0.45));
+            photos.style.clipPath = t < L.b03_contact + 0.45 ? `circle(${rr.toFixed(1)}px at ${P.J.x}px ${P.J.y}px)` : "none";
+          }
+
+          // page B et pliage
+          const pageB = $("s1-pageB");
+          pageB.style.visibility = t >= L.b10_maquette ? "inherit" : "hidden";
+          if (t >= L.b10_maquette) {
+            const bl = e2io(seg(t, L.b12_page, L.b12_page + 0.3));
+            const kPap = lerp(0.6, 1.4, bl), kCont = lerp(1.0, 1.4, bl);
+            // papier à 0,6 et contenu à 1,0 ; toute la page passe à 1,4 quand elle tourne
+            tr(pageB, cf.x * kPap, cf.y * kPap);
+            tr($("pageB-contenu"), cf.x * (kCont - kPap), cf.y * (kCont - kPap));
+            if (t >= L.b12_page) {
+              const f = FOLD_FIN * e2i(seg(t, L.b12_page, L.b12_page + 0.84));
+              const pl = pliage(f);
+              $("pageB").style.clipPath = polyCss(pl.reste);
+              const flap = $("flap");
+              flap.style.transform = pl.m;
+              flap.style.clipPath = polyCss(pl.plie);
+              $("flap-ombre").style.visibility = pl.plie.length > 2 ? "inherit" : "hidden";
+            } else {
+              $("pageB").style.clipPath = "none";
+              $("flap-ombre").style.visibility = "hidden";
+            }
+          } else $("flap-ombre").style.visibility = "hidden";
+
+          // croquis B : passes de couleurs, coche, feutre B, reflet
+          crB.groupes.forEach((g, j) => g.forEach((h, i) => {
+            if (j === 0) { traceHachure(h, 1); return; }
+            const d0 = PASS_B.t0 + (j - 1) * PASS_B.ecart + i * PASS_B.pas;
+            traceHachure(h, seg(t, d0, d0 + PASS_B.duree));
+          }));
+          for (const k in crB.traits) trace(crB.traits[k], 1);
+          const pc = seg(t, ...COCHE);
+          coche.setAttribute("stroke-dashoffset", (COCHE_LEN * (1 - pc)).toFixed(2));
+          coche.style.visibility = pc > 0 ? "inherit" : "hidden";
+          placeFeutre($("feutreB"), feutreB(t), t, { x: 0, y: 0 });
+          tr($("reflet"), -700 + 1700 * seg(t, L.b11_cta, L.b12_page), 0);
+
+          // ---- scène vestiaire
+          const cv = camV(t);
+          elsT.s2cam.style.transform = `scale(${cv.s.toFixed(5)})`;
+          COUCHES_V.forEach((c) => tr(c.n, cv.x * c.k, cv.y * c.k));
+          sets.forEach((n, i) => {
+            const st = etatSet(i, t);
+            if (!st) { n.style.visibility = "hidden"; return; }
+            n.style.visibility = "inherit";
+            n.style.transform = `translate(${st.x.toFixed(2)}px, ${st.y.toFixed(2)}px) rotate(${st.rot.toFixed(3)}deg) scale(${st.sc.toFixed(4)}) translate(${(-PIV.x).toFixed(2)}px, ${(-PIV.y).toFixed(2)}px)`;
+          });
+          const pl = seg(t, ...ECRIT);
+          logoTrace.setAttribute("stroke-dashoffset", (LOGO_LEN * (1 - pl)).toFixed(2));
+          $("logo-boite").style.visibility = pl > 0 ? "inherit" : "hidden";
+
+          // ---- ballon
+          const b = ballon(t);
+          const c = centreBallon(b);
+          const ball = $("ball"), body = $("ball-body");
+          ball.style.transform = `translate(${c.x.toFixed(2)}px, ${c.y.toFixed(2)}px) rotate(${(b.rot || 0).toFixed(2)}deg)`;
+          const k = b.k, sx = b.sigma / k, sy = b.sigma * k;
+          body.style.transform = `scale(${sx.toFixed(4)}, ${sy.toFixed(4)})`;
+          $("ball-motif").setAttribute("transform", `rotate(${angleMotif(t, b).toFixed(2)})`);
+          const vide = b.vide || 0;
+          $("ball-fond").setAttribute("fill-opacity", (1 - vide).toFixed(3));
+          $("ball-hachures").setAttribute("opacity", (0.55 * (1 - clamp((b.sigma - 2) / 5))).toFixed(3));
+          $("ball-motif").setAttribute("opacity", (1 - clamp((b.sigma - 2.6) / 5)).toFixed(3));
+          ball.style.visibility = b.sigma > 23.5 ? "hidden" : "inherit";
+          // ouverture du vestiaire à travers le ballon
+          if (t >= 6.2125 && t < L.b05_vestiaire) {
+            const ri = Math.max(0, (R - 3.5) * b.sigma * vide);
+            elsT.s2.style.clipPath = `circle(${ri.toFixed(1)}px at ${c.x.toFixed(1)}px ${c.y.toFixed(1)}px)`;
+          } else elsT.s2.style.clipPath = "none";
+          // ombre
+          const om2 = $("ball-ombre");
+          if (b.f === "F" && b.sol) {
+            const rx = (R * 1.05 * b.sigma) / (1 + b.h / 600), op = 0.22 / (1 + b.h / 250);
+            om2.style.visibility = "inherit"; om2.style.opacity = op.toFixed(3);
+            om2.style.transform = `translate(${(b.sol.x + 6 - rx).toFixed(1)}px, ${(b.sol.y + 2 - rx * 0.42).toFixed(1)}px) scale(${((2 * rx) / 200).toFixed(4)}, ${((0.84 * rx) / 200).toFixed(4)})`;
+          } else if (b.ombreF) {
+            const o = b.ombreF, rx = (R * 1.05 * o.s) / (1 + o.h / 600), op = 0.22 / (1 + o.h / 250);
+            om2.style.visibility = "inherit"; om2.style.opacity = op.toFixed(3);
+            om2.style.transform = `translate(${(o.sol.x + 6 - rx).toFixed(1)}px, ${(o.sol.y + 2 - rx * 0.42).toFixed(1)}px) scale(${((2 * rx) / 200).toFixed(4)}, ${((0.84 * rx) / 200).toFixed(4)})`;
+          } else if (b.f === "V") {
+            const rr = R * b.sigma;
+            om2.style.visibility = "inherit"; om2.style.opacity = "0.13";
+            om2.style.transform = `translate(${(c.x + 14 * b.sigma - rr).toFixed(1)}px, ${(c.y + 18 * b.sigma - rr).toFixed(1)}px) scale(${((2 * rr) / 200).toFixed(4)})`;
+          } else om2.style.visibility = "hidden";
+          // traînée : deux traits qui suivent avec 0,06 et 0,12 s de retard
+          let c1 = centreBallon(ballon(Math.max(0, t - 0.06))), c2 = centreBallon(ballon(Math.max(0, t - 0.12)));
+          const vit = Math.hypot(c.x - c1.x, c.y - c1.y) / 0.06;
+          const memeScene = ballon(Math.max(0, t - 0.12)).f === b.f && b.f !== "ecran";
+          const opT = memeScene ? clamp((vit - 350) / 900) : 0;
+          const nrm = (p, q) => { const dx = q.x - p.x, dy = q.y - p.y, n = Math.hypot(dx, dy) || 1; return { x: -dy / n, y: dx / n }; };
+          // traits de vitesse partant du bord arrière du ballon, décalés de part et d'autre de la trajectoire
+          const n1 = nrm(c1, c), n2 = nrm(c2, c1), off = R * 0.42 * b.sigma, rr = R * 0.95 * b.sigma;
+          const ar = (p, q) => { const dx = q.x - p.x, dy = q.y - p.y, n = Math.hypot(dx, dy) || 1; return { x: dx / n, y: dy / n }; };
+          const d1 = ar(c1, c), d2 = ar(c2, c1);
+          const pt = (p, d, nn, o, k) => `${(p.x - d.x * rr + nn.x * o * k).toFixed(1)},${(p.y - d.y * rr + nn.y * o * k).toFixed(1)}`;
+          // longueur plafonnée à 1,4 rayon : la traînée reste collée au ballon
+          const cap = (q, p) => { const dx = q.x - p.x, dy = q.y - p.y, n = Math.hypot(dx, dy), m = 1.4 * R * b.sigma; return n > m ? { x: p.x + (dx * m) / n, y: p.y + (dy * m) / n } : q; };
+          c1 = cap(c1, c); c2 = cap(c2, c1);
+          const l1 = $("trail-1"), l2 = $("trail-2");
+          l1.setAttribute("d", `M${pt(c1, d1, n1, off, 1)} L${pt(c, d1, n1, off, 0.8)}`);
+          l2.setAttribute("d", `M${pt(c2, d2, n2, -off, 1)} L${pt(c1, d2, n2, -off, 0.8)}`);
+          l1.setAttribute("opacity", opT.toFixed(3)); l2.setAttribute("opacity", (opT * 0.7).toFixed(3));
+          // points d'encre
+          CONTACTS.forEach((ct, i) => {
+            const vis = t >= ct.t && t < ct.t + 0.9 && ((ct.f === "F" && visF) || (ct.f === "V" && visV));
+            POINTS[i].forEach((pt) => {
+              if (!vis) { pt.n.setAttribute("opacity", 0); return; }
+              const cam = cams[ct.f](t), q = versEcran({ x: ct.P.x + pt.dx, y: ct.P.y + pt.dy }, cam, coefs[ct.f]);
+              const u = t - ct.t, sc = e2o(clamp(u / 0.07)) * cam.s;
+              pt.n.setAttribute("cx", q.x.toFixed(1)); pt.n.setAttribute("cy", q.y.toFixed(1));
+              pt.n.setAttribute("transform", `translate(${q.x.toFixed(1)} ${q.y.toFixed(1)}) scale(${sc.toFixed(3)}) translate(${(-q.x).toFixed(1)} ${(-q.y).toFixed(1)})`);
+              pt.n.setAttribute("opacity", (1 - seg(u, 0.35, 0.9)).toFixed(3));
+            });
+          });
+
+          // ---- étiquette de prix (carton 1)
+          rendEtiquette(t, cv);
+        }
+
+        // ---------------------------------------------------------------- étiquette
+        const ET = { x0: 60, x1: 1020, y0: 900, y1: 1150 };
+        let etiqPret = false;
+        function preparerEtiquette() {
+          const w = ET.x1 - ET.x0, h = ET.y1 - ET.y0, pointe = 70;
+          const svg = $("etiq-svg");
+          svg.setAttribute("width", w + 20); svg.setAttribute("height", h + 20);
+          svg.style.left = "-10px"; svg.style.top = "-10px";
+          const d = `M${10 + 6},${10} L${10 + w - pointe},${10} L${10 + w},${10 + h / 2} L${10 + w - pointe},${10 + h} L${10 + 4},${10 + h - 2} Q${10 - 2},${10 + h / 2} ${10 + 6},${10}`;
+          $("etiq-fond").setAttribute("d", d + "Z");
+          const t2 = $("etiq-trait");
+          t2.setAttribute("d", d);
+          const len = t2.getTotalLength();
+          t2.setAttribute("stroke-dasharray", len + " " + (len + 10));
+          t2.dataset.len = len;
+          $("etiq-trou").setAttribute("cx", 10 + w - pointe + 14); $("etiq-trou").setAttribute("cy", 10 + h / 2);
+          const corps = $("etiq-corps");
+          corps.style.left = ET.x0 + "px"; corps.style.top = ET.y0 + "px"; corps.style.width = w + "px"; corps.style.height = h + "px";
+          etiqPret = true;
+        }
+        function rendEtiquette(t, cv) {
+          const vis = t >= L.b09_prix && t < 15.85;
+          $("etiquette").style.visibility = vis ? "inherit" : "hidden";
+          if (!vis || !etiqPret) return;
+          const t2 = $("etiq-trait"), len = +t2.dataset.len;
+          const p = e2io(seg(t, L.b09_prix, 13.4));
+          t2.setAttribute("stroke-dashoffset", (len * (1 - p)).toFixed(2));
+          $("etiq-fond").setAttribute("fill-opacity", (0.96 * seg(t, 13.2, 13.4)).toFixed(3));
+          $("etiq-trou").setAttribute("opacity", seg(t, 13.3, 13.4).toFixed(3));
+          const sortie = 1 - seg(t, 15.6, 15.82);
+          $("etiq-corps").style.opacity = sortie.toFixed(3);
+          const sway = 1.2 * Math.exp(-(t - 13.4) / 0.9) * Math.sin((t - 13.4) * 5.2) * (t > 13.4 ? 1 : 0);
+          $("etiq-corps").style.transform = `rotate(${sway.toFixed(3)}deg)`;
+          // fil : du trou de l'étiquette à l'ourlet du set le plus proche
+          const st = etatSet(7, t);
+          const a = (pt) => {
+            const ang = (st.rot * Math.PI) / 180, x = (pt.x - PIV.x) * st.sc, y = (pt.y - PIV.y) * st.sc;
+            return versEcran({ x: st.x + x * Math.cos(ang) - y * Math.sin(ang), y: st.y + x * Math.sin(ang) + y * Math.cos(ang) }, cv, 0.7);
+          };
+          const haut = a({ x: 470, y: 440 });
+          const trou = { x: ET.x1 - 70 + 14, y: (ET.y0 + ET.y1) / 2 };
+          const mx = (haut.x + trou.x) / 2 + 20, my = Math.max(haut.y, trou.y) + 20;
+          $("fil").setAttribute("d", `M${haut.x.toFixed(1)},${haut.y.toFixed(1)} Q${mx.toFixed(1)},${my.toFixed(1)} ${trou.x.toFixed(1)},${trou.y.toFixed(1)}`);
+          $("fil").setAttribute("opacity", (seg(t, 13.25, 13.4) * sortie).toFixed(3));
+        }
+
+        // ---------------------------------------------------------------- textes : tailles, places, tweens éditoriaux
+        function ajuste(id, base, max, min) {
+          const n = $(id);
+          n.parentNode.style.fontSize = base + "px";
+          const w = n.offsetWidth;
+          const taille = w > max ? Math.max(min, (base * max) / w) : base;
+          n.parentNode.style.fontSize = taille.toFixed(1) + "px";
+          return taille;
+        }
+        function construire() {
+          // carton 1, sur l'étiquette (repère écran)
+          preparerEtiquette();
+          const f1 = ajuste("c1-l1-t", 84, 840, 40), f2 = ajuste("c1-l2-t", 44, 840, 40);
+          const w = ET.x1 - ET.x0;
+          const l1 = $("c1-l1"), l2 = $("c1-l2");
+          l1.style.width = l2.style.width = w - 70 + "px";
+          l1.style.top = 34 + "px";
+          l2.style.top = 34 + f1 * 1.05 + 22 + "px";
+          // surlignage jaune du prix
+          const prix = $("c1-prix");
+          const sl = $("surligne");
+          // offsetLeft se mesure depuis la ligne (parent positionné) : le centrage y est déjà compris
+          const x0 = prix.offsetLeft;
+          sl.style.left = x0 - 10 + "px"; sl.style.top = 34 + f1 * 0.2 + "px";
+          sl.style.width = prix.offsetWidth + 20 + "px"; sl.style.height = f1 * 0.78 + "px";
+
+          // carton 2, sur la feuille B (repère monde, caméra autour de 1,04)
+          const g1 = ajuste("c2-l1-t", 84 / 1.04, 900 / 1.04, 40 / 1.04), g2 = ajuste("c2-l2-t", 44 / 1.04, 900 / 1.04, 40 / 1.04);
+          const m1 = $("c2-l1"), m2 = $("c2-l2");
+          m1.style.left = m2.style.left = "20px";
+          m1.style.top = 965 - g1 * 0.55 + "px";
+          m2.style.top = 965 + g1 * 0.6 + 14 + "px";
+          // bouton 720 x 140 et adresse, à l'écran avec la caméra fixe de b11 (échelle 1,08)
+          const bt = $("bouton"), sc = 1.08;
+          bt.style.width = 720 / sc + "px"; bt.style.height = 140 / sc + "px";
+          bt.style.left = 570 - 360 / sc + "px"; bt.style.top = 1000 - 70 / sc + "px";
+          bt.style.fontSize = 56 / sc + "px";
+          const ad = $("adresse");
+          ad.style.fontSize = 40 / sc + "px"; ad.style.left = "30px"; ad.style.top = 1000 + 70 / sc + 26 + "px";
+
+          const tl = gsap.timeline({ paused: true });
+          for (const [k, n] of Object.entries(BEATS)) tl.addLabel(k, OFFSET + n * TEMPS);
+          // horloge : tout le mouvement physique et la caméra se calculent depuis t
+          const horloge = { t: 0 };
+          tl.to(horloge, { t: DUREE, duration: DUREE, ease: "none", onUpdate: () => rendu(horloge.t) }, 0);
+
+          // set A : décollage de la feuille, puis sortie par le haut
+          tl.fromTo("#setA-ombre", { opacity: 0 }, { opacity: 0.3, duration: 0.3, ease: "power2.out" }, "b03_contact+=0.15");
+          tl.to("#setA-lift", { y: -80, scale: 1.06, duration: 0.6, ease: "power2.out" }, "b04_envol");
+          tl.to("#setA-ombre", { scale: 1.1, opacity: 0.12, filter: "brightness(0) blur(14px)", duration: 0.6, ease: "power2.out" }, "b04_envol");
+          tl.to("#setA-lift", { y: -2300, duration: 0.75, ease: "power2.in" }, "b04_envol+=0.6");
+          tl.to("#setA-ombre", { opacity: 0, duration: 0.4, ease: "power2.in" }, "b04_envol+=0.6");
+
+          // cartons : masque vertical 0,35 s power3.out, sortie par masque inverse 0,25 s power2.in
+          const entre = (id, at) => {
+            tl.fromTo("#" + id, { clipPath: "inset(0% 0% 100% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.35, ease: "power3.out" }, at);
+            tl.fromTo("#" + id + "-t", { yPercent: 60 }, { yPercent: 0, duration: 0.35, ease: "power3.out" }, at);
+          };
+          const sort = (id, at) => {
+            tl.to("#" + id, { clipPath: "inset(0% 0% 100% 0%)", duration: 0.25, ease: "power2.in" }, at);
+            tl.to("#" + id + "-t", { yPercent: -40, duration: 0.25, ease: "power2.in" }, at);
+          };
+          entre("c1-l1", 13.4);
+          tl.fromTo("#surligne", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, 13.55);
+          entre("c1-l2", 14.6);
+          sort("c1-l2", 15.4); sort("c1-l1", 15.48);
+          tl.to("#surligne", { scaleX: 0, transformOrigin: "100% 50%", duration: 0.25, ease: "power2.in" }, 15.48);
+          entre("c2-l1", 16.4);
+          entre("c2-l2", 17.8);
+          sort("c2-l2", 18.38); sort("c2-l1", 18.46);
+          // bouton : scale 0,97 vers 1 en 0,30 s power2.out avec masque, puis fixe ; adresse dessous
+          tl.fromTo("#bouton", { scale: 0.97, clipPath: "inset(0% 0% 100% 0% round 5.6px)" }, { scale: 1, clipPath: "inset(0% 0% 0% 0% round 5.6px)", duration: 0.3, ease: "power2.out" }, "b11_cta");
+          entre("adresse", L.b11_cta + 0.08);
+
+          rendu(0);
+          window.__timelines["le-dessin"] = tl;
+        }
+        document.fonts.ready.then(() => Promise.all([document.fonts.load('900 84px "Archivo"'), document.fonts.load('700 44px "Hanken Grotesk"')])).then(construire).catch((e) => console.error("construction", e && e.message, e && e.stack));
+      })();
+    </script>
+  </body>
+</html>
