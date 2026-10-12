@@ -34,6 +34,7 @@
 .cs-bandeau{position:fixed;left:16px;right:16px;bottom:16px;z-index:60;max-width:560px;margin-inline:auto;padding:20px;background:var(--bg);color:var(--text);border:1px solid var(--line-strong);border-radius:var(--r);box-shadow:var(--shadow-dialog);font:400 15px/1.5 var(--f-body)}
 .cs-bandeau h2{margin:0 0 6px;font:700 17px/1.3 var(--f-head)}
 .cs-bandeau p{margin:0 0 16px;color:var(--text-2)}
+.cs-bandeau p a{color:var(--accent-text);font-weight:700;text-underline-offset:3px}
 .cs-actions{display:flex;gap:12px;flex-wrap:wrap}
 .cs-actions button{flex:1 1 140px;min-height:44px;padding:0 18px;border:2px solid var(--text);border-radius:var(--r);background:var(--bg);color:var(--text);font:700 15px/1 var(--f-body);cursor:pointer}
 .cs-actions button:hover{background:var(--text);color:var(--bg)}
@@ -47,7 +48,7 @@
     d.setAttribute("role", "region");
     d.setAttribute("aria-labelledby", "cs-titre");
     d.innerHTML = `<h2 id="cs-titre">Cookies publicitaires</h2>
-<p>Avec votre accord, nous utilisons le pixel Meta pour mesurer l'efficacité de nos publicités Facebook et Instagram et vous en montrer de plus pertinentes. Le catalogue fonctionne pareil si vous refusez. Vous pouvez changer d'avis depuis le lien « Cookies » en bas de page.</p>
+<p>Avec votre accord, nous utilisons le pixel Meta pour mesurer l'efficacité de nos publicités Facebook et Instagram et vous en montrer de plus pertinentes. Le catalogue fonctionne pareil si vous refusez. Vous pouvez changer d'avis depuis le lien « Cookies » en bas de page. <a href="confidentialite.html#cookies">En savoir plus</a></p>
 <div class="cs-actions"><button type="button" data-cs="non">Refuser</button><button type="button" data-cs="oui">Accepter</button></div>`;
     d.addEventListener("click", e => {
       const b = e.target.closest("[data-cs]");
