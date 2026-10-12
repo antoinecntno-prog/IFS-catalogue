@@ -40,12 +40,12 @@ Le sujet semble-t-il vouloir quelque chose ? Oui. Le ballon ouvre les familles d
 2. Timing : oui. Le vol du boxer à la marge dure 1,8 s pour 260 px, contre 0,40 s pour un rebond de rafale. Le recul de la caméra, de l'échelle 2,4 à 0,92, dure 1,17 s (17,344 à 18,516).
 3. Anticipation : oui. La caméra tient la rangée du boxer de 16,875 à 17,344 avant de reculer, et le feutre entoure « 30/30 » de 16,992 à 17,273 avant la sortie du compteur à 17,578.
 4. Staging : oui. Le compteur sort pendant le recul et le « 30 » prend le relais du score. Les lignes « produits, prix en ligne » et « Hors taxes, selon la quantité » entrent à 18,750 et 18,984, une fois la caméra posée (18,516).
-5. Follow-through : oui. Les gobelets flous au premier plan entrent en parallaxe 1,4 pendant le recul, et le ballon s'amortit après sa pose.
-6. Straight ahead / pose to pose : oui. Recul, pose V et dérive de la table sont des fonctions pures du temps entre les labels `b09_trente` et `b10_prix`.
+5. Follow-through : oui. La surface anthracite glisse en parallaxe 0,3 pendant le recul, et le ballon s'amortit après sa pose.
+6. Straight ahead / pose to pose : oui. Recul, pose V et dérive de la surface sont des fonctions pures du temps entre les labels `b09_trente` et `b10_prix`.
 7. Slow in & slow out : oui. Le recul interpole le logarithme de l'échelle en power2.inOut ; la pose V pousse de 0,92 à 0,93 en power1.inOut ; les cartons entrent en power3.out.
 8. Arcs : oui. Le long vol du ballon suit une parabole pendant que la caméra recule.
 9. Exaggeration : oui. Le rebond de 260 px est le plus haut de la construction.
-10. Secondary action : oui, plus discrète. La table dérive de 6 px/s à partir de 18,750, et les gobelets restent flous au bord du cadre.
+10. Secondary action : oui, plus discrète. La surface anthracite dérive de 6 px/s à partir de 18,750, sous la feuille immobile.
 11. Appeal : oui. 29 photos et le croquis du bob forment le nombre qu'annonce le film ; le « 30 » reste lisible sur une vignette de 135 × 240 px.
 
 Le sujet semble-t-il vouloir quelque chose ? Oui. Après le dernier produit, le ballon rebondit haut et se pose au-dessus du « 0 », comme pour signer le nombre (18,750).
@@ -56,7 +56,7 @@ Le sujet semble-t-il vouloir quelque chose ? Oui. Après le dernier produit, le 
 2. Timing : oui. Le clic dure 0,33 s en tout, le tour de page 0,84 s en power2.in, et la plongée finale 1,41 s (28,594 à 30).
 3. Anticipation : oui. Le ballon recule de 18 px et s'écrase de 27,375 à 27,797 avant la frappe ; le bon sort de 27,891 à 28,125 et découvre le coin avant le contact.
 4. Staging : oui. Le contenu du bon entre ligne après ligne (logo à 22,125, phrase à 22,219, bouton à 22,313, adresse à 22,453, mention à 22,500). Le ballon attend sur le coin du bon de 21,938 à 26,0, sauf pendant le dribble. Le bouton reste fixe de 22,613 à 27,891, sauf pendant l'appui de 26,250.
-5. Follow-through : oui. Le rabat de la page porte son ombre, le ballon s'amortit après chaque pose, et la dérive de la table revient à zéro à 30 par une courbe de Hermite à vitesse nulle.
+5. Follow-through : oui. Le rabat de la page porte son ombre, le ballon s'amortit après chaque pose, et la dérive de la surface revient à zéro à 30 par une courbe de Hermite à vitesse nulle.
 6. Straight ahead / pose to pose : oui. Le bon, le bouton, le pliage et la plongée sont posés sur les labels `b11_cta`, `b12_clic` et `b13_page`.
 7. Slow in & slow out : oui. La caméra passe de V à C en power2.inOut (21,563 à 22,125). Le bon entre en power3.out (21,797 à 22,078) et sort en power2.in. La plongée suit une courbe de Hermite à pentes nulles, et la caméra arrive immobile sur l'image 0.
 8. Arcs : oui. Les sauts vers le bouton et vers le coin de la feuille sont des paraboles. Le dernier vol monte jusqu'à 29,672 puis retombe sur la case vide de l'image 0.

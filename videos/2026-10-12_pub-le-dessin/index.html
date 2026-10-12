@@ -42,7 +42,6 @@
       #flap-ombre { position: absolute; left: 40px; top: 250px; width: 1000px; height: 1441px; filter: drop-shadow(-10px 12px 18px rgba(26, 19, 32, 0.38)); }
       #flap { position: absolute; left: 0; top: 0; width: 1000px; height: 1441px; transform-origin: 0 0; }
       #flap img { width: 1000px; height: 1441px; }
-      #gobelets { position: absolute; left: -90px; top: 1330px; width: 374px; height: 687px; filter: blur(12px); opacity: 0.95; }
       .feutre { position: absolute; left: 0; top: 0; width: 545px; height: 394px; transform-origin: 0 0; }
       .feutre img, .feutre-img { width: 545px; height: 394px; }
       .feutre-img { background: url(assets/feutre.png) 0 0 / 100% 100% no-repeat; }
@@ -85,10 +84,10 @@
   </head>
   <body>
     <div id="root" data-composition-id="le-dessin" data-start="0" data-width="1080" data-height="1920" data-duration="22.5" data-fps="30">
-      <!-- Scène 1 : la feuille de match sur la table de la buvette -->
+      <!-- Scène 1 : la feuille de match sur une surface anthracite -->
       <section id="s1" class="scene">
         <div id="s1-cam" class="cam">
-          <div id="s1-table" class="couche"><img id="s1-table-img" src="assets/table.jpg" alt="" /></div>
+          <div id="s1-table" class="couche"><img id="s1-table-img" src="assets/fond-anthracite.jpg" alt="" /></div>
           <div id="s1-feuilleA" class="couche"><img id="s1-papierA" class="papier" src="assets/feuille-dos.png" alt="" /></div>
           <div id="s1-dessinA" class="couche">
             <img id="setA-ombre" src="assets/set-complet.png" alt="" />
@@ -121,7 +120,6 @@
             </div>
             <div id="flap-ombre"><div id="flap"><img src="assets/feuille-recto.png" alt="" /></div></div>
           </div>
-          <div id="s1-avant" class="couche"><img id="gobelets" src="assets/gobelets.png" alt="" /></div>
         </div>
       </section>
 
@@ -840,7 +838,7 @@
 
         const elsT = { s1: $("s1"), s2: $("s2"), s1cam: $("s1-cam"), s2cam: $("s2-cam") };
         const couche = (id, k) => ({ n: $(id), k });
-        const COUCHES_F = [couche("s1-table", 0.3), couche("s1-feuilleA", 0.6), couche("s1-dessinA", 1.0), couche("s1-avant", 1.4)];
+        const COUCHES_F = [couche("s1-table", 0.3), couche("s1-feuilleA", 0.6), couche("s1-dessinA", 1.0)];
         const COUCHES_V = [couche("s2-mur", 0.35), couche("s2-rangee", 0.7), couche("s2-banc", 1.5)];
         const tr = (n, x, y) => { n.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px)`; };
 

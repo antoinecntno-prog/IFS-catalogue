@@ -324,22 +324,23 @@ def impact(graine=31):
 # ---------------------------------------------------------------- bruitages d'animation
 
 
-def feutre(vitesses, pas, graine=41):
+def feutre(vitesses, pas, graine=41, aigu=6500, crepitement=1.0, chant=1.0):
     """Frottement du feutre sur le papier : bruit filtré dont l'intensité suit la vitesse de la pointe.
-    vitesses : px/s échantillonnées tous les `pas` secondes (0 quand le feutre est levé)."""
+    vitesses : px/s échantillonnées tous les `pas` secondes (0 quand le feutre est levé).
+    aigu : coupure haute du grain ; crepitement et chant : part des crépitements et du couinement des traits rapides."""
     d = len(vitesses) * pas
     t = temps(d)
     v = np.interp(t, np.arange(len(vitesses)) * pas, vitesses)
     a = np.clip(v / 900, 0, 1.4) ** 0.6
     a = filtre(a, "lp", 40)
     b = bruit(d, graine)
-    grain = filtre(filtre(b, "bp", (1200, 5200)), "lp", 6500) * 0.7 + filtre(b, "bp", (450, 1200)) * 0.3
+    grain = filtre(filtre(b, "bp", (1200, min(5200, aigu - 300))), "lp", aigu) * 0.7 + filtre(b, "bp", (450, 1200)) * 0.3
     # le grain du papier : petits crépitements dont la densité suit la vitesse
     rng = np.random.default_rng(graine + 1)
     cr = (rng.random(len(t)) < np.clip(v / 9000, 0, 0.08)) * rng.uniform(0.3, 1.0, len(t))
-    cr = filtre(cr, "bp", (2500, 9000)) * 1.5
+    cr = filtre(cr, "bp", (2500, 9000)) * 1.5 * crepitement
     # léger chant du feutre (le « couinement » des traits rapides)
-    chant = np.sin(2 * np.pi * np.cumsum(900 + 0.6 * v) / SR) * np.clip((v - 1500) / 2500, 0, 1) * 0.04
+    chant = np.sin(2 * np.pi * np.cumsum(900 + 0.6 * v) / SR) * np.clip((v - 1500) / 2500, 0, 1) * 0.04 * chant
     return (grain + cr + chant) * a * 0.5
 
 

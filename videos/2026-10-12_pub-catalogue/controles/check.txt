@@ -2,7 +2,7 @@
 [hyperframes] browserGpuMode probe → software (WebGL unavailable)
 
 Lint
-  ⚠ composition_file_too_large: This HTML composition file has 988 lines. Smaller sub-compositions are easier to read, iterate on, and diff.
+  ⚠ composition_file_too_large: This HTML composition file has 981 lines. Smaller sub-compositions are easier to read, iterate on, and diff.
     /home/user/IFS-catalogue/videos/2026-10-12_pub-catalogue/index.html [data-composition-id] t=0s
     Fix: Split coherent scenes or layers into separate .html files under compositions/, then mount them from the parent with data-composition-src so each file stays small enough to inspect, revise, and validate independently.
   0 error(s), 1 warning(s), 0 info(s)

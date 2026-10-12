@@ -55,7 +55,7 @@ Le sujet semble-t-il vouloir quelque chose ? En partie. Le feutre veut faire val
 1. Squash & stretch : oui pour le ballon, qui s'étire au décollage de 21,563. Le bouton ne se déforme pas au-delà de son entrée en scale 0,97 vers 1.
 2. Timing : oui. Le bouton reste fixe 2,5 s (19,05 à 21,563) et la page tourne en 0,84 s (21,563 à 22,40).
 3. Anticipation : oui. Le coin de la page se soulève lentement avant de tourner vite, en power2.in à partir de 21,563.
-4. Staging : oui. Le bouton est le seul centre : le ballon reste immobile de 16,50 à 21,563 et seuls la table (6 px/s) et le reflet bougent.
+4. Staging : oui. Le bouton est le seul centre : le ballon reste immobile de 16,50 à 21,563 et seuls la surface anthracite (6 px/s) et le reflet bougent.
 5. Follow-through : oui. Le rabat porte une ombre pendant le tour de page, et des traits de vitesse suivent le ballon qui remonte (21,825).
 6. Straight ahead / pose to pose : oui. Les labels `b11_cta` et `b12_page` bornent la scène, et le pliage est une fonction pure du temps.
 7. Slow in & slow out : oui. Le bouton entre en power2.out et la page tourne en power2.in ; la caméra revient par une courbe de Hermite qui arrive immobile sur l'état de l'image 0.

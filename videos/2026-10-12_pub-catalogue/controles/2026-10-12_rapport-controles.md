@@ -43,15 +43,15 @@ Vérifié sur les deux planches :
 
 | Mesure | Résultat | Objectif |
 |---|---|---|
-| Images quasi figées (YAVG < 0,3) | 17,5 % | moins de 25 % |
-| Plus longue suite figée | 1,53 s, finie à 24,17 s (tenue du bouton) | dans la tenue du CTA (22,61 à 27,89 s) |
+| Images quasi figées (YAVG < 0,3) | 20,7 % | moins de 25 % |
+| Plus longue suite figée | 1,57 s, de 22,60 à 24,17 s (tenue du bouton) | dans la tenue du CTA (22,61 à 27,89 s) |
 | Secondes figées hors CTA | aucune | aucune |
-| Raccord de boucle, images 899 et 0 | YAVG 2,40 | sous 1,5 |
+| Raccord de boucle, images 899 et 0 | YAVG 2,41 | sous 1,5 |
 | Lignes `black_start` | 0 | 0 |
-| Son : loudness intégrée, crête vraie | −14,1 LUFS, −1,8 dBFS | autour de −14 LUFS, crête sous −1 dBFS |
+| Son : loudness intégrée, crête vraie | −14,1 LUFS, −1,7 dBFS | autour de −14 LUFS, crête sous −1 dBFS |
 | Son : décalage avec l'image | 0 ms (corrélation avec `mix.wav`) | 0 |
 
-Le raccord dépasse l'objectif. L'écart entre les images 899 et 0 (2,40) se range parmi les écarts d'une image à la suivante autour du raccord : 2,03 entre les images 0 et 1, 3,42 entre 898 et 899, et 2,83 en médiane sur tout le film. La boucle n'a aucun saut. L'écart vient du mouvement que la feuille de poses place sur le raccord : le feutre trace le bord de flamme vers 720 px/s et le ballon tombe le long du bord droit. Atteindre 1,5 demande de ralentir ces deux gestes à l'image 0, donc de changer la feuille de poses.
+Le raccord dépasse l'objectif. L'écart entre les images 899 et 0 (2,41) se range parmi les écarts d'une image à la suivante autour du raccord : 2,10 entre les images 0 et 1, 3,48 entre 898 et 899, et 2,87 en médiane sur tout le film. La boucle n'a aucun saut. L'écart vient du mouvement que la feuille de poses place sur le raccord : le feutre trace le bord de flamme vers 720 px/s et le ballon tombe le long du bord droit. Atteindre 1,5 demande de ralentir ces deux gestes à l'image 0, donc de changer la feuille de poses.
 
 Sorties brutes : `mesures.txt`.
 
@@ -61,13 +61,14 @@ Sorties brutes : `mesures.txt`.
 
 ## Écarts au brief
 
-- Table : `table.jpg` est une découpe de `src-buvette.jpg` à pleine résolution ; la source n'apporte aucun détail en plus. La table est agrandie 1,5 fois et floutée à 8 px, pour que la feuille repose sur la nappe dans toutes les vues.
+- Fond : surface anthracite mate à la place de la nappe de la buvette, sur demande d'Antoine le 12/10. La texture est calculée par le projet (`assets/fond-anthracite.jpg`), agrandie sous la feuille en parallaxe 0,3 et floutée à 8 px.
 - Papier : `feuille-dos.png` à toutes les échelles, sans papier de synthèse ni grain ; le dos est presque blanc et son quadrillage ne tient qu'à 2,8 %.
 - Tremblé : aucun filtre feTurbulence. Les cases portent un tremblé figé dessiné à graine fixe, et les traits du feutre restent nets.
 - Bob : les deux passes se croisent (magenta à 45°, jaune à −45°) ; superposées, la jaune aurait caché la magenta.
 - Ballon : après le softshell, il se pose sur la marge au-dessus du haut du « 3 » (case r0c3), pour rester dans le cadre pendant le fouetté horizontal. Dans le « 0 », un petit saut de 27,6 à 28,1 temps le fait descendre avec la caméra. Ses contacts sur le bon (21,94 et 26,72 s) ont leur bruitage.
-- Gobelets : visibles pendant le recul et la vue large, ils s'effacent de 21,61 à 21,94 s ; en vue C, la parallaxe 1,4 les ferait passer devant le bon.
+- Gobelets : retirés avec la nappe de la buvette.
 - Fil de l'étiquette : il part du coin bas gauche de la case et passe à gauche du prix ; tiré du centre, il barrait le texte.
+- Son du feutre : sur demande d'Antoine le 12/10, il ne s'entend que sur l'accroche et les héros, les passes du bob et le cercle du compteur, à −16 dB avec un grain sourd (coupure à 3 800 Hz, sans couinement). Les autres bruitages gardent leur niveau : leur gain se calcule sur le réglage livré la première fois.
 - Feutre : pendant les passes de hachures du bob, la pointe dépasse 1 800 px/s, comme un griffonnage. Hors hachures, 95 % des échantillons de tracé restent sous 1 974 px/s à l'écran, travellings compris, avec des pointes isolées jusqu'à 3 513 px/s.
 - Son : volume 1 sur la piste ; le volume 1,1 de la pub foot montait ici le rendu à −13,3 LUFS et la crête à −1,0 dBFS.
 - Tote bag sublimé : les ombres portées sur le mur, accrochées aux anses, sont retirées du détourage.
@@ -75,5 +76,5 @@ Sorties brutes : `mesures.txt`.
 ## Ce qui reste ouvert
 
 - Données [à fournir] : liste dans `README.md`.
-- Raccord de boucle à 2,40 : à garder ou à corriger par une feuille de poses plus lente à l'image 0.
+- Raccord de boucle à 2,41 : à garder ou à corriger par une feuille de poses plus lente à l'image 0.
 - Avertissement lint sur la taille du fichier : découper la composition en sous-compositions si la vidéo doit évoluer.

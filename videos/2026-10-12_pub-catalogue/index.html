@@ -29,7 +29,7 @@
       .ligne, .ligne *, #bouton { pointer-events: auto; }
       svg { overflow: visible; }
 
-      /* Décor : table de la buvette, feuille de match, gobelets */
+      /* Décor : surface anthracite et feuille de match */
       #table { position: absolute; left: 0; top: 0; width: 10px; height: 10px; transform-origin: 0 0; }
       #table-img { position: absolute; left: -717px; top: -826px; width: 2475px; height: 4305px; filter: blur(8px); }
       .papier { position: absolute; left: 0; top: 0; width: 1040px; height: 1498px; }
@@ -38,8 +38,6 @@
       .cases { position: absolute; left: 0; top: 0; }
       #flap-ombre { position: absolute; left: 0; top: 0; width: 1040px; height: 1498px; filter: drop-shadow(-10px 12px 18px rgba(26, 19, 32, 0.38)); }
       #flap { position: absolute; left: 0; top: 0; width: 1040px; height: 1498px; transform-origin: 0 0; background: url(assets/feuille-recto.png) 0 0 / 100% 100% no-repeat; }
-      #gobelets-calque { position: absolute; left: 0; top: 0; width: 10px; height: 10px; transform-origin: 0 0; }
-      #gobelets { position: absolute; left: -165px; top: 1364px; width: 406px; height: 747px; filter: blur(13px); }
 
       /* Cases du carnet */
       .case { position: absolute; width: 102px; height: 128px; transform-origin: 51px 64px; }
@@ -92,8 +90,8 @@
   </head>
   <body>
     <div id="root" data-composition-id="le-carnet" data-start="0" data-width="1080" data-height="1920" data-duration="30" data-fps="30">
-      <!-- Table de la buvette, en parallaxe 0,3 -->
-      <div id="table"><img id="table-img" src="assets/table.jpg" alt="" data-layout-allow-overflow /></div>
+      <!-- Surface anthracite sous la feuille, en parallaxe 0,3 -->
+      <div id="table"><img id="table-img" src="assets/fond-anthracite.jpg" alt="" data-layout-allow-overflow /></div>
 
       <!-- Le monde : la feuille de match vue de dessus, repère de 1 040 x 1 498 unités -->
       <div id="monde" class="monde">
@@ -182,9 +180,8 @@
         <div id="pr-l2" class="ligne secondaire magenta" style="top: 1176px"><span id="pr-l2-t">Hors taxes, selon la quantité</span></div>
       </div>
 
-      <!-- Feutre, puis gobelets flous au premier plan -->
+      <!-- Feutre -->
       <div id="feutre" data-layout-allow-overflow><div id="feutre-img" data-layout-allow-overflow></div></div>
-      <div id="gobelets-calque"><img id="gobelets" src="assets/gobelets.png" alt="" data-layout-allow-overflow /></div>
     </div>
 
     <script>
@@ -860,18 +857,12 @@
           t = clamp(t, 0, DUREE);
           const c = cam(t);
           tr2($("monde"), CX - c.x * c.s, CY - c.y * c.s, c.s);
-          // table : parallaxe 0,3 et dérive de 6 px/s de 40 à 60, ramenée à zéro par une courbe de Hermite
+          // surface : parallaxe 0,3 et dérive de 6 px/s de 40 à 60, ramenée à zéro par une courbe de Hermite
           let derive = 0;
           if (t >= TP(40) && t < TP(60)) derive = 6 * (t - TP(40));
           else if (t >= TP(60)) derive = herm(6 * (TP(60) - TP(40)), 0, 6 * (DUREE - TP(60)), 0, seg(t, TP(60), DUREE));
           const st = 1 + 0.3 * (c.s - 1), ctx = REF.x + 0.3 * (c.x - REF.x), cty = REF.y + 0.3 * (c.y - REF.y);
           tr2($("table"), CX - ctx * st + derive, CY - cty * st, st);
-          // gobelets : parallaxe 1,4, au premier plan pendant la vue large
-          const cgx = REF.x + 1.4 * (c.x - REF.x), cgy = REF.y + 1.4 * (c.y - REF.y);
-          tr2($("gobelets-calque"), CX - cgx * c.s, CY - cgy * c.s, c.s);
-          const og = t >= TP(36) && t < TP(47) ? 0.95 * (1 - seg(t, TP(46.1), TP(46.8))) : 0;
-          $("gobelets-calque").style.visibility = og > 0 ? "inherit" : "hidden";
-          $("gobelets-calque").style.opacity = og.toFixed(3);
 
           // traits : 7 px à l’écran quelle que soit l’échelle
           for (const { g, k } of groupesTraits) g.setAttribute("stroke-width", (7 / (c.s * k)).toFixed(3));

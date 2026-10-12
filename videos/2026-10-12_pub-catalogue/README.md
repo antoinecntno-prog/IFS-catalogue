@@ -14,6 +14,10 @@ Vidéo verticale HyperFrames, 1080 × 1920 px à 30 i/s, 30 s (64 temps à 128 B
 - `outils/preparer_tailles.py`, `outils/exporter_donnees.py` (s'arrête en erreur si un prix de la composition diffère du site), `outils/reperes.js`, `outils/sound_design.py`, `outils/planche.py`, `outils/mesure_mouvement.py`, `outils/raccord.sh`.
 - `controles/` : sorties des quatre contrôles et rapport.
 
+## Décor
+
+La feuille repose sur une surface anthracite mate (`assets/fond-anthracite.jpg`, texture calculée par le projet, sans photo), floutée comme un arrière-plan. La nappe de la buvette et les gobelets sont retirés depuis le 12/10.
+
 ## Ordre des produits
 
 Les 30 produits passent dans l'ordre de la section 6 du brief : le « 3 » (maillots, sacs, vestes, bonnet polaire), puis le « 0 » (écharpe, bob, accessoires, drapeau, événementiel, objets), et le boxer ferme le nombre à 16,875 s. 29 photos et un croquis : le bob reste dessiné, car sa seule photo vient d'une banque d'images.
@@ -22,7 +26,7 @@ Les 30 produits passent dans l'ordre de la section 6 du brief : le « 3 » (mail
 
 - `assets/audio/mix.wav` : le mix lu par la composition (`<audio id="son-mix">`, volume 1). Dans le MP4 : −14,1 LUFS intégrés, crête vraie −1,8 dBFS, décalage nul avec l'image.
 - Musique : composée et synthétisée par `../son/musique.py`, mêmes tempo et accords que la pub foot, sur 16 mesures. Intro légère pendant les héros, groove plein au temps 8 quand le feutre passe à un produit par temps, pause sous le 30/30 et le recul, retour du groove sur « produits, prix en ligne », groove de base sous le bouton, filtre qui se ferme pendant la plongée finale. Deux motifs de marimba ajoutés (« e » et « f »), une note par révélation. Tampon circulaire : la boucle reste sans couture. La musique appartient au projet, libre de droits pour la publicité.
-- Bruitages : synthétisés par `../son/moteur.py` et calés sur les repères réels. Le frottement du feutre suit la vitesse de sa pointe par rapport au papier ; chaque détouré naît sur un froissement et un pop ; chaque photo en cadre sonne une note pincée de la gamme pentatonique de la majeur, qui monte case après case et repart au début du « 0 » ; la rafale monte d'un ton à chaque rebond. S'y ajoutent des bruitages Pixabay livrés avec HyperFrames (sparkle, pop, clics, whoosh, impact), sous licence Pixabay : usage commercial sans attribution.
+- Bruitages : synthétisés par `../son/moteur.py` et calés sur les repères réels. Le feutre ne s'entend que sur l'accroche et les héros, les passes du bob et le cercle du compteur, avec un grain sourd placé bas dans le mix ; pendant la série d'un produit par temps, la musique et les notes de révélation portent le rythme. Chaque détouré naît sur un froissement et un pop ; chaque photo en cadre sonne une note pincée de la gamme pentatonique de la majeur, qui monte case après case et repart au début du « 0 » ; la rafale monte d'un ton à chaque rebond. S'y ajoutent des bruitages Pixabay livrés avec HyperFrames (sparkle, pop, clics, whoosh, impact), sous licence Pixabay : usage commercial sans attribution.
 - `assets/audio/stem-musique.m4a` et `stem-bruitages.m4a` : les deux pistes séparées.
 - Refaire le son : `NODE_PATH=$(npm root -g) node outils/reperes.js . controles/reperes.json` puis `python3 outils/sound_design.py controles/reperes.json`.
 

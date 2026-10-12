@@ -71,10 +71,31 @@ def vitesse_papier(r):
     return np.minimum(v, 6000)
 
 
-def bruitages(r):
+# le feutre ne s'entend que sur les tracés qui comptent : l'accroche et les héros, les passes du bob, le cercle du compteur.
+# Pendant la série d'un produit par temps, la musique et les notes de révélation portent le rythme.
+FENETRES_FEUTRE = [(TP(63.2) - DUREE, TP(8)), (TP(20.9), TP(22.0)), (TP(36.2), TP(36.9)), (TP(63.2), DUREE + 1)]
+GAIN_FEUTRE = -16
+# réglage livré le 12/10 (feutre partout à -5 dB) : sert seulement à garder le niveau des autres bruitages
+GAIN_FEUTRE_ANCIEN = -5
+
+
+def masque_feutre(t, fondu=0.12):
+    m = np.zeros_like(t)
+    for a, b in FENETRES_FEUTRE:
+        m = np.maximum(m, np.clip((t - a) / fondu, 0, 1) * np.clip((b - t) / fondu, 0, 1))
+    return m
+
+
+def bruitages(r, ancien=False):
     sfx = Piste(DUREE)
     pas = r["pas"]
-    sfx.ajoute(stereo(feutre(vitesse_papier(r), pas, graine=41), 0.1, 0.4), 0, -5)
+    v = vitesse_papier(r)
+    if ancien:
+        sfx.ajoute(stereo(feutre(v, pas, graine=41), 0.1, 0.4), 0, GAIN_FEUTRE_ANCIEN)
+    else:
+        # grain plus sourd, sans crépitements secs ni couinement
+        v = v * masque_feutre(np.array(r["t"]))
+        sfx.ajoute(stereo(feutre(v, pas, graine=41, aigu=3800, crepitement=0.25, chant=0.0), 0.1, 0.4), 0, GAIN_FEUTRE)
 
     sparkle, pop, clic_doux, clic = (charge_pixabay(n) for n in ("sparkle", "pop", "click-soft", "click"))
 
@@ -159,9 +180,10 @@ def main():
     TMP.mkdir(parents=True, exist_ok=True)
     musique, _ = compose(PLAN, 128.0, LEADS)
     sfx = bruitages(r)
-    # niveaux de départ : la musique porte, les bruitages passent devant aux moments clés
+    # niveaux de départ : la musique porte, les bruitages passent devant aux moments clés.
+    # Le gain des bruitages se calcule sur le réglage livré le 12/10 : baisser le feutre laisse les autres bruitages à leur niveau.
     ecrit_wav(TMP / "m.wav", limiteur(musique.buf * 0.5, -1.0))
-    ecrit_wav(TMP / "s.wav", limiteur(sfx.buf * 0.5, -1.0))
+    ecrit_wav(TMP / "s.wav", limiteur(bruitages(r, ancien=True).buf * 0.5, -1.0))
     lm, _ = loudness(TMP / "m.wav")
     ls, _ = loudness(TMP / "s.wav")
     gm = 10 ** ((-16.5 - lm) / 20) * 0.5

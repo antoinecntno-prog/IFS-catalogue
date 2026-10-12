@@ -9,16 +9,20 @@ Vidéo verticale HyperFrames, 1080 × 1920 px à 30 i/s, 22,5 s (48 temps à 128
 - `assets/` : images préparées et données du dessin (`donnees.js`).
 - `sources/` : les photos d'origine, gardées pour refaire les détourages.
 - `outils/preparer_set.py` : détoure le set (photo réelle sans sponsors), le coupe en maillot et short, vectorise le contour du maillot, celui du short, le bord de la flamme et les deux bandes.
-- `outils/preparer_decors.py` : feuille de match (dos vierge et recto), feutre, cintre, table de buvette, gobelets, vestiaire en calques (mur prolongé, barre, patère, banc).
+- `outils/preparer_decors.py` : feuille de match (dos vierge et recto), feutre, cintre, vestiaire en calques (la table de buvette et les gobelets qu'il produit ne servent plus) (mur prolongé, barre, patère, banc).
 - `outils/exporter_donnees.py` : écrit `assets/donnees.js`.
 - `outils/mesure_mouvement.py` et `outils/planche.py` : contrôles c) et b).
 - `controles/` : sorties des quatre contrôles.
 
+## Décor
+
+La feuille repose sur une surface anthracite mate (`assets/fond-anthracite.jpg`, texture calculée par le projet), floutée comme un arrière-plan. La nappe de la buvette et les gobelets sont retirés depuis le 12/10.
+
 ## Son
 
-- `assets/audio/mix.wav` : le mix lu par la composition (`<audio id="son-mix">`, volume 1,1 pour compenser la baisse d'environ 1 dB du rendu). Dans le MP4 : −14,8 LUFS intégrés, crête vraie −1,5 dBFS, décalage nul avec l'image.
+- `assets/audio/mix.wav` : le mix lu par la composition (`<audio id="son-mix">`, volume 1,1 pour compenser la baisse d'environ 1 dB du rendu). Dans le MP4 : −14,6 LUFS intégrés, crête vraie −1,7 dBFS, décalage nul avec l'image.
 - Musique : composée et synthétisée par `../son/musique.py` sur la grille de poses (128 BPM, 12 mesures en la majeur). L'intro griffonnée tient sur les mesures 1 et 2 ; le groove part au contact du ballon (3,75 s) ; la pause tombe sous la signature du logo (11,25 s) ; une cymbale inversée annonce le match cut (15,94 s) ; la mesure 12 retombe pour reboucler. Le tampon est circulaire : la boucle Meta reste sans couture. Elle appartient au projet, libre de droits pour la publicité.
-- Bruitages : synthétisés par `../son/moteur.py` et calés sur le mouvement réel. Le frottement du feutre suit la vitesse de sa pointe, échantillonnée à 120 Hz par `outils/reperes.js`. Les rebonds sur le papier font des « bop », les patères tintent sur une gamme qui monte, les cintres claquent sur chaque temps, la page se soulève puis tourne. S'y ajoutent sept bruitages Pixabay livrés avec HyperFrames (sparkle, pop, clics, whoosh, impact), sous licence Pixabay : usage commercial sans attribution.
+- Bruitages : synthétisés par `../son/moteur.py` et calés sur le mouvement réel. Le feutre garde un grain sourd et bas dans le mix, piloté par la vitesse de sa pointe (échantillonnée à 120 Hz par `outils/reperes.js`) ; l'écriture du logo et le contour de l'étiquette restent muets. Les rebonds sur le papier font des « bop », les patères tintent sur une gamme qui monte, les cintres claquent sur chaque temps, la page se soulève puis tourne. S'y ajoutent sept bruitages Pixabay livrés avec HyperFrames (sparkle, pop, clics, whoosh, impact), sous licence Pixabay : usage commercial sans attribution.
 - `assets/audio/stem-musique.m4a` et `stem-bruitages.m4a` : les deux pistes séparées, pour retoucher le mix.
 - Refaire le son : `NODE_PATH=$(npm root -g) node outils/reperes.js . /tmp/reperes.json` puis `python3 outils/sound_design.py /tmp/reperes.json`.
 
@@ -45,4 +49,4 @@ Avec une autre piste : mesurer son tempo et son premier temps fort, changer `TEM
 
 ## Photos fournies le 12/10/2026
 
-Feuille de match (2000 px de haut, sous les 2400 px demandés), table de buvette, vestiaire, cintre, feutre. La feuille porte l'impression de la feuille de match : le dos utilisé dans la vidéo efface l'impression et garde le quadrillage en transparence à 2,8 %, sans le titre. Le recto apparaît au tour de page final.
+Feuille de match (2000 px de haut, sous les 2400 px demandés), table de buvette (retirée du film le 12/10), vestiaire, cintre, feutre. La feuille porte l'impression de la feuille de match : le dos utilisé dans la vidéo efface l'impression et garde le quadrillage en transparence à 2,8 %, sans le titre. Le recto apparaît au tour de page final.

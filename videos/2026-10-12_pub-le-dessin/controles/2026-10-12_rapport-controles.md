@@ -11,7 +11,7 @@ Zéro erreur. Sortie complète (hyperframes 0.8.149) :
 [hyperframes] browserGpuMode probe → software (WebGL unavailable)
 
 Lint
-  ⚠ composition_file_too_large: This HTML composition file has 1054 lines. Smaller sub-compositions are easier to read, iterate on, and diff.
+  ⚠ composition_file_too_large: This HTML composition file has 1058 lines. Smaller sub-compositions are easier to read, iterate on, and diff.
     /home/user/IFS-catalogue/videos/2026-10-12_pub-le-dessin/index.html [data-composition-id] t=0s
     Fix: Split coherent scenes or layers into separate .html files under compositions/, then mount them from the parent with data-composition-src so each file stays small enough to inspect, revise, and validate independently.
   0 error(s), 1 warning(s), 0 info(s)
@@ -48,13 +48,15 @@ Commande du brief, 24 instants : `controles/2026-10-12_planche-snapshots.jpg`. C
 
 | Mesure | Résultat | Objectif |
 |---|---|---|
-| Images quasi figées (YAVG < 0,3) | 12,2 % | moins de 25 % |
-| Plus longue suite figée | 2,50 s, de 19,07 à 21,53 s (tenue du bouton) | dans la tenue du CTA |
-| Secondes figées hors CTA | aucune | aucune |
-| Raccord de boucle, images 674 et 0 | YAVG 1,055 | sous 1,5 |
+| Images quasi figées (YAVG < 0,3) | 12,3 % | moins de 25 % |
+| Plus longue suite figée | 2,53 s, de 19,00 à 21,53 s (tenue du bouton) | dans la tenue du CTA |
+| Secondes figées hors CTA | la seconde 19, figée à partir de 19,00 s | aucune |
+| Raccord de boucle, images 674 et 0 | YAVG 0,933 | sous 1,5 |
 | Lignes `black_start` | 0 | 0 |
-| Son : loudness intégrée, crête vraie | −14,8 LUFS, −1,5 dBFS | autour de −14 LUFS, crête sous −1 dBFS |
+| Son : loudness intégrée, crête vraie | −14,6 LUFS, −1,7 dBFS | autour de −14 LUFS, crête sous −1 dBFS |
 | Son : décalage avec l'image | 0 ms (corrélation avec la source) | 0 |
+
+La seconde 19 reste figée sur ses 30 images : la suite figée commence à 19,00 s, une image et demie avant le début de la tenue du bouton (19,05 s). Avec la nappe de la buvette, la dérive du décor (6 px/s) animait ces deux images ; la surface anthracite, presque uniforme, ne produit plus d'écart mesurable.
 
 Sorties brutes : `controles/mesures.txt`.
 
@@ -73,6 +75,9 @@ Sorties brutes : `controles/mesures.txt`.
 - La photo de feuille fournie montre le recto imprimé : le dos est obtenu en effaçant l'impression, et le recto apparaît sur la page qui tourne.
 - Vestiaire sans sac : banc et chaussures de la photo fournie.
 - Le short est hachuré à l'encre avec le reste du maillot.
+
+- Fond : surface anthracite mate à la place de la nappe de la buvette, sur demande d'Antoine le 12/10 ; les gobelets sont retirés avec elle.
+- Son du feutre : sur la même demande, grain sourd (coupure à 3 800 Hz, sans couinement) à −19 dB pour le croquis et −21 dB pour les passes de couleurs ; l'écriture du logo et le contour de l'étiquette restent muets. Les autres bruitages gardent leur niveau : leur gain se calcule sur le réglage livré la première fois.
 
 ## Ce qui reste ouvert
 

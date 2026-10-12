@@ -38,24 +38,27 @@ def pic_pixabay(x):
     return int(np.argmax(e)) / SR
 
 
-def bruitages(r):
+def bruitages(r, ancien=False):
     sfx = Piste(DUREE)
     pas = r["pas"]
-    # feutre A (feuille de match, boucle comprise) et feutre B (passes de couleurs, coche)
-    for cle, g in (("feutreA", -8), ("feutreB", -9)):
-        v = vitesse_feutre(r, cle)
-        sfx.ajoute(stereo(feutre(v, pas, graine=41 if cle == "feutreA" else 43), 0.1, 0.4), 0, g)
-    # traînée du ballon qui écrit le logo : même frottement, piloté par la vitesse du ballon
-    b = np.array([x[:2] for x in r["ballon"]], dtype=float)
     t = np.array(r["t"])
-    v = np.zeros(len(t))
-    v[1:] = np.hypot(*(b[1:] - b[:-1]).T) / pas
-    v[(t < r["ECRIT"][0]) | (t > r["ECRIT"][1])] = 0
-    sfx.ajoute(stereo(feutre(np.minimum(v, 3000) * 0.8, pas, graine=45), 0.0, 0.4), 0, -9)
-    # étiquette tracée au feutre (13,125 à 13,40 s)
     L = r["L"]
-    v = np.where((t >= L["b09_prix"]) & (t <= 13.4), 1600.0, 0.0)
-    sfx.ajoute(stereo(feutre(v, pas, graine=47), -0.1, 0.4), 0, -10)
+    if ancien:
+        # réglage livré le 12/10 : sert seulement à garder le niveau des autres bruitages
+        for cle, g in (("feutreA", -8), ("feutreB", -9)):
+            sfx.ajoute(stereo(feutre(vitesse_feutre(r, cle), pas, graine=41 if cle == "feutreA" else 43), 0.1, 0.4), 0, g)
+        b = np.array([x[:2] for x in r["ballon"]], dtype=float)
+        v = np.zeros(len(t))
+        v[1:] = np.hypot(*(b[1:] - b[:-1]).T) / pas
+        v[(t < r["ECRIT"][0]) | (t > r["ECRIT"][1])] = 0
+        sfx.ajoute(stereo(feutre(np.minimum(v, 3000) * 0.8, pas, graine=45), 0.0, 0.4), 0, -9)
+        v = np.where((t >= L["b09_prix"]) & (t <= 13.4), 1600.0, 0.0)
+        sfx.ajoute(stereo(feutre(v, pas, graine=47), -0.1, 0.4), 0, -10)
+    else:
+        # feutre A (croquis et flamme de la boucle) et feutre B (passes de couleurs) : grain sourd, bas dans le mix.
+        # L'écriture du logo et le contour de l'étiquette restent muets : la musique porte ces passages.
+        for cle, g in (("feutreA", -19), ("feutreB", -21)):
+            sfx.ajoute(stereo(feutre(vitesse_feutre(r, cle), pas, graine=41 if cle == "feutreA" else 43, aigu=3800, crepitement=0.25, chant=0.0), 0.1, 0.4), 0, g)
 
     # rebonds sur le papier et tintements sur les patères, lus dans les contacts de la composition
     gamme = ["A5", "B5", "C#6", "D6", "E6", "F#6", "G#6", "A6"]
@@ -124,9 +127,10 @@ def main():
     TMP.mkdir(parents=True, exist_ok=True)
     musique, _ = compose(PLAN, 128.0, LEADS)
     sfx = bruitages(r)
-    # niveaux de départ : la musique porte, les bruitages passent devant aux moments clés
+    # niveaux de départ : la musique porte, les bruitages passent devant aux moments clés.
+    # Le gain des bruitages se calcule sur le réglage livré le 12/10 : baisser le feutre laisse les autres bruitages à leur niveau.
     ecrit_wav(TMP / "m.wav", limiteur(musique.buf * 0.5, -1.0))
-    ecrit_wav(TMP / "s.wav", limiteur(sfx.buf * 0.5, -1.0))
+    ecrit_wav(TMP / "s.wav", limiteur(bruitages(r, ancien=True).buf * 0.5, -1.0))
     lm, _ = loudness(TMP / "m.wav")
     ls, _ = loudness(TMP / "s.wav")
     gm = 10 ** ((-16.5 - lm) / 20) * 0.5
