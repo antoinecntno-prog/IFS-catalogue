@@ -1,0 +1,1070 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Le carnet</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="assets/donnees.js"></script>
+    <style>
+      @font-face{font-family:"Archivo";font-style:normal;font-weight:700 900;font-stretch:75% 100%;font-display:block;src:url(fonts/archivo-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+      @font-face{font-family:"Archivo";font-style:normal;font-weight:700 900;font-stretch:75% 100%;font-display:block;src:url(fonts/archivo-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+      @font-face{font-family:"Hanken Grotesk";font-style:normal;font-weight:400 700;font-display:block;src:url(fonts/hanken-grotesk-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+      @font-face{font-family:"Hanken Grotesk";font-style:normal;font-weight:400 700;font-display:block;src:url(fonts/hanken-grotesk-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+
+      :root {
+        --magenta: #b3125f;
+        --jaune: #ffe45c;
+        --encre: #1a1320;
+        --blanc: #ffffff;
+      }
+      html, body { margin: 0; background: var(--blanc); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--blanc); }
+      .plein { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+      .abs { position: absolute; left: 0; top: 0; }
+      .monde { position: absolute; left: 0; top: 0; width: 1040px; height: 1498px; transform-origin: 0 0; }
+      img { display: block; }
+      /* seuls les textes reçoivent les points de mesure : décors et calques transparents sont ignorés */
+      #root * { pointer-events: none; }
+      .ligne, .ligne *, #bouton { pointer-events: auto; }
+      svg { overflow: visible; }
+
+      /* Décor : table de la buvette, feuille de match, gobelets */
+      #table { position: absolute; left: 0; top: 0; width: 10px; height: 10px; transform-origin: 0 0; }
+      #table-img { position: absolute; left: -717px; top: -826px; width: 2475px; height: 4305px; filter: blur(8px); }
+      .papier { position: absolute; left: 0; top: 0; width: 1040px; height: 1498px; }
+      #papier { background: url(assets/feuille-dos.png) 0 0 / 100% 100% no-repeat; filter: drop-shadow(0 8px 16px rgba(26, 19, 32, 0.32)); }
+      #papier-dessous { background: url(assets/feuille-dos.png) 0 0 / 100% 100% no-repeat; filter: drop-shadow(0 8px 16px rgba(26, 19, 32, 0.32)); }
+      .cases { position: absolute; left: 0; top: 0; }
+      #flap-ombre { position: absolute; left: 0; top: 0; width: 1040px; height: 1498px; filter: drop-shadow(-10px 12px 18px rgba(26, 19, 32, 0.38)); }
+      #flap { position: absolute; left: 0; top: 0; width: 1040px; height: 1498px; transform-origin: 0 0; background: url(assets/feuille-recto.png) 0 0 / 100% 100% no-repeat; }
+      #gobelets-calque { position: absolute; left: 0; top: 0; width: 10px; height: 10px; transform-origin: 0 0; }
+      #gobelets { position: absolute; left: -165px; top: 1364px; width: 406px; height: 747px; filter: blur(13px); }
+
+      /* Cases du carnet */
+      .case { position: absolute; width: 102px; height: 128px; transform-origin: 51px 64px; }
+      .case-fond { position: absolute; left: 0; top: 0; width: 102px; height: 128px; }
+      .photo { position: absolute; left: 0; top: 0; width: 102px; height: 128px; background-size: 100% 100%; background-repeat: no-repeat; }
+      .detoure { filter: drop-shadow(0 2px 4px rgba(26, 19, 32, 0.12)); }
+
+      /* Feutre */
+      #feutre { position: absolute; left: 0; top: 0; width: 545px; height: 394px; transform-origin: 0 0; }
+      #feutre-img { width: 545px; height: 394px; background: url(assets/feutre.png) 0 0 / 100% 100% no-repeat; }
+
+      /* Textes */
+      .ligne { position: absolute; left: 0; width: 1080px; text-align: center; white-space: nowrap; }
+      .ligne > span { display: inline-block; }
+      .principal { font-family: "Archivo", sans-serif; font-weight: 900; font-stretch: 80%; font-size: 84px; line-height: 1; color: var(--encre); letter-spacing: -0.5px; }
+      .secondaire { font-family: "Hanken Grotesk", sans-serif; font-weight: 700; font-size: 44px; line-height: 1; color: var(--encre); }
+      .magenta { color: var(--magenta); }
+
+      /* Compteur */
+      #compteur { position: absolute; left: 70px; top: 292px; width: 270px; height: 118px; transform: rotate(-2deg); transform-origin: 135px 59px; }
+      #compteur-papier { position: absolute; left: 0; top: 0; width: 264px; height: 112px; background: var(--blanc); border: 3px solid var(--encre); border-radius: 4px; box-shadow: 0 6px 12px rgba(26, 19, 32, 0.22); }
+      #compteur-logo { position: absolute; left: 14px; top: 27px; width: 64px; height: 64px; background: url(assets/c-sport.png) 0 0 / 100% 100% no-repeat; border-radius: 10px; }
+      #compteur-chiffres { position: absolute; left: 88px; top: 10px; width: 172px; height: 72px; overflow: hidden; }
+      #compteur-n { position: absolute; left: 0; top: 0; width: 76px; height: 72px; overflow: hidden; }
+      .chiffre { position: absolute; left: 0; top: 0; width: 76px; text-align: right; font-family: "Archivo", sans-serif; font-weight: 900; font-stretch: 80%; font-size: 72px; line-height: 72px; color: var(--encre); font-variant-numeric: tabular-nums; }
+      #compteur-total { position: absolute; left: 76px; top: 0; font-family: "Archivo", sans-serif; font-weight: 900; font-stretch: 80%; font-size: 72px; line-height: 72px; color: var(--encre); font-variant-numeric: tabular-nums; white-space: nowrap; }
+      #compteur-mot { position: absolute; left: 88px; top: 78px; width: 172px; text-align: left; font-family: "Hanken Grotesk", sans-serif; font-weight: 700; font-size: 28px; line-height: 28px; color: var(--magenta); }
+
+      /* Étiquette de prix */
+      #etiquette { position: absolute; left: 65px; top: 1020px; width: 950px; height: 228px; transform-origin: 56px 114px; }
+      .etiq-texte { position: absolute; left: 0; top: 0; width: 950px; height: 228px; }
+      .surligne { position: absolute; background: var(--jaune); transform-origin: 0 50%; border-radius: 4px; }
+
+      /* Bon à détacher */
+      #bon { position: absolute; left: 110px; top: 845px; width: 860px; height: 445px; }
+      #bon-papier { position: absolute; left: 0; top: 0; width: 860px; height: 445px; background: var(--blanc); border-radius: 0 0 6px 6px; filter: drop-shadow(0 10px 16px rgba(26, 19, 32, 0.3));
+        -webkit-mask: radial-gradient(circle 7px at 10px 0, transparent 6.5px, #000 7px) 0 0 / 20px 100% repeat-x; mask: radial-gradient(circle 7px at 10px 0, transparent 6.5px, #000 7px) 0 0 / 20px 100% repeat-x; }
+      #bon-pointilles { position: absolute; left: 16px; top: 14px; width: 828px; height: 0; border-top: 3px dashed rgba(26, 19, 32, 0.35); }
+      #bon-logo { position: absolute; left: 310px; top: 17px; width: 240px; height: 102px; background: url(assets/logo-contino-sport.webp) 0 0 / 100% 100% no-repeat; }
+      #bouton { position: absolute; left: 70px; top: 183px; width: 720px; height: 140px; display: flex; align-items: center; justify-content: center; background: var(--magenta); color: var(--blanc); border-radius: 6px; font-family: "Archivo", sans-serif; font-weight: 900; font-stretch: 80%; font-size: 56px; white-space: nowrap; transform-origin: 50% 50%; }
+      .adresse { font-family: "Hanken Grotesk", sans-serif; font-weight: 500; font-size: 40px; line-height: 1; color: var(--encre); }
+      .mention { font-family: "Hanken Grotesk", sans-serif; font-weight: 500; font-size: 26px; line-height: 1; color: var(--encre); }
+
+      /* Ballon */
+      #ballon-calque { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+      #ball { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+      #ball-body { position: absolute; left: -64px; top: -64px; width: 128px; height: 128px; transform-origin: 64px 64px; }
+      #ball-ombre { position: absolute; left: 0; top: 0; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(closest-side, rgba(26,19,32,0.9), rgba(26,19,32,0)); transform-origin: 0 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="le-carnet" data-start="0" data-width="1080" data-height="1920" data-duration="30" data-fps="30">
+      <!-- Table de la buvette, en parallaxe 0,3 -->
+      <div id="table"><img id="table-img" src="assets/table.jpg" alt="" data-layout-allow-overflow /></div>
+
+      <!-- Le monde : la feuille de match vue de dessus, repère de 1 040 x 1 498 unités -->
+      <div id="monde" class="monde">
+        <!-- feuille neuve, visible sous la page qui tourne -->
+        <div id="feuille-dessous" class="monde">
+          <div id="papier-dessous" class="papier"></div>
+          <svg id="cases-dessous" class="cases" width="1040" height="1498" viewBox="0 0 1040 1498"></svg>
+        </div>
+        <!-- feuille du film : cases, photos, traits du feutre -->
+        <div id="feuille" class="monde">
+          <div id="papier" class="papier"></div>
+          <svg id="cases" class="cases" width="1040" height="1498" viewBox="0 0 1040 1498"></svg>
+          <div id="photos" class="monde"></div>
+          <svg id="traits" class="cases" width="1040" height="1498" viewBox="0 0 1040 1498"></svg>
+        </div>
+        <div id="flap-ombre"><div id="flap"></div></div>
+      </div>
+
+      <!-- Bon à détacher -->
+      <div id="bon">
+        <div id="bon-papier"></div>
+        <div id="bon-pointilles"></div>
+        <div id="bon-logo"></div>
+        <div id="bon-l1" class="ligne secondaire" style="left: -110px; top: 129px"><span id="bon-l1-t">Devis gratuit en deux étapes</span></div>
+        <div id="bouton">Recevoir mon devis</div>
+        <div id="bon-adresse" class="ligne adresse" style="left: -110px; top: 331px"><span id="bon-adresse-t">continosport.fr</span></div>
+        <div id="bon-mention" class="ligne mention" style="left: -110px; top: 375px"><span id="bon-mention-t">Photos non contractuelles</span></div>
+      </div>
+
+      <!-- Son : musique composée pour la grille de 128 BPM et bruitages calés sur le mouvement (outils/sound_design.py) -->
+      <audio id="son-mix" src="assets/audio/mix.wav" data-start="0" data-duration="30" data-track-index="10" data-volume="1"></audio>
+
+      <!-- Le ballon dessiné -->
+      <div id="ballon-calque">
+        <svg id="encre-svg" class="plein" viewBox="0 0 1080 1920" width="1080" height="1920"></svg>
+        <div id="ball-ombre"></div>
+        <svg id="ball-trail" class="plein" viewBox="0 0 1080 1920" width="1080" height="1920">
+          <path id="trail-1" d="" fill="none" stroke="#b3125f" stroke-width="6" stroke-linecap="round" />
+          <path id="trail-2" d="" fill="none" stroke="#b3125f" stroke-width="5" stroke-linecap="round" />
+        </svg>
+        <div id="ball">
+          <div id="ball-body">
+            <svg width="128" height="128" viewBox="-64 -64 128 128">
+              <defs><clipPath id="ball-clip"><path id="ball-clip-d" d="" /></clipPath></defs>
+              <path id="ball-fond" d="" fill="#ffffff" />
+              <g id="ball-hachures" clip-path="url(#ball-clip)" stroke="#b3125f" stroke-width="3.5" stroke-linecap="round" opacity="0.55"></g>
+              <g clip-path="url(#ball-clip)"><g id="ball-motif"></g></g>
+              <path id="ball-trait" d="" fill="none" stroke="#b3125f" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cartons fixés à l'écran -->
+      <div id="accroche">
+        <div id="acc-l1" class="ligne principal" style="top: 430px"><span id="acc-l1-t">Club ou entreprise</span></div>
+        <div id="acc-l2" class="ligne principal magenta" style="top: 524px"><span id="acc-l2-t">à vos couleurs</span></div>
+      </div>
+      <div id="compteur">
+        <div id="compteur-papier"></div>
+        <div id="compteur-logo"></div>
+        <div id="compteur-chiffres">
+          <div id="compteur-n"><div id="chiffre-a" class="chiffre">00</div><div id="chiffre-b" class="chiffre">00</div></div>
+          <div id="compteur-total">/30</div>
+        </div>
+        <div id="compteur-mot">produits</div>
+        <svg id="compteur-cercle" class="abs" width="270" height="118"><path id="cercle-compteur" d="" fill="none" stroke="#b3125f" stroke-width="7" stroke-linecap="round" /></svg>
+      </div>
+      <div id="etiquette">
+        <svg id="etiq-svg" class="abs" width="970" height="248" style="left: -10px; top: -10px"><path id="etiq-fond" d="" fill="#ffffff" /><path id="etiq-trait" d="" fill="none" stroke="#b3125f" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" /><circle id="etiq-trou" r="12" fill="none" stroke="#b3125f" stroke-width="5" /></svg>
+        <div id="etiq-a" class="etiq-texte">
+          <div id="surligne-a" class="surligne"></div>
+          <div id="ea-l1" class="ligne principal"><span id="ea-l1-t"><span id="prix-a">25,99&nbsp;€</span> hors taxes dès 30 pièces</span></div>
+          <div id="ea-l2" class="ligne secondaire"><span id="ea-l2-t">maillot + short, transport inclus</span></div>
+        </div>
+        <div id="etiq-b" class="etiq-texte">
+          <div id="surligne-b" class="surligne"></div>
+          <div id="eb-l1" class="ligne principal"><span id="eb-l1-t"><span id="prix-b">5,59&nbsp;€</span> hors taxes dès 100 pièces</span></div>
+          <div id="eb-l2" class="ligne secondaire"><span id="eb-l2-t">tote bag tout imprimé, transport inclus</span></div>
+        </div>
+      </div>
+      <!-- le fil passe devant l'étiquette : il part de son trou -->
+      <svg id="fil-svg" class="plein" viewBox="0 0 1080 1920" width="1080" height="1920"><path id="fil" d="" fill="none" stroke="#1a1320" stroke-width="3" stroke-linecap="round" /></svg>
+      <div id="promesse">
+        <div id="pr-l1" class="ligne principal" style="top: 1080px"><span id="pr-l1-t">produits, prix en ligne</span></div>
+        <div id="pr-l2" class="ligne secondaire magenta" style="top: 1176px"><span id="pr-l2-t">Hors taxes, selon la quantité</span></div>
+      </div>
+
+      <!-- Feutre, puis gobelets flous au premier plan -->
+      <div id="feutre" data-layout-allow-overflow><div id="feutre-img" data-layout-allow-overflow></div></div>
+      <div id="gobelets-calque"><img id="gobelets" src="assets/gobelets.png" alt="" data-layout-allow-overflow /></div>
+    </div>
+
+    <script>
+      (function () {
+        "use strict";
+        const CAT = window.CATALOGUE, D = window.DESSIN, DEC = window.DECORS;
+        const NS = "http://www.w3.org/2000/svg";
+        const CX = 540, CY = 960;
+
+        // Grille de poses : 128 BPM, un temps = 0,46875 s. Si une autre piste remplace la musique, ajuster TEMPS et OFFSET.
+        const TEMPS = 60 / 128, OFFSET = 0;
+        const BEATS = { b01_hook: 0, b02_entreprise: 4, b03_sweat: 8, b04_dos: 10, b05_saut: 14, b06_zero: 20, b07_cote: 24, b08_rafale: 30, b09_trente: 36, b10_prix: 40, b11_cta: 46, b12_clic: 56, b13_page: 60, fin: 64 };
+        function TP(n) { return OFFSET + n * TEMPS; }
+        const DUREE = TP(64);
+
+        function E(n) { return gsap.parseEase(n); }
+        const e2o = E("power2.out"), e2i = E("power2.in"), e2io = E("power2.inOut"), e1io = E("power1.inOut"), e3o = E("power3.out");
+        const esio = E("sine.inOut");
+        function clamp(v, a = 0, b = 1) { return Math.min(b, Math.max(a, v)); }
+        function seg(t, a, b) { return clamp((t - a) / (b - a)); }
+        function lerp(a, b, u) { return a + (b - a) * u; }
+        function lp(p, q, u) { return ({ x: lerp(p.x, q.x, u), y: lerp(p.y, q.y, u) }); }
+        const herm = (p0, p1, m0, m1, u) => {
+          const u2 = u * u, u3 = u2 * u;
+          return (2 * u3 - 3 * u2 + 1) * p0 + (u3 - 2 * u2 + u) * m0 + (-2 * u3 + 3 * u2) * p1 + (u3 - u2) * m1;
+        };
+        const $ = (id) => document.getElementById(id);
+        const el = (tag, attrs, parent) => {
+          const n = document.createElementNS(NS, tag);
+          for (const k in attrs) n.setAttribute(k, attrs[k]);
+          if (parent) parent.appendChild(n);
+          return n;
+        };
+        // PRNG à graine fixe (mulberry32)
+        const prng = (seed) => () => {
+          seed |= 0; seed = (seed + 0x6d2b79f5) | 0;
+          let r = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+          r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
+          return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+        };
+
+        // ---------------------------------------------------------------- monde : le « 30 » de 30 cases
+        const CW = 102, CH = 128, SP = CW / 640;
+        const caseX = (c) => 21 + 112 * c, caseY = (r) => 250 + 138 * r;
+        const PRODUITS = CAT.produits.map((p) => ({ ...p, T: TP(p.temps), x: caseX(p.c), y: caseY(p.r) }));
+        function centreCase(p) { return ({ x: p.x + CW / 2, y: p.y + CH / 2 }); }
+
+        // ---------------------------------------------------------------- caméra : (s, cx, cy), le point (cx, cy) s’affiche en (540, 960)
+        const POSE = {
+          P0: { s: 2.8, x: 162, y: 1054 }, H1: { s: 2.9, x: 190, y: 1050 }, H2: { s: 2.9, x: 300, y: 1050 },
+          V0: { s: 0.92, x: 520, y: 962 }, V1: { s: 0.93, x: 520, y: 962 }, C0: { s: 0.66, x: 520, y: 1265 }, C1: { s: 0.67, x: 520, y: 1265 },
+        };
+        const RANG = [381, 519, 657, 795, 933, 1071];
+        const R_S = 2.4;
+        function interpCam(a, b, u) { return ({ s: Math.exp(lerp(Math.log(a.s), Math.log(b.s), u)), x: lerp(a.x, b.x, u), y: lerp(a.y, b.y, u) }); }
+        // hauteur de visée sur R : clés (temps, rangée), interpolation monotone (Fritsch-Carlson) ; les fouettés sont à part
+        const CLES_Y = [[9, 5], [10, 4], [11, 3], [12, 2], [14.4, 2], [15, 0], [18, 0], [19, 1], [19.3, 1], [20, 1], [21, 0], [25, 0], [26, 1], [27, 2], [28, 3], [29, 4], [30, 5], [33, 5], [34, 4], [35, 3], [36, 2], [37, 2]].map(([n, r]) => [TP(n), RANG[r]]);
+        const FOUETTE_V = [TP(14.4), TP(15)], FOUETTE_H = [TP(19.3), TP(19.9)];
+        const PENTES = (() => {
+          const n = CLES_Y.length, d = [], m = new Array(n).fill(0);
+          for (let i = 0; i < n - 1; i++) d.push((CLES_Y[i + 1][1] - CLES_Y[i][1]) / (CLES_Y[i + 1][0] - CLES_Y[i][0]));
+          for (let i = 1; i < n - 1; i++) {
+            if (CLES_Y[i][0] === FOUETTE_V[0] || CLES_Y[i][0] === FOUETTE_V[1]) continue;
+            if (d[i - 1] * d[i] > 0) m[i] = (2 * d[i - 1] * d[i]) / (d[i - 1] + d[i]);
+          }
+          return m;
+        })();
+        function visee(t) {
+          let i = 0;
+          while (i < CLES_Y.length - 2 && t >= CLES_Y[i + 1][0]) i++;
+          const [t0, y0] = CLES_Y[i], [t1, y1] = CLES_Y[i + 1];
+          const u = seg(t, t0, t1);
+          const y = t0 === FOUETTE_V[0] ? lerp(y0, y1, e2io(u)) : herm(y0, y1, PENTES[i] * (t1 - t0), PENTES[i + 1] * (t1 - t0), u);
+          const x = t < FOUETTE_H[0] ? 240 : lerp(240, 800, e2io(seg(t, ...FOUETTE_H)));
+          return { s: R_S, x, y };
+        }
+        function cam(t) {
+          if (t < TP(6)) return interpCam(POSE.P0, POSE.H1, e1io(seg(t, 0, TP(6))));
+          if (t < TP(8)) return interpCam(POSE.H1, POSE.H2, e1io(seg(t, TP(6), TP(8))));
+          if (t < TP(9)) return interpCam(POSE.H2, { s: R_S, x: 240, y: RANG[5] }, e2io(seg(t, TP(8), TP(9))));
+          if (t < TP(37)) return visee(t);
+          if (t < TP(39.5)) return interpCam({ s: R_S, x: 800, y: RANG[2] }, POSE.V0, e2io(seg(t, TP(37), TP(39.5))));
+          if (t < TP(46)) return interpCam(POSE.V0, POSE.V1, e1io(seg(t, TP(39.5), TP(46))));
+          if (t < TP(47.2)) return interpCam(POSE.V1, POSE.C0, e2io(seg(t, TP(46), TP(47.2))));
+          if (t < TP(60)) return interpCam(POSE.C0, POSE.C1, esio(seg(t, TP(47.2), TP(60))));
+          if (t < TP(61)) return POSE.C1;
+          // plongée : Hermite à pentes nulles, la caméra arrive immobile sur l’état de l’image 0
+          const u = seg(t, TP(61), DUREE), h = herm(0, 1, 0, 0, u);
+          return interpCam(POSE.C1, POSE.P0, h);
+        }
+        function ecran(p, c) { return ({ x: CX + (p.x - c.x) * c.s, y: CY + (p.y - c.y) * c.s }); }
+
+        // ---------------------------------------------------------------- cases vides : trait encre à 35 %, tremblé figé
+        function rectMain(x, y, w, h, rnd) {
+          function j() { return (rnd() - 0.5) * 2.2; }
+          const p = [[x + j(), y + j()], [x + w + j(), y + j()], [x + w + j(), y + h + j()], [x + j(), y + h + j()]];
+          const q = (a, b) => { const m = [(a[0] + b[0]) / 2 + j(), (a[1] + b[1]) / 2 + j()]; return `Q${m[0].toFixed(1)},${m[1].toFixed(1)} ${b[0].toFixed(1)},${b[1].toFixed(1)}`; };
+          return `M${p[0][0].toFixed(1)},${p[0][1].toFixed(1)} ${q(p[0], p[1])} ${q(p[1], p[2])} ${q(p[2], p[3])} ${q(p[3], [p[0][0] + 1.5, p[0][1] - 0.8])}`;
+        }
+        const casesG = [];
+        for (const svgId of ["cases", "cases-dessous"]) {
+          const g = el("g", { fill: "none", stroke: "rgba(26,19,32,0.35)", "stroke-linecap": "round", "stroke-linejoin": "round" }, $(svgId));
+          const rnd = prng(77);
+          PRODUITS.forEach((p) => el("path", { d: rectMain(p.x, p.y, CW, CH, rnd) }, g));
+          casesG.push(g);
+        }
+
+        // ---------------------------------------------------------------- photos : deux tailles, permutées à l’échelle 1,6
+        const photosEl = $("photos");
+        PRODUITS.forEach((p) => {
+          const d = document.createElement("div");
+          d.className = "case"; d.id = "case-" + p.id;
+          d.style.left = p.x + "px"; d.style.top = p.y + "px";
+          const fond = document.createElement("div");
+          fond.className = "case-fond"; fond.id = "fond-" + p.id;
+          fond.style.background = p.mode === "croquis" ? "rgba(255,228,92,0.25)" : p.detoure ? "rgba(26,19,32,0.06)" : "transparent";
+          d.appendChild(fond);
+          p.fond = fond;
+          if (p.photo) {
+            const nom = p.detoure ? p.id + "-detoure" : p.id;
+            p.hi = document.createElement("div"); p.lo = document.createElement("div");
+            for (const [n, k] of [[p.hi, 480], [p.lo, 192]]) {
+              n.className = "photo" + (p.detoure ? " detoure" : ""); n.id = `ph-${p.id}-${k}`;
+              n.style.backgroundImage = `url(assets/tailles/${nom}-${k}.webp)`;
+              d.appendChild(n);
+            }
+          }
+          photosEl.appendChild(d);
+          p.el = d;
+        });
+
+        // ---------------------------------------------------------------- traits du feutre : tous en coordonnées monde
+        const traitsSvg = $("traits");
+        const groupesTraits = []; // { g, k } : k = unités monde par unité locale, pour garder 7 px à l’écran
+        function groupe(tx, ty, k, parent) {
+          const g = el("g", { transform: `translate(${tx.toFixed(2)} ${ty.toFixed(2)}) scale(${k.toFixed(5)})`, fill: "none", stroke: "#b3125f", "stroke-linecap": "round", "stroke-linejoin": "round" }, parent || traitsSvg);
+          groupesTraits.push({ g, k });
+          return g;
+        }
+        function cheminCR(pts, ferme) {
+          const n = pts.length, f = (p) => p[0].toFixed(1) + "," + p[1].toFixed(1);
+          let d = "M" + f(pts[0]);
+          const last = ferme ? n : n - 1;
+          for (let i = 0; i < last; i++) {
+            const p0 = pts[(i - 1 + n) % n], p1 = pts[i], p2 = pts[(i + 1) % n], p3 = pts[(i + 2) % n];
+            const q0 = ferme || i > 0 ? p0 : p1, q3 = ferme || i + 2 < n ? p3 : p2;
+            const c1 = [p1[0] + (p2[0] - q0[0]) / 6, p1[1] + (p2[1] - q0[1]) / 6];
+            const c2 = [p2[0] - (q3[0] - p1[0]) / 6, p2[1] - (q3[1] - p1[1]) / 6];
+            d += "C" + f(c1) + " " + f(c2) + " " + f(p2);
+          }
+          return d + (ferme ? "Z" : "");
+        }
+        // contour fermé qui démarre au point le plus proche de q, avec un léger dépassement final (trait à main levée)
+        function depuis(pts, q) {
+          let best = 0, bd = 1e9;
+          pts.forEach((p, i) => { const d = (p[0] - q[0]) ** 2 + (p[1] - q[1]) ** 2; if (d < bd) { bd = d; best = i; } });
+          const r = pts.slice(best).concat(pts.slice(0, best));
+          return r.concat([r[0], r[1]].map((p) => [p[0] + 2, p[1] + 3]));
+        }
+        // échantillonnage à la construction : aucun appel de mesure pendant le rendu
+        function echantillons(p, pas = 1) {
+          const len = p.getTotalLength(), n = Math.max(2, Math.ceil(len / pas));
+          const pts = new Float32Array((n + 1) * 2);
+          for (let i = 0; i <= n; i++) { const q = p.getPointAtLength((len * i) / n); pts[2 * i] = q.x; pts[2 * i + 1] = q.y; }
+          return { len, n, pts };
+        }
+        function pointA(ec, u) {
+          const f = clamp(u) * ec.n, i = Math.min(ec.n - 1, Math.floor(f)), r = f - i;
+          return [lerp(ec.pts[2 * i], ec.pts[2 * i + 2], r), lerp(ec.pts[2 * i + 1], ec.pts[2 * i + 3], r)];
+        }
+        // un tracé = des éléments SVG parcourus l’un après l’autre ; le temps se partage selon la longueur, avec un petit saut entre deux éléments
+        function nouveauTrace(els, tx, ty, k, t0, t1, opts) {
+          const o = opts || {};
+          const parts = els.map((e) => {
+            const ech = echantillons(e, k < 0.5 ? 4 : 1);
+            e.setAttribute("stroke-dasharray", ech.len + " " + (ech.len + 10));
+            return { e, ech, len: ech.len };
+          });
+          const saut = o.saut === undefined ? 8 : o.saut;
+          const total = parts.reduce((a, p) => a + p.len, 0) + saut * (parts.length - 1);
+          let acc = 0;
+          parts.forEach((p) => { p.a = acc / total; acc += p.len; p.b = acc / total; acc += saut; });
+          return { parts, tx, ty, k, t0, t1, longueurMonde: total * k, lever: o.lever === undefined ? 0.6 : o.lever };
+        }
+        function progTrace(tr, u) {
+          for (const p of tr.parts) {
+            const v = clamp((u - p.a) / (p.b - p.a));
+            p.e.setAttribute("stroke-dashoffset", (p.len * (1 - v)).toFixed(2));
+            p.e.style.visibility = v > 0 ? "inherit" : "hidden";
+          }
+        }
+        // pointe du feutre sur un tracé, en coordonnées monde ; lever pendant les sauts entre éléments
+        function pointeTrace(tr, u) {
+          for (let i = 0; i < tr.parts.length; i++) {
+            const p = tr.parts[i];
+            if (u <= p.b || i === tr.parts.length - 1) {
+              if (u < p.a && i > 0) {
+                const q = tr.parts[i - 1], w = seg(u, q.b, p.a);
+                const a = pointA(q.ech, 1), b = pointA(p.ech, 0);
+                return { x: tr.tx + lerp(a[0], b[0], e2io(w)) * tr.k, y: tr.ty + lerp(a[1], b[1], e2io(w)) * tr.k, lift: Math.sin(Math.PI * w) * tr.lever };
+              }
+              const q = pointA(p.ech, (u - p.a) / (p.b - p.a));
+              return { x: tr.tx + q[0] * tr.k, y: tr.ty + q[1] * tr.k, lift: 0 };
+            }
+          }
+        }
+
+        // set football : bord de la flamme et contour du maillot (dessin.json), à l’échelle de la case 1
+        const P1 = PRODUITS[0];
+        const gSet = groupe(P1.x, P1.y, SP);
+        const elFlamme = el("path", { d: cheminCR(D.flamme_bord.pts, false) }, gSet);
+        const elMaillot = el("path", { d: cheminCR(depuis(D.maillot.pts, D.flamme_bord.pts[D.flamme_bord.pts.length - 1]), false) }, gSet);
+        P1.groupe = gSet;
+
+        // les tracés de chaque produit, en temps
+        const TRACES = [];
+        const FL = nouveauTrace([elFlamme], P1.x, P1.y, SP, TP(-0.8), TP(0.64));
+        FL.flamme = true; FL.produit = P1;
+        const MA = nouveauTrace([elMaillot], P1.x, P1.y, SP, TP(0.9), TP(1.86));
+        MA.produit = P1;
+        TRACES.push(FL, MA);
+        const ICON = 48;
+        PRODUITS.forEach((p, i) => {
+          if (i === 0) return;
+          if (p.contour) {
+            // héros : contour exact simplifié, à l’échelle de la photo
+            const g = groupe(p.x, p.y, SP);
+            const e = el("path", { d: cheminCR(depuis(p.contour, [p.contour[0][0], -100]), false) }, g);
+            const tr = p.id === "tote-sublime" ? nouveauTrace([e], p.x, p.y, SP, TP(3.0), TP(5.8)) : nouveauTrace([e], p.x, p.y, SP, TP(6.3), TP(7.9));
+            tr.produit = p; p.groupe = g; p.trace = tr;
+            TRACES.push(tr);
+            return;
+          }
+          if (!p.picto) return;
+          const part = p.mode === "croquis" ? 0.8 : 0.55;
+          const k = (CW * part) / ICON;
+          const tx = p.x + (CW - ICON * k) / 2, ty = p.y + (CH - ICON * k) / 2;
+          const g = groupe(tx, ty, k);
+          g.innerHTML = CAT.icones[p.picto];
+          // un sous-tracé par élément : le feutre se lève entre deux sous-tracés au lieu de sauter
+          [...g.children].forEach((c) => {
+            c.removeAttribute("fill");
+            const d = c.tagName === "path" ? c.getAttribute("d") : null;
+            const morceaux = d ? d.split(/(?=M)/).filter((m) => m.trim()) : [];
+            if (morceaux.length > 1) { morceaux.forEach((m) => g.insertBefore(el("path", { d: m }), c)); c.remove(); }
+          });
+          const tr = nouveauTrace([...g.children], tx, ty, k, p.T - TP(0.85), p.T - TP(0.05));
+          tr.produit = p; p.groupe = g; p.trace = tr; p.centrePicto = { x: tx + 24 * k, y: ty + 24 * k };
+          TRACES.push(tr);
+        });
+
+        // bob : deux passes de hachures, magenta puis jaune, rognées à sa silhouette
+        const BOB = PRODUITS.find((p) => p.id === "bob");
+        function dansPoly(x, y, poly) {
+          let c = false;
+          for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+            const xi = poly[i][0], yi = poly[i][1], xj = poly[j][0], yj = poly[j][1];
+            if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) c = !c;
+          }
+          return c;
+        }
+        function hachures(poly, pas, croise) {
+          const xs = poly.map((p) => p[0]), ys = poly.map((p) => p[1]);
+          const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+          const d = croise ? [Math.SQRT1_2, Math.SQRT1_2] : [Math.SQRT1_2, -Math.SQRT1_2], n = croise ? [Math.SQRT1_2, -Math.SQRT1_2] : [Math.SQRT1_2, Math.SQRT1_2];
+          const coins = [[x0, y0], [x1, y0], [x0, y1], [x1, y1]];
+          const cn = coins.map((c) => c[0] * n[0] + c[1] * n[1]), cd = coins.map((c) => c[0] * d[0] + c[1] * d[1]);
+          const lignes = [];
+          let k = 0;
+          for (let c = Math.min(...cn) + pas * 0.6; c < Math.max(...cn); c += pas) {
+            let a = null, b = null;
+            for (let s = Math.min(...cd); s <= Math.max(...cd); s += 0.25) {
+              const x = c * n[0] + s * d[0], y = c * n[1] + s * d[1];
+              if (dansPoly(x, y, poly)) { if (!a) a = [x, y]; b = [x, y]; }
+            }
+            if (a && Math.hypot(b[0] - a[0], b[1] - a[1]) > 2) { lignes.push(k % 2 ? [b, a] : [a, b]); k++; }
+          }
+          return lignes;
+        }
+        const bobFormes = [...BOB.groupe.children].map((c) => {
+          const ec = echantillons(c, 1), pts = [];
+          for (let i = 0; i <= ec.n; i++) pts.push([ec.pts[2 * i], ec.pts[2 * i + 1]]);
+          return pts;
+        });
+        // deux passes croisées, sous le contour du pictogramme : magenta, puis jaune par-dessus
+        const contourBob = BOB.groupe.firstChild;
+        const PASSES_BOB = [["#b3125f", TP(21.0), TP(21.45), false], ["#ffe45c", TP(21.5), TP(21.95), true]].map(([coul, t0, t1, croise]) => {
+          const g = el("g", { stroke: coul }, BOB.groupe);
+          BOB.groupe.insertBefore(g, contourBob);
+          const lignes = bobFormes.flatMap((poly) => hachures(poly, 2.6, croise));
+          const els = lignes.map(([a, b]) => el("path", { d: `M${a[0].toFixed(2)},${a[1].toFixed(2)} L${b[0].toFixed(2)},${b[1].toFixed(2)}` }, g));
+          const tb = BOB.trace;
+          const tr = nouveauTrace(els, tb.tx, tb.ty, tb.k, t0, t1, { saut: 1.2, lever: 0.12 });
+          tr.produit = BOB; tr.passe = true;
+          return tr;
+        });
+        TRACES.push(...PASSES_BOB);
+
+        // cercle au feutre autour du manchon droit
+        const MB = PRODUITS.find((p) => p.cercle);
+        const gCercle = groupe(MB.x, MB.y, SP);
+        const ptsC = [];
+        for (let i = 0; i <= 26; i++) {
+          const a = -2.2 + (i / 24) * Math.PI * 2;
+          ptsC.push([MB.cercle.c[0] + MB.cercle.r[0] * Math.cos(a) * (1 + 0.04 * Math.sin(3 * a)), MB.cercle.c[1] + MB.cercle.r[1] * Math.sin(a)]);
+        }
+        const elCercle = el("path", { d: cheminCR(ptsC, false) }, gCercle);
+        const CERCLE_MB = nouveauTrace([elCercle], MB.x, MB.y, SP, TP(29.05), TP(29.4));
+        CERCLE_MB.produit = MB; CERCLE_MB.cercle = true;
+        TRACES.push(CERCLE_MB);
+        TRACES.sort((a, b) => a.t0 - b.t0);
+
+        // cercle autour des chiffres du compteur (repère du compteur, tourné de -2°)
+        const cc = $("cercle-compteur");
+        const ptsK = [];
+        for (let i = 0; i <= 27; i++) { const a = -2.6 + (i / 24) * Math.PI * 2; ptsK.push([174 + 100 * Math.cos(a), 46 + 52 * Math.sin(a)]); }
+        cc.setAttribute("d", cheminCR(ptsK, false));
+        const CERCLE_K = { ech: echantillons(cc, 1), t0: TP(36.25), t1: TP(36.85) };
+        cc.setAttribute("stroke-dasharray", CERCLE_K.ech.len + " " + (CERCLE_K.ech.len + 10));
+        const pointCompteur = (q) => {
+          const a = (-2 * Math.PI) / 180, ox = 70 + 135, oy = 292 + 59, x = 70 + q[0] - ox, y = 292 + q[1] - oy;
+          return { x: ox + x * Math.cos(a) - y * Math.sin(a), y: oy + x * Math.sin(a) + y * Math.cos(a) };
+        };
+
+        // ---------------------------------------------------------------- feutre : pointe en coordonnées écran
+        function tPrimeFlamme(t) { return (t >= TP(63.2) ? t - TP(63.2) : t + TP(0.8)); }
+        const DUREE_FL = TP(0.64) + TP(0.8);
+        // départ à 125 px/s, puis accélération constante jusqu’au bout du bord (longueur écran mesurée en P0)
+        const LFL = FL.longueurMonde * POSE.P0.s, V0F = 125, AF = (2 * (LFL - V0F * DUREE_FL)) / (DUREE_FL * DUREE_FL);
+        function flammeP(tp) { return clamp((V0F * tp + 0.5 * AF * tp * tp) / LFL); }
+        const DEHORS = { x: 1250, y: 1500 };
+        function feutre(t) {
+          const c = cam(t);
+          function leve(p0, p1, u) { return ({ p: lp(p0, p1, e2io(u)), lift: Math.sin(Math.PI * u) * 0.7 + 0.3 * e2o(clamp(u * 2)) * (1 - u) }); }
+          function W(q) { return ecran(q, c); }
+          // flamme de l’image 0 et de la fin, entrée du feutre depuis le bas droit
+          if (t >= TP(62.6) || t < TP(0.64)) {
+            if (t >= TP(62.6) && t < TP(63.2)) { const u = seg(t, TP(62.6), TP(63.2)); return { p: lp(DEHORS, W(pointeTrace(FL, 0)), e2o(u)), lift: 1 - e2i(u) }; }
+            const q = pointeTrace(FL, flammeP(tPrimeFlamme(t)));
+            return { p: W(q), lift: 0 };
+          }
+          if (t >= TP(37.45)) return { p: DEHORS, lift: 1, vis: false };
+          // cercle du compteur, puis sortie à droite
+          if (t >= TP(36.85)) { const q = pointCompteur(pointA(CERCLE_K.ech, 1)); const u = seg(t, TP(36.85), TP(37.45)); return { p: lp(q, { x: 1300, y: 420 }, e2i(u)), lift: e2o(clamp(u * 3)) }; }
+          if (t >= CERCLE_K.t0) return { p: pointCompteur(pointA(CERCLE_K.ech, seg(t, CERCLE_K.t0, CERCLE_K.t1))), lift: 0 };
+          // tracés dans le monde
+          let prev = null;
+          for (const tr of TRACES) {
+            if (tr.flamme) { prev = tr; continue; }
+            if (t < tr.t0) {
+              const a = prev ? W(pointeTrace(prev, 1)) : DEHORS, b = W(pointeTrace(tr, 0));
+              return leve(a, b, seg(t, prev ? prev.t1 : 0, tr.t0));
+            }
+            if (t <= tr.t1) { const q = pointeTrace(tr, seg(t, tr.t0, tr.t1)); return { p: W(q), lift: q.lift }; }
+            prev = tr;
+          }
+          // du dernier tracé (boxer) au compteur
+          const a = W(pointeTrace(prev, 1)), b = pointCompteur(pointA(CERCLE_K.ech, 0));
+          return leve(a, b, seg(t, prev.t1, CERCLE_K.t0));
+        }
+        const PTE = DEC.feutre.pointe, ECH_F = 0.72;
+        function placeFeutre(st, t) {
+          const node = $("feutre");
+          if (st.vis === false) { node.style.visibility = "hidden"; return; }
+          node.style.visibility = "inherit";
+          const lift = clamp(st.lift);
+          const rot = 3 * Math.sin((2 * Math.PI * 35 * t) / DUREE) + 2 * lift;
+          const sc = ECH_F * (1 + 0.025 * lift);
+          node.style.transform = `translate(${st.p.x.toFixed(2)}px, ${(st.p.y - 12 * lift).toFixed(2)}px) rotate(${rot.toFixed(2)}deg) scale(${sc.toFixed(4)}) translate(${-PTE[0]}px, ${-PTE[1]}px)`;
+          const ox = 8 + 10 * lift, oy = 10 + 12 * lift, b = 5 + 6 * lift, o = 0.3 - 0.1 * lift;
+          node.style.filter = `drop-shadow(${ox}px ${oy}px ${b}px rgba(26,19,32,${o.toFixed(2)}))`;
+        }
+
+        // ---------------------------------------------------------------- bon à détacher : position verticale en fonction du temps
+        function bonY(t) {
+          if (t < TP(46.5)) return 700;
+          if (t < TP(59.5)) return 700 * (1 - e3o(seg(t, TP(46.5), TP(47.1))));
+          return 800 * e2i(seg(t, TP(59.5), TP(60)));
+        }
+
+        // ---------------------------------------------------------------- ballon : trajectoire en fonction pure du temps
+        const R = 52, SQ = 0.07;
+        // repères : F = point de la feuille (monde), B = point du bon (écran, suit le bon)
+        const F = (x, y) => ({ f: "F", x, y }), B = (x, y) => ({ f: "B", x, y });
+        function posW(w, t) { return (w.f === "F" ? ecran(w, cam(t)) : { x: w.x, y: w.y + bonY(t) - 0 }); }
+        const ptCase = (id, dx, dy) => { const p = PRODUITS.find((q) => q.id === id); return F(p.x + CW / 2 + (dx || 0), p.y + CH / 2 + (dy || 0)); };
+        const K = {
+          c3: F(300, 997), set: F(70, 985), coin1: F(36, 932), tote: ptCase("tote-sublime", 0, -12), rep2: F(150, 932), sweat: ptCase("hoodie", 0, -12), rep3: F(296, 880),
+          soft: ptCase("softshell", 0, -4), rep4: F(380, 226), echarpe: ptCase("echarpe", 0, -4), int1: F(745, 520), bandeau: ptCase("bandeau", 0, -4), int2: F(860, 560), int3: F(860, 820),
+          btri: ptCase("bandana-triangle", 0, -4), int4: F(800, 905), coussin: ptCase("coussin-stade", 0, -4), genoux: ptCase("manchons-genoux", 0, -4), yoga: ptCase("tapis-yoga", 0, -4),
+          boxer: ptCase("boxer", 0, -30), marge: F(800, 200), bonCoin: B(920, 884), bouton: B(540, 1098), coinFeuille: F(1025, 1485), apex: F(316, 997),
+        };
+        const SEG = [];
+        function add(o) { return SEG.push(o); }
+        function arc(n0, n1, P0, P1, H, extra) { return add({ type: "arc", t0: typeof n0 === "number" ? TP(n0) : n0.s, t1: typeof n1 === "number" ? TP(n1) : n1.s, P0, P1, H, ...(extra || {}) }); }
+        function contact(n, P) { return add({ type: "contact", t0: TP(n), t1: TP(n) + SQ, P }); }
+        function repos(n0, n1, P, extra) { return add({ type: "repos", t0: typeof n0 === "number" ? TP(n0) : n0.s, t1: TP(n1), P, pose: typeof n0 === "number" ? TP(n0) : n0.s, ...(extra || {}) }); }
+        function apresC(n) { return ({ s: TP(n) + SQ }); }
+        // chute depuis le sommet du temps 63,3 (repris en fin de vidéo), rebond sur la case 3 vide au temps 1
+        add({ type: "arc", t0: TP(63.3) - DUREE, t1: TP(1), P0: K.apex, P1: K.c3, H: 700, forme: "chute" });
+        contact(1, K.c3);
+        arc(apresC(1), 2, K.c3, K.set, 50);
+        contact(2, K.set);
+        arc(apresC(2), 2.6, K.set, K.coin1, 70);
+        repos(2.6, 5.4, K.coin1);
+        arc(5.4, 6, K.coin1, K.tote, 120);
+        contact(6, K.tote);
+        arc(apresC(6), 6.6, K.tote, K.rep2, 70);
+        repos(6.6, 7.4, K.rep2);
+        arc(7.4, 8, K.rep2, K.sweat, 120);
+        contact(8, K.sweat);
+        arc(apresC(8), 8.6, K.sweat, K.rep3, 60);
+        repos(8.6, 14.5, K.rep3, { antic: [TP(13.6), TP(14.5)], vers: K.soft });
+        arc(14.5, 15, K.rep3, K.soft, 240, { depuisAntic: true });
+        contact(15, K.soft);
+        arc(apresC(15), 15.8, K.soft, K.rep4, 90);
+        repos(15.8, 19.4, K.rep4, { antic: [TP(18.5), TP(19.4)], vers: K.echarpe });
+        arc(19.4, 20, K.rep4, K.echarpe, 220, { depuisAntic: true });
+        contact(20, K.echarpe);
+        arc(apresC(20), 20.6, K.echarpe, K.int1, 70);
+        repos(20.6, 25.4, K.int1);
+        arc(25.4, 26, K.int1, K.bandeau, 120);
+        contact(26, K.bandeau);
+        arc(apresC(26), 26.6, K.bandeau, K.int2, 70);
+        repos(26.6, 27.6, K.int2);
+        arc(27.6, 28.1, K.int2, K.int3, 90);
+        repos(28.1, 29.4, K.int3);
+        arc(29.4, 30, K.int3, K.btri, 120);
+        contact(30, K.btri);
+        arc(apresC(30), 30.6, K.btri, K.int4, 70);
+        repos(30.6, 32.5, K.int4);
+        arc(32.5, 33, K.int4, K.coussin, 140);
+        contact(33, K.coussin);
+        arc(apresC(33), 34, K.coussin, K.genoux, 90);
+        contact(34, K.genoux);
+        arc(apresC(34), 35, K.genoux, K.yoga, 90);
+        contact(35, K.yoga);
+        arc(apresC(35), 36, K.yoga, K.boxer, 90);
+        contact(36, K.boxer);
+        arc(apresC(36), 40, K.boxer, K.marge, 260);
+        contact(40, K.marge);
+        arc(apresC(40), 40.5, K.marge, K.marge, 26);
+        repos(40.5, 46, K.marge);
+        arc(46, 46.8, K.marge, K.bonCoin, 150);
+        contact(46.8, K.bonCoin);
+        arc(apresC(46.8), 47.3, K.bonCoin, K.bonCoin, 30);
+        repos(47.3, 51.6, K.bonCoin);
+        arc(51.6, 52, K.bonCoin, K.bonCoin, 40);
+        contact(52, K.bonCoin);
+        arc(apresC(52), 52.4, K.bonCoin, K.bonCoin, 14);
+        repos(52.4, 55.4, K.bonCoin);
+        arc(55.4, 56, K.bonCoin, K.bouton, 160);
+        contact(56, K.bouton);
+        arc(apresC(56), 57, K.bouton, K.bonCoin, 120);
+        contact(57, K.bonCoin);
+        repos(apresC(57), 59.3, K.bonCoin, { antic: [TP(58.4), TP(59.3)], vers: K.coinFeuille });
+        arc(59.3, 60, K.bonCoin, K.coinFeuille, 180, { depuisAntic: true });
+        contact(60, K.coinFeuille);
+        add({ type: "arc", t0: TP(60) + SQ, t1: TP(63.3), P0: K.coinFeuille, P1: K.apex, H: 700, forme: "monte" });
+        const CONTACTS = SEG.filter((s) => s.type === "contact").map((s, i) => ({ t: s.t0, P: s.P, i }));
+
+        function hauteurArc(s, u) {
+          if (s.forme === "chute") return s.H * (1 - u * u);
+          if (s.forme === "monte") return s.H * (1 - (1 - u) * (1 - u));
+          return s.H * 4 * u * (1 - u);
+        }
+        function trouveSeg(t) {
+          const tt = t >= TP(63.3) ? t - DUREE : t;
+          for (const s of SEG) if (tt >= s.t0 && tt < s.t1) return [s, tt];
+          return [SEG[SEG.length - 1], tt];
+        }
+        // recul d’anticipation : 18 px à l’opposé de la cible
+        function recul(s, tt, t) {
+          if (!s.antic || tt < s.antic[0]) return { x: 0, y: 0, u: 0 };
+          const a = posW(s.P, t), b = posW(s.vers, t), dx = a.x - b.x, dy = a.y - b.y, n = Math.hypot(dx, dy) || 1;
+          const u = e2io(seg(tt, s.antic[0], s.antic[1]));
+          return { x: (18 * u * dx) / n, y: (18 * u * dy) / n, u };
+        }
+        function deformation(s, tt) {
+          if (s.type === "contact") return 0.7;
+          if (s.type === "arc") {
+            const tau = tt - s.t0, te = s.t1 - tt;
+            const k0 = s.depuisAntic ? 0.68 : 0.7;
+            let k = 1;
+            if (s.forme !== "chute") {
+              if (tau < 0.1) k = lerp(k0, 1.25, e2o(tau / 0.1));
+              else if (tau < 0.3) k = lerp(1.25, 1, e1io((tau - 0.1) / 0.2));
+            }
+            if (te < 0.1 && s.H > 30) k = Math.max(k, lerp(1, 1.18, e2i(1 - te / 0.1)));
+            if (s.forme === "chute" && te >= 0.1) k = lerp(1, 1.18, seg(tt, s.t0, s.t1 - 0.1));
+            return k;
+          }
+          if (s.type === "repos") {
+            let k = 1;
+            const tau = tt - s.pose;
+            if (tau < SQ) k = 0.7;
+            else { const q = tau - SQ; k = 1 - 0.3 * Math.exp(-q / 0.1) * Math.cos((2 * Math.PI * q) / 0.28); }
+            if (s.antic && tt >= s.antic[0]) k = Math.min(k, 1 - 0.32 * e2io(seg(tt, s.antic[0], s.antic[1])));
+            return k;
+          }
+          return 1;
+        }
+        // état du ballon : sol (écran), hauteur, déformation
+        function ballon(t) {
+          const [s, tt] = trouveSeg(t);
+          const out = { k: deformation(s, tt), h: 0, s };
+          if (s.type === "arc") {
+            const u = seg(tt, s.t0, s.t1);
+            let a = posW(s.P0, t);
+            if (s.depuisAntic) { const prev = SEG[SEG.indexOf(s) - 1], r = recul(prev, prev.antic[1], t); a = { x: a.x + r.x, y: a.y + r.y }; }
+            out.sol = lp(a, posW(s.P1, t), u);
+            out.h = hauteurArc(s, u);
+          } else if (s.type === "contact") out.sol = posW(s.P, t);
+          else {
+            const a = posW(s.P, t), r = recul(s, tt, t);
+            out.sol = { x: a.x + r.x, y: a.y + r.y };
+          }
+          out.centre = { x: out.sol.x, y: out.sol.y - out.h - R * out.k };
+          return out;
+        }
+        // angle du motif : roule avec le déplacement, se tourne vers la cible 0,2 s avant chaque grand saut
+        const REGARDS = SEG.filter((s) => s.type === "arc" && s.H >= 120).map((s) => ({ t0: s.t0 - 0.25, t1: s.t0, s }));
+        const ANGLE_MOTIF0 = (Math.atan2(-8, 10) * 180) / Math.PI;
+        function angleMotif(t, b) {
+          let ang = (b.sol.x / R) * (180 / Math.PI) * 0.6 + (b.sol.y / R) * 12;
+          for (const g of REGARDS) {
+            const tt = t >= TP(63.3) ? t - DUREE : t;
+            if (tt >= g.t0 - 0.01 && tt < g.t1 + 0.25) {
+              const w = tt < g.t1 ? e2io(seg(tt, g.t0, g.t0 + 0.2)) : 1 - e2io(seg(tt, g.t1, g.t1 + 0.25));
+              const a = posW(g.s.P0, t), q = posW(g.s.P1, t);
+              const cible = (Math.atan2(q.y - g.s.H - a.y, q.x - a.x) * 180) / Math.PI - ANGLE_MOTIF0;
+              const dd = ((cible - ang + 540) % 360 + 360) % 360 - 180;
+              ang = ang + dd * w;
+            }
+          }
+          return ang;
+        }
+        (function dessineBallon() {
+          const pts = [];
+          for (let i = 0; i <= 40; i++) {
+            const a = (i / 40) * Math.PI * 2 - 0.4;
+            const r = R * (1 + 0.025 * Math.sin(3 * a + 0.7) + 0.015 * Math.sin(5 * a + 2));
+            pts.push([r * Math.cos(a), r * Math.sin(a)]);
+          }
+          const ferme = cheminCR(pts.slice(0, 40), true);
+          $("ball-fond").setAttribute("d", ferme);
+          $("ball-clip-d").setAttribute("d", ferme);
+          const ouvert = pts.concat([[pts[1][0] * 1.04, pts[1][1] * 1.04], [pts[2][0] * 1.06, pts[2][1] * 1.06]]);
+          $("ball-trait").setAttribute("d", cheminCR(ouvert, false));
+          const gh = $("ball-hachures");
+          for (let i = 0; i < 6; i++) { const c = 10 + i * 9; el("path", { d: `M${c - 60},${60 - c + 40} L${c + 10},${-c + 30}` }, gh); }
+          const m = $("ball-motif"), cx = 10, cy = -8, rp = 13;
+          const pent = [];
+          for (let i = 0; i < 5; i++) { const a = -Math.PI / 2 + (i * 2 * Math.PI) / 5; pent.push([cx + rp * Math.cos(a), cy + rp * Math.sin(a)]); }
+          el("path", { d: "M" + pent.map((p) => p.map((v) => v.toFixed(1)).join(",")).join(" L") + "Z", fill: "#b3125f", stroke: "#b3125f", "stroke-width": 3, "stroke-linejoin": "round" }, m);
+          const penta = (x, y, r, rot) => {
+            const q = [];
+            for (let i = 0; i < 5; i++) { const a = rot + (i * 2 * Math.PI) / 5; q.push([x + r * Math.cos(a), y + r * Math.sin(a)]); }
+            return "M" + q.map((p) => p.map((v) => v.toFixed(1)).join(",")).join(" L") + "Z";
+          };
+          pent.forEach((p, i) => {
+            const a = Math.atan2(p[1] - cy, p[0] - cx), l = i === 2 ? 20 : 24;
+            el("path", { d: `M${p[0].toFixed(1)},${p[1].toFixed(1)} L${(p[0] + l * Math.cos(a)).toFixed(1)},${(p[1] + l * Math.sin(a)).toFixed(1)}`, stroke: "#b3125f", "stroke-width": 4.5, "stroke-linecap": "round", fill: "none" }, m);
+            const b = a + Math.PI / 5, dist = i === 3 ? 46 : 50;
+            el("path", { d: penta(cx + dist * Math.cos(b), cy + dist * Math.sin(b), 12, b), fill: "#b3125f", stroke: "#b3125f", "stroke-width": 3, "stroke-linejoin": "round" }, m);
+          });
+        })();
+        // points d’encre aux contacts (PRNG à graine fixe)
+        const encre = $("encre-svg");
+        const POINTS = CONTACTS.map((c) => {
+          const rnd = prng(1000 + c.i * 17);
+          return Array.from({ length: 4 }, () => {
+            const a = Math.PI * (0.05 + 0.9 * rnd()) * (rnd() < 0.5 ? 1 : -1);
+            const d = R * (0.75 + 0.7 * rnd());
+            const n = el("circle", { r: (2.5 + 3.5 * rnd()).toFixed(1), fill: rnd() < 0.7 ? "#b3125f" : "#1a1320" }, encre);
+            return { n, dx: Math.cos(a) * d, dy: Math.sin(a) * d * 0.45 };
+          });
+        });
+
+        // ---------------------------------------------------------------- tour de page (b13)
+        const PW = 1040, PH = 1498;
+        const DIRP = { x: -0.8, y: -0.6 }, QP = { x: PW, y: PH }, FOLD_FIN = 2190;
+        function coupe(poly, garde) {
+          const out = [];
+          for (let i = 0; i < poly.length; i++) {
+            const a = poly[i], b = poly[(i + 1) % poly.length];
+            const ga = garde(a), gb = garde(b);
+            if (ga >= 0) out.push(a);
+            if (ga >= 0 !== gb >= 0) { const u = ga / (ga - gb); out.push({ x: lerp(a.x, b.x, u), y: lerp(a.y, b.y, u) }); }
+          }
+          return out;
+        }
+        function polyCss(pts) {
+          return pts.length < 3 ? "polygon(0px 0px, 0px 0px, 0px 0px)" : "polygon(" + pts.map((p) => p.x.toFixed(1) + "px " + p.y.toFixed(1) + "px").join(", ") + ")";
+        }
+        function pliage(f) {
+          const rect = [{ x: 0, y: 0 }, { x: PW, y: 0 }, { x: PW, y: PH }, { x: 0, y: PH }];
+          function g(X) { return (X.x - QP.x) * DIRP.x + (X.y - QP.y) * DIRP.y - f; }
+          const reste = coupe(rect, g);
+          const plie = coupe(rect, (X) => -g(X));
+          const dx = DIRP.x, dy = DIRP.y;
+          const Dm = [[1 - 2 * dx * dx, -2 * dx * dy], [-2 * dx * dy, 1 - 2 * dy * dy]];
+          const A = [[-Dm[0][0], Dm[0][1]], [-Dm[1][0], Dm[1][1]]];
+          const k = 2 * (QP.x * dx + QP.y * dy + f);
+          const b = { x: Dm[0][0] * PW + k * dx, y: Dm[1][0] * PW + k * dy };
+          return { reste, plie: plie.map((X) => ({ x: PW - X.x, y: X.y })), m: `matrix(${A[0][0].toFixed(5)}, ${A[1][0].toFixed(5)}, ${A[0][1].toFixed(5)}, ${A[1][1].toFixed(5)}, ${b.x.toFixed(2)}, ${b.y.toFixed(2)})` };
+        }
+        const FIN_PAGE = TP(61.8);
+
+        // ---------------------------------------------------------------- étiquette : gabarit de la pub foot, pointe et trou à gauche
+        const ET = { w: 950, h: 228, pointe: 70 };
+        (function () {
+          const { w, h, pointe } = ET, o = 10;
+          const d = `M${o + w - 6},${o} L${o + pointe},${o} L${o},${o + h / 2} L${o + pointe},${o + h} L${o + w - 4},${o + h - 2} Q${o + w + 2},${o + h / 2} ${o + w - 6},${o}`;
+          $("etiq-fond").setAttribute("d", d + "Z");
+          const t2 = $("etiq-trait");
+          t2.setAttribute("d", d);
+          ET.len = t2.getTotalLength();
+          t2.setAttribute("stroke-dasharray", ET.len + " " + (ET.len + 10));
+          $("etiq-trou").setAttribute("cx", o + pointe - 14); $("etiq-trou").setAttribute("cy", o + h / 2);
+        })();
+        const TROU = { x: 65 + ET.pointe - 14, y: 1020 + ET.h / 2 };
+        function rendEtiquette(t, c) {
+          const vis = t >= TP(1.5) && t < TP(10.6);
+          $("etiquette").style.visibility = vis ? "inherit" : "hidden";
+          $("fil-svg").style.visibility = vis ? "inherit" : "hidden";
+          if (!vis) return;
+          const p = seg(t, TP(1.5), TP(2.0));
+          $("etiq-trait").setAttribute("stroke-dashoffset", (ET.len * (1 - p)).toFixed(2));
+          $("etiq-fond").setAttribute("fill-opacity", (0.96 * seg(t, TP(1.85), TP(2.0))).toFixed(3));
+          $("etiq-trou").setAttribute("opacity", seg(t, TP(1.9), TP(2.0)).toFixed(3));
+          // pendule amorti de 1,2° quand le fil saute sur la case 2
+          const tb = TP(6.25);
+          const sway = t > tb ? 1.2 * Math.exp(-(t - tb) / 0.3) * Math.sin(((t - tb) * 2 * Math.PI) / 0.45) : 0;
+          const sortie = 1 - seg(t, TP(10), TP(10) + 0.25);
+          $("etiquette").style.transform = `rotate(${sway.toFixed(3)}deg)`;
+          // fil : du trou de l’étiquette au bas de la case 1, puis de la case 2
+          const pr = t < TP(6) ? PRODUITS[0] : PRODUITS[1];
+          // le fil part du coin bas gauche de la case et passe à gauche du texte avant d’entrer dans le trou
+          const haut = ecran({ x: pr.x + 10, y: pr.y + CH - 2 }, c);
+          const mx = Math.min(haut.x, TROU.x) - 70, my = (haut.y + TROU.y) / 2 + 10;
+          $("fil").setAttribute("d", `M${haut.x.toFixed(1)},${haut.y.toFixed(1)} Q${mx.toFixed(1)},${my.toFixed(1)} ${TROU.x.toFixed(1)},${TROU.y.toFixed(1)}`);
+          const saut = t >= TP(6) && t < TP(6.25) ? seg(t, TP(6), TP(6.25)) : 1;
+          $("fil").setAttribute("stroke-dasharray", "2000 2000");
+          $("fil").setAttribute("stroke-dashoffset", (2000 * (1 - Math.min(seg(t, TP(1.5), TP(1.9)), saut))).toFixed(1));
+          $("fil").setAttribute("opacity", sortie.toFixed(3));
+        }
+
+        // ---------------------------------------------------------------- compteur : valeur lue dans PRODUITS
+        const FIN_COMPTEUR = TP(37.5), RETOUR_COMPTEUR = TP(62.5);
+        function valeur(t) {
+          return t >= FIN_PAGE ? 0 : PRODUITS.filter((p) => p.T <= t).length;
+        }
+        function deux(n) { return String(n).padStart(2, "0"); }
+        function rendCompteur(t) {
+          const n = valeur(t);
+          const ch = PRODUITS.filter((p) => p.T <= t).map((p) => p.T).pop();
+          const u = ch !== undefined && t < FIN_PAGE ? e2o(seg(t, ch, ch + 0.12)) : 1;
+          const a = $("chiffre-a"), b = $("chiffre-b");
+          a.textContent = deux(Math.max(0, n - 1)); b.textContent = deux(n);
+          a.style.transform = `translateY(${(-72 * u).toFixed(1)}px)`;
+          b.style.transform = `translateY(${(72 * (1 - u)).toFixed(1)}px)`;
+          a.style.visibility = u < 1 ? "inherit" : "hidden";
+          const pc = seg(t, CERCLE_K.t0, CERCLE_K.t1);
+          cc.setAttribute("stroke-dashoffset", (CERCLE_K.ech.len * (1 - pc)).toFixed(2));
+          cc.style.visibility = pc > 0 && t < FIN_PAGE ? "inherit" : "hidden";
+        }
+
+        // ---------------------------------------------------------------- rendu d’une image, fonction pure de t
+        const tr2 = (n, x, y, s) => { n.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) scale(${s.toFixed(5)})`; };
+        const REF = POSE.V0;
+        function rendu(t) {
+          t = clamp(t, 0, DUREE);
+          const c = cam(t);
+          tr2($("monde"), CX - c.x * c.s, CY - c.y * c.s, c.s);
+          // table : parallaxe 0,3 et dérive de 6 px/s de 40 à 60, ramenée à zéro par une courbe de Hermite
+          let derive = 0;
+          if (t >= TP(40) && t < TP(60)) derive = 6 * (t - TP(40));
+          else if (t >= TP(60)) derive = herm(6 * (TP(60) - TP(40)), 0, 6 * (DUREE - TP(60)), 0, seg(t, TP(60), DUREE));
+          const st = 1 + 0.3 * (c.s - 1), ctx = REF.x + 0.3 * (c.x - REF.x), cty = REF.y + 0.3 * (c.y - REF.y);
+          tr2($("table"), CX - ctx * st + derive, CY - cty * st, st);
+          // gobelets : parallaxe 1,4, au premier plan pendant la vue large
+          const cgx = REF.x + 1.4 * (c.x - REF.x), cgy = REF.y + 1.4 * (c.y - REF.y);
+          tr2($("gobelets-calque"), CX - cgx * c.s, CY - cgy * c.s, c.s);
+          const og = t >= TP(36) && t < TP(47) ? 0.95 * (1 - seg(t, TP(46.1), TP(46.8))) : 0;
+          $("gobelets-calque").style.visibility = og > 0 ? "inherit" : "hidden";
+          $("gobelets-calque").style.opacity = og.toFixed(3);
+
+          // traits : 7 px à l’écran quelle que soit l’échelle
+          for (const { g, k } of groupesTraits) g.setAttribute("stroke-width", (7 / (c.s * k)).toFixed(3));
+          for (const g of casesG) g.setAttribute("stroke-width", (3 / c.s).toFixed(3));
+
+          // page : la feuille du film tourne de 60 à 61,8 ; dessous, la feuille neuve
+          const enPage = t >= TP(60) && t < FIN_PAGE;
+          $("feuille-dessous").style.visibility = enPage ? "inherit" : "hidden";
+          if (enPage) {
+            const pl = pliage(FOLD_FIN * e2i(seg(t, TP(60), FIN_PAGE)));
+            $("feuille").style.clipPath = polyCss(pl.reste);
+            $("flap").style.transform = pl.m;
+            $("flap").style.clipPath = polyCss(pl.plie);
+            $("flap-ombre").style.visibility = pl.plie.length > 2 ? "inherit" : "hidden";
+          } else {
+            $("feuille").style.clipPath = "none";
+            $("flap-ombre").style.visibility = "hidden";
+          }
+          const neuve = t >= FIN_PAGE; // après le tour de page, la feuille du film est la feuille neuve de l’image 0
+          const hi = c.s > 1.6;
+
+          // tracés
+          for (const tr of TRACES) {
+            if (tr.flamme) {
+              const p = t >= TP(63.2) || t < TP(0.64) ? flammeP(tPrimeFlamme(t)) : t < FIN_PAGE ? 1 : 0;
+              progTrace(tr, p);
+              continue;
+            }
+            progTrace(tr, neuve ? 0 : seg(t, tr.t0, tr.t1));
+          }
+          // produits : révélations
+          PRODUITS.forEach((p) => {
+            const vis = !neuve && t >= p.T;
+            const g = p.groupe;
+            if (p.mode === "croquis") {
+              p.fond.style.opacity = vis ? seg(t, p.T, p.T + 0.2).toFixed(3) : 0;
+              return;
+            }
+            // le croquis s’efface pendant que la photo naît
+            if (g) g.style.opacity = vis ? (1 - seg(t, p.T, p.T + (p.detoure ? 0.25 : 0.2))).toFixed(3) : 1;
+            p.fond.style.opacity = vis ? seg(t, p.T, p.T + 0.3).toFixed(3) : 0;
+            if (!p.photo) return;
+            p.hi.style.visibility = vis && hi ? "inherit" : "hidden";
+            p.lo.style.visibility = vis && !hi ? "inherit" : "hidden";
+            if (!vis) { p.el.style.transform = "none"; return; }
+            const duree = p.n <= 3 ? 0.45 : 0.3;
+            const u = seg(t, p.T, p.T + duree);
+            const o = p.origine;
+            const rr = 170 * e2o(u);
+            const cp = u < 1 ? `circle(${rr.toFixed(2)}px at ${o.x.toFixed(1)}px ${o.y.toFixed(1)}px)` : "none";
+            p.hi.style.clipPath = p.lo.style.clipPath = cp;
+            const sc = 1 + 0.04 * Math.sin(Math.PI * seg(t, p.T, p.T + 0.25));
+            p.el.style.transform = `scale(${sc.toFixed(4)})`;
+          });
+          placeFeutre(feutre(t), t);
+
+          // ---- ballon
+          const b = ballon(t);
+          const cB = b.centre;
+          $("ball").style.transform = `translate(${cB.x.toFixed(2)}px, ${cB.y.toFixed(2)}px)`;
+          $("ball-body").style.transform = `scale(${(1 / b.k).toFixed(4)}, ${b.k.toFixed(4)})`;
+          $("ball-motif").setAttribute("transform", `rotate(${angleMotif(t, b).toFixed(2)})`);
+          const rx = (R * 1.05) / (1 + b.h / 600), op = 0.22 / (1 + b.h / 250);
+          const om = $("ball-ombre");
+          om.style.opacity = op.toFixed(3);
+          om.style.transform = `translate(${(b.sol.x + 6 - rx).toFixed(1)}px, ${(b.sol.y + 2 - rx * 0.42).toFixed(1)}px) scale(${((2 * rx) / 200).toFixed(4)}, ${((0.84 * rx) / 200).toFixed(4)})`;
+          // traînée : deux traits qui suivent avec 0,06 et 0,12 s de retard (temps repliés sur la boucle)
+          const avant = (d) => { let q = t - d; if (q < 0) q += DUREE; return ballon(q).centre; };
+          let c1 = avant(0.06), c2 = avant(0.12);
+          const vit = Math.hypot(cB.x - c1.x, cB.y - c1.y) / 0.06;
+          const opT = clamp((vit - 350) / 900);
+          const nrm = (p, q) => { const dx = q.x - p.x, dy = q.y - p.y, n = Math.hypot(dx, dy) || 1; return { x: -dy / n, y: dx / n }; };
+          const n1 = nrm(c1, cB), n2 = nrm(c2, c1), off = R * 0.42, rr = R * 0.95;
+          const ar = (p, q) => { const dx = q.x - p.x, dy = q.y - p.y, n = Math.hypot(dx, dy) || 1; return { x: dx / n, y: dy / n }; };
+          const d1 = ar(c1, cB), d2 = ar(c2, c1);
+          function pt(p, d, nn, o, k) { return `${(p.x - d.x * rr + nn.x * o * k).toFixed(1)},${(p.y - d.y * rr + nn.y * o * k).toFixed(1)}`; }
+          const cap = (q, p) => { const dx = q.x - p.x, dy = q.y - p.y, n = Math.hypot(dx, dy), m = 1.4 * R; return n > m ? { x: p.x + (dx * m) / n, y: p.y + (dy * m) / n } : q; };
+          c1 = cap(c1, cB); c2 = cap(c2, c1);
+          $("trail-1").setAttribute("d", `M${pt(c1, d1, n1, off, 1)} L${pt(cB, d1, n1, off, 0.8)}`);
+          $("trail-2").setAttribute("d", `M${pt(c2, d2, n2, -off, 1)} L${pt(c1, d2, n2, -off, 0.8)}`);
+          $("trail-1").setAttribute("opacity", opT.toFixed(3)); $("trail-2").setAttribute("opacity", (opT * 0.7).toFixed(3));
+          // points d’encre
+          CONTACTS.forEach((ct, i) => {
+            const u = t - ct.t;
+            const vis = u >= 0 && u < 0.9;
+            POINTS[i].forEach((q) => {
+              if (!vis) { q.n.setAttribute("opacity", 0); return; }
+              const base = posW(ct.P, t), sc = e2o(clamp(u / 0.07)) * (ct.P.f === "F" ? Math.min(1.4, c.s / 2) : 1);
+              const x = base.x + q.dx * sc, y = base.y + q.dy * sc;
+              q.n.setAttribute("cx", x.toFixed(1)); q.n.setAttribute("cy", y.toFixed(1));
+              q.n.setAttribute("opacity", (1 - seg(u, 0.35, 0.9)).toFixed(3));
+            });
+          });
+
+          rendEtiquette(t, c);
+          rendCompteur(t);
+          $("bon").style.transform = `translateY(${bonY(t).toFixed(2)}px)`;
+          $("bon").style.visibility = t >= TP(46.4) && t < TP(60) ? "inherit" : "hidden";
+        }
+
+        // origine de chaque révélation, en unités locales de la case : point de contact, bout du trait ou centre du pictogramme
+        PRODUITS.forEach((p) => {
+          let o;
+          if (p.ballon === "contact") { const k = CONTACTS.find((ct) => Math.abs(ct.t - p.T) < 1e-6); o = { x: k.P.x - p.x, y: k.P.y - p.y }; }
+          else if (p.mode === "cadre" && p.centrePicto) o = { x: p.centrePicto.x - p.x, y: p.centrePicto.y - p.y };
+          else if (p.trace) { const q = pointeTrace(p.trace, 1); o = { x: q.x - p.x, y: q.y - p.y }; }
+          else o = { x: CW / 2, y: CH / 2 };
+          p.origine = o;
+        });
+
+        // ---------------------------------------------------------------- textes : tailles, places, tweens éditoriaux
+        function ajuste(id, base, max, min) {
+          const n = $(id);
+          n.parentNode.style.fontSize = base + "px";
+          const w = n.offsetWidth;
+          const taille = w > max ? Math.max(min, (base * max) / w) : base;
+          n.parentNode.style.fontSize = taille.toFixed(1) + "px";
+          return taille;
+        }
+        function construire() {
+          // étiquette : deux jeux de lignes, centrés dans le corps (hors pointe)
+          for (const k of ["a", "b"]) {
+            const f1 = ajuste(`e${k}-l1-t`, 84, 840, 40), f2 = ajuste(`e${k}-l2-t`, 44, 840, 40);
+            const l1 = $(`e${k}-l1`), l2 = $(`e${k}-l2`);
+            const haut = (ET.h - (f1 + 18 + f2)) / 2;
+            l1.style.left = l2.style.left = ET.pointe + "px";
+            l1.style.width = l2.style.width = ET.w - ET.pointe - 20 + "px";
+            l1.style.top = haut + "px"; l2.style.top = haut + f1 + 18 + "px";
+            const prix = $(`prix-${k}`), sl = $(`surligne-${k}`);
+            // offsetLeft se mesure depuis la ligne (parent positionné) : le centrage y est déjà compris
+            sl.style.left = ET.pointe + prix.offsetLeft - 8 + "px";
+            sl.style.top = haut + f1 * 0.08 + "px";
+            sl.style.width = prix.offsetWidth + 16 + "px"; sl.style.height = f1 * 0.86 + "px";
+          }
+          ajuste("acc-l1-t", 84, 950, 40); ajuste("acc-l2-t", 84, 950, 40);
+          ajuste("pr-l1-t", 84, 950, 40); ajuste("pr-l2-t", 44, 950, 40);
+          ajuste("bon-l1-t", 44, 800, 40);
+
+          const tl = gsap.timeline({ paused: true });
+          for (const [k, n] of Object.entries(BEATS)) tl.addLabel(k, TP(n));
+          // horloge : caméra, feutre, ballon, révélations et page se calculent depuis t
+          const horloge = { t: 0 };
+          tl.to(horloge, { t: DUREE, duration: DUREE, ease: "none", onUpdate: () => rendu(horloge.t) }, 0);
+
+          // cartons : masque vertical 0,35 s power3.out, sortie par masque inverse 0,25 s power2.in
+          const entre = (id, at) => {
+            tl.fromTo("#" + id, { clipPath: "inset(0% 0% 100% 0%)" }, { clipPath: "inset(-10% 0% -10% 0%)", duration: 0.35, ease: "power3.out", immediateRender: false }, at);
+            tl.fromTo("#" + id + "-t", { yPercent: 60 }, { yPercent: 0, duration: 0.35, ease: "power3.out", immediateRender: false }, at);
+          };
+          const sort = (id, at) => {
+            tl.fromTo("#" + id, { clipPath: "inset(-10% 0% -10% 0%)" }, { clipPath: "inset(0% 0% 100% 0%)", duration: 0.25, ease: "power2.in", immediateRender: false }, at);
+            tl.fromTo("#" + id + "-t", { yPercent: 0 }, { yPercent: -40, duration: 0.25, ease: "power2.in", immediateRender: false }, at);
+          };
+          // accroche : en place à l’image 0, sortie au temps 6, retour de 63,0 à 63,92
+          gsap.set(["#acc-l1", "#acc-l2"], { clipPath: "inset(-10% 0% -10% 0%)" });
+          sort("acc-l1", TP(6)); sort("acc-l2", TP(6) + 0.08);
+          entre("acc-l1", TP(63.0)); entre("acc-l2", TP(63.0) + 0.08);
+          // étiquette : set, puis tote bag
+          gsap.set(["#ea-l1", "#ea-l2", "#eb-l1", "#eb-l2"], { clipPath: "inset(0% 0% 100% 0%)" });
+          entre("ea-l1", TP(2.0)); entre("ea-l2", TP(2.25));
+          tl.fromTo("#surligne-a", { scaleX: 0 }, { scaleX: 1, duration: 0.25, ease: "none", immediateRender: true }, TP(2.5));
+          sort("ea-l2", TP(6.0)); sort("ea-l1", TP(6.0) + 0.08);
+          tl.to("#surligne-a", { scaleX: 0, transformOrigin: "100% 50%", duration: 0.2, ease: "power2.in" }, TP(6.0) + 0.08);
+          entre("eb-l1", TP(6.55)); entre("eb-l2", TP(6.7));
+          tl.fromTo("#surligne-b", { scaleX: 0 }, { scaleX: 1, duration: 0.25, ease: "none", immediateRender: true }, TP(6.95));
+          gsap.set("#etiquette", { clipPath: "inset(-10% -5% -10% -5%)" });
+          tl.fromTo("#etiquette", { clipPath: "inset(-10% -5% -10% -5%)" }, { clipPath: "inset(0% 0% 100% 0%)", duration: 0.25, ease: "power2.in", immediateRender: false }, TP(10));
+          // compteur : en place à l’image 0, sortie à 37,5, retour de 62,5 à 63,25
+          gsap.set("#compteur", { clipPath: "inset(-20% -10% -20% -10%)" });
+          tl.fromTo("#compteur", { clipPath: "inset(-20% -10% -20% -10%)" }, { clipPath: "inset(0% 0% 100% 0%)", duration: 0.25, ease: "power2.in", immediateRender: false }, FIN_COMPTEUR);
+          tl.fromTo("#compteur", { clipPath: "inset(0% 0% 100% 0%)" }, { clipPath: "inset(-20% -10% -20% -10%)", duration: TP(63.25) - RETOUR_COMPTEUR, ease: "power3.out", immediateRender: false }, RETOUR_COMPTEUR);
+          // promesse sous le « 30 »
+          gsap.set(["#pr-l1", "#pr-l2"], { clipPath: "inset(0% 0% 100% 0%)" });
+          entre("pr-l1", TP(40)); entre("pr-l2", TP(40.5));
+          sort("pr-l2", TP(46)); sort("pr-l1", TP(46) + 0.08);
+          // bon : contenu ligne après ligne, bouton avec un léger scale
+          gsap.set(["#bon-logo", "#bon-l1", "#bon-adresse", "#bon-mention"], { clipPath: "inset(0% 0% 100% 0%)" });
+          tl.fromTo("#bon-logo", { clipPath: "inset(0% 0% 100% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.35, ease: "power3.out", immediateRender: false }, TP(47.2));
+          entre("bon-l1", TP(47.4));
+          tl.fromTo("#bouton", { scale: 0.97, clipPath: "inset(0% 0% 100% 0% round 6px)" }, { scale: 1, clipPath: "inset(0% 0% 0% 0% round 6px)", duration: 0.3, ease: "power2.out", immediateRender: true }, TP(47.6));
+          entre("bon-adresse", TP(47.9));
+          entre("bon-mention", TP(48));
+          // le ballon appuie sur le bouton
+          tl.to("#bouton", { scale: 0.96, duration: 0.08, ease: "power2.out" }, TP(56));
+          tl.to("#bouton", { scale: 1, duration: 0.25, ease: "power2.out" }, TP(56) + 0.08);
+
+          rendu(0);
+          // repères exposés pour le sound design (outils/sound_design.py) ; le rendu ne les lit pas
+          window.__reperes = { feutre, ballon, cam, contacts: CONTACTS.map((ct) => ({ t: ct.t, P: ct.P })), produits: PRODUITS.map((p) => ({ id: p.id, n: p.n, T: p.T, mode: p.mode, detoure: p.detoure, ballon: p.ballon })), traces: TRACES.map((tr) => ({ t0: tr.t0, t1: tr.t1, id: tr.produit.id, passe: !!tr.passe, cercle: !!tr.cercle, flamme: !!tr.flamme })), TEMPS, DUREE, BEATS };
+          window.__timelines["le-carnet"] = tl;
+        }
+        document.fonts.ready.then(() => Promise.all([document.fonts.load('900 84px "Archivo"'), document.fonts.load('700 44px "Hanken Grotesk"'), document.fonts.load('500 40px "Hanken Grotesk"')])).then(construire).catch((e) => console.error("construction", e && e.message, e && e.stack));
+      })();
+    </script>
+  </body>
+</html>

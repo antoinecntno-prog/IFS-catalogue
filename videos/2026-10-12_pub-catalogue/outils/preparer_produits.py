@@ -115,7 +115,8 @@ def detoure_produit(pid, src, hf):
         plein = ndi.binary_opening(ndi.binary_fill_holes(sur), iterations=2)
     if pid == "tote-sublime":
         # crochet et ombre portée sur le mur : pixels neutres, le sac est bleu et rose
-        garde = ndi.binary_opening(plein & ((rgb.max(2) - rgb.min(2)) >= 14), iterations=1)
+        lum, chroma = rgb.mean(2), rgb.max(2) - rgb.min(2)
+        garde = ndi.binary_opening(plein & ~((chroma < 24) & (lum < 215)), iterations=2)
         lab, n = ndi.label(garde)
         plein = ndi.binary_fill_holes(lab == 1 + np.argmax(ndi.sum(garde, lab, range(1, n + 1)))) & plein
     if pid == "basket-double":

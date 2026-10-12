@@ -1,0 +1,16 @@
+== mouvement (outils/mesure_mouvement.py, fenêtre CTA 22,61 à 27,89 s)
+quasi figees 17.5 %
+plus longue suite figee 1.53 s
+secondes figees hors CTA : []
+== raccord de boucle, images 899 et 0
+YAVG=2.40202
+== écarts entre images voisines au raccord
+0-1 2.028 · 1-2 1.654 · 897-898 3.323 · 898-899 3.417 · médiane du film 2.826
+== lignes black_start
+0
+== son du rendu (ebur128)
+    I:         -14.1 LUFS
+    Peak:       -1.8 dBFS
+== flux
+stream|codec_name=h264|width=1080|height=1920|r_frame_rate=30/1|duration=30.000000|nb_frames=900
+stream|codec_name=aac|sample_rate=48000|channels=2|r_frame_rate=0/0|duration=30.000000|nb_frames=1408

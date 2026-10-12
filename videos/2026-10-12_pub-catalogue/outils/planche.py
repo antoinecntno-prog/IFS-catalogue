@@ -2,8 +2,8 @@
 import glob, re, sys
 from PIL import Image, ImageDraw, ImageFont
 
-BEATS = [("b01_hook", 0), ("b02_hachures", 4), ("b03_contact", 8), ("b04_envol", 10), ("b05_vestiaire", 14), ("b06_tailles", 18),
-         ("b07_rang", 22), ("b08_signature", 24), ("b09_prix", 28), ("b10_maquette", 34), ("b11_cta", 40), ("b12_page", 46)]
+BEATS = [("b01_hook", 0), ("b02_entreprise", 4), ("b03_sweat", 8), ("b04_dos", 10), ("b05_saut", 14), ("b06_zero", 20), ("b07_cote", 24),
+         ("b08_rafale", 30), ("b09_trente", 36), ("b10_prix", 40), ("b11_cta", 46), ("b12_clic", 56), ("b13_page", 60)]
 TEMPS = 60 / 128
 
 def beat(t):
