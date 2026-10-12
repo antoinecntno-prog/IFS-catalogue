@@ -93,7 +93,7 @@ def bruitages(r, ancien=False):
     if ancien:
         sfx.ajoute(stereo(feutre(v, pas, graine=41), 0.1, 0.4), 0, GAIN_FEUTRE_ANCIEN)
     else:
-        # grain plus sourd, sans crépitements secs ni couinement
+        # grain plus sourd : crépitements réduits au quart, couinement supprimé
         v = v * masque_feutre(np.array(r["t"]))
         sfx.ajoute(stereo(feutre(v, pas, graine=41, aigu=3800, crepitement=0.25, chant=0.0), 0.1, 0.4), 0, GAIN_FEUTRE)
 
@@ -181,7 +181,7 @@ def main():
     musique, _ = compose(PLAN, 128.0, LEADS)
     sfx = bruitages(r)
     # niveaux de départ : la musique porte, les bruitages passent devant aux moments clés.
-    # Le gain des bruitages se calcule sur le réglage livré le 12/10 : baisser le feutre laisse les autres bruitages à leur niveau.
+    # Le gain des bruitages se calcule sur le réglage livré le 12/10 : la piste des autres bruitages garde son niveau, puis le mix entier revient à -14 LUFS.
     ecrit_wav(TMP / "m.wav", limiteur(musique.buf * 0.5, -1.0))
     ecrit_wav(TMP / "s.wav", limiteur(bruitages(r, ancien=True).buf * 0.5, -1.0))
     lm, _ = loudness(TMP / "m.wav")

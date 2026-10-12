@@ -9,14 +9,15 @@ Vidéo verticale HyperFrames, 1080 × 1920 px à 30 i/s, 22,5 s (48 temps à 128
 - `assets/` : images préparées et données du dessin (`donnees.js`).
 - `sources/` : les photos d'origine, gardées pour refaire les détourages.
 - `outils/preparer_set.py` : détoure le set (photo réelle sans sponsors), le coupe en maillot et short, vectorise le contour du maillot, celui du short, le bord de la flamme et les deux bandes.
-- `outils/preparer_decors.py` : feuille de match (dos vierge et recto), feutre, cintre, vestiaire en calques (la table de buvette et les gobelets qu'il produit ne servent plus) (mur prolongé, barre, patère, banc).
+- `outils/preparer_decors.py` : feuille de match (dos vierge et recto), feutre, cintre, vestiaire en calques (mur prolongé, barre, patère, banc). Il écrit aussi la table de buvette et les gobelets, qui ne servent plus.
+- `outils/preparer_fond.py` : la surface anthracite posée sous la feuille (`assets/fond-anthracite.jpg`).
 - `outils/exporter_donnees.py` : écrit `assets/donnees.js`.
 - `outils/mesure_mouvement.py` et `outils/planche.py` : contrôles c) et b).
 - `controles/` : sorties des quatre contrôles.
 
 ## Décor
 
-La feuille repose sur une surface anthracite mate (`assets/fond-anthracite.jpg`, texture calculée par le projet), floutée comme un arrière-plan. La nappe de la buvette et les gobelets sont retirés depuis le 12/10.
+La feuille repose sur une surface anthracite mate (`assets/fond-anthracite.jpg`, texture calculée par `outils/preparer_fond.py`), floutée comme un arrière-plan. La nappe de la buvette et les gobelets sont retirés depuis le 12/10.
 
 ## Son
 
@@ -31,6 +32,7 @@ La feuille repose sur une surface anthracite mate (`assets/fond-anthracite.jpg`,
 ```
 python3 outils/preparer_set.py
 python3 outils/preparer_decors.py
+python3 outils/preparer_fond.py
 python3 outils/exporter_donnees.py
 npx hyperframes check
 npx hyperframes render --output rendu.mp4
@@ -38,7 +40,7 @@ npx hyperframes render --output rendu.mp4
 
 ## Remplacer la musique
 
-Avec une autre piste : mesurer son tempo et son premier temps fort, changer `TEMPS` et `OFFSET` en tête du script de `index.html`, puis refaire le son avec la nouvelle piste à la place de `compose()`. Les durées en temps restent les mêmes.
+Avec une autre piste : mesurer son tempo et son premier temps fort, changer `TEMPS` et `OFFSET` en tête du script de `index.html`, puis refaire le son en branchant la nouvelle piste dans `outils/sound_design.py`, sur l'appel à `compose()`. Les durées en temps restent les mêmes.
 
 ## Éléments [à fournir] restés vides
 

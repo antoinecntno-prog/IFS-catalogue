@@ -56,7 +56,7 @@ Commande du brief, 24 instants : `controles/2026-10-12_planche-snapshots.jpg`. C
 | Son : loudness intégrée, crête vraie | −14,6 LUFS, −1,7 dBFS | autour de −14 LUFS, crête sous −1 dBFS |
 | Son : décalage avec l'image | 0 ms (corrélation avec la source) | 0 |
 
-La seconde 19 reste figée sur ses 30 images : la suite figée commence à 19,00 s, une image et demie avant le début de la tenue du bouton (19,05 s). Avec la nappe de la buvette, la dérive du décor (6 px/s) animait ces deux images ; la surface anthracite, presque uniforme, ne produit plus d'écart mesurable.
+La seconde 19 reste figée sur ses 30 images : la suite figée couvre les images 570 à 646 (19,00 à 21,53 s) et commence une image et demie avant le début de la tenue du bouton (19,05 s). L'écart entre les images 570 et 571 vient surtout de la fin de l'entrée du bouton : il valait 0,331 dans le rendu précédent, juste au-dessus du seuil de 0,3, et vaut 0,299 aujourd'hui. La nappe y ajoutait environ 0,03.
 
 Sorties brutes : `controles/mesures.txt`.
 
@@ -66,7 +66,7 @@ Sorties brutes : `controles/mesures.txt`.
 
 ## Écarts au brief
 
-- Rebonds sur le papier : demi-paraboles de 0,43 s au lieu de 0,28 s, pour que les contacts tombent sur les temps 2 et 4 (0,469 et 1,406 s).
+- Rebonds sur le papier : demi-paraboles de 0,43 s (le brief en prévoyait 0,28 s), pour que les contacts tombent sur les temps 2 et 4 (0,469 et 1,406 s).
 - Push-in de b01 : power2.out précédé d'une prise de vitesse de 0,22 s. La caméra arrive immobile au raccord ; avec le power2.out seul, le raccord mesurait 2,43.
 - Ballon du vestiaire en parallaxe 0,7, celle des patères, pour rester posé dessus.
 - Étiquette de prix fixée à l'écran : son texte reste immobile pendant le zoom arrière, le fil suit le set 8.
@@ -76,10 +76,12 @@ Sorties brutes : `controles/mesures.txt`.
 - Vestiaire sans sac : banc et chaussures de la photo fournie.
 - Le short est hachuré à l'encre avec le reste du maillot.
 
-- Fond : surface anthracite mate à la place de la nappe de la buvette, sur demande d'Antoine le 12/10 ; les gobelets sont retirés avec elle.
-- Son du feutre : sur la même demande, grain sourd (coupure à 3 800 Hz, sans couinement) à −19 dB pour le croquis et −21 dB pour les passes de couleurs ; l'écriture du logo et le contour de l'étiquette restent muets. Les autres bruitages gardent leur niveau : leur gain se calcule sur le réglage livré la première fois.
+- Fond : surface anthracite mate, calculée par `outils/preparer_fond.py`, sur demande d'Antoine le 12/10. La nappe de la buvette et les gobelets sont retirés.
+- Son du feutre : sur la même demande, grain coupé à 3 800 Hz, crépitements réduits au quart et couinement supprimé, à −19 dB pour le croquis et −21 dB pour les passes de couleurs ; l'écriture du logo et le contour de l'étiquette restent muets. La piste des autres bruitages garde son niveau, car son gain se calcule sur le réglage livré la première fois ; dans le mix ramené à −14 LUFS, l'ensemble monte de 0,2 dB.
 
 ## Ce qui reste ouvert
+
+- Seconde 19 figée à partir de 19,00 s, une image et demie avant la tenue du bouton : à garder, ou à corriger en décalant de quelques images la fin de l'entrée du bouton.
 
 - Logo HD, set HD, avis et nombre de clubs équipés : [à fournir], laissés vides (détail dans `README.md`).
 - Feuille de match fournie en 2000 px de haut, sous les 2400 px demandés.

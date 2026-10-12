@@ -200,7 +200,7 @@ Longueur : 5 / 49 / 3 (original 4 / 47 / 2).
 ## 5. Lecture de la vidéo moment par moment
 
 ### Accroche (0 à 1,9 s)
-- **Image.** Une feuille de match vierge repose sur une nappe à carreaux rouges. Un feutre trace un gribouillis magenta. Le ballon dessiné part du coin haut droit et rebondit sur la feuille. Le premier texte arrive à 11,25 s, le premier chiffre à 13,40 s.
+- **Image.** Une feuille de match vierge repose sur une surface anthracite. Un feutre trace un gribouillis magenta. Le ballon dessiné part du coin haut droit et rebondit sur la feuille. Le premier texte arrive à 11,25 s, le premier chiffre à 13,40 s.
 - **Lecture alex.** Le clip ouvre sur une question muette : que va dessiner le feutre ? Ce ressort rappelle l'Ad 1 Secret Project Hook, dont le titre pose une devinette (Swipe File, Part 2, p. 3-4) ; la variante Ad 1 de la partie 4 reprend cette devinette. Les deux plans vidéo du swipe file ouvrent sur un chiffre : une statistique pour la Video 1 (Swipe File, Part 2, p. 10-11), le nombre d'inscrits pour la Video 2 (Swipe File, Part 2, p. 11-12). Ces accroches durent 30 s dans des vidéos YouTube de 6 à 12 minutes (Swipe File, Part 2, p. 10-12). Une accroche sans texte, et sa durée dans un clip de 22,5 s : non couvert par les livres.
 
 ### Le dessin devient le set (1,9 à 4,7 s)

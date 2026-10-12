@@ -128,7 +128,7 @@ def main():
     musique, _ = compose(PLAN, 128.0, LEADS)
     sfx = bruitages(r)
     # niveaux de départ : la musique porte, les bruitages passent devant aux moments clés.
-    # Le gain des bruitages se calcule sur le réglage livré le 12/10 : baisser le feutre laisse les autres bruitages à leur niveau.
+    # Le gain des bruitages se calcule sur le réglage livré le 12/10 : la piste des autres bruitages garde son niveau, puis le mix entier revient à -14 LUFS.
     ecrit_wav(TMP / "m.wav", limiteur(musique.buf * 0.5, -1.0))
     ecrit_wav(TMP / "s.wav", limiteur(bruitages(r, ancien=True).buf * 0.5, -1.0))
     lm, _ = loudness(TMP / "m.wav")

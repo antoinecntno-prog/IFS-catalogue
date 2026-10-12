@@ -12,3 +12,6 @@ YAVG=2.41071
 == flux
 stream|codec_name=h264|width=1080|height=1920|r_frame_rate=30/1|duration=30.000000|nb_frames=900
 stream|codec_name=aac|sample_rate=48000|channels=2|r_frame_rate=0/0|duration=30.000000|nb_frames=1408
+== écarts entre images voisines (même chaîne tblend)
+images 0-1 2.096 · 897-898 3.403 · 898-899 3.477 · médiane du film 2.868
+plus longue suite figée : images 678 à 725, 22.600 à 24.167 s
