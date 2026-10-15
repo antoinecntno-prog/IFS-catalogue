@@ -1,0 +1,166 @@
+{
+  "note": "Temps en secondes dans la vidéo. Début d’étape = début du premier mot dans l’alignement + 0,4 s (placement de la voix) - 0,2 s.",
+  "source_alignement": "voix-off_alignment.json, transcription horodatée par mot (Scribe)",
+  "decalage_voix_s": 0.4,
+  "avance_s": 0.2,
+  "duree_video_s": 30,
+  "fin_voix_s": 23.6,
+  "fin_voix_ok": true,
+  "etapes": [
+    {
+      "id": "INTRO",
+      "premier_mot": "Samedi,",
+      "mot_alignement_s": 0,
+      "mot_video_s": 0.4,
+      "debut_s": 0,
+      "duree_s": 2.68
+    },
+    {
+      "id": "LOGO",
+      "premier_mot": "Vous",
+      "mot_alignement_s": 2.48,
+      "mot_video_s": 2.88,
+      "debut_s": 2.68,
+      "duree_s": 2.48,
+      "duree_min_s": 2.2,
+      "acceleree": false
+    },
+    {
+      "id": "COULEURS",
+      "premier_mot": "La",
+      "mot_alignement_s": 4.96,
+      "mot_video_s": 5.36,
+      "debut_s": 5.16,
+      "duree_s": 1.6,
+      "duree_min_s": 2.2,
+      "acceleree": true
+    },
+    {
+      "id": "DESIGN",
+      "premier_mot": "Ajoutez",
+      "mot_alignement_s": 6.56,
+      "mot_video_s": 6.96,
+      "debut_s": 6.76,
+      "duree_s": 2.92,
+      "duree_min_s": 2.2,
+      "acceleree": false
+    },
+    {
+      "id": "BLASON",
+      "premier_mot": "Le",
+      "mot_alignement_s": 9.48,
+      "mot_video_s": 9.88,
+      "debut_s": 9.68,
+      "duree_s": 1.48,
+      "duree_min_s": 2.2,
+      "acceleree": true
+    },
+    {
+      "id": "SPONSOR",
+      "premier_mot": "le",
+      "mot_alignement_s": 10.96,
+      "mot_video_s": 11.36,
+      "debut_s": 11.16,
+      "duree_s": 2.24,
+      "duree_min_s": 2.2,
+      "acceleree": false
+    },
+    {
+      "id": "NUMÉRO",
+      "premier_mot": "Chaque",
+      "mot_alignement_s": 13.2,
+      "mot_video_s": 13.6,
+      "debut_s": 13.4,
+      "duree_s": 1.84,
+      "duree_min_s": 2.2,
+      "acceleree": true
+    },
+    {
+      "id": "BAT",
+      "premier_mot": "On",
+      "mot_alignement_s": 15.04,
+      "mot_video_s": 15.44,
+      "debut_s": 15.24,
+      "duree_s": 1.68,
+      "duree_min_s": 4.5,
+      "acceleree": true
+    },
+    {
+      "id": "FINALE",
+      "premier_mot": "Et",
+      "mot_alignement_s": 16.72,
+      "mot_video_s": 17.12,
+      "debut_s": 16.92,
+      "duree_s": 13.08
+    }
+  ],
+  "finale_prix": {
+    "id": "FINALE_PRIX",
+    "premier_mot": "Vingt-cinq",
+    "mot_alignement_s": 19.067,
+    "mot_video_s": 19.467,
+    "debut_s": 19.267
+  },
+  "phrases": [
+    {
+      "texte": "Samedi, votre équipe entre sur le terrain.",
+      "debut_s": 0.4,
+      "fin_mot_s": 2.8,
+      "masquee": false
+    },
+    {
+      "texte": "Vous envoyez le logo, on dessine le maillot.",
+      "debut_s": 2.88,
+      "fin_mot_s": 5.28,
+      "masquee": false
+    },
+    {
+      "texte": "La tenue prend vos couleurs.",
+      "debut_s": 5.36,
+      "fin_mot_s": 6.88,
+      "masquee": false
+    },
+    {
+      "texte": "Ajoutez autant de teintes que vous voulez, même prix.",
+      "debut_s": 6.96,
+      "fin_mot_s": 9.84,
+      "masquee": false
+    },
+    {
+      "texte": "Le blason va côté cœur,",
+      "debut_s": 9.88,
+      "fin_mot_s": 11.28,
+      "masquee": false
+    },
+    {
+      "texte": "le sponsor ressort sur chaque photo.",
+      "debut_s": 11.36,
+      "fin_mot_s": 13.52,
+      "masquee": false
+    },
+    {
+      "texte": "Chaque joueur porte son numéro.",
+      "debut_s": 13.6,
+      "fin_mot_s": 15.36,
+      "masquee": false
+    },
+    {
+      "texte": "On imprime quand vous dites oui.",
+      "debut_s": 15.44,
+      "fin_mot_s": 17.04,
+      "masquee": false
+    },
+    {
+      "texte": "Et samedi, ils ont fière allure.",
+      "debut_s": 17.12,
+      "fin_mot_s": 19.44,
+      "masquee": false
+    },
+    {
+      "texte": "Vingt-cinq euros quatre-vingt-dix-neuf hors taxe le maillot et le short, dès trente ensembles.",
+      "debut_s": 19.467,
+      "fin_mot_s": 23.6,
+      "masquee": true
+    }
+  ]
+}

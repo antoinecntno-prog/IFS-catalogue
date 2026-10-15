@@ -1,0 +1,790 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prêts pour samedi</title>
+<link rel="icon" href="data:,">
+<style>
+/*__POLICES__*/
+:root{
+  --blanc:#FFFFFF;
+  --encre:#141016;
+  --magenta:#E6007E;
+  --jaune:#FFD400;
+  --encre-70:rgba(20,16,22,.7);
+  --encre-55:rgba(20,16,22,.55);
+  --encre-22:rgba(20,16,22,.22);
+  --encre-12:rgba(20,16,22,.12);
+  --titre:"Archivo", Arial, sans-serif;
+  --texte:"IBM Plex Sans", Arial, sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--encre);color:var(--encre);font-family:var(--texte)}
+body{display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+#plateau{position:relative;flex:none}
+#scene{position:absolute;left:0;top:0;width:1080px;height:1080px;overflow:hidden;background:var(--blanc);transform-origin:0 0}
+#svg{position:absolute;left:0;top:0;width:1080px;height:1080px;display:block}
+.calque{position:absolute;will-change:transform,opacity}
+
+/* Titre */
+#titre{left:540px;top:44px;margin:0;white-space:nowrap;font-family:var(--titre);font-weight:900;font-size:70px;line-height:1;letter-spacing:.005em;color:var(--encre);text-shadow:4px 4px 0 var(--magenta);transform-origin:50% 60%}
+.soustitre{left:540px;top:130px;white-space:nowrap;font-weight:600;font-size:24px;line-height:1;color:var(--encre-70);letter-spacing:.01em}
+
+/* Carte d'étape */
+#carte{left:640px;top:372px;width:380px;height:320px;background:var(--blanc);border:3.5px solid var(--encre);border-radius:18px;box-shadow:7px 7px 0 var(--encre);transform-origin:50% 50%}
+.contenu{position:absolute;left:0;top:0;width:100%;height:100%;padding:24px 26px 0}
+.lab{font-weight:600;font-size:16px;line-height:1;letter-spacing:.06em;color:var(--encre-55)}
+.qte{margin-top:12px;height:104px;font-family:var(--titre);font-weight:900;font-size:104px;line-height:104px;color:var(--magenta);white-space:nowrap;letter-spacing:-.01em}
+.qte svg{display:block;margin-top:16px}
+.nom{margin-top:10px;font-family:var(--titre);font-weight:900;font-size:34px;line-height:1.05;color:var(--encre);white-space:nowrap}
+.note{margin-top:10px;width:324px;font-size:19px;line-height:1.3;color:var(--encre-70)}
+.final .qte{font-size:96px}
+.bat .qte{font-size:84px}
+#barre{position:absolute;left:26px;right:26px;bottom:24px;height:18px;display:flex;align-items:center;gap:14px}
+#piste{position:relative;flex:1;height:14px;border:2.5px solid var(--encre);border-radius:4px;overflow:hidden;background:var(--blanc)}
+#rempli{position:absolute;left:0;top:0;bottom:0;width:100%;background:var(--magenta);transform-origin:0 50%}
+#compteur{min-width:92px;text-align:right;font-weight:600;font-size:17px;line-height:1;font-variant-numeric:tabular-nums;color:var(--encre)}
+#enveloppe{position:absolute;left:236px;top:34px;width:104px;height:110px;overflow:visible}
+#tampon{position:absolute;left:206px;top:52px;padding:7px 12px 5px;border:4.5px solid var(--magenta);border-radius:9px;background:rgba(255,255,255,.88);font-family:var(--titre);font-weight:900;font-size:34px;line-height:1;color:var(--magenta);letter-spacing:.02em;transform-origin:50% 50%}
+
+/* Sous-titres */
+#legende{left:540px;top:905px;max-width:980px;padding:9px 20px 10px;background:var(--encre);color:var(--blanc);border-radius:12px;font-weight:600;font-size:24px;line-height:1.25;white-space:nowrap;text-align:center}
+
+/* Stepper */
+#etapes{left:0;top:951px;width:1080px;height:80px}
+.lien{position:absolute;top:15px;height:4px;border-radius:2px;background:var(--encre-12);overflow:hidden}
+.lien i{position:absolute;inset:0;background:var(--magenta);transform-origin:0 50%}
+.pas{position:absolute;top:0;width:120px;margin-left:-60px;text-align:center}
+.pastille{position:relative;width:34px;height:34px;margin:0 auto;border-radius:50%;background:var(--blanc);border:3px solid var(--encre-22)}
+.pastille svg{position:absolute;left:4px;top:4px;width:20px;height:20px}
+.pastille b{position:absolute;left:50%;top:50%;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--magenta)}
+.pas .nom-pas{margin-top:9px;font-weight:600;font-size:14px;line-height:1;letter-spacing:.07em;color:var(--encre-55)}
+
+/* Fin */
+#slogan{left:335px;top:796px;white-space:nowrap;font-family:var(--titre);font-weight:900;font-size:30px;line-height:1;color:var(--encre)}
+#badge{left:335px;top:844px;padding:9px 18px 10px;background:var(--encre);color:var(--blanc);border-radius:10px;font-weight:600;font-size:22px;line-height:1;letter-spacing:.01em;box-shadow:4px 4px 0 var(--magenta);white-space:nowrap}
+
+/* Lecture */
+#commandes{display:flex;align-items:center;gap:14px;margin-top:14px;color:#fff;font:600 15px/1 var(--texte)}
+#lecture{width:44px;height:44px;border:0;border-radius:10px;background:var(--magenta);color:#fff;cursor:pointer;display:grid;place-items:center}
+#lecture:focus-visible{outline:3px solid var(--jaune);outline-offset:2px}
+#defile{width:min(70vw,620px);accent-color:var(--magenta)}
+#temps{min-width:110px;font-variant-numeric:tabular-nums}
+html.capture body{display:block;background:var(--blanc)}
+html.capture #commandes{display:none}
+</style>
+</head>
+<body>
+<div id="plateau">
+<div id="scene">
+<svg id="svg" viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <filter id="sat" filterUnits="userSpaceOnUse" x="0" y="0" width="1080" height="1080" color-interpolation-filters="sRGB">
+      <feColorMatrix id="satM" type="saturate" values="0.5"/>
+    </filter>
+    <filter id="satB" x="-40%" y="-20%" width="180%" height="140%" color-interpolation-filters="sRGB">
+      <feColorMatrix type="saturate" values="0.5"/>
+    </filter>
+    <filter id="flou" x="-30%" y="-200%" width="160%" height="500%"><feGaussianBlur stdDeviation="9"/></filter>
+    <linearGradient id="chaud" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#E6007E"/><stop offset=".5" stop-color="#FFD400"/><stop offset="1" stop-color="#E6007E"/>
+    </linearGradient>
+    <path id="dMaillot" d="M292 256 Q335 274 378 256 L434 272 L500 372 L458 400 L432 360 C428 420 430 520 428 612 Q335 622 242 612 C240 520 242 420 238 360 L212 400 L170 372 L236 272 Z"/>
+    <path id="dShort" d="M214 628 L456 628 L465 766 Q404 772 342 770 L335 726 L328 770 Q266 772 205 766 Z"/>
+    <clipPath id="clipEnsemble"><use href="#dMaillot"/><use href="#dShort"/></clipPath>
+    <clipPath id="clipMaillot"><use href="#dMaillot"/></clipPath>
+    <clipPath id="clipShort"><use href="#dShort"/></clipPath>
+    <clipPath id="clipSponsor"><rect id="revSponsor" x="230" y="360" width="0" height="90"/></clipPath>
+    <clipPath id="clipPresse"><rect x="0" y="178" width="1080" height="902"/></clipPath>
+    <path id="etoile4" d="M0 -1 C.14 -.14 .14 -.14 1 0 C.14 .14 .14 .14 0 1 C-.14 .14 -.14 .14 -1 0 C-.14 -.14 -.14 -.14 0 -1 Z"/>
+  </defs>
+
+  <!-- Graduations -->
+  <g id="graduations" font-family="IBM Plex Sans" font-weight="600" font-size="19">
+    <line x1="518" y1="772" x2="518" y2="236" stroke="#141016" stroke-opacity=".14" stroke-width="3" stroke-linecap="round"/>
+    <g id="g50"><line x1="510" y1="504" x2="534" y2="504" stroke-width="4" stroke-linecap="round"/><text x="544" y="511">50 %</text></g>
+    <g id="g100"><line x1="510" y1="236" x2="534" y2="236" stroke-width="4" stroke-linecap="round"/><text x="544" y="243">100 %</text></g>
+  </g>
+
+  <!-- Ensemble maillot et short -->
+  <g id="ensemble">
+    <use href="#dMaillot" fill="#fff"/>
+    <use href="#dShort" fill="#fff"/>
+    <g id="art" filter="url(#sat)">
+      <g clip-path="url(#clipEnsemble)">
+        <path id="encre" fill="#E6007E" d=""/>
+        <g id="eclats" fill="#FFD400" stroke="#141016" stroke-width="0"></g>
+        <g clip-path="url(#clipShort)">
+          <line id="bandeG" x1="222" y1="648" x2="213.5" y2="768" stroke="#FFD400" stroke-width="16"/>
+          <line id="bandeD" x1="448" y1="648" x2="456.5" y2="768" stroke="#FFD400" stroke-width="16"/>
+        </g>
+        <g id="rayures" clip-path="url(#clipMaillot)" stroke="#141016" stroke-width="3" stroke-linecap="round"></g>
+      </g>
+      <g id="blason">
+        <path d="M-25 -29 H25 V1 C25 19 12 28 0 34 C-12 28 -25 19 -25 1 Z" fill="#141016" stroke="#141016" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M-18 -22 H18 V1 C18 14 9 21 0 26 C-9 21 -18 14 -18 1 Z" fill="none" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M0 -15 L4.4 -5.5 L14.6 -4.6 L6.9 2.2 L9.1 12.2 L0 7 L-9.1 12.2 L-6.9 2.2 L-14.6 -4.6 L-4.4 -5.5 Z" fill="#FFD400"/>
+      </g>
+      <g id="sponsor" clip-path="url(#clipSponsor)" font-family="Archivo" font-weight="900" font-size="32" text-anchor="middle" fill="#fff" stroke="#141016" stroke-width="6" stroke-linejoin="round" paint-order="stroke">
+        <text x="335" y="398">VOTRE</text>
+        <text x="335" y="434">SPONSOR</text>
+      </g>
+      <g id="numero" font-family="Archivo" font-weight="900" text-anchor="middle" fill="#fff" stroke="#141016" stroke-linejoin="round" paint-order="stroke">
+        <text id="grand10" x="335" y="584" font-size="124" stroke-width="7">10</text>
+        <text id="petit10" x="262" y="728" font-size="32" stroke-width="5">10</text>
+      </g>
+    </g>
+    <path d="M304 259 Q335 271 366 259 L335 300 Z" fill="#141016" fill-opacity=".14"/>
+    <path id="col" d="M292 256 L335 318 L378 256 L366 256 L335 300 L304 256 Z" fill="#fff" stroke="#141016" stroke-width="4.5" stroke-linejoin="round"/>
+    <g id="details" fill="none" stroke="#141016" stroke-width="4" stroke-linecap="round">
+      <path class="trace" d="M177.7 360.4 L219.7 388.4"/>
+      <path class="trace" d="M492.3 360.4 L450.3 388.4"/>
+      <path class="trace" d="M213 648 L457 648"/>
+    </g>
+    <use id="contourMaillot" class="trace" href="#dMaillot" fill="none" stroke="#141016" stroke-width="6" stroke-linejoin="round"/>
+    <use id="contourShort" class="trace" href="#dShort" fill="none" stroke="#141016" stroke-width="6" stroke-linejoin="round"/>
+    <rect id="flash" x="156" y="240" width="358" height="542" rx="24" fill="#fff" opacity="0"/>
+  </g>
+
+  <!-- Éclats autour de l'ensemble -->
+  <g id="etincelles"></g>
+  <g id="rayons" stroke-width="6" stroke-linecap="round"></g>
+
+  <!-- Filet versé -->
+  <path id="filet" fill="none" stroke-linecap="round" stroke-width="11" filter="url(#sat)" d=""/>
+
+  <!-- Bouteilles -->
+  <g id="bouteilleM" filter="url(#satB)">
+    <g class="corps">
+      <path d="M-10 8 L-10 34 C-10 46 -31 50 -31 66 L-31 166 Q-31 176 -21 176 L21 176 Q31 176 31 166 L31 66 C31 50 10 46 10 34 L10 8 Z" fill="#E6007E" stroke="#141016" stroke-width="4.5" stroke-linejoin="round"/>
+      <rect x="-31" y="96" width="62" height="46" fill="#fff" stroke="#141016" stroke-width="3.5"/>
+      <path d="M0 106 C6 114 10 119 10 124 A10 10 0 0 1 -10 124 C-10 119 -6 114 0 106 Z" fill="#E6007E"/>
+      <path d="M-21 76 L-21 88 M-21 150 L-21 160" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".7"/>
+      <rect x="-14" y="-2" width="28" height="12" rx="3" fill="#141016"/>
+    </g>
+  </g>
+  <g id="bouteilleJ" filter="url(#satB)">
+    <g class="corps">
+      <path d="M-10 8 L-10 34 C-10 46 -31 50 -31 66 L-31 166 Q-31 176 -21 176 L21 176 Q31 176 31 166 L31 66 C31 50 10 46 10 34 L10 8 Z" fill="#FFD400" stroke="#141016" stroke-width="4.5" stroke-linejoin="round"/>
+      <rect x="-31" y="96" width="62" height="46" fill="#fff" stroke="#141016" stroke-width="3.5"/>
+      <path d="M0 106 C6 114 10 119 10 124 A10 10 0 0 1 -10 124 C-10 119 -6 114 0 106 Z" fill="#FFD400" stroke="#141016" stroke-width="2"/>
+      <path d="M-21 76 L-21 88 M-21 150 L-21 160" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".8"/>
+      <rect x="-14" y="-2" width="28" height="12" rx="3" fill="#141016"/>
+    </g>
+  </g>
+
+  <!-- Plateau de presse -->
+  <g clip-path="url(#clipPresse)">
+    <g id="presse" transform="translate(0,-382)">
+      <rect x="150" y="0" width="370" height="560" rx="22" fill="#141016"/>
+      <rect x="166" y="16" width="338" height="512" rx="14" fill="none" stroke="#fff" stroke-opacity=".12" stroke-width="2"/>
+      <g id="ondes" fill="none" stroke="#FFD400" stroke-width="3.5" stroke-linecap="round"></g>
+      <rect x="240" y="226" width="190" height="88" rx="12" fill="#fff" fill-opacity=".06" stroke="#fff" stroke-opacity=".45" stroke-width="2.5"/>
+      <text id="afficheur" x="335" y="286" text-anchor="middle" font-family="Archivo" font-weight="900" font-size="46" fill="#FFD400">0 °C</text>
+      <rect id="halo" x="170" y="540" width="330" height="22" rx="11" fill="#E6007E" filter="url(#flou)" opacity="0"/>
+      <rect id="bordure" x="158" y="542" width="354" height="12" rx="6" fill="url(#chaud)" opacity="0"/>
+    </g>
+  </g>
+</svg>
+
+<h1 id="titre" class="calque">PRÊTS POUR SAMEDI</h1>
+<div id="sous1" class="calque soustitre">la recette de la tenue de club</div>
+<div id="sous2" class="calque soustitre">vos couleurs · votre sponsor</div>
+
+<div id="carte" class="calque">
+  <div class="contenu" data-k="0">
+    <div class="lab">étape 1 sur 7</div>
+    <div class="qte">1</div>
+    <div class="nom">LOGO ENVOYÉ</div>
+    <div class="note">on dessine le maillot</div>
+    <svg id="enveloppe" viewBox="0 0 104 110">
+      <g id="envVol">
+        <path id="rabatArriere" d="M6 46 L52 16 L98 46 Z" fill="#fff" stroke="#141016" stroke-width="4" stroke-linejoin="round"/>
+        <rect x="6" y="46" width="92" height="60" rx="6" fill="#fff" stroke="#141016" stroke-width="4"/>
+        <clipPath id="clipFeuille"><rect x="0" y="-90" width="104" height="196"/></clipPath>
+        <g clip-path="url(#clipFeuille)"><g id="feuille">
+          <rect x="18" y="40" width="68" height="58" rx="4" fill="#fff" stroke="#141016" stroke-width="3"/>
+          <path d="M40 52 H64 V64 C64 73 58 78 52 81 C46 78 40 73 40 64 Z" fill="#E6007E" stroke="#141016" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M52 57 L54.4 62.2 L60 62.7 L55.8 66.4 L57 71.9 L52 69 L47 71.9 L48.2 66.4 L44 62.7 L49.6 62.2 Z" fill="#FFD400"/>
+        </g></g>
+        <path d="M6 100 L6 52 L52 82 L98 52 L98 100 Q98 106 92 106 L12 106 Q6 106 6 100 Z" fill="#fff" stroke="#141016" stroke-width="4" stroke-linejoin="round"/>
+        <path id="rabat" d="M6 46 L52 78 L98 46 Z" fill="#fff" stroke="#141016" stroke-width="4" stroke-linejoin="round"/>
+      </g>
+    </svg>
+  </div>
+  <div class="contenu" data-k="1">
+    <div class="lab">étape 2 sur 7</div>
+    <div class="qte">100&#8239;%</div>
+    <div class="nom">VOS COULEURS</div>
+    <div class="note">le club se reconnaît au premier regard</div>
+  </div>
+  <div class="contenu" data-k="2">
+    <div class="lab">étape 3 sur 7</div>
+    <div class="qte"><svg width="150" height="74" viewBox="0 0 150 74" aria-label="∞"><path d="M75 37 C60 13 24 11 24 37 C24 63 60 61 75 37 C90 13 126 11 126 37 C126 63 90 61 75 37 Z" fill="none" stroke="#E6007E" stroke-width="16" stroke-linejoin="round"/></svg></div>
+    <div class="nom">COULEURS</div>
+    <div class="note">toutes les teintes, même prix</div>
+  </div>
+  <div class="contenu" data-k="3">
+    <div class="lab">étape 4 sur 7</div>
+    <div class="qte">1</div>
+    <div class="nom">BLASON</div>
+    <div class="note">porté côté cœur</div>
+  </div>
+  <div class="contenu" data-k="4">
+    <div class="lab">étape 5 sur 7</div>
+    <div class="qte">1</div>
+    <div class="nom">SPONSOR</div>
+    <div class="note">bien en vue sur chaque photo</div>
+  </div>
+  <div class="contenu" data-k="5">
+    <div class="lab">étape 6 sur 7</div>
+    <div class="qte">10</div>
+    <div class="nom">SON NUMÉRO</div>
+    <div class="note">chaque joueur a le sien</div>
+  </div>
+  <div class="contenu bat" data-k="6">
+    <div class="lab">étape 7 sur 7</div>
+    <div class="qte">BAT</div>
+    <div class="nom">VALIDÉ PAR VOUS</div>
+    <div class="note">on imprime quand vous dites oui</div>
+    <div id="tampon">VALIDÉ</div>
+  </div>
+  <div class="contenu final" data-k="7">
+    <div class="lab">c’est prêt</div>
+    <div class="qte">25,99&#8239;€</div>
+    <div class="nom">HT L’ENSEMBLE DÈS 30</div>
+    <div class="note">maillot et short, devis gratuit</div>
+  </div>
+  <div id="barre"><div id="piste"><div id="rempli"></div></div><div id="compteur">0 / 1</div></div>
+</div>
+
+<div id="legende" class="calque"></div>
+
+<div id="etapes" class="calque"></div>
+
+<div id="slogan" class="calque">Vous l’imaginez. Nous l’imprimons.</div>
+<div id="badge" class="calque">continosport.fr</div>
+</div>
+</div>
+
+<div id="commandes">
+  <button id="lecture" type="button" aria-label="Lecture">
+    <svg id="icoLecture" width="18" height="20" viewBox="0 0 18 20"><path d="M2 1.5 L16.5 10 L2 18.5 Z" fill="#fff" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>
+    <svg id="icoPause" width="18" height="20" viewBox="0 0 18 20" style="display:none"><rect x="2" y="1" width="5" height="18" rx="1.5" fill="#fff"/><rect x="11" y="1" width="5" height="18" rx="1.5" fill="#fff"/></svg>
+  </button>
+  <input id="defile" type="range" min="0" max="30" step="0.001" value="30" aria-label="Position dans la vidéo">
+  <span id="temps">30,0 s / 30,0 s</span>
+</div>
+<audio id="voix" preload="auto" loop></audio>
+
+<script>
+(function () {
+'use strict';
+
+// Temps issus de timings.json, intégrés au build. Valeurs par défaut si le fichier manque.
+const T = /*__TIMINGS__*/null/*__FIN_TIMINGS__*/ || {
+  etapes: [
+    { id: 'LOGO', debut_s: 2.0 }, { id: 'COULEURS', debut_s: 4.5 }, { id: 'DESIGN', debut_s: 8.5 },
+    { id: 'BLASON', debut_s: 11.5 }, { id: 'SPONSOR', debut_s: 14.0 }, { id: 'NUMÉRO', debut_s: 16.5 },
+    { id: 'BAT', debut_s: 19.0 }, { id: 'FINALE', debut_s: 24.5 }
+  ],
+  finale_prix: { debut_s: 25.0 },
+  phrases: []
+};
+const AUDIO = '__AUDIO__';
+
+const FIN = 30;
+const ORDRE = ['LOGO', 'COULEURS', 'DESIGN', 'BLASON', 'SPONSOR', 'NUMÉRO', 'BAT', 'FINALE'];
+const NOMS_PAS = ['LOGO', 'COULEURS', 'DESIGN', 'BLASON', 'SPONSOR', 'NUMÉRO', 'BAT'];
+const A = ORDRE.map(id => T.etapes.find(e => e.id === id).debut_s);
+const PRIX = T.finale_prix.debut_s;
+const PHRASES = (T.phrases || []).filter(p => !p.masquee);
+const ARRIVEE = A[0] - 0.4;       // la carte et le stepper arrivent 0,4 s avant LOGO
+const D = k => (k < 7 ? A[k + 1] : FIN) - A[k];
+const F = (k, t) => (t - A[k]) / D(k);
+
+// Géométrie (unités du viewBox)
+const Y0 = 774, Y100 = 236;       // niveau d'encre : bas du short, au-dessus des épaules
+const BEC = { x: 262, y: 225 };   // bec des bouteilles en position de versement
+const NBSP = ' ';
+
+// Easing
+const cl = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const seg = (x, a, b) => cl((x - a) / (b - a));
+const lerp = (a, b, u) => a + (b - a) * u;
+const eOut = u => 1 - Math.pow(1 - u, 3);
+const eIn = u => u * u * u;
+const eIO = u => (u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2);
+const eQuadIn = u => u * u;
+const eBack = (u, s = 1.70158) => { const c = s + 1; return 1 + c * Math.pow(u - 1, 3) + s * Math.pow(u - 1, 2); };
+const invIO = p => (p < 0.5 ? Math.cbrt(p / 4) : 1 - Math.cbrt(2 * (1 - p)) / 2);
+const eBounce = u => {
+  const n = 7.5625, d = 2.75;
+  if (u < 1 / d) return n * u * u;
+  if (u < 2 / d) { u -= 1.5 / d; return n * u * u + 0.75; }
+  if (u < 2.5 / d) { u -= 2.25 / d; return n * u * u + 0.9375; }
+  u -= 2.625 / d; return n * u * u + 0.984375;
+};
+const f2 = x => x.toFixed(2);
+
+const $ = id => document.getElementById(id);
+const NS = 'http://www.w3.org/2000/svg';
+const svgEl = (nom, attrs, parent) => {
+  const e = document.createElementNS(NS, nom);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  parent.appendChild(e);
+  return e;
+};
+
+// ---------- Construction (une fois) ----------
+const traces = [...document.querySelectorAll('.trace')].map(el => {
+  const src = el.tagName === 'use' ? document.querySelector(el.getAttribute('href')) : el;
+  const L = src.getTotalLength() + 2;
+  el.setAttribute('stroke-dasharray', `${L} ${L}`);
+  return { el, L };
+});
+const [cuffG, cuffD, ceinture, contourM, contourS] = traces;
+
+// Six éclats en diagonale sur le maillot
+const ECLATS = [[276, 566, 22], [303.6, 516.8, 30], [331.2, 467.6, 36], [358.8, 418.4, 32], [386.4, 369.2, 26], [414, 320, 20]];
+const formeEclat = (() => {
+  const pts = [], n = 10, var_ = [1, .86, 1.08, .92, 1.02, .9, 1.1, .88, .98, .94];
+  for (let i = 0; i < n * 2; i++) {
+    const a = -Math.PI / 2 + i * Math.PI / n;
+    const r = i % 2 ? 0.5 : var_[(i / 2) % n];
+    pts.push(`${(Math.cos(a) * r).toFixed(3)} ${(Math.sin(a) * r).toFixed(3)}`);
+  }
+  return 'M' + pts.join(' L') + ' Z';
+})();
+const eclats = ECLATS.map(() => svgEl('path', { d: formeEclat }, $('eclats')));
+
+// Fines rayures diagonales sur le maillot
+const DIR = { x: 0.489, y: -0.872 }, NOR = { x: 0.872, y: 0.489 }, C_RAY = { x: 345, y: 443 };
+const rayures = [-78, -58, 58, 78].map(o => {
+  const cx = C_RAY.x + o * NOR.x, cy = C_RAY.y + o * NOR.y;
+  const s0 = (630 - cy) / DIR.y, s1 = (245 - cy) / DIR.y;
+  const el = svgEl('line', { x1: cx + s0 * DIR.x, y1: 630, x2: cx + s1 * DIR.x, y2: 245 }, $('rayures'));
+  const L = Math.hypot((s1 - s0) * DIR.x, 385) + 2;
+  el.setAttribute('stroke-dasharray', `${L} ${L}`);
+  return { el, L };
+});
+const bandes = ['bandeG', 'bandeD'].map(id => {
+  const el = $(id); const L = 122;
+  el.setAttribute('stroke-dasharray', `${L} ${L}`);
+  return { el, L };
+});
+
+// Étincelles du relevage et rayons de la fin
+const ETINCELLES = [[150, 300, 16, 0], [524, 300, 13, 1], [138, 470, 12, 1], [548, 470, 17, 0], [168, 650, 14, 0], [504, 652, 12, 1], [250, 210, 12, 1], [420, 206, 15, 0], [196, 796, 11, 1], [478, 798, 13, 0]];
+const etincelles = ETINCELLES.map(([x, y, r, c]) => svgEl('use', { href: '#etoile4', fill: c ? '#E6007E' : '#FFD400' }, $('etincelles')));
+const RAYONS = [];
+for (let i = 0; i < 20; i++) RAYONS.push({ a: -Math.PI / 2 + i * Math.PI / 10, c: i % 2 ? '#FFD400' : '#E6007E', vague: 0 });
+for (let i = 0; i < 20; i++) RAYONS.push({ a: -Math.PI / 2 + (i + 0.5) * Math.PI / 10, c: i % 2 ? '#E6007E' : '#FFD400', vague: 1 });
+const rayons = RAYONS.map(r => svgEl('line', { stroke: r.c }, $('rayons')));
+
+// Ondes de chaleur sur le plateau
+const ONDES = [[196, 0], [226, .5], [444, .25], [474, .75]];
+const ondes = ONDES.map(() => svgEl('path', {}, $('ondes')));
+
+// Stepper
+const etapesEl = $('etapes');
+const X_PAS = i => 150 + i * 130;
+const liens = [], pas = [];
+for (let i = 0; i < 6; i++) {
+  const l = document.createElement('div');
+  l.className = 'lien';
+  l.style.left = (X_PAS(i) + 21) + 'px';
+  l.style.width = (130 - 42) + 'px';
+  l.innerHTML = '<i></i>';
+  etapesEl.appendChild(l);
+  liens.push(l.firstChild);
+}
+NOMS_PAS.forEach((nom, i) => {
+  const p = document.createElement('div');
+  p.className = 'pas';
+  p.style.left = X_PAS(i) + 'px';
+  p.innerHTML = '<div class="pastille"><b></b><svg viewBox="0 0 20 20"><path d="M4 10.5 L8.3 14.5 L16 5.5" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="nom-pas">' + nom + '</div>';
+  etapesEl.appendChild(p);
+  pas.push({ p, pastille: p.firstChild, point: p.firstChild.firstChild, coche: p.firstChild.lastChild, nom: p.lastChild });
+});
+
+const contenus = [...document.querySelectorAll('.contenu')];
+const qteRempli = $('rempli'), compteur = $('compteur'), barre = $('barre');
+
+// Ajuste la taille des quantités et des noms à la largeur de la carte (mesure unique, après chargement des polices).
+function ajuster() {
+  const largeur = 324;
+  contenus.forEach(c => {
+    c.style.display = 'block';
+    for (const sel of ['.qte', '.nom']) {
+      const el = c.querySelector(sel);
+      el.style.fontSize = '';
+      const base = parseFloat(getComputedStyle(el).fontSize);
+      const w = el.scrollWidth;
+      if (w > largeur) el.style.fontSize = (base * largeur / w).toFixed(2) + 'px';
+    }
+  });
+}
+
+// ---------- Rendu pur : chaque attribut dépend de t seul ----------
+function niveau(t) {
+  const p = eIO(seg(F(1, t), 0.26, 0.86));
+  return { p, y: lerp(Y0, Y100, p) };
+}
+function amplitude(t) {
+  const fin = A[1] + 0.86 * D(1);
+  if (t < fin) return 6 * eOut(seg(F(1, t), 0.22, 0.32));
+  const a = 6 * Math.exp(-(t - fin) / 0.4);
+  return a < 0.02 ? 0 : a;
+}
+function surface(x, y, a, t) {
+  return y + a * (0.65 * Math.sin(0.05 * x + 11 * t) + 0.35 * Math.sin(0.11 * x - 7 * t));
+}
+
+function bouteille(el, k, t, w, couleur) {
+  // w : fenêtres en fraction de l'étape k
+  const f = F(k, t);
+  if (f < 0 || f > 1) { el.setAttribute('display', 'none'); return; }
+  el.setAttribute('display', 'inline');
+  const entree = eOut(seg(f, w.entree[0], w.entree[1]));
+  const sortie = eIn(seg(f, w.sortie[0], w.sortie[1]));
+  const incl = eIO(seg(f, w.incline[0], w.incline[1])) - eIO(seg(f, w.redresse[0], w.redresse[1]));
+  const x = lerp(lerp(-90, BEC.x, entree), -110, sortie);
+  const y = lerp(lerp(110, BEC.y, entree), 90, sortie);
+  const ang = 40 + 72 * incl;
+  el.setAttribute('transform', `translate(${f2(x)},${f2(y)}) rotate(${f2(ang)})`);
+}
+
+function filet(t) {
+  const el = $('filet');
+  let haut = null, bas = null, couleur = '#E6007E';
+  const fM = F(1, t), fJ = F(2, t);
+  const xFil = y => BEC.x + 14 * (1 - Math.exp(-(y - BEC.y) / 9));
+  if (fM >= 0.22 && fM <= 0.9) {
+    const surf = niveau(t).y;
+    const debut = eQuadIn(seg(fM, 0.22, 0.28)), finF = eQuadIn(seg(fM, 0.84, 0.9));
+    haut = lerp(BEC.y + 4, surf, finF);
+    bas = lerp(BEC.y + 4, surf, debut);
+  } else if (fJ >= 0.15 && fJ <= 0.44) {
+    couleur = '#FFD400';
+    const cible = ECLATS[0][1];
+    const debut = eQuadIn(seg(fJ, 0.15, 0.21)), finF = eQuadIn(seg(fJ, 0.38, 0.44));
+    haut = lerp(BEC.y + 4, cible, finF);
+    bas = lerp(BEC.y + 4, cible, debut);
+  }
+  if (haut === null || bas - haut < 1) { el.setAttribute('d', ''); return; }
+  const pts = [];
+  for (let y = haut; y < bas; y += 8) pts.push(`${f2(xFil(y) + 1.2 * Math.sin(t * 37 + y * 0.05))} ${f2(y)}`);
+  pts.push(`${f2(xFil(bas))} ${f2(bas)}`);
+  el.setAttribute('d', 'M' + pts.join(' L'));
+  el.setAttribute('stroke', couleur);
+}
+
+function renderAt(tBrut) {
+  const t = cl(+tBrut || 0, 0, FIN);
+
+  // Titre et sous-titre
+  const uT = seg(t, 0, 0.45);
+  $('titre').style.transform = `translateX(-50%) scale(${(0.5 + 0.5 * eBack(uT, 2.2)).toFixed(4)})`;
+  $('titre').style.opacity = eOut(seg(t, 0, 0.12)).toFixed(3);
+  const s1in = eOut(seg(t, 0.25, 0.6)), s1out = eOut(seg(t, A[0], A[0] + 0.3));
+  $('sous1').style.opacity = (s1in * (1 - s1out)).toFixed(3);
+  $('sous1').style.transform = `translate(-50%, ${f2(10 * (1 - s1in) - 12 * s1out)}px)`;
+  const s2 = eOut(seg(t, A[0] + 0.12, A[0] + 0.42));
+  $('sous2').style.opacity = s2.toFixed(3);
+  $('sous2').style.transform = `translate(-50%, ${f2(12 * (1 - s2))}px)`;
+
+  // Contours dessinés dès 0,15 s
+  const pM = eOut(seg(t, 0.15, 0.62)), pS = eOut(seg(t, 0.2, 0.66)), pD = eOut(seg(t, 0.35, 0.8));
+  contourM.el.setAttribute('stroke-dashoffset', f2(contourM.L * (1 - pM)));
+  contourS.el.setAttribute('stroke-dashoffset', f2(contourS.L * (1 - pS)));
+  for (const d of [cuffG, cuffD, ceinture]) d.el.setAttribute('stroke-dashoffset', f2(d.L * (1 - pD)));
+  $('col').setAttribute('opacity', eOut(seg(t, 0.3, 0.7)).toFixed(3));
+
+  // COULEURS : niveau d'encre et graduations
+  const nv = niveau(t), amp = amplitude(t);
+  if (nv.p <= 0) $('encre').setAttribute('d', '');
+  else {
+    let d = '';
+    for (let x = 150; x <= 520; x += 10) d += (x === 150 ? 'M' : ' L') + x + ' ' + f2(surface(x, nv.y, amp, t));
+    $('encre').setAttribute('d', d + ' L520 800 L150 800 Z');
+  }
+  const gIn = eOut(seg(F(1, t), 0, 0.2)) * (1 - eOut(seg(F(6, t), 0, 0.15)));
+  $('graduations').setAttribute('opacity', gIn.toFixed(3));
+  for (const [id, seuil] of [['g50', 0.5], ['g100', 0.995]]) {
+    const g = $(id), allume = nv.p >= seuil;
+    const tSeuil = A[1] + D(1) * (0.26 + 0.6 * invIO(seuil));
+    const pop = allume ? 1 + 0.25 * (1 - eOut(seg(t, tSeuil, tSeuil + 0.25))) : 1;
+    g.setAttribute('stroke', allume ? '#E6007E' : 'rgba(20,16,22,.25)');
+    g.setAttribute('fill', allume ? '#141016' : 'rgba(20,16,22,.35)');
+    const yG = id === 'g50' ? 504 : 236;
+    g.setAttribute('transform', `translate(522 ${yG}) scale(${f2(pop)}) translate(-522 ${-yG})`);
+  }
+
+  // DESIGN : éclats, bandes, rayures
+  const f3 = F(2, t);
+  let nEclats = 0, progEclats = 0;
+  eclats.forEach((el, i) => {
+    const [x, y, r] = ECLATS[i];
+    const u = seg(f3, 0.22 + i * 0.06, 0.30 + i * 0.06);
+    const s = u <= 0 ? 0 : eBack(u, 2.4);
+    el.setAttribute('transform', `translate(${x} ${y}) rotate(${-12 + i * 9}) scale(${(r * s).toFixed(3)})`);
+    el.setAttribute('opacity', u > 0 ? 1 : 0);
+    if (u >= 0.5) nEclats++;
+    progEclats += eOut(u);
+  });
+  bandes.forEach((b, i) => b.el.setAttribute('stroke-dashoffset', f2(b.L * (1 - eIO(seg(f3, 0.56 + i * 0.03, 0.70 + i * 0.03))))));
+  rayures.forEach((r, j) => r.el.setAttribute('stroke-dashoffset', f2(r.L * (1 - eIO(seg(f3, 0.68 + j * 0.04, 0.82 + j * 0.04))))));
+
+  // BLASON : chute avec rebond côté cœur
+  const f4 = F(3, t), uB = seg(f4, 0.05, 0.62);
+  $('blason').setAttribute('transform', `translate(392 ${f2(322 - 150 * (1 - eBounce(uB)))}) rotate(${f2(-12 * (1 - eOut(uB)))})`);
+  $('blason').setAttribute('opacity', eOut(seg(f4, 0.05, 0.16)).toFixed(3));
+
+  // SPONSOR : dévoilement gauche à droite, puis flash
+  const f5 = F(4, t), pSp = eIO(seg(f5, 0.08, 0.55));
+  $('revSponsor').setAttribute('width', f2(220 * pSp));
+  const tFlash = A[4] + 0.64 * D(4), uF = seg(t, tFlash, tFlash + 0.15);
+  let flash = 0;
+  if (uF > 0 && uF < 1) flash = 0.6 * (uF < 0.25 ? eOut(uF / 0.25) : 1 - eIO((uF - 0.25) / 0.75));
+  $('flash').setAttribute('opacity', flash.toFixed(3));
+
+  // NUMÉRO : dépassement d'échelle
+  const f6 = F(5, t);
+  const uG = seg(f6, 0.06, 0.40), uP = seg(f6, 0.46, 0.70);
+  $('grand10').setAttribute('transform', `translate(335 540) scale(${uG <= 0 ? 0 : eBack(uG, 2.2).toFixed(4)}) translate(-335 -540)`);
+  $('grand10').setAttribute('opacity', eOut(seg(f6, 0.06, 0.12)).toFixed(3));
+  $('petit10').setAttribute('transform', `translate(262 717) scale(${uP <= 0 ? 0 : eBack(uP, 2.2).toFixed(4)}) translate(-262 -717)`);
+  $('petit10').setAttribute('opacity', eOut(seg(f6, 0.46, 0.52)).toFixed(3));
+
+  // BAT : tampon, presse, relevage
+  const f7 = F(6, t);
+  const py = lerp(-382, 232, eIn(seg(f7, 0.24, 0.40))) + 5 * Math.sin(Math.PI * seg(f7, 0.40, 0.47)) - 614 * eIO(seg(f7, 0.66, 0.80));
+  $('presse').setAttribute('transform', `translate(0 ${f2(py)})`);
+  $('presse').setAttribute('display', py > -381 ? 'inline' : 'none');
+  const temp = Math.round(200 * eOut(seg(f7, 0.40, 0.62)));
+  $('afficheur').textContent = temp + NBSP + '°C';
+  const chaleur = (temp / 200) * (1 - eOut(seg(f7, 0.62, 0.72)));
+  $('bordure').setAttribute('opacity', chaleur.toFixed(3));
+  $('halo').setAttribute('opacity', (0.9 * chaleur).toFixed(3));
+  const vOndes = eOut(seg(f7, 0.44, 0.52)) * (1 - eIn(seg(f7, 0.62, 0.70)));
+  ondes.forEach((o, i) => {
+    const [x0, dec] = ONDES[i];
+    const cycle = ((t - A[6]) / 0.42 + dec) % 1;
+    const u = eOut(cycle < 0 ? cycle + 1 : cycle);
+    const yb = 528 - 150 * u, yh = yb - 90;
+    let d = '';
+    for (let y = yb; y >= yh; y -= 6) d += (d ? ' L' : 'M') + f2(x0 + 6 * Math.sin((y + i * 20) / 11)) + ' ' + f2(y);
+    o.setAttribute('d', d);
+    o.setAttribute('opacity', (vOndes * 0.85 * Math.sin(Math.PI * u)).toFixed(3));
+  });
+  const sat = 0.5 + 0.5 * eOut(seg(f7, 0.92, 1.06));
+  $('satM').setAttribute('values', sat.toFixed(3));
+  etincelles.forEach((el, i) => {
+    const [x, y, r] = ETINCELLES[i];
+    const u = seg(f7, 0.92 + i * 0.022, 1.12 + i * 0.022);
+    const s = u <= 0 || u >= 1 ? 0 : r * (u < 0.45 ? eBack(u / 0.45, 2) : 1 - eIn((u - 0.45) / 0.55));
+    el.setAttribute('transform', `translate(${x} ${y}) rotate(${f2(45 * u)}) scale(${Math.max(0, s).toFixed(3)})`);
+  });
+
+  // FINALE : rebond et rayons
+  const fA = (t - A[7]) / (PRIX - A[7]);
+  const uR = seg(fA, 0, 0.42);
+  const hop = uR < 0.62 ? 4 * (uR / 0.62) * (1 - uR / 0.62) : 0.28 * 4 * ((uR - 0.62) / 0.38) * (1 - (uR - 0.62) / 0.38);
+  const ecrase = 1 - 0.035 * Math.sin(Math.PI * seg(uR, 0.6, 0.72));
+  $('ensemble').setAttribute('transform', `translate(335 772) translate(0 ${f2(-20 * hop)}) scale(${(1 / ecrase).toFixed(4)} ${ecrase.toFixed(4)}) translate(-335 -772)`);
+  rayons.forEach((el, i) => {
+    const r = RAYONS[i];
+    const u = r.vague ? seg(fA, 0.16, 0.74) : seg(fA, 0.02, 0.6);
+    if (u <= 0 || u >= 1) { el.setAttribute('opacity', 0); return; }
+    const rad = 250 + 80 * eOut(u), lg = 6 + 44 * Math.pow(1 - u, 1.2);
+    const cx = 335, cy = 512, kx = 0.82;
+    const x1 = cx + Math.cos(r.a) * rad * kx, y1 = cy + Math.sin(r.a) * rad;
+    const x2 = cx + Math.cos(r.a) * (rad + lg) * kx, y2 = cy + Math.sin(r.a) * (rad + lg);
+    el.setAttribute('x1', f2(x1)); el.setAttribute('y1', f2(y1));
+    el.setAttribute('x2', f2(x2)); el.setAttribute('y2', f2(y2));
+    el.setAttribute('opacity', (1 - eIn(u)).toFixed(3));
+  });
+
+  // Bouteilles et filet
+  bouteille($('bouteilleM'), 1, t, { entree: [0, 0.16], incline: [0.10, 0.24], redresse: [0.84, 0.93], sortie: [0.88, 1] });
+  bouteille($('bouteilleJ'), 2, t, { entree: [0, 0.10], incline: [0.06, 0.16], redresse: [0.40, 0.48], sortie: [0.44, 0.58] });
+  if (F(2, t) > 0.58) $('bouteilleJ').setAttribute('display', 'none');
+  filet(t);
+
+  // Carte d'étape
+  let k = 0;
+  for (let i = 0; i < 7; i++) if (t >= A[i]) k = i;
+  if (t >= PRIX) k = 7;
+  contenus.forEach((c, i) => { c.style.display = i === k ? 'block' : 'none'; });
+  const tPop = k === 0 ? null : (k === 7 ? PRIX : A[k]);
+  const pop = tPop === null ? 1 : 0.88 + 0.12 * eBack(seg(t, tPop, tPop + 0.35), 1.6);
+  const arr = eOut(seg(t, ARRIVEE, A[0]));
+  let jolt = 0;
+  if (k === 6) { const w = seg(f7, 0.20, 0.30); jolt = 5 * Math.sin(Math.PI * 3 * w) * (1 - w); }
+  $('carte').style.opacity = arr.toFixed(3);
+  $('carte').style.transform = `translate(${f2(70 * (1 - arr) + jolt)}px, ${f2(-jolt * 0.4)}px) scale(${(pop * (0.94 + 0.06 * arr)).toFixed(4)})`;
+
+  let prog = 0, txt = '';
+  if (k === 0) {
+    const f1 = F(0, t);
+    prog = eOut(seg(f1, 0.04, 0.50));
+    txt = (prog >= 1 ? 1 : 0) + ' / 1';
+    const uV = seg(f1, 0.04, 0.36);
+    const vol = eOut(uV);
+    const rebond = 1 + 0.06 * Math.sin(Math.PI * seg(f1, 0.34, 0.44));
+    const ouvre = eIO(seg(f1, 0.40, 0.56));
+    const sortieF = eBack(seg(f1, 0.52, 0.72), 1.6);
+    $('envVol').setAttribute('transform', `translate(${f2(240 * (1 - vol))} ${f2(-170 * (1 - vol))}) rotate(${f2(-24 * (1 - vol))} 52 76) translate(52 106) scale(${f2(rebond)}) translate(-52 -106)`);
+    $('enveloppe').style.opacity = eOut(seg(f1, 0.04, 0.12)).toFixed(3);
+    const sy = 1 - 2 * ouvre;
+    $('rabat').setAttribute('transform', `translate(0 46) scale(1 ${f2(sy)}) translate(0 -46)`);
+    $('rabat').setAttribute('display', sy > 0 ? 'inline' : 'none');
+    $('rabatArriere').setAttribute('display', sy > 0 ? 'none' : 'inline');
+    $('rabatArriere').setAttribute('transform', `translate(0 46) scale(1 ${f2(-sy)}) translate(0 -46)`);
+    $('feuille').setAttribute('transform', `translate(0 ${f2(36 - 64 * sortieF)})`);
+  } else if (k === 1) {
+    prog = nv.p;
+    txt = Math.round(nv.p * 100) + NBSP + '%';
+  } else if (k === 2) {
+    prog = progEclats / 6;
+    txt = nEclats + ' / 6 éclats';
+  } else if (k === 3) {
+    const contact = seg(uB, 0, 1 / 2.75);
+    prog = eOut(contact);
+    txt = (contact >= 1 ? 1 : 0) + ' / 1';
+  } else if (k === 4) {
+    prog = pSp;
+    txt = (pSp >= 1 ? 1 : 0) + ' / 1';
+  } else if (k === 5) {
+    const a1 = eOut(seg(f6, 0.06, 0.25)), a2 = eOut(seg(f6, 0.46, 0.60));
+    prog = (a1 + a2) / 2;
+    txt = (a1 >= 1 ? 1 : 0) + (a2 >= 1 ? 1 : 0) + ' / 2';
+  } else if (k === 6) {
+    const uS = seg(f7, 0.02, 0.20);
+    prog = eIn(uS);
+    txt = (uS >= 1 ? 1 : 0) + ' / 1';
+  }
+  barre.style.display = k === 7 ? 'none' : 'flex';
+  qteRempli.style.transform = `scaleX(${cl(prog).toFixed(4)})`;
+  compteur.textContent = txt;
+
+  // Tampon VALIDÉ
+  const uS = seg(f7, 0.02, 0.20), vS = seg(f7, 0.20, 0.32);
+  const echT = uS < 1 ? 1.9 - 0.9 * eIn(uS) : 1 + 0.06 * Math.sin(Math.PI * vS) * (1 - vS);
+  $('tampon').style.opacity = eOut(seg(f7, 0.02, 0.08)).toFixed(3);
+  $('tampon').style.transform = `rotate(${f2(-24 + 10 * eOut(uS))}deg) scale(${echT.toFixed(4)})`;
+
+  // Stepper
+  const vis = eOut(seg(t, ARRIVEE, A[0]));
+  etapesEl.style.opacity = vis.toFixed(3);
+  etapesEl.style.transform = `translateY(${f2(36 * (1 - vis))}px)`;
+  pas.forEach((s, i) => {
+    const fait = t >= A[i + 1], courant = !fait && t >= A[i];
+    const st = s.pastille.style;
+    if (fait) {
+      const u = seg(t, A[i + 1], A[i + 1] + 0.3);
+      st.background = '#E6007E'; st.borderColor = '#E6007E'; st.borderWidth = '3.5px';
+      st.transform = `scale(${(1.25 - 0.25 * eOut(u)).toFixed(4)})`;
+      s.coche.style.display = 'block'; s.point.style.display = 'none';
+      s.nom.style.color = '#141016';
+    } else if (courant) {
+      const ph = (t - A[i]) / 0.9;
+      st.background = '#fff'; st.borderColor = '#141016'; st.borderWidth = '3.5px';
+      st.transform = `scale(${(1 + 0.07 * (0.5 - 0.5 * Math.cos(2 * Math.PI * ph))).toFixed(4)})`;
+      s.coche.style.display = 'none'; s.point.style.display = 'block';
+      s.nom.style.color = '#141016';
+    } else {
+      st.background = '#fff'; st.borderColor = 'rgba(20,16,22,.22)'; st.borderWidth = '3px';
+      st.transform = 'scale(1)';
+      s.coche.style.display = 'none'; s.point.style.display = 'none';
+      s.nom.style.color = 'rgba(20,16,22,.55)';
+    }
+  });
+  liens.forEach((l, i) => { l.style.transform = `scaleX(${eOut(seg(t, A[i + 1], A[i + 1] + 0.35)).toFixed(4)})`; });
+
+  // Sous-titres
+  let ph = null;
+  for (let i = 0; i < PHRASES.length; i++) if (t >= PHRASES[i].debut_s) ph = PHRASES[i];
+  const leg = $('legende');
+  const masque = 1 - eOut(seg(t, PRIX, PRIX + 0.2));
+  if (!ph || masque <= 0) { leg.style.opacity = 0; leg.textContent = ''; }
+  else {
+    if (leg.textContent !== ph.texte) leg.textContent = ph.texte;
+    const u = eOut(seg(t, ph.debut_s, ph.debut_s + 0.14));
+    leg.style.opacity = (u * masque).toFixed(3);
+    leg.style.transform = `translate(-50%, calc(-50% + ${f2(6 * (1 - u))}px))`;
+  }
+
+  // Fin
+  const fB = (t - PRIX) / (FIN - PRIX);
+  const uSl = eOut(seg(fB, 0.07, 0.11));
+  $('slogan').style.opacity = uSl.toFixed(3);
+  $('slogan').style.transform = `translate(-50%, ${f2(16 * (1 - uSl))}px)`;
+  const uBa = seg(fB, 0.13, 0.17);
+  $('badge').style.opacity = eOut(uBa).toFixed(3);
+  $('badge').style.transform = `translateX(-50%) scale(${(0.8 + 0.2 * eBack(uBa, 2)).toFixed(4)})`;
+}
+window.renderAt = renderAt;
+
+// ---------- Lecture et capture ----------
+const capture = new URLSearchParams(location.search).get('capture') === '1';
+if (capture) document.documentElement.classList.add('capture');
+
+function echelle() {
+  const scene = $('scene'), plateau = $('plateau');
+  if (capture) { scene.style.transform = 'none'; plateau.style.width = plateau.style.height = '1080px'; return; }
+  const s = Math.max(0.2, Math.min(window.innerWidth / 1080, (window.innerHeight - 76) / 1080));
+  scene.style.transform = `scale(${s})`;
+  plateau.style.width = plateau.style.height = (1080 * s) + 'px';
+}
+window.addEventListener('resize', echelle);
+
+function demarrer() {
+  ajuster();
+  echelle();
+  window.__pret = true;
+  if (capture) { renderAt(0); return; }
+
+  const voix = $('voix'), defile = $('defile'), temps = $('temps'), bouton = $('lecture');
+  if (AUDIO.startsWith('data:')) voix.src = AUDIO;
+  const fmt = x => x.toFixed(1).replace('.', ',') + ' s';
+  let position = FIN;
+  const afficher = t => {
+    position = t;
+    renderAt(t);
+    defile.value = t;
+    temps.textContent = fmt(t) + ' / ' + fmt(FIN);
+  };
+  const icones = enLecture => {
+    $('icoLecture').style.display = enLecture ? 'none' : 'block';
+    $('icoPause').style.display = enLecture ? 'block' : 'none';
+    bouton.setAttribute('aria-label', enLecture ? 'Pause' : 'Lecture');
+  };
+  const boucle = () => {
+    if (voix.paused) return;
+    afficher(Math.min(voix.currentTime, FIN));
+    requestAnimationFrame(boucle);
+  };
+  bouton.addEventListener('click', () => {
+    if (voix.paused) {
+      voix.currentTime = position >= FIN - 0.05 ? 0 : position;
+      voix.play().then(() => { icones(true); requestAnimationFrame(boucle); }).catch(() => icones(false));
+    } else { voix.pause(); icones(false); }
+  });
+  defile.addEventListener('input', () => {
+    const t = +defile.value;
+    if (!voix.paused) voix.currentTime = t;
+    afficher(t);
+  });
+  voix.addEventListener('pause', () => icones(false));
+  afficher(FIN);
+}
+
+const polices = ['900 40px "Archivo"', '400 20px "IBM Plex Sans"', '600 20px "IBM Plex Sans"'];
+Promise.all(polices.map(p => document.fonts.load(p))).then(() => document.fonts.ready).then(demarrer);
+})();
+</script>
+</body>
+</html>

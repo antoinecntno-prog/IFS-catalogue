@@ -1,0 +1,20 @@
+{
+  "name": "contino-sport-prets-pour-samedi",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Vidéo motion design « Prêts pour samedi » de Contino Sport : voix off, animation HTML/SVG, export MP4.",
+  "type": "module",
+  "scripts": {
+    "voix": "node 2026-10-15_voix-off.mjs",
+    "calage": "node 2026-10-15_voix-off.mjs --calage",
+    "html": "node 2026-10-15_capture.mjs --html",
+    "rendu": "node 2026-10-15_capture.mjs"
+  },
+  "dependencies": {
+    "@fontsource/archivo": "^5.3.0",
+    "@fontsource/ibm-plex-sans": "^5.3.0"
+  },
+  "devDependencies": {
+    "playwright": "1.56.1"
+  }
+}

@@ -54,3 +54,14 @@ python3 outils/fichier-unique.py                                   puis régén�
 - Le nom du fichier contient une empreinte de son contenu (`set-football-b63550d8.webp`) : une photo remplacée change de nom, et aucun navigateur ne garde l'ancienne en cache. Les photos de `site/img/` sont donc mises en cache un an (`site/_headers`).
 - Sans `--illustration`, la photo compte comme une photo réelle de Contino Sport (`"reel": true` dans `site/donnees.js`) : la fiche n'affiche pas la mention « Photo d'illustration ».
 - Les vignettes de catégories reprennent la photo du produit désigné par `cover` dans `site/donnees.js`.
+
+## Vidéo « Prêts pour samedi »
+
+`video/` contient une vidéo motion design de 30 s (1080 × 1080) pour les dirigeants de clubs amateurs, racontée par la voix clonée d'Antoine.
+
+- `2026-10-15_contino-sport_prets-pour-samedi.mp4` et `.html` : la vidéo, et la même animation lisible avec le son, en boucle, sans connexion.
+- `voix-off.mp3`, `voix-off_alignment.json`, `timings.json` : la voix, ses mots horodatés et le début de chaque étape.
+- `source/scene.html` : la scène. Tout le rendu passe par `renderAt(t)`, ce qui rend la capture image par image exacte.
+- `2026-10-15_contino-sport_planche-contact.png` : 15 images légendées avec leur temps.
+
+Pour refaire la vidéo, dans `video/` : `npm install`, puis `npm run voix` (nouvelle prise ElevenLabs, clé lue dans `ELEVENLABS_API_KEY`, consomme des crédits) ou `npm run calage` (recalcule `timings.json` depuis l'alignement présent), puis `npm run rendu` (HTML, MP4, planche et contrôles).
