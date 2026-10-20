@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="fr">
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <link rel="stylesheet" href="assets/kit.css" />
+      <style>
+        #root { position: absolute; inset: 0; overflow: hidden; background: #1A1320; }
+        #s01-frame { position: absolute; inset: 0; transform-origin: 50% 46%; }
+        #s01-cam { position: absolute; inset: 0; perspective: 2000px; perspective-origin: 50% 40%; }
+        #s01-wall { position: absolute; left: 50%; top: -1500px; width: 2476px; height: 3500px; margin-left: -1238px;
+          transform-origin: 50% 2460px; overflow: hidden; }
+        .s01-col { position: absolute; width: 386px; }
+        .s01-colin { position: relative; width: 386px; }
+        .s01-card { position: relative; width: 386px; height: 800px; margin-bottom: 32px; background: #FFFFFF; border-radius: 22px; overflow: hidden;
+          box-shadow: 0 18px 40px rgba(0,0,0,.35); }
+        .s01-z { zoom: 2; width: 193px; padding: 10px 10px 0; font: 400 16px/1.5 var(--body); color: var(--ink); }
+        #s01-wall .ui-card b { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 38.4px; }
+        #s01-wall .ui-card .sub { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 32.5px; }
+        #s01-wall .ui-card .pr strong { margin-right: 2px; }
+        #s01-wall .s01-min { margin-top: 3px; }
+        #s01-vig { position: absolute; left: -120px; right: -120px; top: -120px; bottom: -120px; pointer-events: none;
+          background: linear-gradient(180deg, rgba(26,19,32,.92) 5%, rgba(26,19,32,.55) 16%, rgba(26,19,32,0) 32%, rgba(26,19,32,0) 76%, rgba(26,19,32,.55) 95%); }
+        #s01-dim { position: absolute; left: -120px; right: -120px; top: -120px; bottom: -120px; background: #1A1320; opacity: 0; pointer-events: none; }
+        #s01-bandrot { position: absolute; left: -500px; top: 500px; width: 2080px; height: 740px; transform: rotate(-9deg); transform-origin: 50% 50%; }
+        #s01-band { position: absolute; inset: 0; }
+        #s01-bandbg { position: absolute; inset: 0; background: var(--magenta); box-shadow: 0 30px 80px rgba(0,0,0,.45); }
+        #s01-bandline { position: absolute; left: 0; right: 0; bottom: -26px; height: 18px; background: var(--yellow); }
+        #s01-txt { position: absolute; inset: 0; z-index: 2; display: flex; align-items: center; justify-content: center; }
+        #s01-lines { display: block; }
+        #s01-lines .mask { padding-top: 6px; margin-top: -6px; }
+        #s01-lines .big { font-size: 130px; line-height: .9; white-space: nowrap; }
+        #s01-lines .w { color: #FFFFFF; }
+        #s01-lines .y { color: var(--yellow); }
+        .s01-deco { position: absolute; }
+        .deco.tri.s01-w { border-bottom-color: #FFFFFF; }
+        .deco.ring.s01-w { border-color: #FFFFFF; }
+        .deco.dot.s01-w { background: #FFFFFF; }
+        .deco.plus.s01-w::before, .deco.plus.s01-w::after { background: #FFFFFF; }
+      </style>
+      <div id="root" data-composition-id="s01" data-width="1080" data-height="1920">
+        <div id="s01-frame">
+          <div id="s01-cam">
+            <div id="s01-wall" data-layout-allow-overflow data-layout-ignore>
+          <div class="s01-col" id="s01-col-0" style="left:0px;top:-120px"><div class="s01-colin" id="s01-colin-0"><div class="s01-card" id="s01-c0-0"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/boxer.webp" alt="" /></div><b>Boxer imprimé</b><div class="sub">Lycra 130 g/m²</div><div class="pr"><strong>10,99&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 50 pcs</div></div></div></div><div class="s01-card" id="s01-c0-1"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/survetement.webp" alt="" /></div><b>Survêtement complet</b><div class="sub">Vêtements techniques &amp; training</div><div class="pr"><strong>78,99&nbsp;€</strong> HT / ensemble</div><div class="pr s01-min">Dès 30 pcs</div></div></div></div><div class="s01-card" id="s01-c0-2"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/bonnet-bain.webp" alt="" /></div><b>Bonnet de bain</b><div class="sub">Lycra, intérieur blanc</div><div class="pr"><strong>8,49&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 50 pcs</div></div></div></div><div class="s01-card" id="s01-c0-3"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/tapis-yoga.webp" alt="" /></div><b>Tapis de yoga</b><div class="sub">61 × 183 × 0,4 cm</div><div class="pr"><strong>54,99&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 50 pcs</div></div></div></div><div class="s01-card" id="s01-c0-4"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/bracelet.webp" alt="" /></div><b>Bracelet textile</b><div class="sub">10 mm × 35 cm, sublimation 1 face</div><div class="pr"><strong>1,49&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 100 pcs</div></div></div></div><div class="s01-card" id="s01-c0-5"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/tote-sublime.webp" alt="" /></div><b>Tote bag sublimé</b><div class="sub">42 × 38 cm, autres formats sur devis</div><div class="pr"><strong>5,59&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 100 pcs</div></div></div></div><div class="s01-card" id="s01-c0-6"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/bandeau.webp" alt="" /></div><b>Bandeau</b><div class="sub">7,5 cm</div><div class="pr"><strong>3,29&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 250 pcs</div></div></div></div><div class="s01-card" id="s01-c0-7"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/echarpe.webp" alt="" /></div><b>Écharpe supporter</b><div class="sub">Polyester sport 130 g/m², 160 g/m² en option</div><div class="pr"><strong>6,29&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 100 pcs</div></div></div></div><div class="s01-card" id="s01-c0-8"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/tour-de-cou.webp" alt="" /></div><b>Tour de cou</b><div class="sub">25 × 50 cm, tubulaire sans couture</div><div class="pr"><strong>3,69&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 100 pcs</div></div></div></div></div></div>
+          <div class="s01-col" id="s01-col-1" style="left:418px;top:-540px"><div class="s01-colin" id="s01-colin-1"><div class="s01-card" id="s01-c1-0"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/hoodie.webp" alt="" /></div><b>Sweat à capuche</b><div class="sub">Vêtements techniques &amp; training</div><div class="pr"><strong>40,99&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 30 pcs</div></div></div></div><div class="s01-card" id="s01-c1-1"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/sac-cordon.webp" alt="" /></div><b>Sac à cordon</b><div class="sub">Polyester 200 g, imperméable</div><div class="pr"><strong>6,39&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 50 pcs</div></div></div></div><div class="s01-card" id="s01-c1-2"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/manchons-bras.webp" alt="" /></div><b>Manchons bras</b><div class="sub">Lycra 220 g/m², bande silicone antidérapante</div><div class="pr"><strong>10,99&nbsp;€</strong> HT / paire</div><div class="pr s01-min">Dès 50 pcs</div></div></div></div><div class="s01-card" id="s01-c1-3"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/serviette-petanque.webp" alt="" /></div><b>Serviette de pétanque</b><div class="sub">20 × 20 cm</div><div class="pr"><strong>2,29&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 50 pcs</div></div></div></div><div class="s01-card" id="s01-c1-4"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/bandana-carre.webp" alt="" /></div><b>Bandana carré</b><div class="sub">100 % polyester 60 g/m²</div><div class="pr"><strong>5,89&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 200 pcs</div></div></div></div><div class="s01-card" id="s01-c1-5"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/maillot-cyclisme.webp" alt="" /></div><b>Maillot cyclisme</b><div class="sub">Cyclisme, VTT</div><div class="pr"><strong>28,99&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 30 pcs</div></div></div></div><div class="s01-card" id="s01-c1-6"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/set-football.webp" alt="" /></div><b>Set football, maillot + short</b><div class="sub">Football, volley, handball, badminton</div><div class="pr"><strong>19,99&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 30 pcs</div></div></div></div><div class="s01-card" id="s01-c1-7"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/veste-matelassee.webp" alt="" /></div><b>Veste matelassée hiver</b><div class="sub">Vêtements techniques &amp; training</div><div class="pr"><strong>106,99&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 10 pcs</div></div></div></div><div class="s01-card" id="s01-c1-8"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/drapeau-supporter.webp" alt="" /></div><b>Drapeau supporter</b><div class="sub">Drapeau 115 g/m², classement feu M1/B1</div><div class="pr"><strong>2,29&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 50 pcs</div></div></div></div></div></div>
+          <div class="s01-col" id="s01-col-2" style="left:836px;top:-300px"><div class="s01-colin" id="s01-colin-2"><div class="s01-card" id="s01-c2-0"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/tote-sublime.webp#2" alt="" /></div><b>Tote bag sublimé</b><div class="sub">42 × 38 cm, autres formats sur devis</div><div class="pr"><strong>5,59&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 100 pcs</div></div></div></div><div class="s01-card" id="s01-c2-1"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/coussin-stade.webp" alt="" /></div><b>Coussin de stade</b><div class="sub">100 % polyester imperméable</div><div class="pr"><strong>7,79&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 100 pcs</div></div></div></div><div class="s01-card" id="s01-c2-2"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/bonnet-bain.webp#2" alt="" /></div><b>Bonnet de bain</b><div class="sub">Lycra, intérieur blanc</div><div class="pr"><strong>8,49&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 50 pcs</div></div></div></div><div class="s01-card" id="s01-c2-3"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/bonnet-polaire.webp" alt="" /></div><b>Bonnet polaire</b><div class="sub">Polaire 240 g/m²</div><div class="pr"><strong>8,49&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 50 pcs</div></div></div></div><div class="s01-card" id="s01-c2-4"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/drapeau-supporter.webp#2" alt="" /></div><b>Drapeau supporter</b><div class="sub">Drapeau 115 g/m², classement feu M1/B1</div><div class="pr"><strong>2,29&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 50 pcs</div></div></div></div><div class="s01-card" id="s01-c2-5"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/running-ml.webp" alt="" /></div><b>Maillot running manches longues</b><div class="sub">Running, trail</div><div class="pr"><strong>22,99&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 30 pcs</div></div></div></div><div class="s01-card" id="s01-c2-6"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/bandeau.webp#2" alt="" /></div><b>Bandeau</b><div class="sub">7,5 cm</div><div class="pr"><strong>3,29&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 250 pcs</div></div></div></div><div class="s01-card" id="s01-c2-7"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/tour-de-cou.webp#2" alt="" /></div><b>Tour de cou</b><div class="sub">25 × 50 cm, tubulaire sans couture</div><div class="pr"><strong>3,69&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 100 pcs</div></div></div></div><div class="s01-card" id="s01-c2-8"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/hoodie.webp#2" alt="" /></div><b>Sweat à capuche</b><div class="sub">Vêtements techniques &amp; training</div><div class="pr"><strong>40,99&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 30 pcs</div></div></div></div></div></div>
+          <div class="s01-col" id="s01-col-3" style="left:1254px;top:-700px"><div class="s01-colin" id="s01-colin-3"><div class="s01-card" id="s01-c3-0"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/bandeau.webp#3" alt="" /></div><b>Bandeau</b><div class="sub">7,5 cm</div><div class="pr"><strong>3,29&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 250 pcs</div></div></div></div><div class="s01-card" id="s01-c3-1"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/boxer.webp#2" alt="" /></div><b>Boxer imprimé</b><div class="sub">Lycra 130 g/m²</div><div class="pr"><strong>10,99&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 50 pcs</div></div></div></div><div class="s01-card" id="s01-c3-2"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/chasuble.webp" alt="" /></div><b>Chasuble d'entraînement</b><div class="sub">Entraînements et tournois</div><div class="pr"><strong>12,99&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 25 pcs</div></div></div></div><div class="s01-card" id="s01-c3-3"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/set-football.webp#2" alt="" /></div><b>Set football, maillot + short</b><div class="sub">Football, volley, handball, badminton</div><div class="pr"><strong>19,99&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 30 pcs</div></div></div></div><div class="s01-card" id="s01-c3-4"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/drapeau-supporter.webp#3" alt="" /></div><b>Drapeau supporter</b><div class="sub">Drapeau 115 g/m², classement feu M1/B1</div><div class="pr"><strong>2,29&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 50 pcs</div></div></div></div><div class="s01-card" id="s01-c3-5"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/serviette-petanque.webp#2" alt="" /></div><b>Serviette de pétanque</b><div class="sub">20 × 20 cm</div><div class="pr"><strong>2,29&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 50 pcs</div></div></div></div><div class="s01-card" id="s01-c3-6"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/softshell.webp" alt="" /></div><b>Veste et gilet softshell</b><div class="sub">Vêtements techniques &amp; training</div><div class="pr"><strong>85,99&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 10 pcs</div></div></div></div><div class="s01-card" id="s01-c3-7"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/sac-cordon.webp#2" alt="" /></div><b>Sac à cordon</b><div class="sub">Polyester 200 g, imperméable</div><div class="pr"><strong>6,39&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 50 pcs</div></div></div></div><div class="s01-card" id="s01-c3-8"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/tour-de-cou.webp#3" alt="" /></div><b>Tour de cou</b><div class="sub">25 × 50 cm, tubulaire sans couture</div><div class="pr"><strong>3,69&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 100 pcs</div></div></div></div></div></div>
+          <div class="s01-col" id="s01-col-4" style="left:1672px;top:-60px"><div class="s01-colin" id="s01-colin-4"><div class="s01-card" id="s01-c4-0"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/bandeau.webp#4" alt="" /></div><b>Bandeau</b><div class="sub">7,5 cm</div><div class="pr"><strong>3,29&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 250 pcs</div></div></div></div><div class="s01-card" id="s01-c4-1"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/drapeau-supporter.webp#4" alt="" /></div><b>Drapeau supporter</b><div class="sub">Drapeau 115 g/m², classement feu M1/B1</div><div class="pr"><strong>2,29&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 50 pcs</div></div></div></div><div class="s01-card" id="s01-c4-2"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/bonnet-polaire.webp#2" alt="" /></div><b>Bonnet polaire</b><div class="sub">Polaire 240 g/m²</div><div class="pr"><strong>8,49&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 50 pcs</div></div></div></div><div class="s01-card" id="s01-c4-3"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/serviette-petanque.webp#3" alt="" /></div><b>Serviette de pétanque</b><div class="sub">20 × 20 cm</div><div class="pr"><strong>2,29&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 50 pcs</div></div></div></div><div class="s01-card" id="s01-c4-4"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/sac-cordon.webp#3" alt="" /></div><b>Sac à cordon</b><div class="sub">Polyester 200 g, imperméable</div><div class="pr"><strong>6,39&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 50 pcs</div></div></div></div><div class="s01-card" id="s01-c4-5"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/survetement.webp#2" alt="" /></div><b>Survêtement complet</b><div class="sub">Vêtements techniques &amp; training</div><div class="pr"><strong>78,99&nbsp;€</strong> HT / ensemble</div><div class="pr s01-min">Dès 30 pcs</div></div></div></div><div class="s01-card" id="s01-c4-6"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/veste-matelassee.webp#2" alt="" /></div><b>Veste matelassée hiver</b><div class="sub">Vêtements techniques &amp; training</div><div class="pr"><strong>106,99&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 10 pcs</div></div></div></div><div class="s01-card" id="s01-c4-7"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/bonnet-bain.webp#3" alt="" /></div><b>Bonnet de bain</b><div class="sub">Lycra, intérieur blanc</div><div class="pr"><strong>8,49&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 50 pcs</div></div></div></div><div class="s01-card" id="s01-c4-8"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/dossards.webp" alt="" /></div><b>Dossards</b><div class="sub">Non-tissé 130 g/m² indéchirable, 2 épingles fournies</div><div class="pr"><strong>2,09&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 100 pcs</div></div></div></div></div></div>
+          <div class="s01-col" id="s01-col-5" style="left:2090px;top:-420px"><div class="s01-colin" id="s01-colin-5"><div class="s01-card" id="s01-c5-0"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/manchons-bras.webp#2" alt="" /></div><b>Manchons bras</b><div class="sub">Lycra 220 g/m², bande silicone antidérapante</div><div class="pr"><strong>10,99&nbsp;€</strong> HT / paire</div><div class="pr s01-min">Dès 50 pcs</div></div></div></div><div class="s01-card" id="s01-c5-1"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/sac-cordon.webp#4" alt="" /></div><b>Sac à cordon</b><div class="sub">Polyester 200 g, imperméable</div><div class="pr"><strong>6,39&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 50 pcs</div></div></div></div><div class="s01-card" id="s01-c5-2"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/veste-matelassee.webp#3" alt="" /></div><b>Veste matelassée hiver</b><div class="sub">Vêtements techniques &amp; training</div><div class="pr"><strong>106,99&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 10 pcs</div></div></div></div><div class="s01-card" id="s01-c5-3"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/coussin-stade.webp#2" alt="" /></div><b>Coussin de stade</b><div class="sub">100 % polyester imperméable</div><div class="pr"><strong>7,79&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 100 pcs</div></div></div></div><div class="s01-card" id="s01-c5-4"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/bonnet-bain.webp#4" alt="" /></div><b>Bonnet de bain</b><div class="sub">Lycra, intérieur blanc</div><div class="pr"><strong>8,49&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 50 pcs</div></div></div></div><div class="s01-card" id="s01-c5-5"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/serviette-petanque.webp#4" alt="" /></div><b>Serviette de pétanque</b><div class="sub">20 × 20 cm</div><div class="pr"><strong>2,29&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 50 pcs</div></div></div></div><div class="s01-card" id="s01-c5-6"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/tapis-yoga.webp#2" alt="" /></div><b>Tapis de yoga</b><div class="sub">61 × 183 × 0,4 cm</div><div class="pr"><strong>54,99&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 50 pcs</div></div></div></div><div class="s01-card" id="s01-c5-7"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/bracelet.webp#2" alt="" /></div><b>Bracelet textile</b><div class="sub">10 mm × 35 cm, sublimation 1 face</div><div class="pr"><strong>1,49&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 100 pcs</div></div></div></div><div class="s01-card" id="s01-c5-8"><div class="s01-z"><div class="ui-card"><div class="ph"><img src="assets/img/bonnet-polaire.webp#3" alt="" /></div><b>Bonnet polaire</b><div class="sub">Polaire 240 g/m²</div><div class="pr"><strong>8,49&nbsp;€</strong> HT / pièce</div><div class="pr s01-min">Dès 50 pcs</div></div></div></div></div></div>
+            </div>
+          </div>
+          <div id="s01-vig" data-layout-allow-overflow></div>
+          <div id="s01-dim" data-layout-allow-overflow></div>
+          <div class="deco tri s01-deco" id="s01-d1" style="left:120px;top:420px" data-layout-allow-overflow data-layout-ignore></div>
+          <div class="deco ring s01-w s01-deco" id="s01-d2" style="left:880px;top:300px" data-layout-allow-overflow data-layout-ignore></div>
+          <div class="deco plus s01-deco" id="s01-d3" style="left:560px;top:250px" data-layout-allow-overflow data-layout-ignore></div>
+          <div class="deco dot s01-w s01-deco" id="s01-d4" style="left:170px;top:1430px" data-layout-allow-overflow data-layout-ignore></div>
+          <div class="deco bar s01-deco" id="s01-d5" style="left:840px;top:1330px" data-layout-allow-overflow data-layout-ignore></div>
+          <div class="deco tri s01-w s01-deco" id="s01-d6" style="left:520px;top:1470px" data-layout-allow-overflow data-layout-ignore></div>
+          <div id="s01-bandrot" data-layout-allow-overflow>
+            <div id="s01-band">
+              <div id="s01-bandbg"></div>
+              <div id="s01-bandline"></div>
+              <div id="s01-txt">
+                <div id="s01-lines">
+                  <div class="mask"><span class="big w" id="s01-w1">VOUS</span></div>
+                  <div class="mask"><span class="big w" id="s01-w2">L'IMAGINEZ.</span></div>
+                  <div class="mask"><span class="big y" id="s01-w3">NOUS</span></div>
+                  <div class="mask"><span class="big y" id="s01-w4" data-layout-allow-occlusion>L'IMPRIMONS.</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <script>
+        (function () {
+          const tl = gsap.timeline({ paused: true });
+          const B = 60 / 105, E = B / 2, BAR = 4 * B;
+          const STOP = 4.43;          // musique : silence de 4,43 à 4,571
+          const N = 6;
+
+          // Mur : caméra couchée qui se redresse lentement le long de l'axe long
+          tl.fromTo("#s01-wall",
+            { rotationX: 48, rotationZ: -24, x: -30, y: 120, z: -260 },
+            { rotationX: 40, rotationZ: -17, x: 20, y: -60, z: 0, duration: 4.143, ease: "power1.out" }, 0);
+
+          // Colonnes en sens contraires, de plus en plus vite (dérive constante + accélération)
+          // (dérive linéaire assez forte pour que les sens contraires se lisent dès la première image)
+          for (let c = 0; c < N; c++) {
+            const up = c % 2 === 0;
+            tl.fromTo("#s01-col-" + c, { y: up ? 0 : -820 }, { y: up ? -820 : 0, duration: STOP, ease: "none" }, 0);
+            tl.fromTo("#s01-colin-" + c, { y: up ? 0 : -1900 }, { y: up ? -1900 : 0, duration: STOP, ease: "power3.in" }, 0);
+          }
+
+          // Punch-ins secs sur les temps 1, 2, 3 et 4 (le dernier avec l'arrivée de la bande) : la caméra monte en escalier
+          const steps = [1.035, 1.07, 1.11, 1.15];
+          tl.fromTo("#s01-cam", { scale: 1 }, { scale: steps[0], duration: 0.1, ease: "power4.out" }, B);
+          for (let k = 1; k < steps.length; k++) {
+            tl.to("#s01-cam", { scale: steps[k], duration: 0.1, ease: "power4.out" }, B * (k + 1));
+          }
+
+          // Bande d'encre magenta qui traverse en diagonale et arrive sur le temps 2,286
+          // (accélération jusqu'au temps : la bande balaie le cadre sur les trois images d'avant et claque avec le punch-in
+          // et le coup sourd de 2,286 ; en décélération elle couvrait l'écran dès 2,1, six images trop tôt)
+          tl.fromTo("#s01-dim", { opacity: 0 }, { opacity: 0.42, duration: 0.4, ease: "power2.out" }, BAR - 0.286);
+          tl.fromTo("#s01-band", { x: -2500 }, { x: -25, duration: 0.286, ease: "power2.in" }, BAR - 0.286);
+          tl.to("#s01-band", { x: 25, duration: STOP - BAR, ease: "none" }, BAR);
+
+          // Mots qui claquent sur les croches
+          const words = ["#s01-w1", "#s01-w2", "#s01-w3", "#s01-w4"];
+          words.forEach((w, i) => {
+            const t = BAR + E * (i + 1);
+            tl.fromTo(w, { yPercent: 105 }, { yPercent: 0, duration: 0.2, ease: "power4.out" }, t);
+          });
+          tl.fromTo("#s01-txt", { scale: 1.04 }, { scale: 1, duration: 0.2, ease: "power4.out" }, BAR + E);
+          for (let i = 2; i <= 4; i++) {
+            tl.to("#s01-txt", { keyframes: [{ scale: 1.04, duration: 0.03, ease: "none" }, { scale: 1, duration: 0.17, ease: "power4.out" }] }, BAR + E * i);
+          }
+          // Deux secousses plus légères sur les accords de l'intro (3,714 et 4,0, croches 5 et 6 après la bande) :
+          // la phrase garde le pouls jusqu'au recul, sans secousse muette pendant le recul
+          [BAR + E * 5, BAR + E * 6].forEach((t) => {
+            tl.to("#s01-txt", { keyframes: [{ scale: 1.03, duration: 0.03, ease: "none" }, { scale: 1, duration: 0.11, ease: "power4.out" }] }, t);
+          });
+
+          // Éclat de formes depuis la bande, sur le temps
+          const cx = 540, cy = 870;
+          // [id, x, y, échelle, rotation, symétrique] : les anneaux et points dérivent, les autres tournent sur place
+          const decos = [
+            ["#s01-d1", 120, 420, 1.6, -40, false],
+            ["#s01-d2", 880, 300, 1.5, 0, true],
+            ["#s01-d3", 560, 250, 1.4, -30, false],
+            ["#s01-d4", 170, 1430, 1.6, 0, true],
+            ["#s01-d5", 840, 1330, 1.5, 20, false],
+            ["#s01-d6", 520, 1470, 1.3, 30, false],
+          ];
+          decos.forEach(([id, x, y, s, r0, sym], i) => {
+            const t0 = BAR + 0.02 * i, d = STOP - t0 - 0.55;
+            if (sym) {
+              tl.fromTo(id, { x: cx - x, y: cy - y, scale: 0 }, { x: 0, y: 0, scale: s, duration: 0.55, ease: "power3.out" }, t0);
+              tl.to(id, { x: (x < cx ? -26 : 26), y: (y < cy ? -30 : 30), duration: d, ease: "none" }, t0 + 0.55);
+            } else {
+              tl.fromTo(id, { x: cx - x, y: cy - y, scale: 0, rotation: r0 - 90 }, { x: 0, y: 0, scale: s, rotation: r0, duration: 0.55, ease: "power3.out" }, t0);
+              tl.to(id, { rotation: r0 + (i % 2 ? 45 : -45), duration: d, ease: "none" }, t0 + 0.55);
+            }
+          });
+
+          // Recul à 0,97 juste avant le silence de 4,43, puis tout se fige jusqu'au départ
+          tl.fromTo("#s01-frame", { scale: 1 }, { scale: 0.97, duration: 0.287, ease: "power3.out" }, STOP - 0.287);
+
+          window.__timelines["s01"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

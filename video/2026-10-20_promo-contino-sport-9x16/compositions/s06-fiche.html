@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="fr">
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <link rel="stylesheet" href="assets/kit.css" />
+      <style>
+        #root { position: absolute; inset: 0; overflow: hidden; background: #F4F0F3; }
+
+        /* Plan large : fiche couchée */
+        #s06-main { position: absolute; inset: 0; }
+        #s06-cam { position: absolute; inset: 0; transform-origin: 640px 1240px; }
+        /* Voile couleur surface : le haut de la fiche se fond dans le fond, sous le gros texte */
+        #s06-scrim { position: absolute; left: -120px; top: -320px; width: 1320px; height: 1040px; opacity: 0;
+          background: linear-gradient(to bottom, #F4F0F3 0%, #F4F0F3 81%, rgba(244,240,243,0) 100%); }
+
+        /* Mots géants de fond */
+        #s06-words, #s06-words-top { position: absolute; inset: 0; }
+        .s06-row { position: absolute; left: 0; white-space: nowrap; font: 900 330px/.86 var(--head); font-stretch: 78%;
+          text-transform: uppercase; letter-spacing: -.01em; }
+        .s06-row.fill { color: rgba(26,19,32,.05); }
+        .s06-row.line { color: transparent; -webkit-text-stroke: 3px rgba(26,19,32,.12); }
+        #s06-row1 { top: 40px; }
+        #s06-row2 { top: 620px; }
+        #s06-row3 { top: 1580px; }
+
+        /* Formes */
+        #s06-decos { position: absolute; inset: 0; }
+        .s06-m.deco.tri { border-bottom-color: var(--magenta); }
+        .s06-m.deco.ring { border-color: var(--magenta); }
+        .s06-k.deco.dot { background: var(--ink); }
+        .s06-m.deco.bar { background: var(--magenta); }
+        .s06-m.deco.plus::before, .s06-m.deco.plus::after { background: var(--magenta); }
+        #s06-d1 { left: 90px; top: 290px; }
+        #s06-d2 { left: 250px; top: 170px; }
+        #s06-d3 { left: 120px; top: 520px; }
+        #s06-d4 { left: 300px; top: 380px; }
+        #s06-d5 { left: 960px; top: 150px; }
+
+        /* Écran de la fiche : l'origine des transformations est le centre de la grille de prix
+           une fois la fiche défilée jusqu'en bas (390 ; 1445 px dans l'écran). */
+        #s06-phone { left: 150px; top: -485px; transform-origin: 390px 1445px; }
+        .s06-ui { height: 844px; overflow: hidden; }
+        .s06-page { position: absolute; left: 0; top: 0; width: 390px; padding-bottom: 30px; background: #FFFFFF; }
+        .s06-perso { margin: 14px 16px 0; min-height: 48px; }
+        .s06-page .ui-big-price strong { margin-right: 4px; }
+        .s06-chips { display: flex; gap: 8px; margin: 16px 16px 0; }
+        .s06-chip { padding: 6px 10px; border-radius: 3px; background: var(--surface); font: 600 13px/1.2 var(--body); }
+        .s06-chip.spark { background: var(--yellow); }
+        .s06-specs { margin: 18px 16px 0; border-top: 1px solid var(--line); }
+        .s06-specs > div { display: grid; grid-template-columns: 112px 1fr; gap: 14px; padding: 11px 0; border-bottom: 1px solid var(--line); }
+        .s06-specs dt { font: 600 13.5px/1.35 var(--body); color: var(--text-2); }
+        .s06-specs dd { margin: 0; font: 400 14.5px/1.4 var(--body); }
+        .s06-facts { margin: 16px 16px 0; font: 400 14px/1.45 var(--body); }
+        .s06-facts p { margin: 0 0 6px; }
+        .s06-actions { display: flex; gap: 10px; margin: 16px 16px 0; }
+        .s06-actions .ui-btn { min-height: 48px; padding: 0 18px; }
+        .s06-tarifs { padding: 26px 16px 0; }
+        .s06-tarifs h3 { margin: 0; font: 900 30px/1 var(--head); font-stretch: 80%; letter-spacing: -.01em; }
+        .s06-tarifs .ui-table { margin: 14px 0 0; }
+        .s06-tarifs .unit { font-size: 12.5px; }
+        #s06-tbl { position: relative; border: 1px solid var(--line); border-radius: 3px; }
+        #s06-tbl .row.head { background: var(--surface); }
+        #s06-tbl .row:last-child { border-bottom: 0; }
+        #s06-tbl .row.p > div:nth-child(2) { color: var(--magenta); }
+        /* Prix un peu plus serrés : le cadre de la surbrillance ne touche plus le « € » des colonnes voisines */
+        #s06-tbl .row.p > div:not(:first-child) { font-stretch: 84%; }
+        #s06-hl { position: absolute; left: 92px; top: 0; width: 52.8px; height: 120px; border: 2px solid var(--magenta); border-radius: 3px;
+          background: var(--soft); z-index: 0; opacity: 0; }
+        /* Copies de la même photo en fond CSS : une seule balise img par source */
+        .s06-th { width: 100%; height: 100%; background: var(--surface) center / cover no-repeat; }
+        .s06-th-a, .s06-photo-bg { background: var(--surface) url(assets/img/set-football.webp) center / cover no-repeat; }
+        .s06-th-b { background-image: url(assets/img/set-football-dos.webp); }
+        .s06-fine { margin-top: 12px; font: 400 13px/1.4 var(--body); color: var(--text-2); }
+
+        /* Gros texte : le palier atteint */
+        #s06-type { position: absolute; right: 64px; top: 220px; width: 760px; height: 420px; text-align: right; }
+        .s06-mask { overflow: hidden; padding-top: 8px; margin-top: -8px; }
+        #s06-kick { display: block; font: 700 40px/1.1 var(--body); letter-spacing: .16em; text-transform: uppercase; color: var(--ink); }
+        #s06-nums { position: relative; height: 186px; margin-top: 10px; overflow: hidden; }
+        .s06-num { position: absolute; right: 0; top: 0; display: block; white-space: nowrap; font: 900 170px/1.08 var(--head); font-stretch: 78%;
+          letter-spacing: -.01em; color: var(--magenta); }
+        #s06-ul { position: absolute; right: 0; top: 252px; width: 520px; height: 14px; border-radius: 7px; background: var(--yellow); transform-origin: 100% 50%; }
+
+        /* Coupe en macro sur « Personnaliser ce produit » */
+        #s06-macro { position: absolute; inset: 0; opacity: 0; }
+        #s06-mcam { position: absolute; inset: 0; transform-origin: 540px 1210px; }
+        #s06-mphone { left: 150px; top: -343px; transform-origin: 390px 1303px; }
+        #s06-mtap { left: 430px; top: 1303px; }
+      </style>
+
+      <div id="root" data-composition-id="s06" data-width="1080" data-height="1920">
+        <div id="s06-main">
+          <div id="s06-cam" data-layout-allow-overflow>
+            <div id="s06-words" aria-hidden="true" data-layout-ignore>
+              <div class="s06-row line" id="s06-row2" data-layout-allow-overflow>Set football Set football Set football</div>
+              <div class="s06-row fill" id="s06-row3" data-layout-allow-overflow>Set football Set football Set football</div>
+            </div>
+
+            <div class="scr" id="s06-phone" data-layout-allow-overflow>
+              <div class="ui s06-ui" id="s06-ui" data-layout-allow-overlap data-layout-allow-overflow>
+                <div class="s06-page" id="s06-page" data-layout-allow-overflow>
+                  <div class="ui-sheet-top"><span data-layout-allow-occlusion>Maillots &amp; shorts</span><div class="ui-x" data-layout-allow-occlusion>×</div></div>
+                  <div class="ui-photo"><img src="assets/img/set-football.webp" alt="" /></div>
+                  <div class="ui-thumbs"><div class="on"><div class="s06-th s06-th-a"></div></div><div><img src="assets/img/set-football-dos.webp" alt="" /></div></div>
+                  <div class="ui-btn o s06-perso" data-layout-allow-occlusion>Personnaliser ce produit</div>
+                  <h2 class="ui-title" data-layout-allow-occlusion>Set football, maillot + short</h2>
+                  <div class="ui-meta" data-layout-allow-occlusion>Football, volley, handball, badminton</div>
+                  <div class="ui-big-price" data-layout-allow-occlusion><strong data-layout-allow-occlusion>19,99 €</strong>HT la pièce, dès 30 pcs</div>
+                  <div class="s06-chips"><span class="s06-chip spark" data-layout-allow-occlusion>Fabriqué en Europe</span><span class="s06-chip" data-layout-allow-occlusion>Transport inclus</span></div>
+                  <dl class="s06-specs">
+                    <div><dt data-layout-allow-occlusion>Composition</dt><dd data-layout-allow-occlusion>100 % polyester, tissu aéré haute performance</dd></div>
+                    <div><dt data-layout-allow-occlusion>Impression</dt><dd data-layout-allow-occlusion>Sublimation intégrale en couleurs</dd></div>
+                    <div><dt data-layout-allow-occlusion>Tailles</dt><dd data-layout-allow-occlusion>Enfant à XXL adulte</dd></div>
+                    <div><dt data-layout-allow-occlusion>Options</dt><dd data-layout-allow-occlusion>Flocage noms et numéros, col V ou rond, manches courtes ou longues</dd></div>
+                  </dl>
+                  <div class="s06-facts">
+                    <p data-layout-allow-occlusion><b data-layout-allow-occlusion>Minimum :</b> 30 pièces par modèle/taille. En dessous : 50 € HT de frais de lancement.</p>
+                    <p data-layout-allow-occlusion><b data-layout-allow-occlusion>Transport :</b> inclus dans le prix.</p>
+                  </div>
+                  <div class="s06-actions"><div class="ui-btn m">Demander un devis</div><div class="ui-btn o">Copier le lien</div></div>
+                  <div class="s06-tarifs" id="s06-tarifs">
+                    <h3 data-layout-allow-occlusion>Grille tarifaire</h3>
+                    <div class="ui-table">
+                      <div class="unit" data-layout-allow-occlusion>Prix unitaire, € HT / pièce (maillot ou ensemble)</div>
+                      <div id="s06-tbl">
+                        <div id="s06-hl"></div>
+                        <div class="row head"><div>Format ou version</div><div id="s06-h1" data-layout-allow-occlusion>30 pcs</div><div id="s06-h2" data-layout-allow-occlusion>50 pcs</div><div id="s06-h3" data-layout-allow-occlusion>100 pcs</div><div>200 pcs</div><div>500 pcs</div></div>
+                        <div class="row p"><div>Maillot seul</div><div data-layout-allow-occlusion>19,99 €</div><div id="s06-a2" data-layout-allow-occlusion>15,99 €</div><div id="s06-a3" data-layout-allow-occlusion>14,99 €</div><div>13,99 €</div><div>13,99 €</div></div>
+                        <div class="row p"><div>Set maillot + short</div><div data-layout-allow-occlusion>25,99 €</div><div id="s06-b2" data-layout-allow-occlusion>24,99 €</div><div id="s06-b3" data-layout-allow-occlusion>23,99 €</div><div>22,99 €</div><div>21,99 €</div></div>
+                      </div>
+                    </div>
+                    <div class="s06-fine">Prix HT. Le tarif appliqué est celui du palier atteint.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="s06-scrim" aria-hidden="true" data-layout-ignore data-layout-allow-overflow></div>
+
+            <div id="s06-words-top" aria-hidden="true" data-layout-ignore>
+              <div class="s06-row fill" id="s06-row1" data-layout-allow-overflow>Set football Set football Set football</div>
+            </div>
+
+            <div id="s06-decos" aria-hidden="true" data-layout-ignore>
+              <div class="deco ring s06-m" id="s06-d1"></div>
+              <div class="deco plus s06-m" id="s06-d2"></div>
+              <div class="deco tri" id="s06-d3"></div>
+              <div class="deco dot s06-k" id="s06-d4"></div>
+              <div class="deco bar s06-m" id="s06-d5"></div>
+            </div>
+          </div>
+
+          <div id="s06-type">
+            <div class="s06-mask"><span id="s06-kick" data-layout-allow-overflow>Palier atteint</span></div>
+            <div id="s06-nums" data-layout-allow-overflow data-layout-allow-overlap>
+              <span class="s06-num" id="s06-n1" data-layout-allow-overflow>30 pcs</span>
+              <span class="s06-num" id="s06-n2" data-layout-allow-overflow>50 pcs</span>
+              <span class="s06-num" id="s06-n3" data-layout-allow-overflow>100 pcs</span>
+            </div>
+            <div id="s06-ul" aria-hidden="true"></div>
+          </div>
+        </div>
+
+        <div id="s06-macro">
+          <div id="s06-mcam" data-layout-allow-overflow>
+            <div class="scr" id="s06-mphone" data-layout-allow-overflow>
+              <div class="ui s06-ui" data-layout-allow-overlap data-layout-allow-overflow>
+                <div class="s06-page" id="s06-mpage" data-layout-allow-overflow>
+                  <div class="ui-sheet-top"><span>Maillots &amp; shorts</span><div class="ui-x">×</div></div>
+                  <div class="ui-photo s06-photo-bg"></div>
+                  <div class="ui-thumbs"><div class="on"><div class="s06-th s06-th-a"></div></div><div><div class="s06-th s06-th-b"></div></div></div>
+                  <div class="ui-btn o s06-perso" id="s06-mbtn"><span id="s06-mlabel">Personnaliser ce produit</span></div>
+                  <h2 class="ui-title">Set football, maillot + short</h2>
+                  <div class="ui-meta">Football, volley, handball, badminton</div>
+                  <div class="ui-big-price"><strong>19,99 €</strong>HT la pièce, dès 30 pcs</div>
+                </div>
+              </div>
+              <div class="tap" id="s06-mtap"><div class="dot" id="s06-mtap-dot"></div><div class="ring" id="s06-mtap-ring"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        (function () {
+          const tl = gsap.timeline({ paused: true });
+          const B = 60 / 105;          // un temps
+          const E = B / 2;             // une croche
+          const END = 4.571;
+          const STEP = [1.5 * B, 2.5 * B, 3.5 * B]; // 26,0 / 26,57 / 27,14 s : 30, 50 puis 100 pcs
+          const CUT = 5 * B;           // 28,0 s : coupe en macro
+          const TAP = 6.5 * B;         // 28,857 s : tap sur « Personnaliser ce produit » (sur la croche, avec l'accord)
+          const ZOOM = 7 * B;          // départ de la traversée, une croche après le tap comme en scène 5
+          const GLIDE = 692;           // défilement maximal : le bas de la fiche touche le bas de l'écran
+          const COL = 52.8;            // largeur d'une colonne de palier
+          const PHONE_Y = 330;         // hauteur de l'écran une fois la grille atteinte
+
+          // Mots géants : vitesse constante, sens alternés
+          tl.fromTo("#s06-row1", { x: -300 }, { x: -800, duration: CUT, ease: "none" }, 0);
+          tl.fromTo("#s06-row2", { x: -1500 }, { x: -1000, duration: CUT, ease: "none" }, 0);
+          tl.fromTo("#s06-row3", { x: -600 }, { x: -1100, duration: CUT, ease: "none" }, 0);
+
+          // Éclat de formes depuis le centre au départ de la section
+          const C = [540, 960];
+          const decos = [
+            ["#s06-d1", 90, 290, 0, 0, -18, 20, 0],
+            ["#s06-d2", 250, 170, 30, 120, 20, -16, 200],
+            ["#s06-d3", 120, 520, -40, 160, -14, -22, 220],
+            ["#s06-d4", 300, 380, 0, 0, 22, 14, 0],
+            ["#s06-d5", 960, 150, 40, -20, 24, 10, -6],
+          ];
+          decos.forEach(([id, ex, ey, r0, r1, dx, dy, r2], i) => {
+            const t0 = 0.06 + i * 0.035;
+            tl.fromTo(id, { x: C[0] - ex, y: C[1] - ey, scale: 0.2, rotation: r0 },
+              { x: 0, y: 0, scale: 1, rotation: r1, duration: 0.7, ease: "power3.out" }, t0);
+            tl.fromTo(id, { opacity: 0 }, { opacity: 1, duration: 0.14, ease: "power2.out" }, t0);
+            tl.to(id, { x: dx, y: dy, rotation: r2, duration: CUT - t0 - 0.7, ease: "none" }, t0 + 0.7);
+          });
+
+          // Fiche couchée en perspective. La caméra glisse jusqu'à la grille de prix : la page défile
+          // et l'écran remonte en même temps, pour que la grille arrive au milieu du cadre (zone sûre).
+          const G = STEP[0] - 0.02;
+          tl.fromTo("#s06-phone",
+            { x: -10, y: 610, rotationX: 56, rotationZ: 15, scale: 1.72, transformPerspective: 2000 },
+            { x: 10, y: PHONE_Y, rotationZ: 14, scale: 1.74, duration: G, ease: "power3.inOut" }, 0);
+          tl.to("#s06-phone", { x: -16, y: PHONE_Y - 24, rotationZ: 12.5, scale: 1.8, duration: CUT - G, ease: "none" }, G);
+          tl.fromTo("#s06-page", { y: 0 }, { y: -GLIDE, duration: G, ease: "power3.inOut" }, 0);
+          // Le haut de la fiche se fond dans le fond quand le gros texte arrive
+          tl.fromTo("#s06-scrim", { opacity: 0 }, { opacity: 1, duration: 0.45, ease: "power2.inOut" }, 0.32);
+
+          // Punch-in d'ouverture sur la relance
+          tl.fromTo("#s06-cam", { scale: 1 }, { scale: 1.05, duration: 0.1, ease: "power4.out" }, 0);
+          tl.to("#s06-cam", { scale: 1, duration: 4 * B - 0.1, ease: "none" }, 0.1);
+          // Punch-in sur le premier temps de la seconde mesure, puis lente poussée
+          tl.to("#s06-cam", { scale: 1.05, duration: 0.1, ease: "power4.out" }, 4 * B);
+          tl.to("#s06-cam", { scale: 1.065, duration: CUT - 4 * B - 0.1, ease: "none" }, 4 * B + 0.1);
+
+          // La surbrillance avance d'un palier par temps : 30, 50 puis 100 pcs
+          tl.fromTo("#s06-hl", { scale: 0.8 }, { scale: 1, duration: 0.3, ease: "back.out(2)" }, STEP[0]);
+          tl.fromTo("#s06-hl", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.out" }, STEP[0]);
+          tl.fromTo("#s06-hl", { x: 0 }, { x: COL, duration: 0.26, ease: "power3.out" }, STEP[1]);
+          tl.to("#s06-hl", { x: 2 * COL, duration: 0.26, ease: "power3.out" }, STEP[2]);
+          // À chaque palier, la case s'étire un instant dans le sens du pas puis se pose
+          [STEP[1], STEP[2]].forEach((t) => {
+            tl.to("#s06-hl", { keyframes: [
+              { scaleX: 1.16, scaleY: 1.05, duration: 0.08, ease: "power2.out" },
+              { scaleX: 1, scaleY: 1, duration: 0.24, ease: "back.out(2.2)" },
+            ] }, t);
+          });
+          tl.fromTo("#s06-h1", { color: "#5E5360" }, { color: "#B3125F", duration: 0.1, ease: "power2.out" }, STEP[0]);
+          tl.to("#s06-h1", { color: "#5E5360", duration: 0.1, ease: "power2.out" }, STEP[1]);
+          tl.fromTo("#s06-h2", { color: "#5E5360" }, { color: "#B3125F", duration: 0.1, ease: "power2.out" }, STEP[1]);
+          tl.to("#s06-h2", { color: "#5E5360", duration: 0.1, ease: "power2.out" }, STEP[2]);
+          tl.fromTo("#s06-h3", { color: "#5E5360" }, { color: "#B3125F", duration: 0.1, ease: "power2.out" }, STEP[2]);
+          tl.fromTo(["#s06-a2", "#s06-b2"], { color: "#1A1320" }, { color: "#B3125F", duration: 0.1, ease: "power2.out" }, STEP[1]);
+          tl.to(["#s06-a2", "#s06-b2"], { color: "#1A1320", duration: 0.1, ease: "power2.out" }, STEP[2]);
+          tl.fromTo(["#s06-a3", "#s06-b3"], { color: "#1A1320" }, { color: "#B3125F", duration: 0.1, ease: "power2.out" }, STEP[2]);
+
+          // Gros texte : surtitre puis palier qui roule à chaque pas
+          tl.fromTo("#s06-kick", { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none" }, 2 * E);
+          tl.fromTo("#s06-n1", { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none" }, STEP[0]);
+          // Le palier sortant s'éteint dès que ses chiffres ont passé le masque : sinon le jambage du « p »
+          // reste seul sous « Palier atteint » pendant 0,2 s, comme un tiret égaré
+          tl.set("#s06-n1", { opacity: 0 }, STEP[1] + 0.12);
+          tl.fromTo("#s06-n2", { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none" }, STEP[1]);
+          tl.set("#s06-n2", { opacity: 0 }, STEP[2] + 0.12);
+          tl.fromTo("#s06-n3", { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none" }, STEP[2]);
+          tl.fromTo("#s06-kick", { yPercent: 110 }, { yPercent: 0, duration: 0.4, ease: "power3.out" }, 2 * E);
+          tl.fromTo("#s06-n1", { yPercent: 105 }, { yPercent: 0, duration: 0.36, ease: "power3.out" }, STEP[0]);
+          // Compteur : sortant et entrant roulent ensemble, même durée et même ease
+          tl.to("#s06-n1", { yPercent: -105, duration: 0.32, ease: "power3.out" }, STEP[1]);
+          tl.fromTo("#s06-n2", { yPercent: 105 }, { yPercent: 0, duration: 0.32, ease: "power3.out" }, STEP[1]);
+          tl.to("#s06-n2", { yPercent: -105, duration: 0.32, ease: "power3.out" }, STEP[2]);
+          tl.fromTo("#s06-n3", { yPercent: 105 }, { yPercent: 0, duration: 0.32, ease: "power3.out" }, STEP[2]);
+          // Le palier où elle s'arrête : souligné jaune qui se trace
+          tl.fromTo("#s06-ul", { scaleX: 0 }, { scaleX: 1, duration: 0.34, ease: "power3.out" }, STEP[2] + E / 2);
+
+          // Coupe franche en macro sur le bouton
+          tl.set("#s06-main", { opacity: 0 }, CUT);
+          tl.set("#s06-macro", { opacity: 1 }, CUT);
+          // L'écran arrive encore en mouvement (plus incliné, décalé) et se pose en 0,6 s, puis glisse
+          tl.fromTo("#s06-mphone",
+            { x: 230, y: 330, rotationX: 44, rotationZ: -20, scale: 3.15, transformPerspective: 2000 },
+            { x: 10, y: 254, rotationX: 31, rotationZ: -13, scale: 2.86, duration: 0.6, ease: "power3.out" }, CUT);
+          tl.to("#s06-mphone", { x: -40, y: 250, rotationX: 30, rotationZ: -12, scale: 2.9, duration: END - CUT - 0.6, ease: "none" }, CUT + 0.6);
+          // Punch-in sur le temps suivant, poussée lente vers le bouton
+          tl.fromTo("#s06-mcam", { scale: 1 }, { scale: 1.06, duration: 0.1, ease: "power4.out" }, CUT + B);
+          tl.to("#s06-mcam", { scale: 1.09, duration: ZOOM - (CUT + B + 0.1), ease: "none" }, CUT + B + 0.1);
+
+          // Tap à 28,857 s : le bouton s'enfonce et passe en encre
+          tl.fromTo("#s06-mtap-dot", { scale: 0.5 }, { scale: 1, duration: 0.1, ease: "power3.out" }, TAP - 0.05);
+          tl.fromTo("#s06-mtap-dot", { opacity: 0 }, { opacity: 1, duration: 0.06, ease: "power2.out" }, TAP - 0.05);
+          tl.to("#s06-mtap-dot", { opacity: 0, duration: 0.14, ease: "power2.in" }, TAP + 0.18);
+          tl.fromTo("#s06-mtap-ring", { scale: 0.6 }, { scale: 2.6, duration: 0.45, ease: "power2.out", immediateRender: false }, TAP);
+          tl.fromTo("#s06-mtap-ring", { opacity: 0.95 }, { opacity: 0, duration: 0.45, ease: "power2.out", immediateRender: false }, TAP);
+          tl.fromTo("#s06-mbtn", { scale: 1 }, { scale: 0.95, duration: 0.07, ease: "power2.out" }, TAP);
+          tl.to("#s06-mbtn", { scale: 1, duration: 0.2, ease: "power2.out" }, TAP + 0.07);
+          tl.fromTo("#s06-mbtn", { backgroundColor: "#FFFFFF", color: "#1A1320" }, { backgroundColor: "#1A1320", color: "#FFFFFF", duration: 0.1, ease: "power2.out" }, TAP);
+
+          // Traversée dans le bouton : l'encre remplit le cadre au moment de la coupe
+          tl.to("#s06-mcam", { scale: 16, duration: END - ZOOM, ease: "power3.in" }, ZOOM);
+          tl.fromTo("#s06-mlabel", { opacity: 1 }, { opacity: 0, duration: 0.2, ease: "power2.in" }, ZOOM + 0.18);
+
+          window.__timelines["s06"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

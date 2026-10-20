@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="fr">
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <link rel="stylesheet" href="assets/kit.css" />
+      <style>
+        #root { position: absolute; inset: 0; overflow: hidden; background: #B3125F; }
+        #s08-deep { position: absolute; inset: 0; background: #940E4E; opacity: 0; }
+
+        /* Mots géants : pleins et filaires en alternance, à faible contraste */
+        .s08-row { position: absolute; left: 0; white-space: nowrap; font: 900 310px/.86 var(--head); font-stretch: 78%;
+          text-transform: uppercase; letter-spacing: -.01em; }
+        .s08-row.s08-fill { color: rgba(26,19,32,.13); }
+        .s08-row.s08-line { color: transparent; -webkit-text-stroke: 3px rgba(255,255,255,.17); }
+        #s08-r1 { top: 70px; }
+        #s08-r2 { top: 800px; }
+        #s08-r3 { top: 1530px; }
+
+        /* Formes */
+        .s08-decos .deco { opacity: 0; }
+        .deco.s08-w.ring { border-color: #FFFFFF; }
+        .deco.s08-w.dot, .deco.s08-w.bar { background: #FFFFFF; }
+
+        /* Caméra : #s08-cam porte les zooms plats, #s08-plane la perspective, l'écran glisse dans son plan */
+        #s08-cam { position: absolute; inset: 0; transform-origin: 540px 960px; }
+        #s08-plane { position: absolute; inset: 0; transform-origin: 540px 960px; }
+        #s08-phone { left: 150px; top: 0; box-shadow: 0 60px 140px rgba(58,4,30,.45), 0 0 0 2px rgba(26,19,32,.06); }
+        #s08-scroll { position: absolute; left: 0; top: 0; width: 780px; height: 2400px; }
+        .s08-page { position: absolute; left: 0; top: 0; }
+        #s08-p2 { opacity: 0; }
+        #s08-ylw { position: absolute; inset: 0; background: var(--yellow); opacity: 0; }
+
+        /* Formulaire de devis du site, en pixels du site (zoom 2) */
+        .s08-sp { height: 66px; }
+        .s08-top { padding: 28px 16px 22px; background: var(--soft); }
+        .s08-h2 { margin: 0; font: 900 32px/1 var(--head); font-stretch: 80%; letter-spacing: -.01em; color: var(--ink); }
+        .s08-h2 span { display: block; }
+        .s08-intro { margin: 10px 0 0; font: 400 16px/1.5 var(--body); color: #5A3A4A; }
+        .s08-body { padding: 24px 16px 30px; }
+        .s08-req { margin: 0 0 20px; font: 400 13.5px/1.5 var(--body); color: var(--text-2); }
+        .s08-req i, .s08-lb i { font-style: normal; color: var(--magenta); }
+        .s08-pane { display: flex; flex-direction: column; gap: 22px; }
+        .s08-f { display: flex; flex-direction: column; gap: 6px; }
+        .s08-lb { display: block; font: 600 14px/1.2 var(--body); color: var(--ink); }
+        .s08-pick { display: flex; flex-wrap: wrap; gap: 8px; }
+        .s08-chip { display: flex; align-items: center; min-height: 46px; padding: 10px 16px; border: 1.5px solid var(--line-strong);
+          border-radius: 3px; font: 600 15px/1.25 var(--body); background: #FFFFFF; color: var(--ink); white-space: nowrap; }
+        .s08-sel { position: relative; height: 48px; padding: 0 44px 0 14px; border: 1.5px solid var(--line-strong); border-radius: 3px;
+          font: 400 16px/45px var(--body); color: var(--ink); white-space: nowrap; overflow: hidden; }
+        .s08-sel::after { content: ""; position: absolute; right: 18px; top: 50%; width: 8px; height: 8px; border-right: 2px solid var(--text-2);
+          border-bottom: 2px solid var(--text-2); transform: translateY(-75%) rotate(45deg); }
+        .s08-btn { display: flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 22px; border: 1.5px solid transparent;
+          border-radius: 3px; font: 700 15px/1 var(--body); white-space: nowrap; }
+        .s08-btn.s08-m { background: var(--magenta); color: #FFFFFF; }
+        .s08-btn.s08-y { background: var(--yellow); color: var(--ink); }
+        .s08-btn.s08-o { background: #FFFFFF; color: var(--ink); border-color: var(--ink); }
+        .s08-reas { margin: 0; text-align: center; font: 400 13.5px/1.5 var(--body); color: var(--text-2); }
+        .s08-fg { display: flex; flex-direction: column; gap: 16px; }
+        .s08-in { position: relative; height: 48px; border: 1.5px solid var(--line-strong); border-radius: 3px; background: #FFFFFF; }
+        .s08-ty { position: absolute; left: 14px; top: 0; font: 400 16px/45px var(--body); color: var(--ink); white-space: nowrap; opacity: 0; }
+        .s08-caret { display: inline-block; width: 1.5px; height: 20px; margin-left: 1px; vertical-align: -4px; background: var(--ink); }
+        .s08-legal { margin: 0; font: 400 13px/1.5 var(--body); color: var(--text-2); }
+        .s08-nav { display: grid; grid-template-columns: 1fr 2fr; gap: 12px; }
+
+        /* En-tête collé : étape et barre de progression */
+        #s08-head { z-index: 5; }
+        .s08-hd { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 66px; padding: 11px 14px 11px 16px;
+          background: #FFFFFF; border-bottom: 1px solid var(--line); }
+        .s08-prog { flex: 1; max-width: 280px; }
+        .s08-step { position: relative; height: 16px; margin: 0 0 8px; font: 700 13px/1.2 var(--body); color: var(--magenta); white-space: nowrap; }
+        .s08-step span { position: absolute; left: 0; top: 0; }
+        #s08-st2 { opacity: 0; }
+        .s08-bar { height: 4px; background: var(--surface-2); border-radius: 2px; overflow: hidden; }
+        .s08-bar i { display: block; width: 100%; height: 100%; background: var(--magenta); transform-origin: 0 50%; }
+        .s08-x { display: grid; place-items: center; flex: none; width: 44px; height: 44px; border: 1.5px solid var(--line-strong); border-radius: 3px; }
+        .s08-x svg { width: 16px; height: 16px; stroke: var(--ink); stroke-width: 2; fill: none; }
+
+        /* Taps, en pixels d'écran (2 x les pixels du site), dans le contenu qui défile */
+        #s08-tap1 { left: 147px; top: 744px; }
+        #s08-tap2 { left: 133px; top: 1435px; }
+        #s08-tap3 { left: 390px; top: 1271px; }  /* « Continuer » une fois la page défilée de 700 px */
+      </style>
+
+      <div id="root" data-composition-id="s08" data-width="1080" data-height="1920">
+        <div id="s08-deep" data-layout-ignore></div>
+
+        <div id="s08-words" aria-hidden="true" data-layout-ignore>
+          <div class="s08-row s08-fill" id="s08-r1" data-layout-allow-overflow>Devis gratuit Devis gratuit</div>
+          <div class="s08-row s08-line" id="s08-r2" data-layout-allow-overflow>Devis gratuit Devis gratuit</div>
+          <div class="s08-row s08-fill" id="s08-r3" data-layout-allow-overflow>Devis gratuit Devis gratuit</div>
+        </div>
+
+        <!-- Formes : d1 à d6 éclatent au départ, d7 à d10 sur le passage au fond foncé (étape 2) -->
+        <div class="s08-decos" aria-hidden="true" data-layout-ignore>
+          <div class="deco tri" id="s08-d1" style="left: 92px; top: 330px"></div><div class="deco ring s08-w" id="s08-d2" style="left: 940px; top: 420px"></div>
+          <div class="deco plus" id="s08-d3" style="left: 960px; top: 1080px"></div><div class="deco dot s08-w" id="s08-d4" style="left: 80px; top: 1180px"></div>
+          <div class="deco bar" id="s08-d5" style="left: 880px; top: 1640px"></div><div class="deco ring" id="s08-d6" style="left: 120px; top: 1660px"></div>
+          <div class="deco plus" id="s08-d7" style="left: 880px; top: 610px"></div><div class="deco dot" id="s08-d8" style="left: 1000px; top: 780px"></div>
+          <div class="deco tri" id="s08-d9" style="left: 950px; top: 1330px"></div><div class="deco bar s08-w" id="s08-d10" style="left: 760px; top: 140px"></div>
+        </div>
+
+        <div id="s08-cam" data-layout-allow-overflow>
+          <div id="s08-plane" data-layout-allow-overflow>
+            <div class="scr" id="s08-phone" data-layout-allow-overflow>
+              <div id="s08-scroll" data-layout-allow-overflow>
+                <!-- Étape 1 : votre projet -->
+                <div class="ui s08-page" id="s08-p1" data-layout-allow-overlap>
+                  <div class="s08-sp"></div>
+                  <div class="s08-top">
+                    <h2 class="s08-h2"><span id="s08-h1a" data-layout-allow-occlusion>Parlez-nous</span><span id="s08-h1b" data-layout-allow-occlusion>de votre projet</span></h2>
+                    <p data-layout-allow-occlusion class="s08-intro" id="s08-in1">Quelques clics sur votre besoin, puis vos coordonnées. Nous chiffrons vos pièces, et vous validez la maquette avant la production.</p>
+                  </div>
+                  <div class="s08-body">
+                    <p data-layout-allow-occlusion class="s08-req" id="s08-req1">Les champs marqués <i>*</i> sont obligatoires.</p>
+                    <div class="s08-pane">
+                      <div class="s08-f">
+                        <span data-layout-allow-occlusion class="s08-lb" id="s08-l1">Vous êtes <i>*</i></span>
+                        <div class="s08-pick">
+                          <b data-layout-allow-occlusion class="s08-chip s08-k1" id="s08-c-club">Club sportif</b><b data-layout-allow-occlusion class="s08-chip s08-k1">Entreprise</b>
+                          <b data-layout-allow-occlusion class="s08-chip s08-k1">Association ou collectivité</b><b data-layout-allow-occlusion class="s08-chip s08-k1">École ou université</b>
+                        </div>
+                      </div>
+                      <div class="s08-f" id="s08-g2">
+                        <span data-layout-allow-occlusion class="s08-lb">Produit souhaité <i>*</i></span>
+                        <div data-layout-allow-occlusion class="s08-sel">Set football, maillot + short</div>
+                      </div>
+                      <div class="s08-f">
+                        <span data-layout-allow-occlusion class="s08-lb" id="s08-l3">Quantité <i>*</i></span>
+                        <div class="s08-pick">
+                          <b data-layout-allow-occlusion class="s08-chip s08-k3">Moins de 30</b><b data-layout-allow-occlusion class="s08-chip s08-k3">30 à 49</b><b data-layout-allow-occlusion class="s08-chip s08-k3">50 à 99</b>
+                          <b data-layout-allow-occlusion class="s08-chip s08-k3" id="s08-c-100">100 à 249</b><b data-layout-allow-occlusion class="s08-chip s08-k3">250 et plus</b>
+                        </div>
+                      </div>
+                      <div class="s08-f">
+                        <span data-layout-allow-occlusion class="s08-lb" id="s08-l4">Votre visuel</span>
+                        <div class="s08-pick">
+                          <b data-layout-allow-occlusion class="s08-chip s08-k4">Maquette prête</b><b data-layout-allow-occlusion class="s08-chip s08-k4">Logo seul</b>
+                          <b data-layout-allow-occlusion class="s08-chip s08-k4">Modèle existant à reproduire</b><b data-layout-allow-occlusion class="s08-chip s08-k4">Pas encore de visuel</b>
+                        </div>
+                      </div>
+                      <div data-layout-allow-occlusion class="s08-btn s08-m" id="s08-next">Continuer</div>
+                      <p data-layout-allow-occlusion class="s08-reas" id="s08-reas">Gratuit et sans engagement. Vous validez la maquette avant toute production.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="tap" id="s08-tap1"><div class="ring" id="s08-tap1-ring"></div><div class="dot" id="s08-tap1-dot"></div></div>
+                <div class="tap" id="s08-tap2"><div class="ring" id="s08-tap2-ring"></div><div class="dot" id="s08-tap2-dot"></div></div>
+              </div>
+
+              <!-- Étape 2 : vos coordonnées (hors défilement : la page repart en haut) -->
+              <div class="ui s08-page" id="s08-p2" data-layout-allow-overlap>
+                <div class="s08-sp"></div>
+                <div class="s08-top" id="s08-top2">
+                  <h2 class="s08-h2"><span data-layout-allow-occlusion>Où envoyer votre devis ?</span></h2>
+                  <p data-layout-allow-occlusion class="s08-intro">Dernière étape : votre devis arrive par email.</p>
+                </div>
+                <div class="s08-body">
+                  <p data-layout-allow-occlusion class="s08-req" id="s08-req2">Les champs marqués <i>*</i> sont obligatoires.</p>
+                  <div class="s08-pane">
+                    <div class="s08-fg">
+                      <div class="s08-f s08-k5"><span data-layout-allow-occlusion class="s08-lb">Prénom <i>*</i></span><div class="s08-in"></div></div>
+                      <div class="s08-f s08-k5"><span data-layout-allow-occlusion class="s08-lb">Nom <i>*</i></span><div class="s08-in"></div></div>
+                      <div class="s08-f s08-k5"><span data-layout-allow-occlusion class="s08-lb">Nom du club, de l'entreprise ou de l'association <i>*</i></span><div class="s08-in"></div></div>
+                      <div class="s08-f s08-k5" id="s08-fmail"><span data-layout-allow-occlusion class="s08-lb">Email <i>*</i></span>
+                        <div class="s08-in" id="s08-email">
+                          <span data-layout-allow-occlusion class="s08-ty" id="s08-ty0"><i class="s08-caret"></i></span><span data-layout-allow-occlusion class="s08-ty" id="s08-ty1">cont<i class="s08-caret"></i></span>
+                          <span data-layout-allow-occlusion class="s08-ty" id="s08-ty2">contact@<i class="s08-caret"></i></span><span data-layout-allow-occlusion class="s08-ty" id="s08-ty3">contact@votre<i class="s08-caret"></i></span>
+                          <span data-layout-allow-occlusion class="s08-ty" id="s08-ty4">contact@votreclub<i class="s08-caret"></i></span><span data-layout-allow-occlusion class="s08-ty" id="s08-ty5">contact@votreclub.fr<i class="s08-caret"></i></span>
+                        </div>
+                      </div>
+                    </div>
+                    <p data-layout-allow-occlusion class="s08-legal" id="s08-legal">Vos coordonnées servent uniquement à traiter votre demande de devis.</p>
+                    <div class="s08-nav" id="s08-nav">
+                      <div data-layout-allow-occlusion class="s08-btn s08-o" id="s08-back">Retour</div>
+                      <div data-layout-allow-occlusion class="s08-btn s08-y" id="s08-send">Envoyer ma demande</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tap sur « Continuer » : au-dessus de l'étape 2 qui le remplace -->
+              <div class="tap" id="s08-tap3"><div class="ring" id="s08-tap3-ring"></div><div class="dot" id="s08-tap3-dot"></div></div>
+
+              <!-- En-tête collé en haut de l'écran -->
+              <div class="ui" id="s08-head">
+                <div class="s08-hd">
+                  <div class="s08-prog">
+                    <p class="s08-step"><span id="s08-st1" data-layout-allow-occlusion>Étape 1 sur 2 : votre projet</span><span id="s08-st2" data-layout-allow-occlusion>Étape 2 sur 2 : vos coordonnées</span></p>
+                    <div class="s08-bar"><i id="s08-barfill"></i></div>
+                  </div>
+                  <div class="s08-x"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="s08-ylw" data-layout-ignore></div>
+      </div>
+
+      <script>
+        (function () {
+          const tl = gsap.timeline({ paused: true });
+          const B = 60 / 105;       // un temps
+          const E = B / 2;          // une croche
+          const S = B / 4;          // une double croche
+          const END = 4.571;
+          const T1 = 3 * E;         // 35,143 : Club sportif
+          const T2 = 6 * E;         // 36,0   : 100 à 249
+          const T3 = 9 * E;         // 36,857 : Continuer
+          const TY = 21 * S;        // 37,286 : début de la frappe
+          const ZOOM = 14 * E;      // 38,286 : traversée dans le bouton jaune
+
+          // Points de l'écran (pixels d'écran) amenés au centre du cadre
+          const F = (fx, fy) => ({ x: 390 - fx, y: 960 - fy });
+          const SCA = 420, SCB = 700;              // défilement de l'étape 1 : vers la quantité, puis vers « Continuer »
+          const CLUB = [147, 744], Q100 = [133, 1435], NEXT = [390, 1971];
+          // Bouton « Envoyer ma demande » : 287 à 748 x 1321 à 1417, texte de 371 à 664 (mesuré).
+          // SENDY vise le jaune à droite du texte : la traversée remplit le cadre de jaune, sans lettres géantes.
+          const MAIL = [236, 1107], SEND = [540, 1369], SENDY = [710, 1369];
+
+          // ---------- Fond ----------
+          tl.fromTo("#s08-r1", { x: -120 }, { x: -620, duration: END, ease: "none" }, 0);
+          tl.fromTo("#s08-r2", { x: -900 }, { x: -400, duration: END, ease: "none" }, 0);
+          tl.fromTo("#s08-r3", { x: -260 }, { x: -760, duration: END, ease: "none" }, 0);
+          tl.set("#s08-deep", { opacity: 1 }, 10 * E);
+
+          // Formes : éclat depuis le centre, puis dérive lente jusqu'à la fin
+          const C = [540, 960];
+          function burst(list, start, step, dur, ease, s0) {
+            list.forEach(([id, ex, ey, r0, r1, dx, dy, r2], i) => {
+              const t0 = start + i * step;
+              tl.fromTo(id, { x: C[0] - ex, y: C[1] - ey, scale: s0, rotation: r0 },
+                { x: 0, y: 0, scale: 1, rotation: r1, duration: dur, ease: ease }, t0);
+              tl.fromTo(id, { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.out" }, t0);
+              tl.to(id, { x: dx, y: dy, rotation: r2, duration: END - t0 - dur, ease: "none" }, t0 + dur);
+            });
+          }
+          burst([["#s08-d1", 92, 330, -40, 150, -26, -20, 230], ["#s08-d2", 940, 420, 0, 0, 24, -22, 0],
+            ["#s08-d3", 960, 1080, 30, 140, 22, 24, 220], ["#s08-d4", 80, 1180, 0, 0, -18, 20, 0],
+            ["#s08-d5", 880, 1640, 40, -18, 26, 14, -50], ["#s08-d6", 120, 1660, 0, 0, -20, 18, 0]], 0.04, 0.035, 0.7, "power3.out", 0.25);
+          // Second éclat, plus sec, sur le fond foncé (37,143)
+          burst([["#s08-d7", 880, 610, -30, 135, 16, 14, 200], ["#s08-d8", 1000, 780, 0, 0, 12, -16, 0],
+            ["#s08-d9", 950, 1330, 40, 160, 14, -18, 230], ["#s08-d10", 760, 140, -40, 20, 18, 10, 50]], 10 * E, 0.025, 0.45, "power4.out", 0.3);
+
+          // ---------- Caméra ----------
+          // Plan incliné vu de haut : arrivée sur la relance, lente dérive, plan large au passage à l'étape 2,
+          // gros plan sur l'e-mail, glissé jusqu'au bouton jaune puis traversée
+          tl.fromTo("#s08-plane",
+            { y: 1500, rotationX: 62, rotationZ: -28, scale: 1.1, transformPerspective: 2000 },
+            { y: 0, rotationX: 46, rotationZ: -17, scale: 1.75, duration: 0.8, ease: "power3.out" }, 0);
+          tl.to("#s08-plane", { rotationX: 42, rotationZ: -14, scale: 1.88, duration: T3 + 0.03 - 0.8, ease: "none" }, 0.8);
+          tl.to("#s08-plane", { rotationX: 34, rotationZ: -10, scale: 0.98, duration: 10 * E - T3 - 0.03, ease: "power3.out" }, T3 + 0.03);
+          tl.to("#s08-plane", { rotationX: 40, rotationZ: -14, scale: 1.95, duration: 0.28, ease: "power3.out" }, 10 * E);
+          tl.to("#s08-plane", { rotationX: 38, rotationZ: -12, scale: 2.05, duration: 13 * E - 10 * E - 0.28, ease: "none" }, 10 * E + 0.28);
+          tl.to("#s08-plane", { rotationX: 32, rotationZ: -9, scale: 2.4, duration: ZOOM - 13 * E, ease: "power2.inOut" }, 13 * E);
+          tl.to("#s08-plane", { rotationX: 22, rotationZ: -5, duration: END - ZOOM, ease: "power2.in" }, ZOOM);
+
+          tl.fromTo("#s08-phone", F(360, 560), { ...F(CLUB[0] + 100, CLUB[1] - 20), duration: 0.8, ease: "power3.out" }, 0);
+          tl.to("#s08-phone", { ...F(CLUB[0] + 88, CLUB[1] + 4), duration: 0.15, ease: "none" }, 0.8);
+          tl.to("#s08-phone", { ...F(Q100[0] + 90, Q100[1] - SCA - 24), duration: 0.7, ease: "power2.inOut" }, 0.95);
+          tl.to("#s08-phone", { ...F(Q100[0] + 76, Q100[1] - SCA + 4), duration: 0.25, ease: "none" }, 1.65);
+          tl.to("#s08-phone", { ...F(NEXT[0], NEXT[1] - SCB), duration: 0.55, ease: "power3.inOut" }, 1.9);
+          tl.to("#s08-phone", { ...F(NEXT[0], NEXT[1] - SCB + 8), duration: T3 + 0.03 - 2.45, ease: "none" }, 2.45);
+          tl.to("#s08-phone", { ...F(390, 640), duration: 10 * E - T3 - 0.03, ease: "power3.out" }, T3 + 0.03);
+          tl.to("#s08-phone", { ...F(MAIL[0], MAIL[1]), duration: 0.28, ease: "power3.out" }, 10 * E);
+          tl.to("#s08-phone", { ...F(MAIL[0] + 50, MAIL[1] + 6), duration: 13 * E - 10 * E - 0.28, ease: "none" }, 10 * E + 0.28);
+          tl.to("#s08-phone", { ...F(SEND[0], SEND[1]), duration: ZOOM - 13 * E, ease: "power2.inOut" }, 13 * E);
+          // Sur le temps, la caméra file à droite du texte, dans le jaune, avant que le zoom n'accélère
+          tl.to("#s08-phone", { ...F(SENDY[0], SENDY[1]), duration: 0.34, ease: "power2.out" }, ZOOM);
+
+          // Punch-in sec sur le temps fort de la mesure, tenu jusqu'au tap sur « Continuer »
+          tl.fromTo("#s08-cam", { scale: 1 }, { scale: 1.1, duration: 0.07, ease: "power4.out" }, 4 * B);
+          tl.to("#s08-cam", { scale: 1.05, duration: 0.2, ease: "power2.out" }, 4 * B + 0.07);
+          tl.to("#s08-cam", { scale: 1, duration: 0.25, ease: "power3.out" }, T3 + 0.03);
+          // Traversée : zoom plat qui accélère, la coupe tombe en plein jaune sur la relance
+          tl.to("#s08-cam", { scale: 14, duration: END - ZOOM, ease: "power3.in" }, ZOOM);
+          tl.fromTo("#s08-ylw", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.in" }, END - 0.13);
+
+          // Défilement de l'étape 1 jusqu'au bouton « Continuer »
+          tl.fromTo("#s08-scroll", { y: 0 }, { y: -SCA, duration: 0.7, ease: "power2.inOut" }, 0.95);
+          tl.to("#s08-scroll", { y: -SCB, duration: 0.5, ease: "power3.inOut" }, 1.9);
+
+          // ---------- Outils ----------
+          // ringFade : durée d'extinction de l'onde (plus courte quand la page change sous le doigt)
+          function tap(n, t, hold, fade, ringFade) {
+            const d = "#s08-tap" + n + "-dot", r = "#s08-tap" + n + "-ring";
+            const h = hold === undefined ? 0.22 : hold;
+            tl.fromTo(d, { scale: 0.6 }, { scale: 1.5, duration: 0.11, ease: "power3.out" }, t - 0.12);
+            tl.to(d, { scale: 1.25, duration: 0.06, ease: "power2.out" }, t);
+            tl.fromTo(d, { opacity: 0 }, { opacity: 1, duration: 0.06, ease: "power2.out" }, t - 0.12);
+            tl.to(d, { opacity: 0, duration: fade || 0.16, ease: "power2.in" }, t + h);
+            tl.fromTo(r, { scale: 0.8 }, { scale: 3.4, duration: 0.5, ease: "power2.out" }, t);
+            tl.fromTo(r, { opacity: 0 }, { opacity: 0.95, duration: 0.03, ease: "none" }, t - 0.03);
+            tl.to(r, { opacity: 0, duration: ringFade || 0.5, ease: "power2.out" }, t);
+          }
+          function press(sel, t) {
+            tl.to(sel, { scale: 0.95, duration: 0.07, ease: "power2.out" }, t);
+            tl.to(sel, { scale: 1, duration: 0.22, ease: "power2.out" }, t + 0.07);
+          }
+          function pop(sel, t, st) {
+            tl.fromTo(sel, { y: 8 }, { y: 0, duration: 0.4, ease: "power3.out", stagger: st || 0 }, t);
+            tl.fromTo(sel, { opacity: 0 }, { opacity: 1, duration: 0.22, ease: "power2.out", stagger: st || 0 }, t);
+          }
+          function grow(sel, t) {
+            tl.fromTo(sel, { scaleX: 0 }, { scaleX: 1, duration: 0.42, ease: "power3.out" }, t);
+            tl.fromTo(sel, { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.out" }, t);
+          }
+          function select(sel, t) {
+            tl.fromTo(sel, { backgroundColor: "#FFFFFF", borderColor: "#8A7E88", color: "#1A1320" },
+              { backgroundColor: "#B3125F", borderColor: "#B3125F", color: "#FFFFFF", duration: 0.1, ease: "power2.out" }, t);
+          }
+
+          // ---------- Étape 1 : l'interface se construit sur les croches ----------
+          tl.fromTo("#s08-barfill", { scaleX: 0 }, { scaleX: 0.5, duration: 0.5, ease: "power3.out" }, 0.05);
+          pop(["#s08-h1a", "#s08-h1b"], 0, 0.06);
+          pop(["#s08-in1", "#s08-req1"], E, 0.06);
+          pop(["#s08-l1", ".s08-k1"], 2 * E, 0.04);
+          pop(["#s08-g2", "#s08-l3", ".s08-k3"], 4 * E, 0.035);
+          pop(["#s08-l4", ".s08-k4"], 5 * E, 0.035);
+          grow("#s08-next", 6 * E);
+          pop("#s08-reas", 7 * E);
+
+          // 35,143 : « Club sportif »
+          tap(1, T1);
+          press("#s08-c-club", T1);
+          select("#s08-c-club", T1 + 0.03);
+
+          // 36,0 : quantité « 100 à 249 »
+          tap(2, T2);
+          press("#s08-c-100", T2);
+          select("#s08-c-100", T2 + 0.03);
+
+          // 36,857 : « Continuer », la barre passe à l'étape 2.
+          // La page change sous le doigt (T3 + 0,06) : le point est éteint à ce moment-là et l'onde s'efface
+          // en 0,2 s, pour que rien ne flotte sur le champ e-mail de l'étape 2.
+          tap(3, T3, 0, 0.06, 0.2);
+          press("#s08-next", T3);
+          tl.to("#s08-barfill", { scaleX: 1, duration: 0.4, ease: "power3.out" }, T3 + 0.06);
+          tl.to("#s08-st1", { opacity: 0, duration: 0.08, ease: "power2.out" }, T3 + 0.06);
+          tl.fromTo("#s08-st2", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.out" }, T3 + 0.1);
+          tl.fromTo("#s08-st2", { y: 6 }, { y: 0, duration: 0.3, ease: "power3.out" }, T3 + 0.1);
+          // Changement d'étape franc, comme sur le site : la page 2 remplace la page 1 et repart en haut
+          tl.set("#s08-p1", { opacity: 0 }, T3 + 0.06);
+          tl.set("#s08-p2", { opacity: 1 }, T3 + 0.06);
+
+          // ---------- Étape 2 : vos coordonnées ----------
+          pop(".s08-k5", T3 + 0.06, 0.04);
+          pop("#s08-legal", 11 * E);
+          pop("#s08-back", 11 * E);
+          grow("#s08-send", 11 * E + 0.04);
+
+          // Champ e-mail actif, puis frappe sur les doubles croches : contact@votreclub.fr
+          tl.fromTo("#s08-email", { borderColor: "#8A7E88" }, { borderColor: "#B3125F", duration: 0.1, ease: "power2.out" }, 10 * E + 0.08);
+          tl.set("#s08-ty0", { opacity: 1 }, 10 * E + 0.08);
+          for (let k = 1; k <= 5; k++) {
+            tl.set("#s08-ty" + (k - 1), { opacity: 0 }, TY + (k - 1) * S);
+            tl.set("#s08-ty" + k, { opacity: 1 }, TY + (k - 1) * S);
+          }
+          // Curseur : clignote une fois la frappe finie
+          [[TY + 4 * S + 0.24, 0], [TY + 4 * S + 0.4, 1], [TY + 4 * S + 0.6, 0], [TY + 4 * S + 0.76, 1]].forEach(([t, o]) =>
+            tl.set(".s08-caret", { opacity: o }, t));
+
+          window.__timelines["s08"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

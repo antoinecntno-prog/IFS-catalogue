@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="fr">
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <link rel="stylesheet" href="assets/kit.css" />
+      <style>
+        #root { position: absolute; inset: 0; overflow: hidden; background: #FFFFFF; }
+        #s12-cam { position: absolute; inset: 0; transform-origin: 540px 860px; }
+
+        /* Mots géants : pleins et filaires, à peine visibles sur le blanc */
+        .s12-row { position: absolute; left: 0; white-space: nowrap; font: 900 330px/.86 var(--head); font-stretch: 78%;
+          text-transform: uppercase; letter-spacing: -.01em; }
+        .s12-row.fill { color: rgba(26,19,32,.06); }
+        .s12-row.line { color: transparent; -webkit-text-stroke: 3px rgba(179,18,95,.2); }
+        #s12-r1 { top: 40px; }
+        #s12-r2 { top: 690px; }
+        #s12-r3 { top: 1340px; }
+
+        /* Bloc final */
+        #s12-logo { position: absolute; left: 180px; top: 380px; width: 720px; height: 306px; transform-origin: 50% 55%; }
+        #s12-logo img { display: block; width: 720px; height: 306px; }
+        #s12-line { position: absolute; left: 360px; top: 716px; width: 360px; height: 16px; border-radius: 8px; background: var(--yellow); transform-origin: 50% 50%; }
+        #s12-tag { position: absolute; left: 64px; right: 64px; top: 778px; text-align: center; }
+        .s12-mask { overflow: hidden; padding-top: 6px; margin-top: -6px; padding-bottom: 10px; margin-bottom: -10px; }
+        .s12-mask span { display: block; }
+        #s12-tag span { font: 800 66px/1.12 var(--head); font-stretch: 85%; color: var(--ink); }
+        #s12-url { position: absolute; left: 64px; right: 64px; top: 972px; text-align: center; }
+        #s12-url span { font: 900 112px/1.1 var(--head); font-stretch: 80%; color: var(--magenta); letter-spacing: -.005em; }
+        #s12-btn { position: absolute; left: 170px; top: 1170px; width: 740px; height: 140px; border-radius: 6px; background: var(--yellow);
+          overflow: hidden; transform-origin: 50% 50%; box-shadow: 0 18px 40px rgba(26,19,32,.12); }
+        #s12-btn span { display: block; text-align: center; font: 700 52px/140px var(--body); color: var(--ink); }
+        /* Reflet qui balaie le bouton pendant la tenue */
+        .s12-glint { position: absolute; left: 0; top: -30px; width: 120px; height: 200px;
+          background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.7) 50%, rgba(255,255,255,0) 100%); }
+
+        /* Bande magenta et jaune qui balaie le bas */
+        #s12-band { position: absolute; left: -240px; top: 1590px; width: 1560px; height: 520px; transform-origin: 50% 0; rotate: -6deg; }
+        #s12-by { position: absolute; left: 0; top: 0; width: 1560px; height: 520px; background: var(--yellow); }
+        #s12-bm { position: absolute; left: 0; top: 46px; width: 1560px; height: 474px; background: var(--magenta); }
+
+        /* Formes */
+        #s12-decos .deco { opacity: 0; }
+        .deco.s12-m.tri { border-bottom-color: var(--magenta); }
+        .deco.s12-m.ring { border-color: var(--magenta); }
+        .deco.s12-m.dot { background: var(--magenta); }
+        .deco.s12-k.plus::before, .deco.s12-k.plus::after { background: var(--ink); }
+      </style>
+
+      <div id="root" data-composition-id="s12" data-width="1080" data-height="1920">
+        <div id="s12-cam" data-layout-allow-overflow>
+          <div id="s12-words" aria-hidden="true" data-layout-ignore>
+            <div class="s12-row fill" id="s12-r1" data-layout-allow-overflow>Contino Sport Contino Sport</div>
+            <div class="s12-row line" id="s12-r2" data-layout-allow-overflow>Votre devis Votre devis Votre devis</div>
+            <div class="s12-row fill" id="s12-r3" data-layout-allow-overflow>Contino Sport Contino Sport</div>
+          </div>
+
+          <div id="s12-decos" aria-hidden="true" data-layout-ignore>
+            <div class="deco tri s12-m" id="s12-d1" style="left:120px;top:290px"></div>
+            <div class="deco ring" id="s12-d2" style="left:900px;top:280px"></div>
+            <div class="deco plus s12-k" id="s12-d3" style="left:955px;top:560px"></div>
+            <div class="deco dot s12-m" id="s12-d4" style="left:80px;top:1250px"></div>
+            <div class="deco bar" id="s12-d5" style="left:860px;top:1400px"></div>
+            <div class="deco ring s12-m" id="s12-d6" style="left:150px;top:1410px"></div>
+            <div class="deco tri" id="s12-d7" style="left:560px;top:250px"></div>
+          </div>
+
+          <div id="s12-logo"><img src="assets/logo-encre.png" alt="Contino Sport" /></div>
+          <div id="s12-line"></div>
+          <div id="s12-tag">
+            <div class="s12-mask"><span id="s12-t1">Sublimation textile</span></div>
+            <div class="s12-mask"><span id="s12-t2">pour clubs et entreprises</span></div>
+          </div>
+          <div id="s12-url"><div class="s12-mask"><span id="s12-u">continosport.fr</span></div></div>
+          <div id="s12-btn"><span id="s12-bl">Demandez votre devis</span><i class="s12-glint" id="s12-g1" aria-hidden="true" data-layout-ignore data-layout-allow-overflow></i><i class="s12-glint" id="s12-g2" aria-hidden="true" data-layout-ignore data-layout-allow-overflow></i></div>
+        </div>
+
+        <div id="s12-band" aria-hidden="true" data-layout-allow-overflow data-layout-ignore>
+          <div id="s12-by" data-layout-allow-overflow></div>
+          <div id="s12-bm" data-layout-allow-overflow></div>
+        </div>
+      </div>
+
+      <script>
+        (function () {
+          const tl = gsap.timeline({ paused: true });
+          const B = 60 / 105;     // un temps
+          const E = B / 2;        // une croche
+          const END = 9 * B;      // 60,0 s
+          const HIT = 4 * B;      // 57,143 s : impact final
+
+          // Mots géants : vitesse constante, sens alternés, jusqu'à la fin
+          tl.fromTo("#s12-r1", { x: -100 }, { x: -700, duration: END, ease: "none" }, 0);
+          tl.fromTo("#s12-r2", { x: -1400 }, { x: -800, duration: END, ease: "none" }, 0);
+          tl.fromTo("#s12-r3", { x: -400 }, { x: -1000, duration: END, ease: "none" }, 0);
+
+          // Logo sur la coupe (la bande de l'hôte le découvre en plein claquement), puis souligné,
+          // phrase, adresse et bouton : une entrée par croche
+          tl.fromTo("#s12-logo", { opacity: 0 }, { opacity: 1, duration: 0.06, ease: "none" }, 0);
+          tl.fromTo("#s12-logo", { scale: 1.45 }, { scale: 1, duration: 0.6, ease: "power4.out" }, 0);
+          tl.fromTo("#s12-line", { scaleX: 0 }, { scaleX: 1, duration: 0.35, ease: "power3.out" }, E);
+          tl.fromTo("#s12-t1", { yPercent: 105 }, { yPercent: 0, duration: 0.4, ease: "power3.out" }, 2 * E);
+          tl.fromTo("#s12-t2", { yPercent: 105 }, { yPercent: 0, duration: 0.4, ease: "power3.out" }, 3 * E);
+          tl.fromTo("#s12-u", { yPercent: 105 }, { yPercent: 0, duration: 0.4, ease: "power3.out" }, 4 * E);
+          tl.fromTo("#s12-btn", { scaleX: 0 }, { scaleX: 1, duration: 0.34, ease: "power3.out" }, 5 * E);
+          tl.fromTo("#s12-btn", { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "power2.out" }, 5 * E);
+          tl.fromTo("#s12-bl", { opacity: 0 }, { opacity: 1, duration: 0.16, ease: "power2.out" }, 6 * E);
+          tl.fromTo("#s12-bl", { y: 16 }, { y: 0, duration: 0.3, ease: "power3.out" }, 6 * E);
+          // Bouton qui s'enfonce puis revient sur la croche avant l'impact
+          tl.to("#s12-btn", { scale: 0.95, duration: 0.08, ease: "power2.out" }, 7 * E);
+          tl.to("#s12-btn", { scale: 1, duration: 0.2, ease: "power2.out" }, 7 * E + 0.08);
+          // Deux reflets pendant la tenue, sur les temps
+          tl.fromTo("#s12-g1", { x: -240, skewX: -20 }, { x: 880, skewX: -20, duration: 0.55, ease: "power2.inOut" }, 5 * B);
+          tl.fromTo("#s12-g2", { x: -240, skewX: -20 }, { x: 880, skewX: -20, duration: 0.55, ease: "power2.inOut" }, 7 * B);
+
+          // Impact : la bande balaie le bas, punch-in, éclat de formes ; puis tenue avec une poussée lente
+          tl.fromTo("#s12-by", { x: -1700, skewX: -16 }, { x: 0, skewX: 0, duration: 0.5, ease: "power3.out" }, HIT - 0.04);
+          tl.fromTo("#s12-bm", { x: -1800, skewX: -16 }, { x: 0, skewX: 0, duration: 0.55, ease: "power3.out" }, HIT + 0.02);
+          tl.fromTo("#s12-cam", { scale: 1 }, { scale: 1.06, duration: 0.08, ease: "power4.out" }, HIT);
+          tl.to("#s12-cam", { scale: 1.08, duration: END - HIT - 0.08, ease: "none" }, HIT + 0.08);
+
+          const C = [540, 860];
+          const decos = [
+            // [id, x, y, rotation, dérive x, dérive y, rotation de dérive]
+            ["#s12-d1", 120, 290, -20, -16, -12, 50],
+            ["#s12-d2", 900, 280, 0, 16, -14, 0],
+            ["#s12-d3", 955, 560, 20, 8, -8, 90],
+            ["#s12-d4", 80, 1250, 0, -14, 10, 0],
+            ["#s12-d5", 860, 1400, -12, 16, 10, 24],
+            ["#s12-d6", 150, 1410, 0, -12, 12, 0],
+            ["#s12-d7", 560, 250, 10, 6, -16, -60],
+          ];
+          decos.forEach(([id, x, y, r, dx, dy, r2], i) => {
+            const t0 = HIT + 0.02 + i * 0.03;
+            tl.fromTo(id, { x: C[0] - x, y: C[1] - y, scale: 0.2, rotation: r - 120 },
+              { x: 0, y: 0, scale: 1.2, rotation: r, duration: 0.65, ease: "power3.out" }, t0);
+            tl.fromTo(id, { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.out" }, t0);
+            tl.to(id, { x: dx, y: dy, rotation: r + r2, duration: END - t0 - 0.65, ease: "none" }, t0 + 0.65);
+          });
+
+          window.__timelines["s12"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

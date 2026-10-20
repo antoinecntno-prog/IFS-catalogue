@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Contino Sport, film vertical</title>
+    <script src="assets/gsap.min.js"></script>
+    <link rel="stylesheet" href="assets/kit.css" />
+    <style>
+      body { margin: 0; background: #FFFFFF; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #FFFFFF; }
+      #fx { position: absolute; inset: 0; pointer-events: none; z-index: 50; overflow: hidden; }
+      #flash { position: absolute; inset: 0; background: #FFFFFF; opacity: 0; }
+      #wipe-a { position: absolute; left: 0; top: -500px; width: 1400px; height: 2920px; background: var(--magenta); }
+      #wipe-b { position: absolute; left: 0; top: -500px; width: 80px; height: 2920px; background: var(--yellow); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="60">
+      <div id="s01" data-composition-id="s01" data-composition-src="compositions/s01-mur.html" data-start="0" data-duration="4.571" data-track-index="0" data-width="1080" data-height="1920"></div>
+      <div id="s02" data-composition-id="s02" data-composition-src="compositions/s02-logo.html" data-start="4.571" data-duration="2.286" data-track-index="1" data-width="1080" data-height="1920"></div>
+      <div id="s03" data-composition-id="s03" data-composition-src="compositions/s03-accueil.html" data-start="6.857" data-duration="4.572" data-track-index="0" data-width="1080" data-height="1920"></div>
+      <div id="s04" data-composition-id="s04" data-composition-src="compositions/s04-sports.html" data-start="11.429" data-duration="9.142" data-track-index="1" data-width="1080" data-height="1920"></div>
+      <div id="s05" data-composition-id="s05" data-composition-src="compositions/s05-catalogue.html" data-start="20.571" data-duration="4.571" data-track-index="0" data-width="1080" data-height="1920"></div>
+      <div id="s06" data-composition-id="s06" data-composition-src="compositions/s06-fiche.html" data-start="25.142" data-duration="4.572" data-track-index="1" data-width="1080" data-height="1920"></div>
+      <div id="s07" data-composition-id="s07" data-composition-src="compositions/s07-studio.html" data-start="29.714" data-duration="4.571" data-track-index="0" data-width="1080" data-height="1920"></div>
+      <div id="s08" data-composition-id="s08" data-composition-src="compositions/s08-devis.html" data-start="34.285" data-duration="4.572" data-track-index="1" data-width="1080" data-height="1920"></div>
+      <div id="s09" data-composition-id="s09" data-composition-src="compositions/s09-envoi.html" data-start="38.857" data-duration="2.285" data-track-index="0" data-width="1080" data-height="1920"></div>
+      <div id="s10" data-composition-id="s10" data-composition-src="compositions/s10-suivi.html" data-start="41.142" data-duration="9.143" data-track-index="1" data-width="1080" data-height="1920"></div>
+      <div id="s11" data-composition-id="s11" data-composition-src="compositions/s11-montage.html" data-start="50.285" data-duration="4.572" data-track-index="0" data-width="1080" data-height="1920"></div>
+      <div id="s12" data-composition-id="s12" data-composition-src="compositions/s12-fin.html" data-start="54.857" data-duration="5.143" data-track-index="1" data-width="1080" data-height="1920"></div>
+
+      <!-- Raccords entre scènes : flash blanc et bande d'encre en diagonale -->
+      <div id="fx" class="clip" data-start="0" data-duration="60" data-track-index="5">
+        <div id="flash"></div>
+        <div id="wipe-a" data-layout-allow-overflow></div>
+        <div id="wipe-b" data-layout-allow-overflow></div>
+      </div>
+
+      <audio id="musique" src="assets/audio/musique.m4a" data-start="0" data-duration="60" data-track-index="10" data-volume="0.55"></audio>
+      <audio id="bruitages" src="assets/audio/bruitages.m4a" data-start="0" data-duration="60" data-track-index="11" data-volume="0.8"></audio>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      // la bande est inclinée : son bord haut se décale de 420 px, d'où une position de repos loin à gauche
+      tl.set("#wipe-a", { x: -2100, skewX: -16 }, 0);
+      tl.set("#wipe-b", { x: -2300, skewX: -16 }, 0);
+      function wipe(t) {
+        tl.set("#wipe-a", { x: -2100 }, t - 0.3);
+        tl.to("#wipe-a", { x: 1800, duration: 0.55, ease: "power2.inOut" }, t - 0.3);
+        tl.set("#wipe-b", { x: -2300 }, t - 0.24);
+        tl.to("#wipe-b", { x: 1600, duration: 0.55, ease: "power2.inOut" }, t - 0.24);
+      }
+      function flash(t, dur) {
+        tl.to("#flash", { keyframes: [{ opacity: 1, duration: 0.001 }, { opacity: 0, duration: dur, ease: "power2.out" }] }, t);
+      }
+      [6.857, 25.143, 34.286, 54.857].forEach(wipe);
+      flash(4.571, 0.4); flash(20.571, 0.3); flash(50.286, 0.4);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

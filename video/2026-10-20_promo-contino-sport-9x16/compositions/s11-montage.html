@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="fr">
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <link rel="stylesheet" href="assets/kit.css" />
+      <style>
+        #root { position: absolute; inset: 0; overflow: hidden; background: #1A1320; }
+
+        /* Photos plein cadre, une par temps */
+        .s11-shot { position: absolute; inset: 0; overflow: hidden; opacity: 0; }
+        .s11-img { position: absolute; inset: 0; }
+        .s11-img img { display: block; width: 100%; height: 100%; object-fit: cover; }
+        #s11-p1 img { object-position: 52% 50%; }
+        #s11-p2 img { object-position: 50% 40%; }
+        #s11-p3 img { object-position: 52% 50%; }
+        #s11-p4 img { object-position: 50% 45%; }
+        #s11-p5 img { object-position: 72% 50%; }
+        #s11-p6 img { object-position: 34% 50%; }
+        #s11-p7 img { object-position: 70% 50%; }
+        #s11-p8 img { object-position: 46% 50%; }
+        /* Dossards : coureuse centrée, poussée ancrée en bas pour que le bandeau « Foulées des Sapins » reste
+           au-dessus des bandeaux de texte et que le numéro passe en entier derrière « BAT avant » */
+        #s11-i5 { transform-origin: 50% 100%; }
+        /* Léger voile en bas pour asseoir les bandeaux de texte */
+        #s11-shade { position: absolute; left: 0; right: 0; bottom: 0; height: 900px;
+          background: linear-gradient(180deg, rgba(26,19,32,0) 0%, rgba(26,19,32,.42) 100%); }
+
+        /* Engagements : bandeaux pleins, une ligne par croche */
+        #s11-type { position: absolute; left: 64px; top: 880px; width: 952px; height: 580px; }
+        .s11-eng { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start; gap: 10px; opacity: 0; }
+        .s11-pl { display: block; overflow: hidden; padding: 6px 26px 0; transform-origin: 0 50%; }
+        .s11-pl span { display: block; font: 900 124px/1.12 var(--head); font-stretch: 78%; text-transform: uppercase; letter-spacing: -.005em; white-space: nowrap; }
+        .s11-e1 .s11-pl { background: var(--magenta); color: #FFFFFF; }
+        .s11-e2 .s11-pl { background: var(--yellow); color: var(--ink); }
+        .s11-e3 .s11-pl { background: var(--ink); color: var(--yellow); }
+        .s11-e4 .s11-pl { background: #FFFFFF; color: var(--magenta); }
+
+        /* Formes : éclat au second départ */
+        #s11-decos .deco { opacity: 0; }
+        .deco.s11-w.ring { border-color: #FFFFFF; }
+        .deco.s11-w.plus::before, .deco.s11-w.plus::after { background: #FFFFFF; }
+        .deco.s11-m.tri { border-bottom-color: var(--magenta); }
+      </style>
+
+      <div id="root" data-composition-id="s11" data-width="1080" data-height="1920">
+        <div id="s11-photos" data-layout-allow-overflow>
+          <div class="s11-shot" id="s11-p1"><div class="s11-img" id="s11-i1" data-layout-allow-overflow><img src="assets/img/echarpe.webp" alt="Écharpe supporter" /></div></div>
+          <div class="s11-shot" id="s11-p2"><div class="s11-img" id="s11-i2" data-layout-allow-overflow><img src="assets/img/set-football.webp" alt="Set football, maillot + short" /></div></div>
+          <div class="s11-shot" id="s11-p3"><div class="s11-img" id="s11-i3" data-layout-allow-overflow><img src="assets/img/maillot-cyclisme.webp" alt="Maillot cyclisme" /></div></div>
+          <div class="s11-shot" id="s11-p4"><div class="s11-img" id="s11-i4" data-layout-allow-overflow><img src="assets/img/hoodie.webp" alt="Sweat à capuche" /></div></div>
+          <div class="s11-shot" id="s11-p5"><div class="s11-img" id="s11-i5" data-layout-allow-overflow><img src="assets/img/dossards.webp" alt="Dossards" /></div></div>
+          <div class="s11-shot" id="s11-p6"><div class="s11-img" id="s11-i6" data-layout-allow-overflow><img src="assets/img/running-ml.webp" alt="Maillot running manches longues" /></div></div>
+          <div class="s11-shot" id="s11-p7"><div class="s11-img" id="s11-i7" data-layout-allow-overflow><img src="assets/img/chasuble.webp" alt="Chasuble d'entraînement" /></div></div>
+          <div class="s11-shot" id="s11-p8"><div class="s11-img" id="s11-i8" data-layout-allow-overflow><img src="assets/img/drapeau-supporter.webp" alt="Drapeau supporter" /></div></div>
+        </div>
+        <div id="s11-shade"></div>
+
+        <div id="s11-decos" aria-hidden="true" data-layout-ignore>
+          <div class="deco tri" id="s11-d1" style="left:150px;top:330px" data-layout-allow-overflow></div>
+          <div class="deco ring s11-w" id="s11-d2" style="left:880px;top:300px" data-layout-allow-overflow></div>
+          <div class="deco plus" id="s11-d3" style="left:960px;top:760px" data-layout-allow-overflow></div>
+          <div class="deco dot s11-w" id="s11-d4" style="left:90px;top:700px" data-layout-allow-overflow></div>
+          <div class="deco tri s11-m" id="s11-d5" style="left:560px;top:250px" data-layout-allow-overflow></div>
+        </div>
+
+        <div id="s11-type">
+          <div class="s11-eng s11-e1" id="s11-e1">
+            <div class="s11-pl" id="s11-e1a"><span id="s11-e1a-t" data-layout-allow-overflow>Prix affichés</span></div>
+            <div class="s11-pl" id="s11-e1b"><span id="s11-e1b-t" data-layout-allow-overflow>palier</span></div>
+            <div class="s11-pl" id="s11-e1c"><span id="s11-e1c-t" data-layout-allow-overflow>par palier</span></div>
+          </div>
+          <div class="s11-eng s11-e2" id="s11-e2">
+            <div class="s11-pl" id="s11-e2a"><span id="s11-e2a-t" data-layout-allow-overflow>Couleurs</span></div>
+            <div class="s11-pl" id="s11-e2b"><span id="s11-e2b-t" data-layout-allow-overflow>illimitées,</span></div>
+            <div class="s11-pl" id="s11-e2c"><span id="s11-e2c-t" data-layout-allow-overflow>même prix</span></div>
+          </div>
+          <div class="s11-eng s11-e3" id="s11-e3">
+            <div class="s11-pl" id="s11-e3a"><span id="s11-e3a-t" data-layout-allow-overflow>BAT avant</span></div>
+            <div class="s11-pl" id="s11-e3b"><span id="s11-e3b-t" data-layout-allow-overflow>production</span></div>
+          </div>
+          <div class="s11-eng s11-e4" id="s11-e4">
+            <div class="s11-pl" id="s11-e4a"><span id="s11-e4a-t" data-layout-allow-overflow>Fabriqué</span></div>
+            <div class="s11-pl" id="s11-e4b"><span id="s11-e4b-t" data-layout-allow-overflow>en Europe</span></div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        (function () {
+          const tl = gsap.timeline({ paused: true });
+          const B = 60 / 105;   // un temps
+          const E = B / 2;      // une croche
+          const END = 8 * B;    // 54,857 s
+          // Repères calés sur la grille globale : la scène démarre à 50,286 s, le temps n° 88 tombe à 50,2857 s.
+          // at(n) = temps local du n-ième temps de la scène, 2 ms en avance : l'image qui tombe pile
+          // sur le temps (52,0 s) montre déjà la coupe, et aucune image ne mélange deux photos.
+          const G0 = 50.286, N0 = 88;
+          const at = (n) => Math.max(0, (N0 + n) * B - G0 - 0.002);
+
+          // Huit photos, une par temps : coupe franche, punch-in sec, puis lente poussée
+          for (let i = 1; i <= 8; i++) {
+            const t = at(i - 1), tn = i < 8 ? at(i) : END;
+            tl.fromTo("#s11-p" + i, { opacity: 0 }, { opacity: 1, duration: 0.001, ease: "none" }, t);
+            if (i > 1) tl.set("#s11-p" + (i - 1), { opacity: 0 }, t + 0.02);
+            const dir = i % 2 ? 1 : -1;
+            tl.fromTo("#s11-i" + i, { scale: 1 }, { scale: 1.07, duration: 0.08, ease: "power4.out" }, t);
+            tl.to("#s11-i" + i, { scale: 1.11, duration: tn - t - 0.08, ease: "none" }, t + 0.08);
+            tl.fromTo("#s11-i" + i, { x: 0 }, { x: 22 * dir, duration: tn - t, ease: "none" }, t);
+          }
+          tl.fromTo("#s11-shade", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power2.out" }, 0);
+
+          // Quatre engagements, deux temps chacun ; les lignes arrivent sur les croches
+          const ENG = [["#s11-e1a", "#s11-e1b", "#s11-e1c"], ["#s11-e2a", "#s11-e2b", "#s11-e2c"], ["#s11-e3a", "#s11-e3b"], ["#s11-e4a", "#s11-e4b"]];
+          ENG.forEach((lines, j) => {
+            const t = at(2 * j);
+            const g = "#s11-e" + (j + 1);
+            tl.fromTo(g, { opacity: 0 }, { opacity: 1, duration: 0.001, ease: "none" }, t);
+            if (j < 3) tl.set(g, { opacity: 0 }, at(2 * j + 2));
+            lines.forEach((id, l) => {
+              const tt = at(2 * j + l / 2);
+              tl.fromTo(id, { scaleX: 0 }, { scaleX: 1, duration: 0.22, ease: "power3.out" }, tt);
+              tl.fromTo(id + "-t", { yPercent: 105 }, { yPercent: 0, duration: 0.3, ease: "power3.out" }, tt + 0.04);
+            });
+          });
+
+          // Éclat de formes depuis le centre au départ, puis elles s'effacent
+          const C = [540, 760];
+          [["#s11-d1", 150, 330, -30], ["#s11-d2", 880, 300, 0], ["#s11-d3", 960, 760, 45], ["#s11-d4", 90, 700, 0], ["#s11-d5", 560, 250, 20]].forEach(([id, x, y, r], i) => {
+            const t0 = 0.04 + i * 0.03;
+            tl.fromTo(id, { x: C[0] - x, y: C[1] - y, scale: 0.2, rotation: r - 140 }, { x: 0, y: 0, scale: 1.3, rotation: r, duration: 0.6, ease: "power3.out" }, t0);
+            tl.fromTo(id, { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.out" }, t0);
+            tl.to(id, { x: (x < C[0] ? -40 : 40), y: (y < C[1] ? -30 : 30), rotation: r + 50, duration: 0.6, ease: "none" }, t0 + 0.6);
+            tl.to(id, { opacity: 0, duration: 0.25, ease: "power2.in" }, t0 + 0.95);
+          });
+
+          window.__timelines["s11"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

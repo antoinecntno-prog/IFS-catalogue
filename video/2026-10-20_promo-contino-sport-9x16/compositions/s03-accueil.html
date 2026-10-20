@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="fr">
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <link rel="stylesheet" href="assets/kit.css" />
+      <style>
+        #root { position: absolute; inset: 0; overflow: hidden; background: #FFE45C; }
+
+        /* Mots géants de fond */
+        #s03-words { position: absolute; inset: 0; }
+        .s03-row { position: absolute; left: 0; white-space: nowrap; font: 900 300px/.86 var(--head); font-stretch: 78%;
+          text-transform: uppercase; letter-spacing: -.01em; }
+        .s03-row.fill { color: rgba(26,19,32,.075); }
+        .s03-row.line { color: transparent; -webkit-text-stroke: 3px rgba(26,19,32,.17); }
+        #s03-row1 { top: 40px; }
+        #s03-row2 { top: 790px; }
+        #s03-row3 { top: 1540px; }
+
+        /* Formes */
+        #s03-decos { position: absolute; inset: 0; }
+        .s03-m.deco.tri { border-bottom-color: var(--magenta); }
+        .s03-w.deco.ring { border-color: #FFFFFF; }
+        .s03-m.deco.dot { background: var(--magenta); }
+        .s03-w.deco.bar { background: #FFFFFF; }
+        .s03-m.deco.plus::before, .s03-m.deco.plus::after { background: var(--magenta); }
+        .s03-m.deco.ring { border-color: var(--magenta); }
+        .s03-w.deco.tri { border-bottom-color: #FFFFFF; }
+        .s03-w.deco.plus::before, .s03-w.deco.plus::after { background: #FFFFFF; }
+        /* Positions hors de la zone balayée par l'écran pendant la poussée (x 265 à 1014, y 111 à 1731) */
+        #s03-d1 { left: 120px; top: 380px; }
+        #s03-d2 { left: 930px; top: 250px; }
+        #s03-d3 { left: 960px; top: 1790px; }
+        #s03-d4 { left: 60px; top: 1180px; }
+        #s03-d5 { left: 190px; top: 1760px; }
+        #s03-d6 { left: 70px; top: 740px; }
+        #s03-d7 { left: 620px; top: 1810px; }
+        #s03-d8 { left: 1000px; top: 600px; }
+
+        /* Caméra et écran */
+        #s03-cam { position: absolute; inset: 0; transform-origin: 343.2px 1036.8px; }
+        #s03-phone { left: 150px; top: 116px; }
+        #s03-ui { height: 844px; overflow: hidden; }
+        #s03-page { position: absolute; left: 0; top: 0; width: 390px; padding-top: 62px; background: #FFFFFF; }
+        #s03-head { position: absolute; left: 0; top: 0; width: 390px; z-index: 3; }
+        .s03-search { display: flex; align-items: center; gap: 8px; }
+        .s03-search svg { width: 18px; height: 18px; flex: none; }
+
+        /* Bandeau d'accueil */
+        #s03-hero { height: 1113px; overflow: hidden; padding: 40px 16px 30px; }
+        #s03-lead { margin-top: 30px; }
+        #s03-cta-wrap { margin-top: 34px; }
+        #s03-cta { width: 178px; min-height: 48px; }
+        #s03-price { margin-top: 18px; }
+        #s03-price .s03-pl { display: block; }
+        #s03-facts { margin-top: 26px; }
+        #s03-kit { display: block; margin: 34px auto 0; width: 272px; height: 299px; filter: drop-shadow(0 16px 26px rgba(58,4,30,.35)); }
+        .s03-sws { display: flex; gap: 10px; justify-content: center; margin-top: 16px; }
+        .s03-sw { width: 44px; height: 44px; border-radius: 50%; border: 2px solid rgba(255,255,255,.55); }
+        .s03-sw.on { border-color: var(--yellow); box-shadow: 0 0 0 2px var(--yellow); }
+        .s03-cap { margin-top: 12px; text-align: center; font: 600 14px/1.3 var(--body); color: #FBDDEA; }
+        .s03-cap b { color: #FFFFFF; }
+
+        /* Univers et catégories */
+        #s03-cats-h { height: 58px; overflow: hidden; }
+        .s03-tile-ph { position: relative; }
+        #s03-tile1-sel { position: absolute; inset: 0; border: 3px solid var(--magenta); border-radius: 3px; opacity: 0; }
+        #s03-nav { align-items: center; }
+        .s03-sec { padding: 24px 16px 0; }
+        .s03-sec h3 { margin: 0; font: 900 30px/1 var(--head); font-stretch: 80%; }
+        .s03-sec-sub { margin-top: 10px; font: 400 15px/1.5 var(--body); color: var(--text-2); }
+        .s03-sec-n { margin-top: 4px; font: 400 13px/1.4 var(--body); color: var(--text-2); }
+        #s03-grid { padding-top: 16px; }
+        #s03-card1-ph { background: var(--surface) url(assets/img/set-football.webp) center / cover no-repeat; }
+
+        /* Tap */
+        #s03-tap { left: 144px; top: 940px; }
+      </style>
+
+      <div id="root" data-composition-id="s03" data-width="1080" data-height="1920">
+        <div id="s03-words" aria-hidden="true" data-layout-ignore>
+          <div class="s03-row fill" id="s03-row1" data-layout-allow-overflow>Contino Sport Contino Sport Contino Sport</div>
+          <div class="s03-row line" id="s03-row2" data-layout-allow-overflow>Contino Sport Contino Sport Contino Sport</div>
+          <div class="s03-row fill" id="s03-row3" data-layout-allow-overflow>Contino Sport Contino Sport Contino Sport</div>
+        </div>
+
+        <div id="s03-decos" aria-hidden="true" data-layout-ignore>
+          <div class="deco tri s03-m" id="s03-d1"></div>
+          <div class="deco ring s03-w" id="s03-d2"></div>
+          <div class="deco plus s03-m" id="s03-d3"></div>
+          <div class="deco bar s03-w" id="s03-d4"></div>
+          <div class="deco dot s03-m" id="s03-d5"></div>
+          <div class="deco ring s03-m" id="s03-d6"></div>
+          <div class="deco tri s03-w" id="s03-d7"></div>
+          <div class="deco plus s03-w" id="s03-d8"></div>
+        </div>
+
+        <div id="s03-cam" data-layout-allow-overflow>
+          <div class="scr" id="s03-phone">
+            <div class="ui" id="s03-ui" data-layout-allow-overlap data-layout-allow-overflow>
+              <div id="s03-page" data-layout-allow-overflow>
+                <section class="ui-hero" id="s03-hero">
+                  <div id="s03-hero-top">
+                  <h2><span id="s03-h1">Vous</span><span id="s03-h2">L'imaginez.</span><span class="y" id="s03-h3">Nous</span><span class="y" id="s03-h4">L'imprimons.</span></h2>
+                  <p id="s03-lead">Votre logo et vos couleurs sur tout l'équipement de votre club ou de votre entreprise. Vous validez la maquette avant la production, réalisée en Europe.</p>
+                  <div id="s03-cta-wrap"><div class="ui-btn y" id="s03-cta">Recevoir mon devis</div></div>
+                  <div class="price" id="s03-price"><span class="s03-pl">Maillot de football sublimé</span><b>19,99 € HT</b> la pièce dès 30</div>
+                  <div class="ui-facts" id="s03-facts"><span>Fabriqué en Europe</span><span>BAT avant production</span><span>Couleurs illimitées, même prix</span><span>Tarifs dégressifs affichés</span></div>
+                  </div>
+                  <svg id="s03-kit" viewBox="0 0 400 440" aria-hidden="true">
+                    <defs>
+                      <clipPath id="s03-kclip"><path d="M165 26C180 44 220 44 235 26L292 44 372 104 340 164 302 142 304 420Q200 432 96 420L98 142 60 164 28 104 108 44Z" /></clipPath>
+                      <linearGradient id="s03-kshade" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0" stop-color="#3A041E" stop-opacity=".16" /><stop offset=".3" stop-color="#3A041E" stop-opacity="0" />
+                        <stop offset=".7" stop-color="#3A041E" stop-opacity="0" /><stop offset="1" stop-color="#3A041E" stop-opacity=".16" />
+                      </linearGradient>
+                    </defs>
+                    <g clip-path="url(#s03-kclip)">
+                      <rect width="400" height="440" fill="#FFFFFF" />
+                      <path fill="#B3125F" d="M-20 262 420 72v84L-20 346z" />
+                      <path fill="#FFE45C" d="M-20 368 420 178v18L-20 386z" />
+                      <rect width="400" height="440" fill="url(#s03-kshade)" />
+                      <path fill="#1A1320" d="M28 104 60 164 71 156 39 96zM372 104 340 164 329 156 361 96z" />
+                      <path stroke="#1A1320" d="M165 26C180 50 220 50 235 26" stroke-width="10" fill="none" />
+                      <circle stroke="#1A1320" cx="258" cy="116" r="21" stroke-width="2" stroke-dasharray="4 4" fill="none" />
+                      <text fill="#1A1320" x="258" y="120" text-anchor="middle" style="font: 800 10px/1 'Hanken Grotesk', Arial, sans-serif; letter-spacing: .08em">LOGO</text>
+                      <text fill="#1A1320" x="200" y="262" text-anchor="middle" style="font: 900 76px/1 Archivo, Arial, sans-serif; font-stretch: 80%">10</text>
+                    </g>
+                  </svg>
+                  <div class="s03-sws">
+                    <div class="s03-sw on" style="background: linear-gradient(135deg, #FFFFFF 0 50%, #B3125F 50% 100%)"></div>
+                    <div class="s03-sw" style="background: linear-gradient(135deg, #FFFFFF 0 50%, #D62839 50% 100%)"></div>
+                    <div class="s03-sw" style="background: linear-gradient(135deg, #19C3A6 0 50%, #0E1B4D 50% 100%)"></div>
+                    <div class="s03-sw" style="background: linear-gradient(135deg, #15151C 0 50%, #E8B021 50% 100%)"></div>
+                  </div>
+                  <div class="s03-cap">Maillot personnalisé, motif <b>éclats magenta et jaune sur fond blanc</b></div>
+                </section>
+
+                <section class="ui-cats" id="s03-cats">
+                  <h3 id="s03-cats-h">Du maillot au bonnet de bain, tout se personnalise</h3>
+                  <div class="ui-tiles">
+                    <div class="ui-tile" id="s03-tile1"><div class="ph s03-tile-ph"><img src="assets/img/set-football.webp" alt="" /><div id="s03-tile1-sel"></div></div><b id="s03-tile1-name">Maillots &amp; shorts</b></div>
+                    <div class="ui-tile" id="s03-tile2"><div class="ph"><img src="assets/img/tote-sublime.webp" alt="" /></div><b>Sacs &amp; bagagerie</b></div>
+                    <div class="ui-tile" id="s03-tile3"><div class="ph"><img src="assets/img/tour-de-cou.webp" alt="" /></div><b>Accessoires &amp; textile promotionnel</b></div>
+                    <div class="ui-tile" id="s03-tile4"><div class="ph"><img src="assets/img/manchons-bras.webp" alt="" /></div><b>Accessoires sport &amp; protection</b></div>
+                  </div>
+                </section>
+
+                <nav class="ui-nav" id="s03-nav"><a>Maillots &amp; shorts</a><a>Sacs &amp; bagagerie</a><a>Accessoires &amp; textile promotionnel</a></nav>
+
+                <div class="s03-sec">
+                  <h3>Maillots &amp; shorts</h3>
+                  <div class="s03-sec-sub">Football, basketball, volley, handball, cyclisme, running</div>
+                  <div class="s03-sec-n">10 références</div>
+                </div>
+                <div class="ui-grid" id="s03-grid">
+                  <div class="ui-card"><div class="ph" id="s03-card1-ph"></div></div>
+                  <div class="ui-card"><div class="ph"></div></div>
+                </div>
+              </div>
+
+              <div class="ui-head" id="s03-head">
+                <img src="assets/logo-encre.png" alt="Contino Sport" />
+                <div class="ui-search s03-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7" fill="none" stroke="#1A1320" stroke-width="2.2" /><path d="M16 16l5 5" stroke="#1A1320" stroke-width="2.2" stroke-linecap="round" /></svg>Rechercher</div>
+                <div class="ui-devis">Devis</div>
+              </div>
+            </div>
+
+            <div class="tap" id="s03-tap"><div class="dot" id="s03-tap-dot"></div><div class="ring" id="s03-tap-ring"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        (function () {
+          const tl = gsap.timeline({ paused: true });
+          const B = 60 / 105;          // un temps
+          const E = B / 2;             // une croche
+          const Q = B / 4;             // une double croche
+          const END = 4.572;
+
+          // Géométrie : écran de face, centre (540, 960), échelle 0,8 ; vignette « Maillots & shorts »
+          // au centre (72, 1327) de la page en px d'interface, page défilée de SCROLL.
+          const SCROLL = 857;
+          const TX = 343.2, TY = 1036.8; // centre de la vignette dans le cadre (origine de la caméra)
+
+          // Mots géants : vitesse constante, sens alternés
+          tl.fromTo("#s03-row1", { x: -150 }, { x: -650, duration: END, ease: "none" }, 0);
+          tl.fromTo("#s03-row2", { x: -1450 }, { x: -950, duration: END, ease: "none" }, 0);
+          tl.fromTo("#s03-row3", { x: -480 }, { x: -980, duration: END, ease: "none" }, 0);
+
+          // Éclat de formes depuis le centre, puis dérive lente
+          const C = [540, 960];
+          const decos = [
+            ["#s03-d1", 120, 380, -40, 160, -24, -30, 250],
+            ["#s03-d2", 930, 250, 0, 0, 30, -26, 0],
+            ["#s03-d3", 960, 1790, 30, 135, 20, 24, 225],
+            ["#s03-d4", 60, 1180, 60, -28, -18, 22, -12],
+            ["#s03-d5", 190, 1760, 0, 0, -26, 18, 0],
+            ["#s03-d6", 70, 740, 0, 0, -22, -14, 0],
+            ["#s03-d7", 620, 1810, 20, -150, 16, 26, -230],
+            ["#s03-d8", 1000, 600, 0, 90, 24, -10, 180],
+          ];
+          decos.forEach(([id, ex, ey, r0, r1, dx, dy, r2], i) => {
+            const t0 = 0.08 + i * 0.03;
+            tl.fromTo(id, { x: C[0] - ex, y: C[1] - ey, scale: 0.3, rotation: r0 },
+              { x: 0, y: 0, scale: 1.5, rotation: r1, duration: 0.75, ease: "power3.out" }, t0);
+            tl.fromTo(id, { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power2.out" }, t0);
+            tl.to(id, { x: dx, y: dy, rotation: r2, duration: END - t0 - 0.75, ease: "none" }, t0 + 0.75);
+          });
+
+          // L'écran monte couché puis se redresse
+          tl.fromTo("#s03-phone",
+            { y: 1150, rotationX: 58, rotationZ: -22, scale: 0.78, transformPerspective: 2000 },
+            { y: 0, rotationX: 14, rotationZ: -6, scale: 0.8, duration: 5 * E, ease: "power3.out" }, 0);
+          tl.to("#s03-phone", { rotationX: 0, rotationZ: 0, duration: 5 * E, ease: "power2.inOut" }, 5 * E);
+
+          // Construction du bandeau sur les croches
+          function pop(sel, t, dy) {
+            tl.fromTo(sel, { y: dy || 16 }, { y: 0, duration: 0.4, ease: "power3.out" }, t);
+            tl.fromTo(sel, { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power2.out" }, t);
+          }
+          pop("#s03-h1", E); pop("#s03-h2", E + 0.07);
+          pop("#s03-h3", 2 * E); pop("#s03-h4", 2 * E + 0.07);
+          pop("#s03-lead", 3 * E);
+          // Bouton qui jaillit de son centre, sans écraser son texte
+          tl.fromTo("#s03-cta", { scale: 0.3 }, { scale: 1, duration: 0.4, ease: "back.out(2)" }, 4 * E);
+          tl.fromTo("#s03-cta", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.out" }, 4 * E);
+          pop("#s03-price", 4 * E + 0.07);
+          pop("#s03-facts", 4 * E + 0.14);
+
+          // La page défile jusqu'aux catégories
+          tl.fromTo("#s03-page", { y: 0 }, { y: -SCROLL, duration: 5 * E, ease: "power3.inOut" }, 4.5 * E);
+          tl.set("#s03-hero-top", { opacity: 0 }, 2.15); // sortie de l'écran par le haut
+          pop("#s03-cats-h", 6 * E);
+          [1, 2, 3, 4].forEach((n, i) => pop("#s03-tile" + n, 7 * E + i * Q, 20));
+
+          // Punch-in sur le temps, puis lente poussée vers la vignette
+          tl.fromTo("#s03-cam", { scale: 1, x: 0, y: 0 }, { scale: 1.07, duration: 0.09, ease: "power4.out" }, 5 * B);
+          tl.to("#s03-cam", { scale: 1.2, x: 60, y: -24, duration: 6.5 * B - 5 * B - 0.09, ease: "none" }, 5 * B + 0.09);
+
+          // Tap sur « Maillots & shorts » à 10,29 s (temps local 6 temps)
+          const TAP = 6 * B;
+          // Point agrandi (environ 90 px à l'écran) pour rester lisible sur l'écran réduit
+          tl.fromTo("#s03-tap-dot", { scale: 0.6 }, { scale: 1.4, duration: 0.1, ease: "power3.out" }, TAP - 0.05);
+          tl.fromTo("#s03-tap-dot", { opacity: 0 }, { opacity: 1, duration: 0.06, ease: "power2.out" }, TAP - 0.05);
+          tl.to("#s03-tap-dot", { opacity: 0, duration: 0.16, ease: "power2.in" }, TAP + 0.24);
+          tl.fromTo("#s03-tap-ring", { scale: 0.9 }, { scale: 3.4, duration: 0.5, ease: "power2.out" }, TAP);
+          tl.fromTo("#s03-tap-ring", { opacity: 0 }, { opacity: 0.95, duration: 0.03, ease: "none" }, TAP - 0.03);
+          tl.to("#s03-tap-ring", { opacity: 0, duration: 0.5, ease: "power2.out" }, TAP);
+          tl.to("#s03-tile1", { scale: 0.95, duration: 0.07, ease: "power2.out" }, TAP);
+          tl.to("#s03-tile1", { scale: 1, duration: 0.22, ease: "power2.out" }, TAP + 0.07);
+          tl.to("#s03-tile1-name", { color: "#B3125F", duration: 0.1, ease: "power2.out" }, TAP);
+          tl.fromTo("#s03-tile1-sel", { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "power2.out" }, TAP);
+          tl.to("#s03-tile1-sel", { opacity: 0, duration: 0.2, ease: "power2.in" }, 6.5 * B + 0.1);
+
+          // Traversée dans la vignette : la coupe tombe au zoom maximal
+          tl.to("#s03-cam", { scale: 18, x: 540 - TX, y: 960 - TY, duration: END - 6.5 * B, ease: "power3.in" }, 6.5 * B);
+
+          window.__timelines["s03"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

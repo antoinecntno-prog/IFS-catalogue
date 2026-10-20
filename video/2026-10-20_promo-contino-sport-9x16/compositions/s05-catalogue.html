@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="fr">
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <link rel="stylesheet" href="assets/kit.css" />
+      <style>
+        #root { position: absolute; inset: 0; overflow: hidden; background: #FFFFFF; }
+
+        /* Caméra : punch-in et traversée autour du centre du cadre */
+        #s05-cam { position: absolute; inset: 0; transform-origin: 540px 960px; }
+
+        /* Mots géants de fond */
+        #s05-words { position: absolute; inset: 0; }
+        .s05-row { position: absolute; left: 0; white-space: nowrap; font: 900 330px/.86 var(--head); font-stretch: 78%;
+          text-transform: uppercase; letter-spacing: -.01em; }
+        .s05-row.fill { color: rgba(179,18,95,.09); }
+        .s05-row.line { color: transparent; -webkit-text-stroke: 3px rgba(179,18,95,.24); }
+        #s05-row1 { top: 60px; }
+        #s05-row2 { top: 640px; }
+        #s05-row3 { top: 1220px; }
+
+        /* Formes */
+        #s05-decos { position: absolute; inset: 0; }
+        .s05-m.deco.tri { border-bottom-color: var(--magenta); }
+        .s05-m.deco.ring { border-color: var(--magenta); }
+        .s05-m.deco.dot { background: var(--magenta); }
+        .s05-k.deco.bar { background: var(--ink); }
+        .s05-m.deco.plus::before, .s05-m.deco.plus::after { background: var(--magenta); }
+        #s05-d1 { left: 930px; top: 250px; }
+        #s05-d2 { left: 960px; top: 520px; }
+        #s05-d3 { left: 820px; top: 160px; }
+        #s05-d4 { left: 60px; top: 160px; }
+        #s05-d5 { left: 640px; top: 640px; }
+        #s05-d6 { left: 40px; top: 760px; }
+
+        /* Écran : l'origine des transformations est le centre de la photo du set football,
+           à sa place finale (205 ; 736,25 px dans l'écran), posée au centre du cadre. */
+        #s05-phone { left: 335px; top: 223.75px; transform-origin: 205px 736.25px; }
+        #s05-ui { height: 844px; overflow: hidden; }
+        #s05-head { position: absolute; left: 0; top: 0; width: 390px; z-index: 3; }
+        .s05-search { display: flex; align-items: center; gap: 8px; }
+        .s05-search svg { width: 18px; height: 18px; flex: none; }
+        #s05-page { position: absolute; left: 0; top: 62px; width: 390px; padding-bottom: 40px; background: #FFFFFF; }
+        #s05-nav { height: 50px; align-items: center; }
+        #s05-nav a { padding: 15px 10px 12px; }
+        #s05-nav svg { flex: none; width: 18px; height: 18px; margin-left: auto; }
+
+        /* En-têtes de catégorie, comme sur le site */
+        .s05-sec { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 6px 16px; padding: 26px 16px 0; }
+        #s05-sec1 { height: 132px; align-content: flex-start; }
+        .s05-sec h3 { margin: 0; font: 900 30px/1 var(--head); font-stretch: 80%; }
+        .s05-sec-sub { margin-top: 8px; font: 400 15px/1.45 var(--body); color: var(--text-2); }
+        .s05-sec-n { font: 600 13px/1.4 var(--body); color: var(--text-2); }
+        .s05-grid { padding: 16px 16px 12px; gap: 24px 12px; }
+        .s05-grid .ui-card b { font-weight: 800; }
+        .s05-min { margin-top: 3px; font: 400 12.5px/1.3 var(--body); color: var(--text-2); }
+        .s05-noimg { display: grid; place-items: center; }
+        .s05-ico { width: 34%; height: 34%; fill: none; stroke: var(--magenta); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+        #s05-card1-sel { position: absolute; inset: 0; border: 3px solid var(--magenta); border-radius: 3px; opacity: 0; }
+
+        /* Tap sur la photo du set football */
+        #s05-tap { left: 205px; top: 736.25px; }
+
+        /* Gros texte de film */
+        #s05-type { position: absolute; left: 64px; top: 236px; width: 952px; height: 420px; }
+        .s05-grp { position: absolute; left: 0; top: 0; width: 952px; }
+        .s05-mask { overflow: hidden; padding-top: 40px; margin-top: -40px; }
+        .s05-num { display: block; font: 900 270px/.84 var(--head); font-stretch: 78%; color: var(--magenta); letter-spacing: -.02em; }
+        .s05-word { display: block; font: 900 150px/.92 var(--head); font-stretch: 78%; color: var(--ink); text-transform: uppercase; letter-spacing: -.01em; }
+      </style>
+
+      <div id="root" data-composition-id="s05" data-width="1080" data-height="1920">
+        <div id="s05-cam" data-layout-allow-overflow>
+          <div id="s05-words" aria-hidden="true" data-layout-ignore>
+            <div class="s05-row fill" id="s05-row1" data-layout-allow-overflow>Catalogue Catalogue Catalogue</div>
+            <div class="s05-row line" id="s05-row2" data-layout-allow-overflow>Catalogue Catalogue Catalogue</div>
+            <div class="s05-row fill" id="s05-row3" data-layout-allow-overflow>Catalogue Catalogue Catalogue</div>
+          </div>
+
+          <div id="s05-decos" aria-hidden="true" data-layout-ignore>
+            <div class="deco tri" id="s05-d1"></div>
+            <div class="deco ring s05-m" id="s05-d2"></div>
+            <div class="deco plus s05-m" id="s05-d3"></div>
+            <div class="deco dot s05-m" id="s05-d4"></div>
+            <div class="deco bar s05-k" id="s05-d5"></div>
+            <div class="deco tri s05-m" id="s05-d6"></div>
+          </div>
+
+          <div class="scr" id="s05-phone" data-layout-allow-overflow>
+            <div class="ui" id="s05-ui" data-layout-allow-overlap data-layout-allow-overflow>
+              <div id="s05-page" data-layout-allow-overflow>
+                <nav class="ui-nav" id="s05-nav"><a class="on" data-layout-allow-occlusion>Maillots &amp; shorts</a><a data-layout-allow-occlusion>Sacs &amp; bagagerie</a><a data-layout-allow-occlusion>Accessoires &amp; textile promotionnel</a><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="#1A1320" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg></nav>
+
+<div class="s05-sec" id="s05-sec1"><div class="s05-sec-l"><h3 data-layout-allow-occlusion>Maillots &amp; shorts</h3><div class="s05-sec-sub" data-layout-allow-occlusion>Football, basketball, volley, handball, cyclisme, running</div></div><div class="s05-sec-n" data-layout-allow-occlusion>10 références</div></div>
+<div class="ui-grid s05-grid">
+<div class="ui-card" id="s05-card1"><div class="ph" id="s05-card1-ph"><img src="assets/img/set-football.webp" alt="" /><div id="s05-card1-sel"></div></div><b id="s05-card1-name" data-layout-allow-occlusion>Set football, maillot + short</b><div class="sub" data-layout-allow-occlusion>Football, volley, handball, badminton</div><div class="pr" data-layout-allow-occlusion><strong data-layout-allow-occlusion>19,99 €</strong> HT / pièce</div><div class="s05-min" data-layout-allow-occlusion>Dès 30 pcs</div></div>
+<div class="ui-card"><div class="ph s05-noimg"><svg class="s05-ico" viewBox="0 0 48 48" aria-hidden="true"><path d="M17 6c0 7-2 10-5 12v24h24V18c-3-2-5-5-5-12-2 4-4 6-7 6s-5-2-7-6Z"/></svg></div><b data-layout-allow-occlusion>Maillot basketball double face (réversible)</b><div class="sub" data-layout-allow-occlusion>Basketball</div><div class="pr" data-layout-allow-occlusion><strong data-layout-allow-occlusion>30,99 €</strong> HT / pièce</div><div class="s05-min" data-layout-allow-occlusion>Dès 30 pcs</div></div>
+<div class="ui-card"><div class="ph s05-noimg"><svg class="s05-ico" viewBox="0 0 48 48" aria-hidden="true"><path d="M17 6c0 7-2 10-5 12v24h24V18c-3-2-5-5-5-12-2 4-4 6-7 6s-5-2-7-6Z"/></svg></div><b data-layout-allow-occlusion>Maillot basketball simple face</b><div class="sub" data-layout-allow-occlusion>Basketball</div><div class="pr" data-layout-allow-occlusion><strong data-layout-allow-occlusion>22,99 €</strong> HT / pièce</div><div class="s05-min" data-layout-allow-occlusion>Dès 30 pcs</div></div>
+<div class="ui-card"><div class="ph"><img src="assets/img/running-ml.webp" alt="" /></div><b data-layout-allow-occlusion>Maillot running manches longues</b><div class="sub" data-layout-allow-occlusion>Running, trail</div><div class="pr" data-layout-allow-occlusion><strong data-layout-allow-occlusion>22,99 €</strong> HT / pièce</div><div class="s05-min" data-layout-allow-occlusion>Dès 30 pcs</div></div>
+<div class="ui-card"><div class="ph"><img src="assets/img/maillot-cyclisme.webp" alt="" /></div><b data-layout-allow-occlusion>Maillot cyclisme</b><div class="sub" data-layout-allow-occlusion>Cyclisme, VTT</div><div class="pr" data-layout-allow-occlusion><strong data-layout-allow-occlusion>28,99 €</strong> HT / pièce</div><div class="s05-min" data-layout-allow-occlusion>Dès 30 pcs</div></div>
+<div class="ui-card"><div class="ph"><img src="assets/img/chasuble.webp" alt="" /></div><b data-layout-allow-occlusion>Chasuble d'entraînement</b><div class="sub" data-layout-allow-occlusion>Entraînements et tournois</div><div class="pr" data-layout-allow-occlusion><strong data-layout-allow-occlusion>12,99 €</strong> HT / pièce</div><div class="s05-min" data-layout-allow-occlusion>Dès 25 pcs</div></div>
+<div class="ui-card"><div class="ph"><img src="assets/img/veste-matelassee.webp" alt="" /></div><b data-layout-allow-occlusion>Veste matelassée hiver</b><div class="sub" data-layout-allow-occlusion>Vêtements techniques &amp; training</div><div class="pr" data-layout-allow-occlusion><strong data-layout-allow-occlusion>106,99 €</strong> HT / pièce</div><div class="s05-min" data-layout-allow-occlusion>Dès 10 pcs</div></div>
+<div class="ui-card"><div class="ph"><img src="assets/img/softshell.webp" alt="" /></div><b data-layout-allow-occlusion>Veste et gilet softshell</b><div class="sub" data-layout-allow-occlusion>Vêtements techniques &amp; training</div><div class="pr" data-layout-allow-occlusion><strong data-layout-allow-occlusion>85,99 €</strong> HT / pièce</div><div class="s05-min" data-layout-allow-occlusion>Dès 10 pcs</div></div>
+<div class="ui-card"><div class="ph"><img src="assets/img/survetement.webp" alt="" /></div><b data-layout-allow-occlusion>Survêtement complet</b><div class="sub" data-layout-allow-occlusion>Vêtements techniques &amp; training</div><div class="pr" data-layout-allow-occlusion><strong data-layout-allow-occlusion>78,99 €</strong> HT / ensemble</div><div class="s05-min" data-layout-allow-occlusion>Dès 30 pcs</div></div>
+<div class="ui-card"><div class="ph"><img src="assets/img/hoodie.webp" alt="" /></div><b data-layout-allow-occlusion>Sweat à capuche</b><div class="sub" data-layout-allow-occlusion>Vêtements techniques &amp; training</div><div class="pr" data-layout-allow-occlusion><strong data-layout-allow-occlusion>40,99 €</strong> HT / pièce</div><div class="s05-min" data-layout-allow-occlusion>Dès 30 pcs</div></div>
+</div>
+<div class="s05-sec" id="s05-sec2"><div class="s05-sec-l"><h3 data-layout-allow-occlusion>Sacs &amp; bagagerie</h3><div class="s05-sec-sub" data-layout-allow-occlusion>Tote bags et sacs à cordon</div></div><div class="s05-sec-n" data-layout-allow-occlusion>3 références</div></div>
+<div class="ui-grid s05-grid">
+<div class="ui-card"><div class="ph"><img src="assets/img/sac-cordon.webp" alt="" /></div><b data-layout-allow-occlusion>Sac à cordon</b><div class="sub" data-layout-allow-occlusion>Polyester 200 g, imperméable</div><div class="pr" data-layout-allow-occlusion><strong data-layout-allow-occlusion>6,39 €</strong> HT / pièce</div><div class="s05-min" data-layout-allow-occlusion>Dès 50 pcs</div></div>
+<div class="ui-card"><div class="ph"><img src="assets/img/tote-sublime.webp" alt="" /></div><b data-layout-allow-occlusion>Tote bag sublimé</b><div class="sub" data-layout-allow-occlusion>42 × 38 cm, autres formats sur devis</div><div class="pr" data-layout-allow-occlusion><strong data-layout-allow-occlusion>5,59 €</strong> HT / pièce</div><div class="s05-min" data-layout-allow-occlusion>Dès 100 pcs</div></div>
+<div class="ui-card"><div class="ph s05-noimg"><svg class="s05-ico" viewBox="0 0 48 48" aria-hidden="true"><path d="M10 18h28l-3 24H13Z"/><path d="M17 18c0-8 3-11 7-11s7 3 7 11"/></svg></div><b data-layout-allow-occlusion>Tote bag jute et coton, marquage DTF</b><div class="sub" data-layout-allow-occlusion>Sac vierge au choix + marquage DTF, à additionner</div><div class="pr" data-layout-allow-occlusion><strong data-layout-allow-occlusion>0,75 €</strong> HT le sac vierge</div><div class="s05-min" data-layout-allow-occlusion>Marquage DTF en supplément</div></div>
+</div>
+<div id="s05-far">
+<div class="s05-sec" id="s05-sec3"><div class="s05-sec-l"><h3 data-layout-allow-occlusion>Accessoires &amp; textile promotionnel</h3><div class="s05-sec-sub" data-layout-allow-occlusion>Écharpes, tours de cou, bandanas, bandeaux, bracelets</div></div><div class="s05-sec-n" data-layout-allow-occlusion>6 références</div></div>
+<div class="ui-grid s05-grid">
+<div class="ui-card"><div class="ph"><img src="assets/img/echarpe.webp" alt="" /></div><b data-layout-allow-occlusion>Écharpe supporter</b><div class="sub" data-layout-allow-occlusion>Polyester sport 130 g/m², 160 g/m² en option</div><div class="pr" data-layout-allow-occlusion><strong data-layout-allow-occlusion>6,29 €</strong> HT / pièce</div><div class="s05-min" data-layout-allow-occlusion>Dès 100 pcs</div></div>
+<div class="ui-card"><div class="ph"><img src="assets/img/tour-de-cou.webp" alt="" /></div><b data-layout-allow-occlusion>Tour de cou</b><div class="sub" data-layout-allow-occlusion>25 × 50 cm, tubulaire sans couture</div><div class="pr" data-layout-allow-occlusion><strong data-layout-allow-occlusion>3,69 €</strong> HT / pièce</div><div class="s05-min" data-layout-allow-occlusion>Dès 100 pcs</div></div>
+<div class="ui-card"><div class="ph"><img src="assets/img/bandana-carre.webp" alt="" /></div><b data-layout-allow-occlusion>Bandana carré</b><div class="sub" data-layout-allow-occlusion>100 % polyester 60 g/m²</div><div class="pr" data-layout-allow-occlusion><strong data-layout-allow-occlusion>5,89 €</strong> HT / pièce</div><div class="s05-min" data-layout-allow-occlusion>Dès 200 pcs</div></div>
+<div class="ui-card"><div class="ph s05-noimg"><svg class="s05-ico" viewBox="0 0 48 48" aria-hidden="true"><path d="M6 12h36L24 40Z"/><path d="M6 12 3 8M42 12l3-4"/></svg></div><b data-layout-allow-occlusion>Bandana triangulaire</b><div class="sub" data-layout-allow-occlusion>100 % polyester 60 g/m²</div><div class="pr" data-layout-allow-occlusion><strong data-layout-allow-occlusion>3,49 €</strong> HT / pièce</div><div class="s05-min" data-layout-allow-occlusion>Dès 200 pcs</div></div>
+<div class="ui-card"><div class="ph"><img src="assets/img/bandeau.webp" alt="" /></div><b data-layout-allow-occlusion>Bandeau</b><div class="sub" data-layout-allow-occlusion>7,5 cm</div><div class="pr" data-layout-allow-occlusion><strong data-layout-allow-occlusion>3,29 €</strong> HT / pièce</div><div class="s05-min" data-layout-allow-occlusion>Dès 250 pcs</div></div>
+<div class="ui-card"><div class="ph"><img src="assets/img/bracelet.webp" alt="" /></div><b data-layout-allow-occlusion>Bracelet textile</b><div class="sub" data-layout-allow-occlusion>10 mm × 35 cm, sublimation 1 face</div><div class="pr" data-layout-allow-occlusion><strong data-layout-allow-occlusion>1,49 €</strong> HT / pièce</div><div class="s05-min" data-layout-allow-occlusion>Dès 100 pcs</div></div>
+</div>
+<div class="s05-sec" id="s05-sec4"><div class="s05-sec-l"><h3 data-layout-allow-occlusion>Accessoires sport &amp; protection</h3><div class="s05-sec-sub" data-layout-allow-occlusion>Serviettes de pétanque, manchons genoux, manchons bras, dossards</div></div><div class="s05-sec-n" data-layout-allow-occlusion>4 références</div></div>
+<div class="ui-grid s05-grid">
+<div class="ui-card"><div class="ph"><img src="assets/img/serviette-petanque.webp" alt="" /></div><b data-layout-allow-occlusion>Serviette de pétanque</b><div class="sub" data-layout-allow-occlusion>20 × 20 cm</div><div class="pr" data-layout-allow-occlusion><strong data-layout-allow-occlusion>2,29 €</strong> HT / pièce</div><div class="s05-min" data-layout-allow-occlusion>Dès 50 pcs</div></div>
+<div class="ui-card"><div class="ph s05-noimg"><svg class="s05-ico" viewBox="0 0 48 48" aria-hidden="true"><path d="M16 6h14l-2 36h-10Z"/><path d="M16 12h14M18 36h10"/></svg></div><b data-layout-allow-occlusion>Manchons genoux</b><div class="sub" data-layout-allow-occlusion>Lycra 220 g/m², bande silicone antidérapante</div><div class="pr" data-layout-allow-occlusion><strong data-layout-allow-occlusion>12,99 €</strong> HT / paire</div><div class="s05-min" data-layout-allow-occlusion>Dès 50 pcs</div></div>
+<div class="ui-card"><div class="ph"><img src="assets/img/manchons-bras.webp" alt="" /></div><b data-layout-allow-occlusion>Manchons bras</b><div class="sub" data-layout-allow-occlusion>Lycra 220 g/m², bande silicone antidérapante</div><div class="pr" data-layout-allow-occlusion><strong data-layout-allow-occlusion>10,99 €</strong> HT / paire</div><div class="s05-min" data-layout-allow-occlusion>Dès 50 pcs</div></div>
+<div class="ui-card"><div class="ph"><img src="assets/img/dossards.webp" alt="" /></div><b data-layout-allow-occlusion>Dossards</b><div class="sub" data-layout-allow-occlusion>Non-tissé 130 g/m² indéchirable, 2 épingles fournies</div><div class="pr" data-layout-allow-occlusion><strong data-layout-allow-occlusion>2,09 €</strong> HT / pièce</div><div class="s05-min" data-layout-allow-occlusion>Dès 100 pcs</div></div>
+</div>
+<div class="s05-sec" id="s05-sec5"><div class="s05-sec-l"><h3 data-layout-allow-occlusion>Objets &amp; accessoires techniques</h3><div class="s05-sec-sub" data-layout-allow-occlusion>Tapis de yoga</div></div><div class="s05-sec-n" data-layout-allow-occlusion>1 référence</div></div>
+<div class="ui-grid s05-grid">
+<div class="ui-card"><div class="ph"><img src="assets/img/tapis-yoga.webp" alt="" /></div><b data-layout-allow-occlusion>Tapis de yoga</b><div class="sub" data-layout-allow-occlusion>61 × 183 × 0,4 cm</div><div class="pr" data-layout-allow-occlusion><strong data-layout-allow-occlusion>54,99 €</strong> HT / pièce</div><div class="s05-min" data-layout-allow-occlusion>Dès 50 pcs</div></div>
+</div>
+</div>
+              </div>
+
+              <div class="ui-head" id="s05-head">
+                <img src="assets/logo-encre.png" alt="Contino Sport" />
+                <div class="ui-search s05-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7" fill="none" stroke="#1A1320" stroke-width="2.2" /><path d="M16 16l5 5" stroke="#1A1320" stroke-width="2.2" stroke-linecap="round" /></svg>Rechercher</div>
+                <div class="ui-devis">Devis</div>
+              </div>
+            </div>
+
+            <div class="tap" id="s05-tap"><div class="dot" id="s05-tap-dot"></div><div class="ring" id="s05-tap-ring"></div></div>
+          </div>
+        </div>
+
+        <div id="s05-type">
+          <div class="s05-grp" id="s05-g1">
+            <div class="s05-mask"><span class="s05-num" id="s05-n1" data-layout-allow-overflow data-layout-allow-occlusion>30</span></div>
+            <div class="s05-mask"><span class="s05-word" id="s05-w1" data-layout-allow-overflow data-layout-allow-occlusion>Références</span></div>
+          </div>
+          <div class="s05-grp" id="s05-g2">
+            <div class="s05-mask"><span class="s05-num" id="s05-n2" data-layout-allow-overflow data-layout-allow-occlusion>9</span></div>
+            <div class="s05-mask"><span class="s05-word" id="s05-w2" data-layout-allow-overflow data-layout-allow-occlusion>Catégories</span></div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        (function () {
+          const tl = gsap.timeline({ paused: true });
+          const B = 60 / 105;          // un temps
+          const E = B / 2;             // une croche
+          const END = 4.572;
+          const TAP = 6 * B;           // 24,0 s : tap sur le set football
+          const ZOOM = TAP + E;        // départ de la traversée
+          const SCROLL0 = 4600;        // défilement de départ, en px d'interface
+          const BRAKE = 800;           // distance du freinage
+          const T_BRAKE = 1.9;         // début du freinage
+
+          // Mots géants : vitesse constante, sens alternés
+          tl.fromTo("#s05-row1", { x: -260 }, { x: -760, duration: END, ease: "none" }, 0);
+          tl.fromTo("#s05-row2", { x: -1500 }, { x: -1000, duration: END, ease: "none" }, 0);
+          tl.fromTo("#s05-row3", { x: -520 }, { x: -1020, duration: END, ease: "none" }, 0);
+
+          // Éclat de formes depuis le centre sur le départ du groove, puis dérive lente
+          const C = [540, 960];
+          const decos = [
+            ["#s05-d1", 930, 250, -30, 150, -20, -24, 210],
+            ["#s05-d2", 960, 520, 0, 0, 26, -18, 0],
+            ["#s05-d3", 820, 160, 20, 135, 18, 20, 225],
+            ["#s05-d4", 60, 160, 0, 0, -16, 22, 0],
+            ["#s05-d5", 640, 640, -40, -20, 30, 10, -8],
+            ["#s05-d6", 40, 760, 30, -150, -10, -26, -200],
+          ];
+          decos.forEach(([id, ex, ey, r0, r1, dx, dy, r2], i) => {
+            const t0 = 0.04 + i * 0.035;
+            tl.fromTo(id, { x: C[0] - ex, y: C[1] - ey, scale: 0.2, rotation: r0 },
+              { x: 0, y: 0, scale: 1, rotation: r1, duration: 0.7, ease: "power3.out" }, t0);
+            tl.fromTo(id, { opacity: 0 }, { opacity: 1, duration: 0.14, ease: "power2.out" }, t0);
+            tl.to(id, { x: dx, y: dy, rotation: r2, duration: END - t0 - 0.7, ease: "none" }, t0 + 0.7);
+          });
+
+          // Écran couché en très gros plan, lente dérive, puis il se redresse pendant le freinage
+          tl.fromTo("#s05-phone",
+            { x: 70, y: 420, rotationX: 52, rotationZ: -12, scale: 1.5, transformPerspective: 2000 },
+            { x: 50, y: 400, rotationZ: -10, scale: 1.52, duration: 4.5 * B, ease: "none" }, 0);
+          tl.to("#s05-phone", { x: 0, y: 0, rotationX: 12, rotationZ: -5, scale: 1.22, duration: 0.8, ease: "power3.inOut" }, 4.5 * B);
+          tl.to("#s05-phone", { rotationZ: -4, scale: 1.25, duration: ZOOM - (4.5 * B + 0.8), ease: "none" }, 4.5 * B + 0.8);
+
+          // La grille défile vite à vitesse constante, puis freine jusqu'au set football
+          // (vitesse raccordée : 3 x BRAKE / 1,2 s = (SCROLL0 - BRAKE) / T_BRAKE)
+          tl.fromTo("#s05-page", { y: -SCROLL0 }, { y: -BRAKE, duration: T_BRAKE, ease: "none" }, 0);
+          tl.to("#s05-page", { y: 0, duration: 1.2, ease: "power3.out" }, T_BRAKE);
+
+          // Gros texte révélé par masque, une ligne par croche
+          function inn(sel, t) { tl.fromTo(sel, { yPercent: 130 }, { yPercent: 0, duration: 0.42, ease: "power3.out" }, t); }
+          function out(sel, t) { tl.to(sel, { yPercent: -140, duration: 0.2, ease: "power2.in" }, t); }
+          // Chaque groupe n'est visible que pendant sa fenêtre (le masque cache le reste)
+          tl.fromTo("#s05-g1", { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none" }, E);
+          tl.set("#s05-g1", { opacity: 0 }, 4 * E + 0.3);
+          tl.fromTo("#s05-g2", { opacity: 0 }, { opacity: 1, duration: 0.01, ease: "none" }, 5 * E);
+          tl.set("#s05-g2", { opacity: 0 }, 9 * E + 0.3);
+          inn("#s05-n1", E); inn("#s05-w1", 2 * E);
+          out("#s05-n1", 4 * E); out("#s05-w1", 4 * E + 0.04);
+          inn("#s05-n2", 5 * E); inn("#s05-w2", 6 * E);
+          out("#s05-n2", 9 * E); out("#s05-w2", 9 * E + 0.04);
+
+          // Impact sur le départ du groove B : le cadre arrive serré et se détend
+          tl.fromTo("#s05-cam", { scale: 1.08 }, { scale: 1, duration: 0.34, ease: "power3.out" }, 0);
+          // Punch-in sur le premier temps de la seconde mesure, puis lente poussée
+          tl.to("#s05-cam", { scale: 1.06, duration: 0.1, ease: "power4.out" }, 4 * B);
+          tl.to("#s05-cam", { scale: 1.09, duration: ZOOM - (4 * B + 0.1), ease: "none" }, 4 * B + 0.1);
+
+          // Tap sur le set football à 24,0 s
+          tl.fromTo("#s05-tap-dot", { scale: 0.5 }, { scale: 1, duration: 0.1, ease: "power3.out" }, TAP - 0.05);
+          tl.fromTo("#s05-tap-dot", { opacity: 0 }, { opacity: 1, duration: 0.06, ease: "power2.out" }, TAP - 0.05);
+          tl.to("#s05-tap-dot", { opacity: 0, duration: 0.16, ease: "power2.in" }, TAP + 0.24);
+          tl.fromTo("#s05-tap-ring", { scale: 0.6 }, { scale: 2.6, duration: 0.5, ease: "power2.out", immediateRender: false }, TAP);
+          tl.fromTo("#s05-tap-ring", { opacity: 0.95 }, { opacity: 0, duration: 0.5, ease: "power2.out", immediateRender: false }, TAP);
+          tl.fromTo("#s05-card1", { scale: 1 }, { scale: 0.95, duration: 0.07, ease: "power2.out" }, TAP);
+          tl.to("#s05-card1", { scale: 1, duration: 0.22, ease: "power2.out" }, TAP + 0.07);
+          tl.fromTo("#s05-card1-sel", { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "power2.out" }, TAP);
+          tl.fromTo("#s05-card1-name", { color: "#1A1320" }, { color: "#B3125F", duration: 0.1, ease: "power2.out" }, TAP);
+
+          // Les catégories lointaines sont passées : on les retire une fois hors champ
+          tl.set("#s05-far", { opacity: 0 }, 5.5 * B);
+
+          // Traversée dans la carte : la coupe tombe au zoom maximal
+          tl.to("#s05-cam", { scale: 11, duration: END - ZOOM, ease: "power3.in" }, ZOOM);
+
+          window.__timelines["s05"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

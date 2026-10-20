@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="fr">
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <link rel="stylesheet" href="assets/kit.css" />
+      <style>
+        #root { position: absolute; inset: 0; overflow: hidden; background: #1A1320; }
+
+        /* Caméra : punch-ins (origine = point de visée), puis traversée finale */
+        #s10-cam { position: absolute; inset: 0; transform-origin: 540px 880px; }
+        #s10-zoom { position: absolute; inset: 0; }
+        #s10-tilt { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 540px 880px; }
+
+        /* Mots géants : pleins et filaires en alternance, faible contraste sur l'encre */
+        #s10-words { position: absolute; inset: 0; }
+        .s10-row { position: absolute; left: 0; white-space: nowrap; font: 900 330px/.86 var(--head); font-stretch: 78%;
+          text-transform: uppercase; letter-spacing: -.01em; }
+        .s10-row.fill { color: rgba(255,255,255,.075); }
+        .s10-row.line { color: transparent; -webkit-text-stroke: 3px rgba(255,255,255,.18); }
+
+        /* Halo magenta qui monte avec la musique, derrière l'écran */
+        #s10-glow { position: absolute; left: -260px; top: -420px; width: 1600px; height: 1400px; border-radius: 50%;
+          background: radial-gradient(closest-side, rgba(179,18,95,.95) 0%, rgba(179,18,95,.55) 45%, rgba(179,18,95,0) 100%);
+          opacity: 0; transform-origin: 50% 50%; }
+        #s10-r1 { top: 0px; }
+        #s10-r2 { top: 300px; }
+        #s10-r3 { top: 1640px; }
+
+        /* Formes */
+        #s10-decos { position: absolute; inset: 0; }
+        .s10-decos .deco { opacity: 0; }
+        .deco.s10-m.ring { border-color: var(--magenta); }
+        .deco.s10-m.tri { border-bottom-color: var(--magenta); }
+        .deco.s10-m.bar { background: var(--magenta); }
+        .deco.s10-w.dot { background: #FFFFFF; }
+        .deco.s10-w.plus::before, .deco.s10-w.plus::after { background: #FFFFFF; }
+        .deco.s10-w.ring { border-color: #FFFFFF; }
+
+        /* Écran : la page de suivi défile dedans */
+        #s10-phone { left: 176px; top: 410px; box-shadow: 0 60px 140px rgba(0,0,0,.55), 0 0 0 2px rgba(255,255,255,.08); }
+        .s10-ui { height: 844px; overflow: hidden; clip-path: inset(0); }
+        #s10-page { position: absolute; left: 0; top: 0; width: 390px; background: #FFFFFF; }
+        .s10-search { display: flex; align-items: center; gap: 8px; }
+        .s10-search svg { width: 18px; height: 18px; flex: none; }
+        .s10-intro { height: 150px; padding: 22px 16px 0; background: var(--soft); }
+        .s10-intro h3 { margin: 0; max-width: 300px; font: 800 30px/1.02 var(--head); font-stretch: 88%; }
+        .s10-intro p { margin: 10px 0 0; font: 400 15px/1.4 var(--body); color: var(--text-2); }
+
+        /* Frise de suivi : cinq étapes de 148 px */
+        .s10-frise { position: relative; height: 780px; padding: 20px 16px 0; }
+        #s10-hl { position: absolute; left: 6px; top: 12px; width: 378px; height: 130px; border-radius: 3px; background: var(--soft);
+          border-left: 4px solid var(--magenta); opacity: 0; }
+        .s10-step { position: relative; height: 148px; }
+        .s10-track { position: absolute; left: 17px; top: 53px; width: 4px; height: 102px; border-radius: 2px; background: var(--surface-2); overflow: hidden; }
+        .s10-track i { display: block; width: 4px; height: 102px; background: var(--magenta); transform-origin: 50% 0; }
+        .s10-dot { position: absolute; left: 0; top: 11px; width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--line-strong); background: #FFFFFF; }
+        .s10-dot .n { position: absolute; inset: 0; text-align: center; font: 800 17px/34px var(--head); color: var(--text-2); }
+        .s10-dot .on { position: absolute; left: -2px; top: -2px; width: 38px; height: 38px; border-radius: 50%; background: var(--magenta); }
+        .s10-dot svg { position: absolute; left: -2px; top: -2px; width: 38px; height: 38px; }
+        .s10-dot path { fill: none; stroke: #FFFFFF; stroke-width: 3.6; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 26; stroke-dashoffset: 26; }
+        .s10-pulse { position: absolute; left: 0; top: 11px; width: 38px; height: 38px; border-radius: 50%; border: 3px solid var(--magenta); opacity: 0; }
+        .s10-txt { position: absolute; left: 54px; right: 0; top: 8px; }
+        .s10-lab { display: block; font: 700 12px/1 var(--body); letter-spacing: .12em; text-transform: uppercase; color: var(--text-3); }
+        .s10-ttl { display: block; margin-top: 8px; font: 800 23.5px/1.06 var(--head); font-stretch: 86%; color: #8A7E88; white-space: nowrap; }
+        .s10-desc { display: block; margin-top: 7px; font: 400 14.5px/1.4 var(--body); color: var(--text-2); }
+
+        /* Bas de page du site */
+        .s10-order { display: flex; justify-content: flex-start; gap: 14px; margin: 0 16px; padding: 12px; border: 1.5px solid var(--line); border-radius: 3px; background: #FFFFFF; transform-origin: 30% 50%; }
+        .s10-order .ph { width: 104px; height: 130px; flex: none; border-radius: 3px; overflow: hidden; background: var(--surface); }
+        .s10-order .ph img { display: block; width: 100%; height: 100%; object-fit: cover; }
+        .s10-order .tx { width: 178px; flex: none; padding-top: 4px; }
+        .s10-order .k { display: block; font: 700 12px/1 var(--body); letter-spacing: .12em; text-transform: uppercase; color: var(--magenta); }
+        .s10-order b { display: block; max-width: 170px; margin-top: 8px; font: 800 20px/1.1 var(--head); font-stretch: 88%; }
+        .s10-order .q { display: block; margin-top: 6px; font: 400 14px/1.3 var(--body); color: var(--text-2); }
+        .s10-order .chip { display: inline-block; margin-top: 10px; padding: 6px 10px; border-radius: 3px; background: var(--yellow); font: 600 13px/1.2 var(--body); }
+        .s10-space { height: 150px; }
+        .s10-foot { height: 420px; padding: 26px 16px; background: var(--ink); color: rgba(255,255,255,.85); font: 400 13.5px/1.5 var(--body); }
+        .s10-foot b { color: #FFFFFF; }
+        .s10-links { display: flex; gap: 16px; margin-top: 18px; font: 400 13.5px/1 var(--body); text-decoration: underline; }
+        .s10-badge { display: inline-block; margin-top: 22px; padding: 8px 12px; border: 1.5px solid var(--yellow); border-radius: 3px; color: var(--yellow); font: 700 13px/1 var(--body); }
+      </style>
+
+      <div id="root" data-composition-id="s10" data-width="1080" data-height="1920">
+        <div id="s10-cam" data-layout-allow-overflow>
+          <div id="s10-words" aria-hidden="true" data-layout-ignore>
+            <div class="s10-row fill" id="s10-r1" data-layout-allow-overflow>Suivi Suivi Suivi Suivi</div>
+            <div class="s10-row line" id="s10-r2" data-layout-allow-overflow>Commande Commande Commande</div>
+            <div class="s10-row fill" id="s10-r3" data-layout-allow-overflow>Suivi Suivi Suivi Suivi</div>
+          </div>
+
+          <div id="s10-glow" aria-hidden="true" data-layout-ignore data-layout-allow-overflow></div>
+
+          <div id="s10-decos" class="s10-decos" aria-hidden="true" data-layout-ignore>
+            <div class="deco tri" id="s10-d1" style="left:120px;top:250px"></div>
+            <div class="deco ring s10-m" id="s10-d2" style="left:880px;top:236px"></div>
+            <div class="deco plus s10-w" id="s10-d3" style="left:470px;top:226px"></div>
+            <div class="deco dot" id="s10-d4" style="left:330px;top:380px"></div>
+            <div class="deco bar s10-m" id="s10-d5" style="left:660px;top:330px"></div>
+            <div class="deco ring" id="s10-d6" style="left:70px;top:430px"></div>
+            <div class="deco tri s10-m" id="s10-d7" style="left:760px;top:190px"></div>
+            <div class="deco dot s10-w" id="s10-d8" style="left:980px;top:400px"></div>
+          </div>
+
+          <div id="s10-zoom" data-layout-allow-overflow>
+            <div id="s10-tilt" data-layout-allow-overflow>
+              <div class="scr" id="s10-phone" data-layout-allow-overflow>
+                <div class="ui s10-ui" data-layout-allow-overlap data-layout-allow-overflow>
+                  <div id="s10-page" data-layout-allow-overflow>
+                    <div class="ui-head" id="s10-head">
+                      <img src="assets/logo-encre.png" alt="Contino Sport" />
+                      <div class="ui-search s10-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7" fill="none" stroke="#1A1320" stroke-width="2.2" /><path d="M16 16l5 5" stroke="#1A1320" stroke-width="2.2" stroke-linecap="round" /></svg>Rechercher</div>
+                      <div class="ui-devis">Devis</div>
+                    </div>
+                    <div class="s10-intro" id="s10-intro">
+                      <h3>Suivi de votre commande</h3>
+                      <p>Club sportif, 100 à 249 pièces</p>
+                    </div>
+
+                    <div class="s10-frise">
+                      <div id="s10-hl"></div>
+
+                      <div class="s10-step" id="s10-st1">
+                        <div class="s10-track"><i id="s10-tr1"></i></div>
+                        <div class="s10-pulse" id="s10-pu1"></div>
+                        <div class="s10-dot"><span class="n" id="s10-n1">1</span><div class="on" id="s10-on1"></div><svg viewBox="0 0 38 38" aria-hidden="true"><path id="s10-ck1" d="M11 19.5l5.5 5.5 11-11.5" /></svg></div>
+                        <div class="s10-txt" id="s10-x1"><span class="s10-lab" id="s10-lb1">Étape 1</span><span class="s10-ttl" id="s10-t1">Demande reçue</span><span class="s10-desc">Nous préparons votre maquette.</span></div>
+                      </div>
+                      <div class="s10-step" id="s10-st2">
+                        <div class="s10-track"><i id="s10-tr2"></i></div>
+                        <div class="s10-pulse" id="s10-pu2"></div>
+                        <div class="s10-dot"><span class="n" id="s10-n2">2</span><div class="on" id="s10-on2"></div><svg viewBox="0 0 38 38" aria-hidden="true"><path id="s10-ck2" d="M11 19.5l5.5 5.5 11-11.5" /></svg></div>
+                        <div class="s10-txt" id="s10-x2"><span class="s10-lab" id="s10-lb2">Étape 2</span><span class="s10-ttl" id="s10-t2">BAT numérique validé</span><span class="s10-desc">La production démarre.</span></div>
+                      </div>
+                      <div class="s10-step" id="s10-st3">
+                        <div class="s10-track"><i id="s10-tr3"></i></div>
+                        <div class="s10-pulse" id="s10-pu3"></div>
+                        <div class="s10-dot"><span class="n" id="s10-n3">3</span><div class="on" id="s10-on3"></div><svg viewBox="0 0 38 38" aria-hidden="true"><path id="s10-ck3" d="M11 19.5l5.5 5.5 11-11.5" /></svg></div>
+                        <div class="s10-txt" id="s10-x3"><span class="s10-lab" id="s10-lb3">Étape 3</span><span class="s10-ttl" id="s10-t3">Production en Europe</span><span class="s10-desc">Sublimation intégrale.</span></div>
+                      </div>
+                      <div class="s10-step" id="s10-st4">
+                        <div class="s10-track"><i id="s10-tr4"></i></div>
+                        <div class="s10-pulse" id="s10-pu4"></div>
+                        <div class="s10-dot"><span class="n" id="s10-n4">4</span><div class="on" id="s10-on4"></div><svg viewBox="0 0 38 38" aria-hidden="true"><path id="s10-ck4" d="M11 19.5l5.5 5.5 11-11.5" /></svg></div>
+                        <div class="s10-txt" id="s10-x4"><span class="s10-lab" id="s10-lb4">Étape 4</span><span class="s10-ttl" id="s10-t4">Expédition</span><span class="s10-desc">Transport inclus.</span></div>
+                      </div>
+                      <div class="s10-step" id="s10-st5">
+                        <div class="s10-pulse" id="s10-pu5"></div>
+                        <div class="s10-dot"><span class="n" id="s10-n5">5</span><div class="on" id="s10-on5"></div><svg viewBox="0 0 38 38" aria-hidden="true"><path id="s10-ck5" d="M11 19.5l5.5 5.5 11-11.5" /></svg></div>
+                        <div class="s10-txt" id="s10-x5"><span class="s10-lab" id="s10-lb5">Étape 5</span><span class="s10-ttl" id="s10-t5">Livraison au club</span><span class="s10-desc">Vos couleurs sur le terrain.</span></div>
+                      </div>
+                    </div>
+
+                    <div class="s10-order" id="s10-order">
+                      <div class="tx"><span class="k">Votre commande</span><b>Set football, maillot + short</b><span class="q">100 à 249 pièces</span><span class="chip">Fabriqué en Europe</span></div>
+                      <div class="ph"><img src="assets/img/set-football.webp" alt="" /></div>
+                    </div>
+                    <div class="s10-space"></div>
+                    <div class="s10-foot">
+                      <div><b>Contino Sport</b>, marque du Groupe Contino IFS. Catalogue sublimation 2026. Photos non contractuelles.</div>
+                      <div class="s10-links"><span>Mentions légales</span><span>Confidentialité</span><span>CGV</span><span>Cookies</span></div>
+                      <div class="s10-badge">Made in Europe</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        (function () {
+          const tl = gsap.timeline({ paused: true });
+          const B = 60 / 105;           // un temps
+          const E = B / 2;              // une croche
+          const T = [1, 4, 7, 10, 13].map((k) => k * B); // 41,714 / 43,429 / 45,143 / 46,857 / 48,571 s
+          const MONTEE = 8 * B;         // 45,714 s : la caméra accélère et pousse
+          const SIL = 15.5 * B;         // 50,0 s : silence, traversée
+          const END = 16 * B;           // 50,286 s : flash blanc de l'hôte
+
+          // Géométrie (px d'interface sauf mention) : chaque étape mesure 148 px ; la visée se fait
+          // au milieu de la ligne active, à 235 px du haut de l'écran.
+          const ROW = 148, V = ROW / (3 * B);  // vitesse de défilement : une étape toutes les trois temps
+          const AIM = [540, 880];              // point de visée dans le cadre (origine des rotations)
+          const PH = [176, 410];               // coin de l'écran dans le cadre
+          const S5 = -V * T[4];                // défilement quand l'étape 5 est visée
+          const SEND = S5 - V * (SIL - T[4]) / 2; // fin du défilement (décélération sans à-coup)
+          const DOT5 = [35, 262 + 4 * ROW];    // centre du rond de l'étape 5 dans la page
+
+          // Mots géants : dérive lente pendant la pause, puis ils accélèrent avec la montée
+          [["#s10-r1", -200, -560, -1320], ["#s10-r2", -1500, -1140, -380], ["#s10-r3", -500, -860, -1620]].forEach(([id, a, b, c]) => {
+            tl.fromTo(id, { x: a }, { x: b, duration: MONTEE, ease: "none" }, 0);
+            tl.to(id, { x: c, duration: END - MONTEE, ease: "power2.in" }, MONTEE);
+          });
+
+          // Halo magenta : il naît au début de la montée et envahit le haut du cadre jusqu'au silence
+          tl.fromTo("#s10-glow", { scale: 0.55 }, { scale: 1.35, duration: SIL - MONTEE, ease: "power2.in" }, MONTEE);
+          tl.fromTo("#s10-glow", { opacity: 0 }, { opacity: 1, duration: SIL - MONTEE, ease: "power1.in" }, MONTEE);
+
+          // Formes : deux éclats depuis le centre, au départ de la pause puis au départ de la montée
+          const C = [540, 760];
+          const decos = [
+            // [id, x, y, rotation finale, dérive x, dérive y, rotation de dérive, départ]
+            ["#s10-d1", 120, 250, -20, -18, -14, 60, 0],
+            ["#s10-d2", 880, 236, 0, 20, -16, 0, 0],
+            ["#s10-d3", 470, 226, 20, -10, -18, 110, 0],
+            ["#s10-d4", 330, 380, 0, -16, 10, 0, 0],
+            ["#s10-d5", 660, 330, -14, 18, 8, 30, 0],
+            ["#s10-d6", 70, 430, 0, -14, 12, 0, MONTEE],
+            ["#s10-d7", 760, 190, 15, 14, -12, -70, MONTEE],
+            ["#s10-d8", 980, 400, 0, 16, 10, 0, MONTEE],
+          ];
+          decos.forEach(([id, x, y, r1, dx, dy, r2, t], i) => {
+            const t0 = t + 0.04 + (i % 5) * 0.035;
+            tl.fromTo(id, { x: C[0] - x, y: C[1] - y, scale: 0.2, rotation: r1 - 120 },
+              { x: 0, y: 0, scale: 1, rotation: r1, duration: 0.7, ease: "power3.out" }, t0);
+            tl.fromTo(id, { opacity: 0 }, { opacity: 1, duration: 0.14, ease: "power2.out" }, t0);
+            tl.to(id, { x: dx, y: dy, rotation: r1 + r2, duration: SIL - t0 - 0.7, ease: "none" }, t0 + 0.7);
+          });
+
+          // Écran couché en perspective : il se redresse un peu à l'ouverture, dérive, puis la caméra pousse
+          tl.fromTo("#s10-tilt",
+            { rotationX: 54, rotationZ: -12, scale: 1.24, transformPerspective: 2400 },
+            { rotationX: 42, rotationZ: -9, scale: 1.32, transformPerspective: 2400, duration: 1.4, ease: "power3.out" }, 0);
+          tl.to("#s10-tilt", { rotationZ: -8, scale: 1.36, duration: MONTEE - 1.4, ease: "none" }, 1.4);
+          const FIN = { rx: 34, rz: -5, s: 1.72, d: 2400 };
+          tl.to("#s10-tilt", { rotationX: FIN.rx, rotationZ: FIN.rz, scale: FIN.s, duration: SIL - MONTEE, ease: "power2.in" }, MONTEE);
+
+          // La caméra descend le long de la frise : défilement régulier, une étape toutes les trois temps
+          tl.fromTo("#s10-page", { y: 0 }, { y: S5, duration: T[4], ease: "none" }, 0);
+          tl.to("#s10-page", { y: SEND, duration: SIL - T[4], ease: "power2.out" }, T[4]);
+
+          // Les étapes s'allument
+          const GREY = "#8A7E88", INK = "#1A1320", LAB = "#6B606C", MAG = "#B3125F";
+          T.forEach((t, i) => {
+            const k = i + 1;
+            if (k > 1) {
+              // le trait de progression descend jusqu'au rond suivant
+              tl.fromTo("#s10-tr" + (k - 1), { scaleY: 0 }, { scaleY: 1, duration: T[i] - T[i - 1] - 0.24, ease: "none" }, T[i - 1] + 0.22);
+            }
+            tl.fromTo("#s10-on" + k, { scale: 0.3 }, { scale: 1, duration: 0.36, ease: "back.out(2)" }, t);
+            tl.fromTo("#s10-on" + k, { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "power2.out" }, t);
+            tl.fromTo("#s10-n" + k, { opacity: 1 }, { opacity: 0, duration: 0.08, ease: "power2.out" }, t);
+            tl.fromTo("#s10-ck" + k, { strokeDashoffset: 26 }, { strokeDashoffset: 0, duration: 0.26, ease: "power2.out" }, t + 0.08);
+            tl.fromTo("#s10-pu" + k, { scale: 1 }, { scale: 2.4, duration: 0.6, ease: "power2.out" }, t);
+            tl.fromTo("#s10-pu" + k, { opacity: 0.9 }, { opacity: 0, duration: 0.6, ease: "power2.out" }, t);
+            tl.fromTo("#s10-t" + k, { color: GREY }, { color: INK, duration: 0.12, ease: "power2.out" }, t);
+            tl.fromTo("#s10-lb" + k, { color: LAB }, { color: MAG, duration: 0.12, ease: "power2.out" }, t);
+            // punch-in sec sur le temps, puis la caméra revient
+            const p = k >= 4 ? 1.06 : 1.04;
+            if (k === 1) tl.fromTo("#s10-cam", { scale: 1 }, { scale: p, duration: 0.08, ease: "power4.out" }, t);
+            else tl.to("#s10-cam", { scale: p, duration: 0.08, ease: "power4.out" }, t);
+            tl.to("#s10-cam", { scale: 1, duration: 0.9, ease: "power2.inOut" }, t + 0.08);
+          });
+          // La surbrillance suit l'étape active
+          tl.fromTo("#s10-hl", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.out" }, T[0]);
+          tl.fromTo("#s10-hl", { scaleX: 0.9 }, { scaleX: 1, duration: 0.3, ease: "power3.out" }, T[0]);
+          tl.fromTo("#s10-hl", { y: 0 }, { y: ROW, duration: 0.34, ease: "power3.out" }, T[1]);
+          for (let i = 2; i < 5; i++) tl.to("#s10-hl", { y: i * ROW, duration: 0.34, ease: "power3.out" }, T[i]);
+
+          // Ce qui a défilé s'efface avant d'atteindre le bord haut de l'écran : aucune ligne n'est tranchée par le bord.
+          // Une étape passée s'efface ligne par ligne (étiquette, titre, phrase) dès que l'étape suivante s'allume :
+          // l'étiquette touche le bord vers T + 0,41 s, le titre vers T + 0,6 s.
+          tl.fromTo("#s10-head > *", { opacity: 1 }, { opacity: 0, duration: 0.24, ease: "power1.out" }, 0.06);
+          tl.fromTo("#s10-intro > *", { opacity: 1 }, { opacity: 0, duration: 0.35, ease: "power1.out" }, 0.7);
+          for (let k = 1; k <= 4; k++) {
+            tl.fromTo("#s10-x" + k + " > *", { opacity: 1 }, { opacity: 0, duration: 0.3, ease: "none", stagger: 0.1 }, T[k] + 0.06);
+          }
+
+          // La carte de la commande attend sous la frise ; à la livraison elle claque et passe au magenta
+          tl.fromTo("#s10-order", { scale: 1 }, { scale: 1.07, duration: 0.09, ease: "power3.out" }, T[4] + E);
+          tl.to("#s10-order", { scale: 1, duration: 0.36, ease: "back.out(2.2)" }, T[4] + E + 0.09);
+          tl.fromTo("#s10-order", { borderColor: "#E7E0E5" }, { borderColor: "#B3125F", duration: 0.12, ease: "power2.out" }, T[4] + E);
+
+          // Traversée dans le rond de l'étape 5 : position projetée du rond à la fin de la poussée
+          // (ordre GSAP : échelle, rotationX, rotation, puis perspective autour de l'origine)
+          function project(px, py, st) {
+            const dx = (px - AIM[0]) * st.s, dy = (py - AIM[1]) * st.s;
+            const rx = st.rx * Math.PI / 180, rz = st.rz * Math.PI / 180;
+            const y1 = dy * Math.cos(rx), z1 = dy * Math.sin(rx);
+            const x2 = dx * Math.cos(rz) - y1 * Math.sin(rz), y2 = dx * Math.sin(rz) + y1 * Math.cos(rz);
+            const f = st.d / (st.d - z1);
+            return [AIM[0] + f * x2, AIM[1] + f * y2];
+          }
+          const pc = project(PH[0] + 2 * DOT5[0], PH[1] + 2 * (DOT5[1] - 5 + SEND), FIN);
+          // Travelling latéral lent pendant la descente, puis traversée
+          tl.fromTo("#s10-zoom", { x: -14, y: 0, scale: 1, transformOrigin: pc[0] + "px " + pc[1] + "px" },
+            { x: 46, y: 0, scale: 1, transformOrigin: pc[0] + "px " + pc[1] + "px", duration: SIL, ease: "sine.inOut" }, 0);
+          tl.to("#s10-zoom", { x: 540 - pc[0], y: 960 - pc[1], scale: 40, duration: END - SIL, ease: "power3.in" }, SIL);
+          tl.to("#s10-ck5", { opacity: 0, duration: 0.12, ease: "power2.in" }, SIL + 0.08);
+
+          window.__timelines["s10"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

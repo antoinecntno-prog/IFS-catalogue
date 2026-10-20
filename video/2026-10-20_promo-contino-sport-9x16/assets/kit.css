@@ -1,0 +1,142 @@
+/* Kit commun du film vertical : polices, couleurs, écran de téléphone, interface du site recomposée,
+   tap et formes. Chaque scène le charge par <link rel="stylesheet" href="assets/kit.css">. */
+@font-face { font-family: "Archivo"; font-weight: 700 900; font-stretch: 75% 100%; src: url(fonts/archivo-latin.woff2) format("woff2"); }
+@font-face { font-family: "Hanken Grotesk"; font-weight: 400 700; src: url(fonts/hanken-grotesk-latin.woff2) format("woff2"); }
+
+:root {
+  --magenta: #B3125F; --magenta-deep: #940E4E; --yellow: #FFE45C; --ink: #1A1320; --paper: #FFFFFF;
+  --surface: #F4F0F3; --surface-2: #EAE3E8; --soft: #FCEAF2; --text-2: #5E5360; --text-3: #6B606C; --line: #E7E0E5; --line-strong: #8A7E88;
+  --red: #D62839; --royal: #1F4FD1; --green: #138A4B; --navy: #0E1B4D; --gold: #E8B021; --turq: #19C3A6;
+  --head: "Archivo", Arial, sans-serif; --body: "Hanken Grotesk", Arial, sans-serif;
+}
+
+/* ---------- Typographie de film ---------- */
+.big { font: 900 150px/.92 var(--head); font-stretch: 78%; text-transform: uppercase; letter-spacing: -.01em; }
+.kick { font: 700 30px/1 var(--body); letter-spacing: .16em; text-transform: uppercase; }
+.mask { overflow: hidden; display: block; }
+.mask > span { display: block; }
+
+/* ---------- Écran de téléphone sans coque ----------
+   .scr fait 780 x 1688 px. Son contenu .ui est écrit à la taille du site mobile (390 px de large)
+   et agrandi deux fois par zoom : le texte reste net. */
+.scr { position: absolute; width: 780px; height: 1688px; border-radius: 56px; overflow: hidden; background: #FFFFFF;
+  box-shadow: 0 40px 90px rgba(26,19,32,.28), 0 0 0 2px rgba(26,19,32,.06); }
+.scr.dark-edge { box-shadow: 0 40px 90px rgba(26,19,32,.35), 0 0 0 10px var(--ink); }
+.ui { position: absolute; left: 0; top: 0; width: 390px; zoom: 2; font: 400 16px/1.5 var(--body); color: var(--ink); background: #FFFFFF; }
+.ui * { box-sizing: border-box; }
+.ui-status { height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 26px; font: 700 14px/1 var(--body); }
+.ui-status i { display: inline-block; width: 22px; height: 11px; border: 1.5px solid var(--ink); border-radius: 3px; }
+
+/* En-tête du site */
+.ui-head { display: flex; align-items: center; gap: 8px; height: 62px; padding: 0 12px; background: #FFFFFF; border-bottom: 1px solid var(--line); }
+.ui-head img { width: 82px; height: auto; display: block; }
+.ui-search { flex: 1; height: 42px; border: 1.5px solid var(--line-strong); border-radius: 3px; font: 400 15px/39px var(--body); color: var(--text-2); padding-left: 12px; }
+.ui-devis { height: 42px; padding: 0 14px; border-radius: 3px; background: var(--magenta); color: #FFFFFF; font: 700 15px/42px var(--body); }
+
+/* Bandeau d'accueil */
+.ui-hero { background: var(--magenta); color: #FFFFFF; padding: 26px 16px 30px; }
+.ui-hero h2 { margin: 0; font: 900 44px/.98 var(--head); font-stretch: 85%; text-transform: uppercase; }
+.ui-hero h2 span { display: block; }
+.ui-hero h2 span.y { color: var(--yellow); }
+.ui-hero p { margin: 18px 0 0; font: 400 16px/1.5 var(--body); }
+.ui-hero .price { margin-top: 18px; font: 400 14px/1.3 var(--body); }
+.ui-hero .price b { font: 900 26px/1.1 var(--head); color: var(--yellow); }
+.ui-facts { margin-top: 16px; font: 700 14px/1.9 var(--body); }
+.ui-facts span { display: block; padding-left: 18px; position: relative; }
+.ui-facts span::before { content: ""; position: absolute; left: 0; top: 9px; width: 9px; height: 9px; background: var(--yellow); }
+
+/* Boutons du site : rectangles à coins de 3 px */
+.ui-btn { display: flex; align-items: center; justify-content: center; min-height: 50px; padding: 0 20px; border-radius: 3px; font: 700 15px/1 var(--body); border: 1.5px solid transparent; }
+.ui-btn.y { background: var(--yellow); color: var(--ink); }
+.ui-btn.m { background: var(--magenta); color: #FFFFFF; }
+.ui-btn.o { background: #FFFFFF; color: var(--ink); border-color: var(--ink); }
+
+/* Rangée de catégories */
+.ui-cats { padding: 24px 16px 28px; }
+.ui-cats h3, .ui-h3 { margin: 0 0 14px; font: 800 26px/1.1 var(--head); font-stretch: 88%; }
+.ui-tiles { display: flex; gap: 10px; }
+.ui-tile { width: 112px; flex: none; }
+.ui-tile .ph { width: 112px; height: 112px; border-radius: 3px; overflow: hidden; background: var(--surface); }
+.ui-tile .ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ui-tile b { display: block; margin-top: 8px; font: 600 14px/1.25 var(--body); }
+
+/* Onglets de catégories */
+.ui-nav { display: flex; gap: 6px; padding: 0 12px; border-bottom: 1px solid var(--line); white-space: nowrap; overflow: hidden; }
+.ui-nav a { padding: 16px 10px 13px; font: 600 14.5px/1.2 var(--body); color: var(--text-2); border-bottom: 3px solid transparent; text-decoration: none; }
+.ui-nav a.on { color: var(--ink); border-bottom-color: var(--magenta); }
+
+/* Grille de produits : deux colonnes */
+.ui-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 12px; padding: 18px 16px; }
+.ui-card .ph { position: relative; aspect-ratio: 4 / 5; border-radius: 3px; overflow: hidden; background: var(--surface); }
+.ui-card .ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ui-card .tag { position: absolute; left: 8px; top: 8px; padding: 4px 7px; background: var(--yellow); color: var(--ink); font: 700 11px/1 var(--body); border-radius: 2px; }
+.ui-card b { display: block; margin-top: 10px; font: 700 16px/1.2 var(--head); font-stretch: 92%; }
+.ui-card .sub { margin-top: 3px; font: 400 12.5px/1.3 var(--body); color: var(--text-2); }
+.ui-card .pr { margin-top: 8px; font: 400 13px/1.2 var(--body); color: var(--text-2); }
+.ui-card .pr strong { font: 800 18px/1 var(--head); color: var(--magenta); }
+
+/* Fiche produit */
+.ui-sheet-top { display: flex; align-items: center; justify-content: space-between; height: 64px; padding: 0 14px; border-bottom: 1px solid var(--line); font: 500 15px/1 var(--body); color: var(--text-2); }
+.ui-x { width: 44px; height: 44px; border: 1.5px solid var(--ink); border-radius: 3px; display: grid; place-items: center; font: 400 22px/1 var(--body); color: var(--ink); }
+.ui-photo { margin: 16px; aspect-ratio: 4 / 5; border-radius: 3px; overflow: hidden; background: var(--surface); }
+.ui-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ui-thumbs { display: flex; gap: 8px; padding: 0 16px; }
+.ui-thumbs div { width: 56px; height: 70px; border-radius: 3px; overflow: hidden; border: 1.5px solid var(--line); }
+.ui-thumbs div.on { border: 2px solid var(--magenta); }
+.ui-thumbs img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ui-title { margin: 22px 16px 0; font: 800 34px/1.02 var(--head); font-stretch: 85%; }
+.ui-meta { margin: 8px 16px 0; font: 400 15px/1.4 var(--body); color: var(--text-2); }
+.ui-big-price { margin: 14px 16px 0; font: 400 14px/1.2 var(--body); color: var(--text-2); }
+.ui-big-price strong { font: 900 30px/1 var(--head); color: var(--magenta); }
+
+/* Grille de prix par palier */
+.ui-table { margin: 18px 16px 0; }
+.ui-table .unit { font: 600 12px/1 var(--body); color: var(--text-2); margin-bottom: 8px; }
+.ui-table .row { display: grid; grid-template-columns: 92px repeat(5, 1fr); align-items: center; height: 40px; border-bottom: 1px solid var(--line); }
+.ui-table .row > div { position: relative; text-align: center; font: 700 14px/1 var(--head); font-stretch: 92%; z-index: 1; }
+.ui-table .row > div:first-child { text-align: left; font: 600 12.5px/1.15 var(--body); }
+.ui-table .row.head > div { font: 600 11.5px/1 var(--body); color: var(--text-2); }
+
+/* Puces de choix du devis */
+.ui-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.ui-chip { display: flex; align-items: center; min-height: 46px; padding: 0 16px; border: 1.5px solid var(--line-strong); border-radius: 3px; font: 600 15px/1.2 var(--body); background: #FFFFFF; }
+.ui-chip.on { border-color: var(--magenta); background: var(--magenta); color: #FFFFFF; }
+.ui-label { display: block; margin: 20px 0 10px; font: 600 14px/1 var(--body); }
+.ui-label i { color: var(--magenta); font-style: normal; }
+.ui-field { height: 48px; border: 1.5px solid var(--line-strong); border-radius: 3px; padding: 0 14px; font: 400 16px/45px var(--body); }
+.ui-steps { padding: 14px 16px 0; font: 600 14px/1 var(--body); }
+.ui-steps .bar { margin-top: 10px; height: 4px; background: var(--surface-2); border-radius: 2px; overflow: hidden; }
+.ui-steps .bar i { display: block; height: 100%; width: 50%; background: var(--magenta); transform-origin: 0 50%; }
+.ui-intro { background: var(--soft); padding: 22px 16px; }
+.ui-intro h3 { margin: 0; font: 800 30px/1.02 var(--head); font-stretch: 88%; }
+.ui-intro p { margin: 10px 0 0; font: 400 15px/1.5 var(--body); color: var(--text-2); }
+
+/* Studio */
+.ui-studio-head { display: flex; align-items: center; gap: 10px; height: 62px; padding: 0 12px; border-bottom: 1px solid var(--line); font: 800 15px/1.1 var(--head); }
+.ui-studio-head img { width: 76px; }
+.ui-select { margin: 12px; height: 46px; border: 1.5px solid var(--ink); border-radius: 3px; padding: 0 14px; font: 500 15px/43px var(--body); }
+.ui-stage { position: relative; margin: 0 12px; height: 420px; background: var(--surface); border-radius: 3px; }
+.ui-viewchip { position: absolute; left: 10px; top: 10px; padding: 7px 10px; background: #FFFFFF; border: 1.5px solid var(--ink); border-radius: 3px; font: 700 13px/1 var(--body); }
+.ui-note { margin: 10px 12px 0; padding: 9px 11px; background: var(--soft); border-radius: 3px; font: 400 11.5px/1.35 var(--body); color: #5A3A4A; }
+.ui-note b { color: var(--ink); }
+.ui-tabs { display: flex; margin-top: 12px; border-bottom: 1px solid var(--line); }
+.ui-tabs div { flex: 1; text-align: center; padding: 13px 0 11px; font: 700 14px/1 var(--body); color: var(--text-2); border-bottom: 3px solid transparent; }
+.ui-tabs div.on { color: var(--ink); border-bottom-color: var(--magenta); }
+.ui-swatches { display: flex; gap: 10px; padding: 14px 12px; }
+.ui-sw { width: 40px; height: 40px; border-radius: 50%; border: 2px solid rgba(26,19,32,.25); overflow: hidden; position: relative; }
+.ui-sw.on { box-shadow: 0 0 0 3px #FFFFFF, 0 0 0 5px var(--magenta); }
+
+/* ---------- Tap : point jaune et onde ---------- */
+.tap { position: absolute; width: 0; height: 0; z-index: 40; pointer-events: none; }
+.tap .dot { position: absolute; left: -32px; top: -32px; width: 64px; height: 64px; border-radius: 50%; background: var(--yellow); border: 3px solid rgba(26,19,32,.3); opacity: 0; }
+.tap .ring { position: absolute; left: -32px; top: -32px; width: 64px; height: 64px; border-radius: 50%; border: 5px solid var(--yellow); opacity: 0; }
+
+/* ---------- Formes géométriques ---------- */
+.deco { position: absolute; pointer-events: none; }
+.deco.tri { width: 0; height: 0; border-left: 22px solid transparent; border-right: 22px solid transparent; border-bottom: 38px solid var(--yellow); }
+.deco.ring { width: 46px; height: 46px; border-radius: 50%; border: 6px solid var(--yellow); }
+.deco.dot { width: 22px; height: 22px; border-radius: 50%; background: var(--yellow); }
+.deco.bar { width: 90px; height: 8px; background: var(--yellow); border-radius: 4px; }
+.deco.plus { width: 40px; height: 40px; }
+.deco.plus::before, .deco.plus::after { content: ""; position: absolute; left: 16px; top: 0; width: 8px; height: 40px; background: var(--yellow); border-radius: 3px; }
+.deco.plus::after { transform: rotate(90deg); }

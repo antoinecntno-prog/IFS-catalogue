@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="fr">
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <link rel="stylesheet" href="assets/kit.css" />
+      <style>
+        #root { position: absolute; inset: 0; overflow: hidden; background: #940E4E; }
+
+        /* Caméra et écran : même formulaire que la scène 8, étape 2 remplie */
+        #s09-cam { position: absolute; inset: 0; transform-origin: 540px 960px; }
+        #s09-plane { position: absolute; inset: 0; transform-origin: 540px 960px; }
+        #s09-phone { left: 150px; top: 0; box-shadow: 0 60px 140px rgba(58,4,30,.45), 0 0 0 2px rgba(26,19,32,.06); }
+        .s09-page { position: absolute; left: 0; top: 0; }
+
+        .s09-sp { height: 66px; }
+        .s09-top { padding: 28px 16px 22px; background: var(--soft); }
+        .s09-h2 { margin: 0; font: 900 32px/1 var(--head); font-stretch: 80%; letter-spacing: -.01em; color: var(--ink); }
+        .s09-h2 span { display: block; }
+        .s09-intro { margin: 10px 0 0; font: 400 16px/1.5 var(--body); color: #5A3A4A; }
+        .s09-body { padding: 24px 16px 30px; }
+        .s09-req { margin: 0 0 20px; font: 400 13.5px/1.5 var(--body); color: var(--text-2); }
+        .s09-req i, .s09-lb i { font-style: normal; color: var(--magenta); }
+        .s09-pane { display: flex; flex-direction: column; gap: 22px; }
+        .s09-f { display: flex; flex-direction: column; gap: 6px; }
+        .s09-lb { display: block; font: 600 14px/1.2 var(--body); color: var(--ink); }
+        .s09-fg { display: flex; flex-direction: column; gap: 16px; }
+        .s09-in { position: relative; height: 48px; border: 1.5px solid var(--line-strong); border-radius: 3px; background: #FFFFFF;
+          padding-left: 14px; font: 400 16px/45px var(--body); color: var(--ink); white-space: nowrap; }
+        #s09-email { border-color: var(--magenta); }
+        .s09-legal { margin: 0; font: 400 13px/1.5 var(--body); color: var(--text-2); }
+        .s09-nav { display: grid; grid-template-columns: 1fr 2fr; gap: 12px; }
+        .s09-btn { display: flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 22px; border: 1.5px solid transparent;
+          border-radius: 3px; font: 700 15px/1 var(--body); white-space: nowrap; }
+        .s09-btn.s09-o { background: #FFFFFF; color: var(--ink); border-color: var(--ink); }
+        .s09-btn.s09-y { background: var(--yellow); color: var(--ink); }
+
+        #s09-head { z-index: 5; }
+        .s09-hd { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 66px; padding: 11px 14px 11px 16px;
+          background: #FFFFFF; border-bottom: 1px solid var(--line); }
+        .s09-prog { flex: 1; max-width: 280px; }
+        .s09-step { height: 16px; margin: 0 0 8px; font: 700 13px/1.2 var(--body); color: var(--magenta); white-space: nowrap; }
+        .s09-bar { height: 4px; background: var(--magenta); border-radius: 2px; }
+        .s09-x { display: grid; place-items: center; flex: none; width: 44px; height: 44px; border: 1.5px solid var(--line-strong); border-radius: 3px; }
+        .s09-x svg { width: 16px; height: 16px; stroke: var(--ink); stroke-width: 2; fill: none; }
+
+        /* Tap sur « Envoyer ma demande » (pixels d'écran) */
+        #s09-tap { left: 517px; top: 1369px; }
+        /* Sur le bouton jaune, le point de tap reste jaune, cerclé d'encre pour rester lisible */
+        #s09-tap .dot { background: var(--yellow); border: 5px solid var(--ink); }
+        #s09-tap .ring { box-shadow: 0 0 0 2px var(--ink), inset 0 0 0 2px var(--ink); }
+
+        /* Éclair jaune depuis le point tapé (le centre du cadre), puis fond jaune */
+        #s09-ylw { position: absolute; inset: 0; background: var(--yellow); opacity: 0; }
+        #s09-burst { position: absolute; left: -1660px; top: -1240px; width: 4400px; height: 4400px; border-radius: 50%; background: var(--yellow); }
+        #s09-white { position: absolute; inset: 0; background: #FFFFFF; opacity: 0; }
+        #s09-in { position: absolute; inset: 0; background: var(--yellow); }
+
+        /* Mots géants sur le jaune */
+        #s09-words { opacity: 0; }
+        .s09-row { position: absolute; left: 0; white-space: nowrap; font: 900 330px/.86 var(--head); font-stretch: 78%;
+          text-transform: uppercase; letter-spacing: -.01em; }
+        .s09-row.s09-fill { color: rgba(26,19,32,.07); }
+        .s09-row.s09-line { color: transparent; -webkit-text-stroke: 3px rgba(26,19,32,.13); }
+        #s09-r1 { top: 40px; }
+        #s09-r2 { top: 760px; }
+        #s09-r3 { top: 1480px; }
+
+        .s09-decos .deco { opacity: 0; }
+        .deco.s09-i.tri { border-bottom-color: var(--ink); }
+        .deco.s09-m.ring { border-color: var(--magenta); }
+        .deco.s09-w.ring { border-color: #FFFFFF; }
+        .deco.s09-i.dot, .deco.s09-i.bar { background: var(--ink); }
+        .deco.s09-m.bar { background: var(--magenta); }
+        .deco.s09-m.plus::before, .deco.s09-m.plus::after { background: var(--magenta); }
+
+        /* Coupure : fond encre */
+        #s09-ink { position: absolute; inset: 0; background: var(--ink); opacity: 0; }
+
+        /* Confirmation */
+        #s09-done { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 540px 900px; }
+        #s09-ckwrap { position: absolute; left: 380px; top: 400px; width: 320px; height: 320px; }
+        #s09-ckwrap svg { display: block; width: 320px; height: 320px; overflow: visible; }
+        #s09-ring { opacity: 0; }
+        #s09-title { position: absolute; left: 64px; right: 64px; top: 790px; text-align: center; color: var(--ink); font-size: 196px; }
+        /* Le masque laisse de la place à l'accent du É sans décaler la ligne */
+        #s09-title .mask { padding-top: 44px; margin-top: -44px; }
+      </style>
+
+      <div id="root" data-composition-id="s09" data-width="1080" data-height="1920">
+        <div id="s09-cam" data-layout-allow-overflow>
+          <div id="s09-plane" data-layout-allow-overflow>
+            <div class="scr" id="s09-phone" data-layout-allow-overflow>
+              <div class="ui s09-page" id="s09-p2" data-layout-allow-overlap>
+                <div class="s09-sp"></div>
+                <div class="s09-top">
+                  <h2 class="s09-h2"><span data-layout-allow-occlusion>Où envoyer votre devis ?</span></h2>
+                  <p data-layout-allow-occlusion class="s09-intro">Dernière étape : votre devis arrive par email.</p>
+                </div>
+                <div class="s09-body">
+                  <p data-layout-allow-occlusion class="s09-req">Les champs marqués <i>*</i> sont obligatoires.</p>
+                  <div class="s09-pane">
+                    <div class="s09-fg">
+                      <div class="s09-f"><span data-layout-allow-occlusion class="s09-lb">Prénom <i>*</i></span><div class="s09-in"></div></div>
+                      <div class="s09-f"><span data-layout-allow-occlusion class="s09-lb">Nom <i>*</i></span><div class="s09-in"></div></div>
+                      <div class="s09-f"><span data-layout-allow-occlusion class="s09-lb">Nom du club, de l'entreprise ou de l'association <i>*</i></span><div class="s09-in"></div></div>
+                      <div class="s09-f"><span data-layout-allow-occlusion class="s09-lb">Email <i>*</i></span>
+                        <div data-layout-allow-occlusion class="s09-in" id="s09-email">contact@votreclub.fr</div></div>
+                    </div>
+                    <p data-layout-allow-occlusion class="s09-legal">Vos coordonnées servent uniquement à traiter votre demande de devis.</p>
+                    <div class="s09-nav">
+                      <div data-layout-allow-occlusion class="s09-btn s09-o">Retour</div>
+                      <div data-layout-allow-occlusion class="s09-btn s09-y" id="s09-send">Envoyer ma demande</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tap" id="s09-tap"><div class="ring" id="s09-tap-ring"></div><div class="dot" id="s09-tap-dot"></div></div>
+
+              <div class="ui" id="s09-head">
+                <div class="s09-hd">
+                  <div class="s09-prog">
+                    <p data-layout-allow-occlusion class="s09-step">Étape 2 sur 2 : vos coordonnées</p>
+                    <div class="s09-bar"></div>
+                  </div>
+                  <div class="s09-x"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="s09-ylw" data-layout-ignore></div>
+        <div id="s09-burst" data-layout-allow-overflow data-layout-ignore></div>
+
+        <div id="s09-words" aria-hidden="true" data-layout-ignore>
+          <div class="s09-row s09-fill" id="s09-r1" data-layout-allow-overflow>Merci Merci Merci Merci</div>
+          <div class="s09-row s09-line" id="s09-r2" data-layout-allow-overflow>Merci Merci Merci Merci</div>
+          <div class="s09-row s09-fill" id="s09-r3" data-layout-allow-overflow>Merci Merci Merci Merci</div>
+        </div>
+
+        <div class="s09-decos" aria-hidden="true" data-layout-ignore>
+          <div class="deco tri s09-i" id="s09-d1" style="left: 110px; top: 300px"></div>
+          <div class="deco ring s09-m" id="s09-d2" style="left: 900px; top: 330px"></div>
+          <div class="deco plus s09-m" id="s09-d3" style="left: 950px; top: 1380px"></div>
+          <div class="deco dot s09-i" id="s09-d4" style="left: 96px; top: 1390px"></div>
+          <div class="deco bar s09-m" id="s09-d5" style="left: 850px; top: 1600px"></div>
+          <div class="deco ring s09-w" id="s09-d6" style="left: 150px; top: 1620px"></div>
+          <div class="deco bar s09-i" id="s09-d7" style="left: 150px; top: 580px"></div>
+          <div class="deco ring s09-w" id="s09-d8" style="left: 880px; top: 600px"></div>
+        </div>
+
+        <div id="s09-ink" data-layout-ignore></div>
+
+        <div id="s09-done" data-layout-allow-overflow>
+          <div id="s09-ckwrap">
+            <svg viewBox="-160 -160 320 320" aria-hidden="true">
+              <circle id="s09-ring" cx="0" cy="0" r="138" fill="none" stroke="#1A1320" stroke-width="22" />
+              <path id="s09-ck" d="M-62 4 L-18 48 L66 -42" fill="none" stroke="#1A1320" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"
+                stroke-dasharray="200" stroke-dashoffset="200" />
+            </svg>
+          </div>
+          <div id="s09-title" class="big">
+            <div class="mask"><span id="s09-t1" data-layout-allow-overflow>Demande</span></div>
+            <div class="mask"><span id="s09-t2" data-layout-allow-overflow>envoyée</span></div>
+          </div>
+        </div>
+
+        <div id="s09-white" data-layout-ignore></div>
+        <div id="s09-in" data-layout-ignore></div>
+      </div>
+
+      <script>
+        (function () {
+          const tl = gsap.timeline({ paused: true });
+          const B = 60 / 105;       // un temps
+          const E = B / 2;          // une croche
+          const TAP = B;            // 39,429 : tap sur « Envoyer ma demande »
+          const FLASH = TAP + 0.05; // éclair jaune
+          const FULL = TAP + 0.19;  // le jaune couvre tout le cadre
+          const RING = 3 * E;       // 39,714 : l'anneau arrive
+          const DONE = 2 * B;       // 40,0   : coche et « Demande envoyée »
+          const CUT = 3.5 * B;      // 40,857 : coupure et coup sourd
+          const END = 2.286;
+
+          const F = (fx, fy) => ({ x: 390 - fx, y: 960 - fy });
+          const SEND = [517, 1369], SENDY = [710, 1369];   // SENDY : même visée que la fin de la scène 8
+
+          // ---------- Entrée : on ressort du jaune du bouton, macro inclinée ----------
+          tl.fromTo("#s09-in", { opacity: 1 }, { opacity: 0, duration: 0.1, ease: "power2.out" }, 0);
+          tl.fromTo("#s09-cam", { scale: 3.2 }, { scale: 1, duration: 0.45, ease: "power4.out" }, 0);
+          tl.fromTo("#s09-plane",
+            { rotationX: 22, rotationZ: -5, scale: 2.4, transformPerspective: 2000 },
+            { rotationX: 30, rotationZ: -11, scale: 2.3, duration: 0.45, ease: "power3.out" }, 0);
+          tl.to("#s09-plane", { rotationX: 32, rotationZ: -13, scale: 2.42, duration: FULL - 0.45, ease: "none" }, 0.45);
+          tl.fromTo("#s09-phone", F(SENDY[0], SENDY[1]), { ...F(SEND[0], SEND[1]), duration: 0.45, ease: "power3.out" }, 0);
+
+          // ---------- 39,429 : tap, le bouton s'enfonce ----------
+          tl.fromTo("#s09-tap-dot", { scale: 0.6 }, { scale: 1.5, duration: 0.11, ease: "power3.out" }, TAP - 0.12);
+          tl.to("#s09-tap-dot", { scale: 1.25, duration: 0.06, ease: "power2.out" }, TAP);
+          tl.fromTo("#s09-tap-dot", { opacity: 0 }, { opacity: 1, duration: 0.06, ease: "power2.out" }, TAP - 0.12);
+          tl.fromTo("#s09-tap-ring", { scale: 0.8 }, { scale: 3.4, duration: 0.3, ease: "power2.out" }, TAP);
+          tl.fromTo("#s09-tap-ring", { opacity: 0 }, { opacity: 0.95, duration: 0.03, ease: "none" }, TAP - 0.03);
+          tl.fromTo("#s09-send", { scale: 1 }, { scale: 0.95, duration: 0.07, ease: "power2.out" }, TAP);
+          tl.fromTo("#s09-send", { backgroundColor: "#FFE45C" }, { backgroundColor: "#FFD426", duration: 0.06, ease: "power2.out" }, TAP);
+          tl.fromTo("#s09-email", { borderColor: "#B3125F" }, { borderColor: "#8A7E88", duration: 0.08, ease: "power2.out" }, TAP);
+
+          // ---------- Éclair jaune plein cadre ----------
+          tl.fromTo("#s09-burst", { scale: 0 }, { scale: 1, duration: FULL - FLASH, ease: "power2.in" }, FLASH);
+          tl.set("#s09-ylw", { opacity: 1 }, FULL);
+          tl.set("#s09-cam", { opacity: 0 }, FULL);
+          tl.set("#s09-burst", { opacity: 0 }, FULL + 0.01);
+          tl.to("#s09-white", { keyframes: [{ opacity: 0.85, duration: 0.03, ease: "none" }, { opacity: 0, duration: 0.26, ease: "power2.out" }] }, FULL - 0.02);
+
+          // Mots géants sur le jaune, vitesse constante
+          tl.set("#s09-words", { opacity: 1 }, FULL);
+          tl.fromTo("#s09-r1", { x: -100 }, { x: -520, duration: END, ease: "none" }, 0);
+          tl.fromTo("#s09-r2", { x: -820 }, { x: -400, duration: END, ease: "none" }, 0);
+          tl.fromTo("#s09-r3", { x: -240 }, { x: -660, duration: END, ease: "none" }, 0);
+
+          // Formes : éclat depuis le centre avec l'éclair, puis dérive lente
+          const C = [540, 960];
+          [
+            ["#s09-d1", 110, 300, -40, 140, -24, -18, 200],
+            ["#s09-d2", 900, 330, 0, 0, 22, -20, 0],
+            ["#s09-d3", 950, 1380, 30, 135, 20, 22, 200],
+            ["#s09-d4", 96, 1390, 0, 0, -18, 20, 0],
+            ["#s09-d5", 850, 1600, 40, -20, 24, 16, -50],
+            ["#s09-d6", 150, 1620, 0, 0, -20, 18, 0],
+            ["#s09-d7", 150, 580, -30, 20, -22, -8, 60],
+            ["#s09-d8", 880, 600, 0, 0, 22, -10, 0],
+          ].forEach(([id, ex, ey, r0, r1, dx, dy, r2], i) => {
+            const t0 = FULL + i * 0.03;
+            tl.fromTo(id, { x: C[0] - ex, y: C[1] - ey, scale: 0.25, rotation: r0 },
+              { x: 0, y: 0, scale: 1, rotation: r1, duration: 0.6, ease: "power3.out" }, t0);
+            tl.fromTo(id, { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.out" }, t0);
+            tl.to(id, { x: dx, y: dy, rotation: r2, duration: CUT - t0 - 0.6, ease: "none" }, t0 + 0.6);
+          });
+
+          // ---------- Coche et « Demande envoyée » ----------
+          tl.fromTo("#s09-ring", { scale: 0.3, transformOrigin: "50% 50%" }, { scale: 1, transformOrigin: "50% 50%", duration: 0.4, ease: "back.out(1.6)" }, RING);
+          tl.fromTo("#s09-ring", { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "power2.out" }, RING);
+          tl.fromTo("#s09-ck", { strokeDashoffset: 200 }, { strokeDashoffset: 0, duration: 0.24, ease: "power2.out" }, DONE);
+          tl.fromTo("#s09-t1", { yPercent: 105 }, { yPercent: 0, duration: 0.42, ease: "power3.out" }, DONE);
+          tl.fromTo("#s09-t2", { yPercent: 105 }, { yPercent: 0, duration: 0.42, ease: "power3.out" }, DONE + 0.07);
+          tl.set(["#s09-t1", "#s09-t2"], { opacity: 0 }, 0);
+          tl.set("#s09-t1", { opacity: 1 }, DONE);
+          tl.set("#s09-t2", { opacity: 1 }, DONE + 0.07);
+          // Légère poussée, punch-in sec sur le dernier temps (40,571), puis punch-out sur la coupure
+          const P4 = 3 * B;
+          tl.fromTo("#s09-done", { scale: 1 }, { scale: 1.02, duration: P4 - RING, ease: "none" }, RING);
+          tl.to("#s09-done", { scale: 1.075, duration: 0.06, ease: "power4.out" }, P4);
+          tl.to("#s09-done", { scale: 1.085, duration: CUT - P4 - 0.06, ease: "none" }, P4 + 0.06);
+
+          // ---------- 40,857 : coupure, tout se fige sur l'encre ----------
+          tl.set("#s09-ink", { opacity: 1 }, CUT);
+          tl.set(["#s09-ring", "#s09-ck"], { stroke: "#FFE45C" }, CUT);
+          tl.set("#s09-title", { color: "#FFFFFF" }, CUT);
+          tl.to("#s09-done", { scale: 1.02, duration: 0.07, ease: "power4.out" }, CUT);
+
+          window.__timelines["s09"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

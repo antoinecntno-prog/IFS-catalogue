@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="fr">
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <link rel="stylesheet" href="assets/kit.css" />
+      <style>
+        #root { position: absolute; inset: 0; overflow: hidden; background: #1A1320; }
+
+        /* Halo magenta derrière l'écran */
+        #s07-halo { position: absolute; left: -160px; top: 89px; width: 1400px; height: 1400px; border-radius: 50%;
+          background: radial-gradient(circle at 50% 50%, rgba(179,18,95,.80) 0%, rgba(179,18,95,.45) 28%, rgba(148,14,78,.16) 50%, rgba(148,14,78,0) 69%); }
+
+        /* Mots géants : pleins et filaires en alternance, à faible contraste */
+        .s07-row { position: absolute; left: 0; white-space: nowrap; font: 900 330px/.86 var(--head); font-stretch: 78%;
+          text-transform: uppercase; letter-spacing: -.01em; }
+        .s07-row.fill { color: rgba(255,255,255,.05); }
+        .s07-row.line { color: transparent; -webkit-text-stroke: 3px rgba(255,255,255,.13); }
+        #s07-r1 { top: 20px; }
+        #s07-r2 { top: 742px; }
+        #s07-r3 { top: 1464px; }
+
+        /* Formes */
+        .s07-decos .deco { opacity: 0; }
+        .deco.s07-w.ring { border-color: #FFFFFF; }
+        .deco.s07-w.dot, .deco.s07-w.bar { background: #FFFFFF; }
+        .deco.s07-m.ring { border-color: var(--magenta); }
+
+        /* Caméra et écran */
+        #s07-cam { position: absolute; inset: 0; transform-origin: 540px 789px; }
+        #s07-phone { left: 150px; top: 217px; box-shadow: 0 60px 140px rgba(0,0,0,.55), 0 0 0 2px rgba(255,255,255,.08); }
+        #s07-ui { height: 844px; overflow: hidden; }
+        .s07-a { position: absolute; }
+
+        /* Aperçu collé en haut (studio mobile, page défilée) */
+        #s07-canvas { left: 0; top: 0; width: 390px; height: 448px; background: #FFFFFF; border-bottom: 1px solid var(--line); }
+        .s07-th { position: absolute; top: 8px; width: 60px; height: 62px; border: 1.5px solid var(--line-strong); border-radius: 3px; background: #FFFFFF; }
+        .s07-th .on { position: absolute; left: -1.5px; top: -1.5px; right: -1.5px; bottom: -1.5px; border: 1.5px solid var(--magenta);
+          box-shadow: inset 0 0 0 1.5px var(--magenta); background: var(--soft); border-radius: 3px; }
+        .s07-th .mini { position: absolute; left: 12px; top: 5px; width: 33px; height: 36px; }
+        .s07-th .mini svg { display: block; width: 100%; height: 100%; }
+        .s07-th b { position: absolute; left: 0; right: 0; bottom: 5px; text-align: center; font: 700 12.5px/1 var(--body); }
+        #s07-thf { left: 12px; }
+        #s07-thd { left: 80px; }
+        #s07-thd-on { opacity: 0; }
+        #s07-clear { right: 12px; top: 30px; height: 40px; padding: 0 12px; border: 1.5px solid var(--line-strong); border-radius: 3px;
+          font: 600 13px/37px var(--body); background: #FFFFFF; }
+
+        #s07-stage { left: 12px; top: 78px; width: 366px; height: 300px; border-radius: 3px; overflow: hidden;
+          background: linear-gradient(156deg, rgba(26,19,32,0) 0 54%, rgba(26,19,32,.045) 54% 70%, rgba(26,19,32,0) 70% 79%, rgba(26,19,32,.045) 79% 85%, rgba(26,19,32,0) 85%), #F4F0F3; }
+        .s07-tag { position: absolute; left: 10px; top: 10px; padding: 6px 10px; border-radius: 3px; background: #FFFFFF;
+          border: 1.5px solid var(--line-strong); font: 800 13px/1.2 var(--body); color: var(--ink); z-index: 3; }
+        #s07-tag-dos { background: var(--magenta); border-color: var(--magenta); color: #FFFFFF; opacity: 0; }
+        #s07-flip { position: absolute; left: 18px; top: 15px; width: 330px; height: 270px; }
+        #s07-face, #s07-back { position: absolute; left: 0; top: 0; width: 330px; height: 270px; }
+        #s07-back { opacity: 0; }
+        #s07-face svg, #s07-back svg { display: block; width: 100%; height: 100%; overflow: visible; }
+
+        #s07-note { left: 12px; top: 386px; width: 366px; padding: 8px 10px; border-radius: 3px; background: var(--soft);
+          font: 400 12px/1.35 var(--body); color: #5A3A4A; }
+        #s07-note b { color: var(--ink); font-weight: 700; }
+
+        /* Onglets et panneau */
+        #s07-tabs { left: 0; top: 448px; width: 390px; height: 42px; display: flex; background: #FFFFFF; border-bottom: 1px solid var(--line); }
+        #s07-tabs div { flex: 1; text-align: center; padding-top: 13px; font: 700 14px/1 var(--body); color: var(--text-2); border-bottom: 3px solid transparent; }
+        #s07-tabs div.on { color: var(--ink); border-bottom-color: var(--magenta); }
+        .s07-lbl { position: absolute; left: 16px; font: 600 13px/1 var(--body); color: var(--ink); white-space: nowrap; }
+        #s07-lb1b { opacity: 0; }
+
+        .s07-tile { position: absolute; top: 522px; width: 66px; height: 64px; border: 1.5px solid var(--line-strong); border-radius: 3px; }
+        .s07-tile .mini { position: absolute; left: 15.5px; top: 5px; width: 32px; height: 35px; }
+        .s07-tile .mini svg { display: block; width: 100%; height: 100%; }
+        .s07-tile b { position: absolute; left: 0; right: 0; bottom: 7px; text-align: center; font: 600 11.5px/1 var(--body); }
+        #s07-tselbg { left: 16px; top: 522px; width: 66px; height: 64px; border-radius: 3px; background: var(--soft); }
+        #s07-tselbd { left: 16px; top: 522px; width: 66px; height: 64px; border-radius: 3px; border: 1.5px solid var(--magenta);
+          box-shadow: inset 0 0 0 1.5px var(--magenta); z-index: 2; }
+
+        .s07-sw { position: absolute; width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--line-strong); }
+        .s07-ring { position: absolute; width: 30px; height: 30px; border-radius: 50%; box-shadow: 0 0 0 3px #FFFFFF, 0 0 0 5px var(--magenta); }
+        #s07-row1 { left: 0; top: 598px; width: 390px; height: 50px; }
+        #s07-row2 { left: 0; top: 659px; width: 390px; height: 50px; opacity: 0; }
+
+        #s07-btns { left: 16px; top: 722px; width: 358px; height: 44px; }
+        #s07-btns .ui-btn { position: absolute; top: 0; width: 175px; min-height: 44px; height: 44px; }
+        #s07-blogo { left: 0; }
+        #s07-btxt { left: 183px; }
+
+        #s07-foot { left: 0; top: 776px; width: 390px; height: 68px; background: #FFFFFF; border-top: 1px solid var(--line); }
+        #s07-foot .ui-btn { position: absolute; left: 16px; right: 16px; top: 9px; }
+
+        /* Taps : placés dans l'écran, en pixels d'écran (2 x les pixels du site) */
+        #s07-tap1 { left: 390px; top: 1108px; }
+        #s07-tap2 { left: 278px; top: 1262px; }
+        #s07-tap3 { left: 638px; top: 1382px; }
+        #s07-tap4 { left: 207px; top: 1488px; }
+        #s07-tap5 { left: 220px; top: 78px; }
+
+        /* Type de film */
+        #s07-title { position: absolute; left: 64px; right: 64px; top: 226px; text-align: center; color: #FFFFFF; font-size: 124px; }
+        #s07-t2 { color: var(--yellow); }
+        #s07-aprot { position: absolute; left: -112px; top: 800px; width: 460px; height: 50px; transform: rotate(-90deg); transform-origin: 230px 25px; }
+        #s07-aprot .mask > span { font-size: 36px; line-height: 50px; letter-spacing: .14em; color: rgba(255,255,255,.82); text-align: center; }
+      </style>
+
+      <div id="root" data-composition-id="s07" data-width="1080" data-height="1920">
+        <div id="s07-halo" data-layout-allow-overflow data-layout-ignore></div>
+
+        <div id="s07-words" aria-hidden="true" data-layout-ignore>
+          <div class="s07-row fill" id="s07-r1" data-layout-allow-overflow>Studio Studio Studio</div>
+          <div class="s07-row line" id="s07-r2" data-layout-allow-overflow>Studio Studio Studio</div>
+          <div class="s07-row fill" id="s07-r3" data-layout-allow-overflow>Studio Studio Studio</div>
+        </div>
+
+        <div class="s07-decos" aria-hidden="true" data-layout-ignore>
+          <div class="deco tri" id="s07-d1" style="left: 96px; top: 520px"></div>
+          <div class="deco ring s07-w" id="s07-d2" style="left: 930px; top: 590px"></div>
+          <div class="deco plus" id="s07-d3" style="left: 940px; top: 1150px"></div>
+          <div class="deco dot s07-w" id="s07-d4" style="left: 120px; top: 1200px"></div>
+          <div class="deco bar" id="s07-d5" style="left: 900px; top: 1560px"></div>
+          <div class="deco ring s07-m" id="s07-d6" style="left: 130px; top: 1500px"></div>
+        </div>
+
+        <div id="s07-cam" data-layout-allow-overflow>
+          <div class="scr" id="s07-phone">
+            <div class="ui" id="s07-ui" data-layout-allow-overlap>
+              <!-- Aperçu collé en haut -->
+              <div class="s07-a" id="s07-canvas">
+                <div class="s07-th" id="s07-thf"><div class="on" id="s07-thf-on"></div><div class="mini" id="s07-mf"></div><b>Face</b></div>
+                <div class="s07-th" id="s07-thd" data-layout-allow-occlusion><div class="on" id="s07-thd-on"></div><div class="mini" id="s07-md"></div><b data-layout-allow-occlusion>Dos</b></div>
+                <div class="s07-a" id="s07-clear">Tout effacer</div>
+                <div class="s07-a" id="s07-stage">
+                  <div class="s07-tag" id="s07-tag-face">Vue de face</div>
+                  <div class="s07-tag" id="s07-tag-dos">Vue de dos</div>
+                  <div id="s07-flip">
+                    <div id="s07-face"></div>
+                    <div id="s07-back"></div>
+                  </div>
+                </div>
+                <div class="s07-a" id="s07-note"><b>Aperçu indicatif.</b> Les couleurs et le placement définitifs sont validés avec vous sur le BAT officiel, avant toute production.</div>
+              </div>
+
+              <div class="s07-a" id="s07-tabs"><div class="on">Produit</div><div>Logos</div><div>Textes</div></div>
+
+              <div class="s07-lbl" style="top: 502px">Design du maillot</div>
+              <div class="s07-a" id="s07-tselbg"></div>
+              <div class="s07-tile" id="s07-tile1" style="left: 16px"><div class="mini" id="s07-m1"></div><b>Uni</b></div>
+              <div class="s07-tile" id="s07-tile2" style="left: 89px"><div class="mini" id="s07-m2"></div><b>Éclats</b></div>
+              <div class="s07-tile" id="s07-tile3" style="left: 162px" data-layout-allow-occlusion><div class="mini" id="s07-m3"></div><b data-layout-allow-occlusion>Rayures</b></div>
+              <div class="s07-tile" id="s07-tile4" style="left: 235px"><div class="mini" id="s07-m4"></div><b>Dégradé</b></div>
+              <div class="s07-tile" id="s07-tile5" style="left: 308px"><div class="mini" id="s07-m5"></div><b>Chevrons</b></div>
+              <div class="s07-a" id="s07-tselbd"></div>
+
+              <div class="s07-a" id="s07-row1">
+                <div class="s07-lbl" id="s07-lb1a" style="top: 0">Couleur du produit</div>
+                <div class="s07-lbl" id="s07-lb1b" style="top: 0">Couleur de fond</div>
+                <div id="s07-sws1"></div>
+                <div class="s07-ring" id="s07-ring1" style="left: 16px; top: 18px"></div>
+              </div>
+              <div class="s07-a" id="s07-row2">
+                <div class="s07-lbl" style="top: 0">Couleur du motif</div>
+                <div id="s07-sws2"></div>
+                <div class="s07-ring" id="s07-ring2" style="left: 88px; top: 18px"></div>
+              </div>
+
+              <div class="s07-a" id="s07-btns">
+                <div class="ui-btn o" id="s07-blogo" data-layout-allow-occlusion>+ Logo</div>
+                <div class="ui-btn o" id="s07-btxt">+ Texte</div>
+              </div>
+
+              <div class="s07-a" id="s07-foot"><div class="ui-btn m">Demander un devis avec ce visuel</div></div>
+            </div>
+
+            <div class="tap" id="s07-tap1"><div class="ring" id="s07-tap1-ring"></div><div class="dot" id="s07-tap1-dot"></div></div>
+            <div class="tap" id="s07-tap2"><div class="ring" id="s07-tap2-ring"></div><div class="dot" id="s07-tap2-dot"></div></div>
+            <div class="tap" id="s07-tap3"><div class="ring" id="s07-tap3-ring"></div><div class="dot" id="s07-tap3-dot"></div></div>
+            <div class="tap" id="s07-tap4"><div class="ring" id="s07-tap4-ring"></div><div class="dot" id="s07-tap4-dot"></div></div>
+            <div class="tap" id="s07-tap5"><div class="ring" id="s07-tap5-ring"></div><div class="dot" id="s07-tap5-dot"></div></div>
+          </div>
+        </div>
+
+        <div id="s07-title" class="big">
+          <div class="mask"><span id="s07-t1" data-layout-allow-overflow data-layout-allow-occlusion>Votre logo.</span></div>
+          <div class="mask"><span id="s07-t2" data-layout-allow-overflow data-layout-allow-occlusion>Vos couleurs.</span></div>
+        </div>
+        <div id="s07-aprot"><div class="mask"><span class="kick" id="s07-ap" data-layout-allow-overflow data-layout-allow-occlusion>Aperçu indicatif</span></div></div>
+      </div>
+
+      <script>
+        (function () {
+          // ---------- Dessins du studio (gabarit tshirt du site, 400 x 440) ----------
+          const S_TEE = "M165 26C180 44 220 44 235 26L292 44 372 104 340 164 302 142 304 420Q200 432 96 420L98 142 60 164 28 104 108 44Z";
+          const S_TEE_B = "M165 26C185 34 215 34 235 26L292 44 372 104 340 164 302 142 304 420Q200 432 96 420L98 142 60 164 28 104 108 44Z";
+          const NECK_IN = "M165 26C185 34 215 34 235 26C220 44 180 44 165 26Z";
+          const COLLAR_F = "M165 26C180 50 220 50 235 26";
+          const COLLAR_B = "M165 26C185 38 215 38 235 26";
+          const CUFFS = "M372 104 340 164 329 156 361 96ZM28 104 60 164 71 156 39 96Z";
+          const STRIPE_X = [36, 118, 200, 282];
+          const WHITE = "#FFFFFF", NAVY = "#0E1B4D", RED = "#D62839", GOLD = "#E8B021";
+          const SHADE = "#3A041E";
+
+          function grad(id) {
+            return '<linearGradient id="' + id + '" x1="0" y1="0" x2="1" y2="0">' +
+              '<stop offset="0" stop-color="' + SHADE + '" stop-opacity=".2"/><stop offset=".28" stop-color="' + SHADE + '" stop-opacity="0"/>' +
+              '<stop offset=".72" stop-color="' + SHADE + '" stop-opacity="0"/><stop offset="1" stop-color="' + SHADE + '" stop-opacity=".2"/></linearGradient>';
+          }
+          function stripes(p, k, c, dos) {
+            const xs = dos ? STRIPE_X.map((x) => 362 - x) : STRIPE_X;
+            return '<g id="' + p + "-" + k + '">' + xs.map((x, i) =>
+              '<rect id="' + p + "-" + k + (i + 1) + '" x="' + x + '" y="0" width="38" height="440" fill="' + c + '"/>').join("") + "</g>";
+          }
+          function trim(p, k, c, dos) {
+            const col = dos
+              ? '<path d="' + COLLAR_B + '" fill="none" stroke="' + c + '" stroke-width="9"/><rect x="191" y="40" width="18" height="10" rx="1.5" fill="' + c + '" opacity=".85"/>' +
+                '<path d="M108 44C130 60 150 66 165 70M292 44C270 60 250 66 235 70" fill="none" stroke="' + c + '" stroke-width="1.5" stroke-opacity=".5"/>'
+              : '<path d="' + COLLAR_F + '" fill="none" stroke="' + c + '" stroke-width="10"/>';
+            return '<g id="' + p + "-" + k + '">' + col + '<path d="' + CUFFS + '" fill="' + c + '"/></g>';
+          }
+          // Maillot en couches : blanc uni, rayures rouges, fond marine, rayures or (une couche par état)
+          function tee(p, dos, finalOnly, extraIn, extraOver) {
+            const sil = dos ? S_TEE_B : S_TEE;
+            let s = '<svg viewBox="0 0 400 440" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><clipPath id="' + p + '-s"><path d="' + sil + '"/></clipPath>' + grad(p + "-g") + "</defs>";
+            if (!dos) {
+              if (!finalOnly) s += '<path id="' + p + '-iw" d="' + NECK_IN + '" fill="#949494"/>';
+              s += '<path id="' + p + '-in" d="' + NECK_IN + '" fill="#39446D"/>';
+            }
+            s += '<g clip-path="url(#' + p + '-s)">';
+            if (!finalOnly) s += '<rect id="' + p + '-bw" width="400" height="440" fill="' + WHITE + '"/>';
+            s += '<rect id="' + p + '-bn" width="400" height="440" fill="' + NAVY + '"/>';
+            if (!finalOnly) s += stripes(p, "sr", RED, dos);
+            s += stripes(p, "sg", GOLD, dos);
+            s += (extraIn || "") + "</g>";
+            s += '<g clip-path="url(#' + p + '-s)">';
+            if (!finalOnly) s += trim(p, "tg", "#B8B8B8", dos) + trim(p, "tr", RED, dos);
+            s += trim(p, "to", GOLD, dos);
+            s += '<rect width="400" height="440" fill="url(#' + p + '-g)"/></g>';
+            if (!finalOnly) s += '<path id="' + p + '-ow" d="' + sil + '" fill="none" stroke="#A6A6A6" stroke-width="1.5"/>';
+            s += '<path id="' + p + '-on" d="' + sil + '" fill="none" stroke="#091232" stroke-width="1.5"/>';
+            s += (extraOver || "") + "</svg>";
+            return s;
+          }
+          // Écusson générique (logo du club) et cadre de sélection du studio, sur le cœur
+          const LOGO = '<g transform="translate(260 114) scale(.92)"><g id="s07-logo">' +
+            '<path d="M0 -36 L29 -26 L27 4 C25 23 12 33 0 40 C-12 33 -25 23 -27 4 L-29 -26 Z" fill="#FFFFFF"/>' +
+            '<path d="M0 -29 L22 -21 L20.5 3 C19 18 9 26 0 32 C-9 26 -19 18 -20.5 3 L-22 -21 Z" fill="' + GOLD + '"/>' +
+            '<path d="M0 -15 L4.4 -6 L14.3 -4.6 L7.2 2.4 L8.8 12.2 L0 7.5 L-8.8 12.2 L-7.2 2.4 L-14.3 -4.6 L-4.4 -6 Z" fill="' + NAVY + '"/></g>' +
+            '<g id="s07-sel"><rect x="-34" y="-41" width="68" height="85" fill="none" stroke="#B3125F" stroke-width="2.6"/>' +
+            '<path d="M0 -41V-58" stroke="#B3125F" stroke-width="2.4"/><circle cx="0" cy="-64" r="6.5" fill="#FFFFFF" stroke="#B3125F" stroke-width="2.4"/>' +
+            [[-34, -41], [34, -41], [-34, 44], [34, 44]].map(([x, y]) =>
+              '<rect x="' + (x - 6) + '" y="' + (y - 6) + '" width="12" height="12" rx="1.5" fill="#FFFFFF" stroke="#B3125F" stroke-width="2.4"/>').join("") +
+            "</g></g>";
+          const BACK_TXT =
+            '<text x="200" y="94" text-anchor="middle" fill="#FFFFFF" stroke="' + NAVY + '" stroke-width="5" paint-order="stroke" style="font: 900 36px var(--head); font-stretch: 80%; letter-spacing: 1px">VOTRE NOM</text>' +
+            '<text x="200" y="266" text-anchor="middle" fill="#FFFFFF" stroke="' + NAVY + '" stroke-width="7" paint-order="stroke" style="font: 900 168px var(--head); font-stretch: 80%">10</text>';
+
+          document.getElementById("s07-face").innerHTML = tee("s07-jf", false, false, "", LOGO);
+          document.getElementById("s07-back").innerHTML = tee("s07-jb", true, true, BACK_TXT, "");
+          document.getElementById("s07-mf").innerHTML = tee("s07-mf", false, false, "", "");
+          document.getElementById("s07-md").innerHTML = tee("s07-md", true, false, "", "");
+
+          // Vignettes des designs, dans leurs couleurs d'origine
+          const MOTIFS = [
+            ["s07-m1", WHITE, "#B8B8B8", "#A6A6A6", ""],
+            ["s07-m2", WHITE, "#B3125F", "#A6A6A6", '<path d="M-20 262 420 72v84L-20 346z" fill="#B3125F"/><path d="M-20 368 420 178v18L-20 386z" fill="#FFE45C"/>'],
+            ["s07-m3", WHITE, RED, "#A6A6A6", '<path d="M36 0h38v440H36zM118 0h38v440h-38zM200 0h38v440h-38zM282 0h38v440h-38z" fill="' + RED + '"/>'],
+            ["s07-m4", "#19C3A6", NAVY, "#107F6C", '<rect width="400" height="440" fill="url(#s07-m4-m)"/><path d="M-20 300h440M-20 318h440M-20 336h440" stroke="#FFFFFF" stroke-width="3" stroke-opacity=".45" fill="none"/>'],
+            ["s07-m5", "#15151C", GOLD, "#0E0E12", '<path d="M-30 268 200 372 430 268" stroke="' + GOLD + '" stroke-width="34" fill="none"/><path d="M-30 320 200 424 430 320" stroke="' + GOLD + '" stroke-width="10" fill="none"/>'],
+          ];
+          MOTIFS.forEach(([id, c1, tr, out, motif]) => {
+            const g = id === "s07-m4" ? '<linearGradient id="s07-m4-m" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="440"><stop offset="0" stop-color="#19C3A6"/><stop offset="1" stop-color="' + NAVY + '"/></linearGradient>' : "";
+            document.getElementById(id).innerHTML = '<svg viewBox="0 0 400 440" aria-hidden="true"><defs><clipPath id="' + id + '-c"><path d="' + S_TEE + '"/></clipPath>' + g + '</defs>' +
+              '<g clip-path="url(#' + id + '-c)"><rect width="400" height="440" fill="' + c1 + '"/>' + motif +
+              '<path d="' + COLLAR_F + '" fill="none" stroke="' + tr + '" stroke-width="14"/></g><path d="' + S_TEE + '" fill="none" stroke="' + out + '" stroke-width="6"/></svg>';
+          });
+
+          // Pastilles de couleur du site (dix teintes)
+          const SW = ["#FFFFFF", "#15151C", "#D62839", "#0E1B4D", "#1F4FD1", "#138A4B", "#FFE45C", "#B3125F", "#E8B021", "#19C3A6"];
+          ["s07-sws1", "s07-sws2"].forEach((id, r) => {
+            document.getElementById(id).innerHTML = SW.map((c, i) =>
+              '<div class="s07-sw" id="s07-sw' + (r + 1) + "-" + (i + 1) + '" style="left: ' + (16 + 36 * i) + 'px; top: 18px; background: ' + c + '"></div>').join("");
+          });
+
+          // ---------- Timeline ----------
+          const tl = gsap.timeline({ paused: true });
+          const B = 60 / 105;        // un temps
+          const E = B / 2;           // une croche
+          const END = 4.572;
+          const T1 = 2 * E;          // 30,286 : rayures
+          const T2 = 4 * E;          // 30,857 : fond bleu marine
+          const T3 = 5 * E;          // 31,143 : motif or (marine et or)
+          const T4 = 8 * E;          // 32,0   : + Logo
+          const T5 = 11 * E;         // 32,857 : Dos
+          const PUSH = 7 * B;        // 33,714 : le titre sort, poussée finale vers le dos du maillot (sous la bande de l'hôte)
+
+          // Fond : halo, mots géants qui défilent à vitesse constante
+          tl.fromTo("#s07-halo", { scale: 0.62 }, { scale: 1, duration: 0.5, ease: "power3.out" }, 0);
+          tl.fromTo("#s07-halo", { opacity: 0 }, { opacity: 0.82, duration: 0.3, ease: "power2.out" }, 0);
+          tl.fromTo("#s07-r1", { x: -140 }, { x: -540, duration: END, ease: "none" }, 0);
+          tl.fromTo("#s07-r2", { x: -720 }, { x: -320, duration: END, ease: "none" }, 0);
+          tl.fromTo("#s07-r3", { x: -300 }, { x: -700, duration: END, ease: "none" }, 0);
+
+          // Formes : éclat depuis le centre au départ de la section, puis dérive lente
+          const C = [540, 900];
+          [
+            ["#s07-d1", 96, 520, -50, 140, -22, -24, 220],
+            ["#s07-d2", 930, 590, 0, 0, 26, -20, 0],
+            ["#s07-d3", 940, 1150, 30, 135, 20, 26, 215],
+            ["#s07-d4", 120, 1200, 0, 0, -20, 18, 0],
+            ["#s07-d5", 900, 1560, 40, -20, 24, 16, -48],
+            ["#s07-d6", 130, 1500, 0, 0, -18, 22, 0],
+          ].forEach(([id, ex, ey, r0, r1, dx, dy, r2], i) => {
+            const t0 = 0.04 + i * 0.035;
+            tl.fromTo(id, { x: C[0] - ex, y: C[1] - ey, scale: 0.25, rotation: r0 },
+              { x: 0, y: 0, scale: 1, rotation: r1, duration: 0.7, ease: "power3.out" }, t0);
+            tl.fromTo(id, { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power2.out" }, t0);
+            tl.to(id, { x: dx, y: dy, rotation: r2, duration: END - t0 - 0.7, ease: "none" }, t0 + 0.7);
+          });
+
+          // Caméra : on ressort du bouton tapé (raccord), petits coups sur les taps de couleur,
+          // gros punch-in sur « + Logo » (bord haut de l'écran épinglé sous le titre), pivot au « Dos », poussée finale
+          const PIN = 480 - 789;     // décalage y qui garde le haut de l'écran (y 480) fixe pendant un zoom
+          const pin = (s) => ({ scale: s, y: (1 - s) * PIN });
+          tl.fromTo("#s07-cam", { scale: 2.8, y: 0, rotation: 0, rotationY: 0, transformPerspective: 1800 },
+            { scale: 1, y: 0, rotation: 0, rotationY: 0, transformPerspective: 1800, duration: 0.6, ease: "power4.out" }, 0);
+          [T1, T3].forEach((t) => {
+            tl.to("#s07-cam", { ...pin(1.05), duration: 0.07, ease: "power4.out" }, t);
+            tl.to("#s07-cam", { ...pin(1), duration: 0.4, ease: "power2.out" }, t + 0.07);
+          });
+          tl.to("#s07-cam", { ...pin(1.16), rotation: -1.2, duration: 0.1, ease: "power4.out" }, T4);
+          tl.to("#s07-cam", { ...pin(1.18), rotation: -1.5, duration: 0.35, ease: "none" }, T4 + 0.1);
+          tl.to("#s07-cam", { ...pin(1), rotation: 0, duration: 0.3, ease: "power3.inOut" }, T4 + 0.45);
+          tl.to("#s07-cam", { scale: 2.1, rotation: -4, duration: END - PUSH, ease: "power2.in" }, PUSH);
+
+          // Écran presque de face : il se redresse puis dérive lentement
+          tl.fromTo("#s07-phone",
+            { scale: 0.7, rotationX: 24, rotationY: -12, rotationZ: 4, y: 40, transformPerspective: 2000 },
+            { scale: 0.7, rotationX: 6, rotationY: -5, rotationZ: 0, y: 0, duration: 0.7, ease: "power3.out" }, 0);
+          tl.to("#s07-phone", { rotationX: 2, rotationY: 5, rotationZ: -1, y: -12, duration: END - 0.7, ease: "none" }, 0.7);
+
+          // Titre au-dessus de l'écran, révélé sur la croche
+          tl.fromTo("#s07-t1", { yPercent: 105 }, { yPercent: 0, duration: 0.45, ease: "power3.out" }, E);
+          tl.fromTo("#s07-t2", { yPercent: 105 }, { yPercent: 0, duration: 0.45, ease: "power3.out" }, E + 0.07);
+          tl.to("#s07-t1", { yPercent: -105, duration: 0.3, ease: "power2.in" }, PUSH);
+          tl.to("#s07-t2", { yPercent: -105, duration: 0.3, ease: "power2.in" }, PUSH + 0.05);
+          tl.fromTo("#s07-ap", { yPercent: 105 }, { yPercent: 0, duration: 0.4, ease: "power3.out" }, 6 * E);
+          tl.to("#s07-ap", { yPercent: -105, duration: 0.25, ease: "power2.in" }, PUSH);
+          // Hors de leur fenêtre, les lignes masquées sont aussi éteintes (rien ne reste caché sous le masque)
+          tl.set(["#s07-t1", "#s07-t2", "#s07-ap"], { opacity: 0 }, 0);
+          tl.set("#s07-t1", { opacity: 1 }, E);
+          tl.set("#s07-t2", { opacity: 1 }, E + 0.07);
+          tl.set("#s07-ap", { opacity: 1 }, 6 * E);
+          tl.set("#s07-ap", { opacity: 0 }, PUSH + 0.25);
+          tl.set("#s07-t1", { opacity: 0 }, PUSH + 0.3);
+          tl.set("#s07-t2", { opacity: 0 }, PUSH + 0.35);
+
+          // Outils
+          // hold : tenue du point après l'appui (courte quand un autre tap suit de près, pour ne jamais montrer deux doigts)
+          function tap(n, t, hold) {
+            const d = "#s07-tap" + n + "-dot", r = "#s07-tap" + n + "-ring";
+            const h = hold === undefined ? 0.22 : hold;
+            tl.fromTo(d, { scale: 0.6 }, { scale: 1.5, duration: 0.11, ease: "power3.out" }, t - 0.12);
+            tl.to(d, { scale: 1.25, duration: 0.06, ease: "power2.out" }, t);
+            tl.fromTo(d, { opacity: 0 }, { opacity: 1, duration: 0.06, ease: "power2.out" }, t - 0.12);
+            tl.to(d, { opacity: 0, duration: h < 0.1 ? 0.1 : 0.16, ease: "power2.in" }, t + h);
+            tl.fromTo(r, { scale: 0.8 }, { scale: 3.4, duration: 0.5, ease: "power2.out" }, t);
+            tl.fromTo(r, { opacity: 0 }, { opacity: 0.95, duration: 0.03, ease: "none" }, t - 0.03);
+            tl.to(r, { opacity: 0, duration: 0.5, ease: "power2.out" }, t);
+            tl.to("#s07-halo", { opacity: 1, duration: 0.06, ease: "power2.out" }, t);
+            tl.to("#s07-halo", { opacity: 0.82, duration: 0.2, ease: "power2.out" }, t + 0.06);
+          }
+          function press(sel, t, s) {
+            tl.to(sel, { scale: s || 0.95, duration: 0.07, ease: "power2.out" }, t);
+            tl.to(sel, { scale: 1, duration: 0.22, ease: "power2.out" }, t + 0.07);
+          }
+          function fadeIn(sel, t, d) { tl.fromTo(sel, { opacity: 0 }, { opacity: 1, duration: d || 0.14, ease: "power2.out" }, t); }
+          function fadeOut(sel, t, d) { tl.to(sel, { opacity: 0, duration: d || 0.14, ease: "power2.out" }, t); }
+          const minis = (k) => ["#s07-mf-" + k, "#s07-md-" + k];
+
+          // États initiaux des couches (maillot blanc uni)
+          ["sr", "sg", "tr", "to", "on"].forEach((k) => tl.set(["#s07-jf-" + k].concat(minis(k)), { opacity: 0 }, 0));
+          tl.set(["#s07-jf-in", "#s07-mf-in"], { opacity: 0 }, 0);
+          tl.set(minis("bn"), { opacity: 0 }, 0);
+          tl.set(["#s07-logo", "#s07-sel"], { opacity: 0 }, 0);
+
+          // ---------- 30,286 : tap sur « Rayures », rayures rouges ----------
+          tap(1, T1);
+          press("#s07-tile3", T1);
+          tl.to(["#s07-tselbg", "#s07-tselbd"], { x: 146, duration: 0.22, ease: "power3.out" }, T1 + 0.02);
+          tl.set("#s07-jf-sr", { opacity: 1 }, T1 + 0.03);
+          [1, 2, 3, 4].forEach((i) => tl.fromTo("#s07-jf-sr" + i, { scaleY: 0, transformOrigin: "50% 0%" },
+            { scaleY: 1, transformOrigin: "50% 0%", duration: 0.32, ease: "power3.out" }, T1 + 0.04 + (i - 1) * 0.035));
+          fadeIn("#s07-jf-tr", T1 + 0.06); fadeOut("#s07-jf-tg", T1 + 0.06);
+          fadeIn(minis("sr").concat(minis("tr")), T1 + 0.06); fadeOut(minis("tg"), T1 + 0.06);
+          fadeOut("#s07-lb1a", T1 + 0.04, 0.1); fadeIn("#s07-lb1b", T1 + 0.08, 0.12);
+          // La ligne « Couleur du motif » apparaît, les boutons descendent
+          tl.fromTo("#s07-row2", { y: 16 }, { y: 0, duration: 0.35, ease: "power3.out" }, 3 * E);
+          fadeIn("#s07-row2", 3 * E, 0.2);
+          tl.fromTo("#s07-btns", { y: -61 }, { y: 0, duration: 0.35, ease: "power3.out" }, 3 * E);
+
+          // ---------- 30,857 : fond bleu marine ----------
+          tap(2, T2, 0.05);
+          press("#s07-sw1-4", T2, 0.86);
+          tl.to("#s07-ring1", { x: 108, duration: 0.25, ease: "power3.out" }, T2 + 0.02);
+          tl.fromTo("#s07-jf-bn", { scaleY: 0, transformOrigin: "50% 100%" },
+            { scaleY: 1, transformOrigin: "50% 100%", duration: 0.34, ease: "power3.out" }, T2 + 0.04);
+          fadeIn(["#s07-jf-in", "#s07-jf-on"], T2 + 0.12); fadeOut(["#s07-jf-iw", "#s07-jf-ow"], T2 + 0.12);
+          fadeIn(minis("bn").concat(minis("on")), T2 + 0.08); fadeOut(minis("ow"), T2 + 0.08);
+          fadeIn("#s07-mf-in", T2 + 0.08); fadeOut("#s07-mf-iw", T2 + 0.08);
+
+          // ---------- 31,143 : motif or ----------
+          tap(3, T3);
+          press("#s07-sw2-9", T3, 0.86);
+          tl.to("#s07-ring2", { x: 216, duration: 0.25, ease: "power3.out" }, T3 + 0.02);
+          tl.set("#s07-jf-sg", { opacity: 1 }, T3 + 0.03);
+          [1, 2, 3, 4].forEach((i) => tl.fromTo("#s07-jf-sg" + i, { scaleY: 0, transformOrigin: "50% 0%" },
+            { scaleY: 1, transformOrigin: "50% 0%", duration: 0.32, ease: "power3.out" }, T3 + 0.04 + (i - 1) * 0.035));
+          fadeIn("#s07-jf-to", T3 + 0.06); fadeOut("#s07-jf-tr", T3 + 0.06);
+          fadeIn(minis("sg").concat(minis("to")), T3 + 0.06); fadeOut(minis("tr"), T3 + 0.06);
+
+          // ---------- 32,0 : « + Logo », l'écusson se pose sur le cœur ----------
+          tap(4, T4);
+          press("#s07-blogo", T4);
+          tl.fromTo("#s07-logo", { scale: 0, rotation: -12, transformOrigin: "50% 50%" },
+            { scale: 1, rotation: 0, transformOrigin: "50% 50%", duration: 0.42, ease: "back.out(1.6)" }, T4 + 0.06);
+          fadeIn("#s07-logo", T4 + 0.06, 0.08);
+          fadeIn("#s07-sel", T4 + 0.26, 0.12);
+
+          // ---------- 32,857 : « Dos », le maillot pivote ----------
+          tap(5, T5);
+          press("#s07-thd", T5);
+          fadeOut("#s07-thf-on", T5 + 0.03, 0.1); fadeIn("#s07-thd-on", T5 + 0.03, 0.1);
+          fadeOut("#s07-sel", T5, 0.08);
+          const F = T5 + 0.04;
+          tl.to("#s07-flip", { keyframes: [
+            { rotationY: 88, transformPerspective: 900, duration: 0.15, ease: "power2.in" },
+            { rotationY: -88, transformPerspective: 900, duration: 0.001, ease: "none" },
+            { rotationY: 0, transformPerspective: 900, duration: 0.36, ease: "power3.out" },
+          ] }, F);
+          // L'écran entier pivote un peu dans le même sens que le maillot, puis revient (élan en 3D)
+          tl.to("#s07-cam", { rotationY: 8, duration: 0.15, ease: "power2.in" }, F);
+          tl.to("#s07-cam", { rotationY: -2.5, duration: 0.3, ease: "power3.out" }, F + 0.15);
+          tl.to("#s07-cam", { rotationY: 0, duration: 0.25, ease: "power2.inOut" }, F + 0.45);
+          tl.set("#s07-face", { opacity: 0 }, F + 0.15);
+          tl.set("#s07-back", { opacity: 1 }, F + 0.15);
+          tl.set("#s07-tag-face", { opacity: 0 }, F + 0.15);
+          tl.set("#s07-tag-dos", { opacity: 1 }, F + 0.15);
+
+          window.__timelines["s07"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

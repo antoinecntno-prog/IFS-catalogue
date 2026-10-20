@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="fr">
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <link rel="stylesheet" href="assets/kit.css" />
+      <style>
+        #root { position: absolute; inset: 0; overflow: hidden; background: #B3125F; }
+        #s04-bg { position: absolute; inset: 0; background: #B3125F; }
+
+        /* Mots géants : trois lignes par sport, pleines et filaires en alternance */
+        .s04-words { position: absolute; inset: 0; }
+        .s04-row { position: absolute; left: 0; white-space: nowrap; font: 900 320px/.86 var(--head); font-stretch: 78%;
+          text-transform: uppercase; letter-spacing: -.01em; }
+        .s04-row.fill { color: rgba(0,0,0,.15); }
+        .s04-row.line { color: transparent; -webkit-text-stroke: 3px rgba(255,255,255,.26); }
+        .s04-dark .s04-row.fill { color: rgba(255,255,255,.06); }
+        .s04-dark .s04-row.line { -webkit-text-stroke: 3px rgba(255,255,255,.16); }
+        .s04-row.r1 { top: 20px; }
+        .s04-row.r2 { top: 812px; }
+        .s04-row.r3 { top: 1604px; }
+        #s04-w2, #s04-w3, #s04-w4 { opacity: 0; }
+
+        /* Formes */
+        .s04-decos { position: absolute; inset: 0; }
+        .s04-decos .deco { opacity: 0; }
+        .deco.s04-w.tri { border-bottom-color: #FFFFFF; }
+        .deco.s04-w.ring { border-color: #FFFFFF; }
+        .deco.s04-w.dot, .deco.s04-w.bar { background: #FFFFFF; }
+        .deco.s04-w.plus::before, .deco.s04-w.plus::after { background: #FFFFFF; }
+        .deco.s04-m.tri { border-bottom-color: var(--magenta); }
+        .deco.s04-m.dot { background: var(--magenta); }
+
+        /* Caméra, unités (écran + étiquette de prix) */
+        #s04-cam { position: absolute; inset: 0; transform-origin: 540px 672px; }
+        .s04-unit { position: absolute; inset: 0; }
+        .s04-drift { position: absolute; inset: 0; transform-origin: 540px 900px; }
+        .s04-unit .scr { left: 150px; top: 56px; }
+        .s04-unit .ui { height: 844px; overflow: hidden; }
+        .s04-top { position: relative; z-index: 2; background: #FFFFFF; }
+        .s04-body { position: relative; z-index: 1; margin-top: -36px; }
+        .s04-th { background: var(--surface) center / cover no-repeat; }
+        .s04-btnw { margin: 14px 16px 0; }
+        /* Pastilles de la fiche du site, sous le prix */
+        .s04-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 16px 0; }
+        .s04-chip { display: block; padding: 6px 10px; border-radius: 3px; background: var(--surface); font: 600 13px/1.2 var(--body); color: var(--ink); }
+        .s04-chip.spark { background: var(--yellow); }
+
+        .s04-tag { position: absolute; top: 816px; padding: 22px 30px 24px; background: var(--yellow); color: var(--ink);
+          border-radius: 6px; box-shadow: 0 22px 50px rgba(26,19,32,.35); opacity: 0; }
+        .s04-tag.r { right: 64px; }
+        .s04-tag.l { left: 64px; }
+        .s04-tag-q { font: 700 36px/1 var(--body); letter-spacing: .08em; text-transform: uppercase; }
+        .s04-tag-p { margin-top: 10px; font: 900 92px/.9 var(--head); font-stretch: 80%; white-space: nowrap; }
+      </style>
+
+      <div id="root" data-composition-id="s04" data-width="1080" data-height="1920">
+        <div id="s04-bg"></div>
+
+        <div id="s04-wordsets" aria-hidden="true" data-layout-ignore>
+          <div class="s04-words" id="s04-w1">
+            <div class="s04-row fill r1" id="s04-w1-r1" data-layout-allow-overflow>Football Football Football</div>
+            <div class="s04-row line r2" id="s04-w1-r2" data-layout-allow-overflow>Football Football Football</div>
+            <div class="s04-row fill r3" id="s04-w1-r3" data-layout-allow-overflow>Football Football Football</div>
+          </div>
+          <div class="s04-words" id="s04-w2">
+            <div class="s04-row fill r1" id="s04-w2-r1" data-layout-allow-overflow>Cyclisme Cyclisme Cyclisme</div>
+            <div class="s04-row line r2" id="s04-w2-r2" data-layout-allow-overflow>Cyclisme Cyclisme Cyclisme</div>
+            <div class="s04-row fill r3" id="s04-w2-r3" data-layout-allow-overflow>Cyclisme Cyclisme Cyclisme</div>
+          </div>
+          <div class="s04-words" id="s04-w3">
+            <div class="s04-row fill r1" id="s04-w3-r1" data-layout-allow-overflow>Running Running Running</div>
+            <div class="s04-row line r2" id="s04-w3-r2" data-layout-allow-overflow>Running Running Running</div>
+            <div class="s04-row fill r3" id="s04-w3-r3" data-layout-allow-overflow>Running Running Running</div>
+          </div>
+          <div class="s04-words s04-dark" id="s04-w4">
+            <div class="s04-row fill r1" id="s04-w4-r1" data-layout-allow-overflow>Supporters Supporters Supporters</div>
+            <div class="s04-row line r2" id="s04-w4-r2" data-layout-allow-overflow>Supporters Supporters Supporters</div>
+            <div class="s04-row fill r3" id="s04-w4-r3" data-layout-allow-overflow>Supporters Supporters Supporters</div>
+          </div>
+        </div>
+
+        <div class="s04-decos" id="s04-decos" aria-hidden="true" data-layout-ignore>
+          <div class="deco tri" id="s04-d1-1" style="left: 110px; top: 360px"></div><div class="deco ring s04-w" id="s04-d1-2" style="left: 930px; top: 330px"></div><div class="deco plus" id="s04-d1-3" style="left: 120px; top: 1250px"></div><div class="deco bar s04-w" id="s04-d1-4" style="left: 920px; top: 1640px"></div><div class="deco dot" id="s04-d1-5" style="left: 160px; top: 1700px"></div>
+          <div class="deco ring" id="s04-d2-1" style="left: 140px; top: 330px"></div><div class="deco tri s04-w" id="s04-d2-2" style="left: 920px; top: 560px"></div><div class="deco dot" id="s04-d2-3" style="left: 950px; top: 1180px"></div><div class="deco plus s04-w" id="s04-d2-4" style="left: 130px; top: 1580px"></div><div class="deco bar" id="s04-d2-5" style="left: 880px; top: 1700px"></div>
+          <div class="deco plus" id="s04-d3-1" style="left: 930px; top: 300px"></div><div class="deco dot s04-w" id="s04-d3-2" style="left: 150px; top: 250px"></div><div class="deco tri" id="s04-d3-3" style="left: 120px; top: 700px"></div><div class="deco ring s04-w" id="s04-d3-4" style="left: 150px; top: 1300px"></div><div class="deco bar" id="s04-d3-5" style="left: 900px; top: 1620px"></div>
+          <div class="deco ring" id="s04-d4-1" style="left: 930px; top: 420px"></div><div class="deco tri s04-m" id="s04-d4-2" style="left: 130px; top: 560px"></div><div class="deco plus" id="s04-d4-3" style="left: 940px; top: 1250px"></div><div class="deco dot s04-m" id="s04-d4-4" style="left: 140px; top: 1300px"></div><div class="deco bar" id="s04-d4-5" style="left: 880px; top: 1680px"></div>
+        </div>
+
+        <div id="s04-cam" data-layout-allow-overflow>
+          <!-- Football -->
+          <div class="s04-unit" id="s04-u1" data-layout-allow-overflow>
+            <div class="s04-drift" id="s04-dr1">
+              <div class="scr" id="s04-scr1">
+                <div class="ui" id="s04-ui1" data-layout-allow-overlap>
+                  <div class="ui-sheet-top s04-top"><span>Maillots &amp; shorts</span><div class="ui-x">×</div></div>
+                  <div class="s04-body">
+                    <div class="ui-photo"><img src="assets/img/set-football.webp" alt="Set football, maillot + short" /></div>
+                    <div class="ui-thumbs" id="s04-th1"><div class="on s04-th" style="background-image: url(assets/img/set-football.webp)"></div><div class="s04-th" style="background-image: url(assets/img/set-football-dos.webp)"></div></div>
+                    <div class="s04-btnw"><div class="ui-btn o" id="s04-bt1">Personnaliser ce produit</div></div>
+                    <div class="ui-title" id="s04-ti1">Set football, maillot + short</div>
+                    <div class="ui-meta" id="s04-me1">Football, volley, handball, badminton</div>
+                    <div class="ui-big-price" id="s04-pr1"><strong>19,99 €</strong> HT la pièce, dès 30 pcs</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="s04-tag r" id="s04-tag1" data-layout-allow-overlap><div class="s04-tag-q">dès 30 pcs</div><div class="s04-tag-p">19,99 € HT</div></div>
+          </div>
+
+          <!-- Cyclisme -->
+          <div class="s04-unit" id="s04-u2" data-layout-allow-overflow>
+            <div class="s04-drift" id="s04-dr2">
+              <div class="scr" id="s04-scr2">
+                <div class="ui" id="s04-ui2" data-layout-allow-overlap>
+                  <div class="ui-sheet-top s04-top"><span>Maillots &amp; shorts</span><div class="ui-x">×</div></div>
+                  <div class="s04-body">
+                    <div class="ui-photo"><img src="assets/img/maillot-cyclisme.webp" alt="Maillot cyclisme" /></div>
+                    <div class="ui-thumbs" id="s04-th2"><div class="on s04-th" style="background-image: url(assets/img/maillot-cyclisme.webp)"></div><div class="s04-th" style="background-image: url(assets/img/maillot-cyclisme.webp); background-size: 240%; background-position: 50% 30%"></div></div>
+                    <div class="s04-btnw"><div class="ui-btn o" id="s04-bt2">Personnaliser ce produit</div></div>
+                    <div class="ui-title" id="s04-ti2">Maillot cyclisme</div>
+                    <div class="ui-meta" id="s04-me2">Cyclisme, VTT</div>
+                    <div class="ui-big-price" id="s04-pr2"><strong>28,99 €</strong> HT la pièce, dès 30 pcs</div>
+                    <div class="s04-chips" id="s04-ch2"><span class="s04-chip spark">Fabriqué en Europe</span><span class="s04-chip">Transport inclus</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="s04-tag l" id="s04-tag2" data-layout-allow-overlap><div class="s04-tag-q">dès 30 pcs</div><div class="s04-tag-p">28,99 € HT</div></div>
+          </div>
+
+          <!-- Running -->
+          <div class="s04-unit" id="s04-u3" data-layout-allow-overflow>
+            <div class="s04-drift" id="s04-dr3">
+              <div class="scr" id="s04-scr3">
+                <div class="ui" id="s04-ui3" data-layout-allow-overlap>
+                  <div class="ui-sheet-top s04-top"><span>Maillots &amp; shorts</span><div class="ui-x">×</div></div>
+                  <div class="s04-body">
+                    <div class="ui-photo"><img src="assets/img/running-ml.webp" alt="Maillot running manches longues" /></div>
+                    <div class="ui-thumbs" id="s04-th3"><div class="on s04-th" style="background-image: url(assets/img/running-ml.webp)"></div><div class="s04-th" style="background-image: url(assets/img/running-ml.webp); background-size: 240%; background-position: 50% 32%"></div></div>
+                    <div class="s04-btnw"><div class="ui-btn o" id="s04-bt3">Personnaliser ce produit</div></div>
+                    <div class="ui-title" id="s04-ti3">Maillot running manches longues</div>
+                    <div class="ui-meta" id="s04-me3">Running, trail</div>
+                    <div class="ui-big-price" id="s04-pr3"><strong>22,99 €</strong> HT la pièce, dès 30 pcs</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="s04-tag r" id="s04-tag3" data-layout-allow-overlap><div class="s04-tag-q">dès 30 pcs</div><div class="s04-tag-p">22,99 € HT</div></div>
+          </div>
+
+          <!-- Supporters -->
+          <div class="s04-unit" id="s04-u4" data-layout-allow-overflow>
+            <div class="s04-drift" id="s04-dr4">
+              <div class="scr" id="s04-scr4">
+                <div class="ui" id="s04-ui4" data-layout-allow-overlap>
+                  <div class="ui-sheet-top s04-top"><span>Accessoires &amp; textile promotionnel</span><div class="ui-x">×</div></div>
+                  <div class="s04-body">
+                    <div class="ui-photo"><img src="assets/img/echarpe.webp" alt="Écharpe supporter" /></div>
+                    <div class="ui-thumbs" id="s04-th4"><div class="on s04-th" style="background-image: url(assets/img/echarpe.webp)"></div><div class="s04-th" style="background-image: url(assets/img/echarpe.webp); background-size: 240%; background-position: 60% 18%"></div></div>
+                    <div class="s04-btnw"><div class="ui-btn o" id="s04-bt4">Personnaliser ce produit</div></div>
+                    <div class="ui-title" id="s04-ti4">Écharpe supporter</div>
+                    <div class="ui-big-price" id="s04-pr4"><strong>6,29 €</strong> HT la pièce, dès 100 pcs</div>
+                    <div class="s04-chips" id="s04-ch4"><span class="s04-chip spark">Fabriqué en Europe</span><span class="s04-chip">Transport inclus</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="s04-tag l" id="s04-tag4" data-layout-allow-overlap><div class="s04-tag-q">dès 100 pcs</div><div class="s04-tag-p">6,29 € HT</div></div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        (function () {
+          const tl = gsap.timeline({ paused: true });
+          const B = 60 / 105;               // un temps
+          const E = B / 2;                  // une croche
+          const M = 4 * B;                  // une mesure
+          // La scène commence à 11,429 alors que le temps 20 du film tombe à 11,4286 : les repères sont pris sur la
+          // grille du film (temps k = k × B), avec une milliseconde d'avance pour que l'image du temps porte l'événement
+          // (sinon 12,0, 14,0, 16,0 et 18,0 glissent d'une image : à 16,0 l'écran Running se posait sur le fond bleu).
+          const G = (k) => k * B - 11.429 - 0.001;
+          const BARS = [G(20), G(24), G(28), G(32)]; // une mesure par sport
+          const STOP = 20.0 - 11.429;       // 8,571 : arrêt musical, tout se fige
+          const PUSH = 0.43;                // poussée verticale, milieu sur le temps
+          const SLAM = 0.25;                // relance après la coupure : arrivée sèche sur le temps
+          const C = [540, 900];             // centre de l'écran dans le cadre
+          const COLORS = ["#B3125F", "#1F4FD1", "#138A4B", "#1A1320"];
+
+          // ---------- Fond qui claque sur les temps forts, mots géants ----------
+          BARS.forEach((b, i) => {
+            if (i > 0) {
+              tl.set("#s04-bg", { backgroundColor: COLORS[i] }, b);
+              tl.set("#s04-w" + i, { opacity: 0 }, b);
+              tl.set("#s04-w" + (i + 1), { opacity: 1 }, b);
+            }
+            const t0 = i === 0 ? 0 : b - PUSH / 2;
+            const t1 = i === 3 ? STOP : b + M;
+            const w = "#s04-w" + (i + 1);
+            const dir = i % 2 ? -1 : 1;
+            tl.fromTo(w + "-r1", { x: -200 - 180 * (1 - dir) }, { x: -200 - 180 * (1 + dir), duration: t1 - t0, ease: "none" }, t0);
+            tl.fromTo(w + "-r2", { x: -740 - 180 * (1 + dir) }, { x: -740 - 180 * (1 - dir), duration: t1 - t0, ease: "none" }, t0);
+            tl.fromTo(w + "-r3", { x: -380 - 180 * (1 - dir) }, { x: -380 - 180 * (1 + dir), duration: t1 - t0, ease: "none" }, t0);
+          });
+
+          // ---------- Formes : éclat depuis le centre à chaque départ de sport ----------
+          // [x, y, rotation départ, rotation arrivée, dérive x, dérive y, rotation finale]
+          const DECO = [
+            [[110, 360, -60, 150, -20, -26, 230], [930, 330, 0, 0, 24, -20, 0], [120, 1250, 0, 135, -16, 28, 200], [920, 1640, 40, -30, 22, 18, -50], [160, 1700, 0, 0, -18, 20, 0]],
+            [[140, 330, 0, 0, -22, -18, 0], [920, 560, 40, -160, 22, -24, -230], [950, 1180, 0, 0, 20, 16, 0], [130, 1580, 0, 135, -18, 24, 210], [880, 1700, -40, 25, 20, 16, 45]],
+            [[930, 300, 0, 135, 20, -22, 220], [150, 250, 0, 0, -18, -14, 0], [120, 700, 60, 150, -20, -16, 230], [150, 1300, 0, 0, -20, 22, 0], [900, 1620, 40, -20, 22, 20, -40]],
+            [[930, 420, 0, 0, 16, -14, 0], [130, 560, -40, 140, -14, -12, 190], [940, 1250, 0, 135, 14, 16, 180], [140, 1300, 0, 0, -12, 14, 0], [880, 1680, -30, 30, 14, 12, 50]],
+          ];
+          DECO.forEach((set, i) => {
+            const b = BARS[i];
+            const end = i === 3 ? STOP : BARS[i + 1] - PUSH / 2;
+            set.forEach(([ex, ey, r0, r1, dx, dy, r2], k) => {
+              const id = "#s04-d" + (i + 1) + "-" + (k + 1);
+              const t0 = b + 0.02 + k * 0.035;
+              tl.fromTo(id, { x: C[0] - ex, y: C[1] - ey, scale: 0.3, rotation: r0 },
+                { x: 0, y: 0, scale: 1.3, rotation: r1, duration: 0.7, ease: "power3.out" }, t0);
+              tl.fromTo(id, { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power2.out" }, t0);
+              tl.to(id, { x: dx, y: dy, rotation: r2, duration: end - t0 - 0.7, ease: "none" }, t0 + 0.7);
+              if (i < 3) tl.to(id, { opacity: 0, duration: 0.18, ease: "power2.in" }, end - 0.05);
+            });
+          });
+
+          // ---------- Caméra ----------
+          // Ouverture : on sort de la photo du set football (raccord avec la traversée de la scène 3)
+          tl.fromTo("#s04-cam", { scale: 5.5, y: 288 }, { scale: 1, y: 0, duration: 0.66, ease: "power4.out" }, 0);
+          // Relance après la coupure (16,0 s) : punch-in sec, puis relâche
+          tl.to("#s04-cam", { scale: 1.07, duration: 0.09, ease: "power4.out" }, BARS[2]);
+          tl.to("#s04-cam", { scale: 1, duration: 1.5, ease: "sine.inOut" }, BARS[2] + 0.2);
+          // Supporters : lente poussée qui s'arrête net à l'arrêt musical
+          tl.to("#s04-cam", { scale: 1.04, duration: STOP - BARS[3], ease: "none" }, BARS[3]);
+
+          // ---------- Écrans : poussée verticale d'une mesure à l'autre ----------
+          const inStart = [0, BARS[1] - PUSH / 2, BARS[2] - SLAM, BARS[3] - PUSH / 2];
+          const outStart = [BARS[1] - PUSH / 2, BARS[2] - SLAM, BARS[3] - PUSH / 2, null];
+          const moveDur = (t) => (t === BARS[2] - SLAM ? SLAM : PUSH);
+          const moveEase = (t) => (t === BARS[2] - SLAM ? "power2.in" : "power3.inOut");
+          for (let i = 0; i < 4; i++) {
+            const u = "#s04-u" + (i + 1);
+            if (i === 0) tl.to(u, { y: -1920, duration: PUSH, ease: "power3.inOut" }, outStart[0]);
+            else {
+              tl.fromTo(u, { y: 1920 }, { y: 0, duration: moveDur(inStart[i]), ease: moveEase(inStart[i]) }, inStart[i]);
+              if (outStart[i] !== null) tl.to(u, { y: -1920, duration: moveDur(outStart[i]), ease: moveEase(outStart[i]) }, outStart[i]);
+            }
+            // Légère dérive en profondeur, l'écran reste de face
+            const d0 = inStart[i];
+            const d1 = outStart[i] === null ? STOP : outStart[i] + moveDur(outStart[i]);
+            // L'écran reste de face mais tourne et avance un peu pendant la mesure (départ du sport 1 identique
+            // à la fin de la scène 3 : échelle 0,74, aucune rotation)
+            const s = i % 2 ? -1 : 1;
+            tl.fromTo("#s04-dr" + (i + 1),
+              { scale: 0.74, rotationY: i === 0 ? 0 : -8 * s, rotationX: i === 0 ? 0 : 5, rotation: i === 0 ? 0 : -1.2 * s, transformPerspective: 2000 },
+              { scale: 0.77, rotationY: 8 * s, rotationX: 1, rotation: 1 * s, duration: d1 - d0, ease: "none" }, d0);
+          }
+
+          // ---------- Interface qui se construit sur les croches, étiquette de prix ----------
+          // Photo, vignettes et bouton arrivent avec l'écran (pas d'écran vide pendant la poussée) ;
+          // titre, prix, pastilles puis étiquette claquent sur les croches qui suivent l'arrivée.
+          function pop(sel, t) {
+            tl.fromTo(sel, { y: 14 }, { y: 0, duration: 0.4, ease: "power3.out" }, t);
+            tl.fromTo(sel, { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power2.out" }, t);
+          }
+          BARS.forEach((b, i) => {
+            const n = i + 1;
+            pop("#s04-ti" + n, b + E);
+            if (n !== 4) pop("#s04-me" + n, b + E + 0.07);
+            pop("#s04-pr" + n, b + 2 * E);
+            if (n === 2 || n === 4) pop("#s04-ch" + n, b + 3 * E);
+            const left = n % 2 === 0;
+            const tagIn = b + 4 * E;
+            tl.fromTo("#s04-tag" + n, { scale: 0.5, rotation: left ? 14 : -14, y: 40 },
+              { scale: 1, rotation: left ? 4 : -4, y: 0, duration: 0.45, ease: "back.out(1.7)" }, tagIn);
+            tl.fromTo("#s04-tag" + n, { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power2.out" }, tagIn);
+            // L'étiquette flotte jusqu'au départ de l'écran (ou jusqu'à l'arrêt musical)
+            const tagEnd = outStart[i] === null ? STOP : outStart[i];
+            tl.to("#s04-tag" + n, { rotation: left ? 1.5 : -1.5, y: -14, duration: tagEnd - tagIn - 0.45, ease: "sine.inOut" }, tagIn + 0.45);
+            // Coup sur la caisse claire du 4e temps : l'étiquette repique entre son arrivée et la poussée suivante
+            // (sauf Supporters, dont le 4e temps est l'arrêt musical de 20,0)
+            if (n < 4) tl.to("#s04-tag" + n, { keyframes: [{ scale: 1.06, duration: 0.05, ease: "power2.out" }, { scale: 1, duration: 0.3, ease: "power3.out" }] }, b + 3 * B);
+          });
+
+          window.__timelines["s04"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>
