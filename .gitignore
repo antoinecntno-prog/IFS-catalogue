@@ -1,2 +1,6 @@
 # Documents de travail pour les photos du catalogue (prompts IA, photos du partenaire) : gardés hors du dépôt public
 photos-ia/
+
+# Film : artefacts de contrôle et rendus intermédiaires HyperFrames
+video/*/.hyperframes/
+video/*/renders/
