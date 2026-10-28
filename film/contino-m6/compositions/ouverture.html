@@ -238,7 +238,9 @@
     }
 
     // Faisceau : polygone final mesuré à 2,38 s ; il naît près du produit et s'étend vers le haut à droite.
-    const SOMMETS = [[1102, 0], [1920, 0], [1920, 190], [1290, 486], [1000, 640], [790, 428]];
+    // Le sommet gauche tombe sur le coin haut gauche du capot ouvert (810, 409), comme chez Apple où le bord
+    // du faisceau touche le coin du portable.
+    const SOMMETS = [[1102, 0], [1920, 0], [1920, 190], [1290, 486], [1000, 640], [810, 409]];
     const ORIGINE = [1180, 470];
     const polygone = (k) =>
       "polygon(" + SOMMETS.map(([x, y]) =>
