@@ -77,6 +77,13 @@
       height: 480px;
       transform-origin: 50% 50%;
     }
+    /* Lacet de caméra (rotateY appliquée après l'inclinaison) : nul pendant la bascule, il sert à la pose finale. */
+    #ouv-lacet {
+      position: absolute;
+      inset: 0;
+      transform-origin: 50% 50%;
+      transform-style: preserve-3d;
+    }
     #ouv-inclinaison {
       position: absolute;
       inset: 0;
@@ -174,6 +181,7 @@
         </div>
       </div>
       <div id="ouv-echelle">
+      <div id="ouv-lacet">
       <div id="ouv-inclinaison">
         <div id="ouv-objet">
           <div class="ouv-face" id="ouv-base"><div id="ouv-clavier"></div><div id="ouv-pave"></div></div>
@@ -184,6 +192,7 @@
             <div class="ouv-face" id="ouv-ecran"></div>
           </div>
         </div>
+      </div>
       </div>
       </div>
     </div>
@@ -223,7 +232,8 @@
       const p = progression(t), r = rotationProgression(t), e = 1 - 0.66 * p;
       gsap.set("#ouv-objet", { rotation: 47 * r });
       // Perspective divisée par l'échelle : même projection que l'objet réduit placé à 2400 px.
-      gsap.set("#ouv-inclinaison", { rotationX: 60 * p, transformPerspective: 2400 / e });
+      gsap.set("#ouv-lacet", { rotationY: 0, transformPerspective: 2400 / e });
+      gsap.set("#ouv-inclinaison", { rotationX: 60 * p });
       gsap.set("#ouv-echelle", { scale: e, x: 10 * p, y: 26 * p });
     }
 
@@ -242,14 +252,17 @@
     // Lumière mesurée sur Apple : l'ordinateur passe de 130 à 61 de luminance moyenne en s'inclinant (0,70 à 0,88 s),
     // puis le capot qui se lève reprend la lumière.
     tl.fromTo("#ouv-echelle", { filter: "brightness(1)" }, { filter: "brightness(0.46)", duration: 0.18, ease: "power1.inOut" }, 0.7);
-    tl.to("#ouv-echelle", { filter: "brightness(0.75)", duration: 0.3, ease: "power1.out" }, 1.75);
-    // Le capot se lève vers la caméra autour de la charnière : 15° à 1,84 s, 35° à 1,92 s, 55° à 2,0 s, grand ouvert à 2,4 s.
+    tl.to("#ouv-echelle", { filter: "brightness(0.75)", duration: 0.28, ease: "power1.out" }, 1.75);
+    // Le capot se lève vers la caméra autour de la charnière : 15° à 1,84 s, 35° à 1,92 s, 55° à 2,0 s, ouvert à 2,4 s.
     tl.fromTo("#ouv-charniere", { rotationX: 0, z: 13 }, { keyframes: [
       { rotationX: -15, duration: 0.11, ease: "power1.in" },
       { rotationX: -35, duration: 0.08, ease: "none" },
       { rotationX: -55, duration: 0.08, ease: "power1.out" },
       { rotationX: -95, duration: 0.4, ease: "sine.inOut" },
     ] }, 1.73);
+    // Capot vu en biais : la perspective incline le texte du logo. On compense pendant l'ouverture pour qu'il
+    // apparaisse droit, comme la pomme sur le portable d'Apple à 2,71 s.
+    tl.fromTo("#ouv-monogramme", { skewY: 0 }, { skewY: -15, duration: 0.6, ease: "sine.inOut" }, 1.73);
     // Le faisceau s'ouvre de 1,85 à 2,30 s.
     tl.fromTo("#ouv-faisceau", { clipPath: polygone(0) }, { clipPath: polygone(1), duration: 0.45, ease: "sine.inOut" }, "faisceau");
     // Le titre sort du noir à 1,72 s et s'éclaire depuis le faisceau jusqu'à 2,2 s, puis rien ne bouge.
