@@ -13,50 +13,46 @@
       overflow: hidden;
       font-family: "Archivo Film", sans-serif;
     }
-    #preuve-camera {
+    #preuve-pov {
       position: absolute;
       inset: 0;
     }
     #preuve-fond {
       position: absolute;
-      inset: -40px;
+      inset: 0;
       background:
         radial-gradient(circle at 12% 30%, #5a3b22 0, transparent 26%),
         radial-gradient(circle at 88% 25%, #6e4a2a 0, transparent 24%),
         radial-gradient(circle at 80% 70%, #3b2a20 0, transparent 34%),
         linear-gradient(#2a211c, #171311);
     }
-    #preuve-clavier {
-      position: absolute;
-      left: 260px;
-      top: 640px;
-      width: 1400px;
-      height: 560px;
-      border-radius: 30px;
-      background: repeating-linear-gradient(90deg, #1b1b1d 0 74px, #0e0e10 74px 80px), #141416;
-      transform: perspective(900px) rotateX(58deg);
-      transform-origin: 50% 0;
-    }
+    /* Écran et clavier aux positions mesurées sur le POV Apple (écran de 525 à 1470 px, clavier dès 735 px). */
     #preuve-ecran {
       position: absolute;
-      left: 520px;
-      top: 70px;
-      width: 880px;
-      height: 560px;
-      padding: 18px;
+      left: 525px;
+      top: 84px;
+      width: 945px;
+      height: 651px;
+      padding: 18px 18px 60px;
       background: #0b0b0c;
-      border-radius: 22px;
+      border-radius: 22px 22px 0 0;
       box-shadow: 0 0 0 3px #3a3a3e;
-      transform: perspective(1800px) rotateX(6deg);
-      transform-origin: 50% 100%;
     }
     #preuve-ecran img {
       display: block;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: 30% 50%;
-      border-radius: 6px;
+      object-position: 0% 0%;
+    }
+    #preuve-clavier {
+      position: absolute;
+      left: 330px;
+      top: 735px;
+      width: 1340px;
+      height: 345px;
+      background: repeating-linear-gradient(90deg, #1b1b1d 0 74px, #0e0e10 74px 80px), #141416;
+      clip-path: polygon(14% 0%, 86% 0%, 100% 100%, 0% 100%);
     }
     #preuve-plaque {
       position: absolute;
@@ -68,21 +64,21 @@
       font-stretch: 85%;
       letter-spacing: 0.04em;
     }
-    #preuve-plan {
+    /* Ligne de texte posée sur le plan du clavier : bande de 750 à 876 px, de 240 à 1680 px comme chez Apple. */
+    #preuve-ligne {
       position: absolute;
-      left: 50%;
-      top: 610px;
-      width: 2200px;
-      margin-left: -1100px;
-      white-space: nowrap;
+      left: 0;
+      top: 744px;
+      width: 1950px;
       display: flex;
-      align-items: baseline;
       justify-content: center;
-      gap: 28px;
-      transform: perspective(1100px) rotateX(58deg);
+      align-items: baseline;
+      gap: 30px;
+      white-space: nowrap;
+      transform: perspective(1400px) rotateX(24deg) skewX(-13deg);
       transform-origin: 50% 50%;
     }
-    .preuve-texte {
+    .preuve-mot {
       line-height: 1;
       font-weight: 900;
       background: linear-gradient(100deg, #5f5d5c 0%, #d8d4d2 38%, #9b9897 62%, #e4e1df 82%, #8d8a89 100%);
@@ -90,38 +86,32 @@
       background-clip: text;
       color: transparent;
     }
-    #preuve-chiffre {
-      font-size: 190px;
-      font-stretch: 125%;
-    }
-    #preuve-mots {
-      font-size: 140px;
-      font-stretch: 62%;
-    }
+    #preuve-chiffre { font-size: 143px; font-stretch: 125%; }
+    #preuve-mots-1, #preuve-mots-2 { font-size: 143px; font-stretch: 62%; }
   </style>
   <div id="root" data-composition-id="preuve" data-width="1920" data-height="1080">
-    <div id="preuve-camera" class="clip" data-start="0" data-duration="2.2" data-layout-allow-overflow>
+    <div id="preuve-pov" class="clip" data-start="0" data-duration="2.26" data-layout-allow-overflow>
       <div id="preuve-fond"></div>
-      <div id="preuve-clavier"></div>
       <div id="preuve-ecran"><img src="assets/studio-3-magenta.png" alt="Studio à l'écran" /></div>
+      <div id="preuve-clavier"></div>
     </div>
-    <div id="preuve-plan" class="clip" data-start="0" data-duration="2.2" data-layout-allow-overflow>
-      <span class="preuve-texte" id="preuve-chiffre">0&#8239;€</span>
-      <span class="preuve-texte" id="preuve-mots">DE PLUS PAR COULEUR</span>
+    <div id="preuve-ligne" class="clip" data-start="0" data-duration="2.26" data-layout-allow-overflow>
+      <span class="preuve-mot" id="preuve-chiffre">0&#8239;€</span>
+      <span class="preuve-mot" id="preuve-mots-1">DE PLUS</span>
+      <span class="preuve-mot" id="preuve-mots-2">PAR COULEUR</span>
     </div>
-    <span id="preuve-plaque" class="clip" data-start="0" data-duration="2.2">Plaque Veo : POV, écran incrusté</span>
+    <span id="preuve-plaque" class="clip" data-start="0" data-duration="2.26">Plaque Veo : POV, écran incrusté</span>
   </div>
   <script>
+    // Balayage oblique de gauche à droite, mot par mot, calé sur les apparitions mesurées chez Apple :
+    // le grand chiffre de 0 à 0,17 s après la coupe, puis les deux groupes de mots, puis plus rien ne bouge.
+    const CACHE = "polygon(-20% 0%, 0% 0%, -20% 100%, -20% 100%)";
+    const VU = "polygon(-20% 0%, 120% 0%, 100% 100%, -20% 100%)";
     const tl = gsap.timeline({ paused: true });
-    tl.addLabel("pov", 0).addLabel("chiffre", 0.05).addLabel("mots", 0.2).addLabel("tenue", 0.75);
-
-    // Le chiffre arrive d'abord, balayé de gauche à droite sur une longue traîne.
-    tl.fromTo("#preuve-chiffre", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.45, ease: "expo.out" }, "chiffre");
-    // Les mots suivent en chevauchement, puis tout le texte tient immobile jusqu'à la coupe.
-    tl.fromTo("#preuve-mots", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.5, ease: "expo.out" }, "mots");
-    // Le décor derrière glisse, le texte posé ne bouge pas.
-    tl.fromTo("#preuve-camera", { x: 0, y: 0 }, { x: -12, y: 6, duration: 2.2, ease: "power2.inOut" }, "pov");
-
+    tl.addLabel("coupe", 0).addLabel("mots-1", 0.21).addLabel("mots-2", 0.28).addLabel("tenue", 0.42);
+    tl.fromTo("#preuve-chiffre", { clipPath: CACHE }, { clipPath: VU, duration: 0.17, ease: "power2.out" }, "coupe");
+    tl.fromTo("#preuve-mots-1", { clipPath: CACHE }, { clipPath: VU, duration: 0.1, ease: "power2.out" }, "mots-1");
+    tl.fromTo("#preuve-mots-2", { clipPath: CACHE }, { clipPath: VU, duration: 0.14, ease: "power2.out" }, "mots-2");
     window.__timelines["preuve"] = tl;
   </script>
 </template>

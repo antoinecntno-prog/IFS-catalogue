@@ -1,0 +1,25 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background: #f4f0f3;
+      overflow: hidden;
+    }
+    /* Capture native d'un écran plus grand, recadrée dans son coin haut gauche, fixe : comme le plan 3 d'Apple. */
+    #ecran-capture {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 2880px;
+      height: 1620px;
+    }
+  </style>
+  <div id="root" data-composition-id="ecran" data-width="1920" data-height="1080">
+    <img id="ecran-capture" class="clip" data-start="0" data-duration="0.92" data-layout-allow-overflow
+      src="assets/studio-grand-magenta.png" alt="Studio de personnalisation Contino Sport" />
+  </div>
+  <script>
+    window.__timelines["ecran"] = gsap.timeline({ paused: true });
+  </script>
+</template>

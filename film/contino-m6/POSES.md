@@ -1,45 +1,36 @@
-# Feuille de poses, plans 1 à 4
+# Relevé Apple et poses, plans 1 à 4
 
-Registre : **éditorial** sur tout le film (produit, titres, interface, chiffres). Les principes de Lasseter s'appliquent en version douce : staging, slow in et slow out, chevauchement par décalage, anticipation discrète. Aucun écrasement ni rebond sur le texte. Les personnes filmées (plaques Veo) apportent seules le jeu d'acteur.
+Règle : chaque mouvement reprend celui du film Apple « The new 14” MacBook Pro with M6 », mesuré image par image (24 images par seconde, de 0 à 2,75 s et de 4,3 à 6,3 s). Seul le contenu change : produit, textes, plaques filmées. Registre éditorial : aucun mouvement ajouté.
 
-Cadence : 24 i/s, comme le film Apple (23,976 i/s). Temps locaux à chaque scène.
+## Plan continu `ouverture` (0 à 4,42 s)
 
-## Scène `packshot` (0,0 à 2,0 s du film)
+| t (s) | Apple, mesuré | Contino Sport |
+|---|---|---|
+| 0 à 0,46 | MacBook fermé vu du dessus, recul très lent (échelle 0,97) | set football vu du dessus, même recul |
+| 0,46 à 0,96 | bascule en accélérant, pose nette à 0,96 s : rotation 47° dans le plan, inclinaison 57 à 60°, échelle 0,34, centre décalé de (+10, +26) px | même courbe (interpolation des 14 mesures), mêmes valeurs finales |
+| 0,96 à 1,72 | produit immobile en isométrique au centre | identique |
+| 1,72 à 2,20 | le titre sort du noir, éclairé depuis le faisceau vers l'extérieur | même éclairage radial (masque animé) |
+| 1,75 à 1,92 | le MacBook s'ouvre et devient le vrai portable de la plaque | fondu du set vers le produit de la plaque (voir écarts) |
+| 1,85 à 2,30 | le faisceau naît à droite du portable et s'étend jusqu'au coin haut droit | même polygone final mesuré, même croissance |
+| 2,30 à 4,42 | tout est fixe, seule la plaque vit | identique |
 
-| Label | t (s) | Pose clé | Intention |
-|---|---|---|---|
-| `approche` | 0,00 | set à plat, vu du dessus, échelle 1 | poser le produit seul |
-| `anticipation` | 0,90 | échelle 1,025, remonté de 8 px | rapprochement lent, sens inverse du recul qui suit |
-| `bascule` | 0,95 | début de l'inclinaison | quitter la vue du dessus |
-| `iso` | 1,85 | rotX 56°, rotZ −38°, échelle 0,3, opacité 0,75 | produit petit au centre, là où le faisceau va s'ouvrir |
+Géométrie du titre : ligne de base à 30°, haut des lettres orienté vers le haut à droite, même sol que le produit. Points de départ mesurés (1920 × 1080) : NEW (370, 267), MACBOOK PRO (132, 382), WITH (1317, 522), M6 (1020, 678). NOUVEAU, CATALOGUE, ÉDITION et 2026 partent des mêmes points ; 2026 est réduit pour tenir dans la longueur de M6.
 
-## Scène `titre` (2,0 à 4,4 s)
+## Plan `ecran` (4,42 à 5,34 s)
 
-| Label | t (s) | Pose clé | Intention |
-|---|---|---|---|
-| `ouverture` | 0,00 | faisceau fermé au point où le produit s'est posé | le produit devient le décor (transition causée) |
-| `faisceau` | 0,55 | faisceau ouvert sur la plaque Veo | révéler la présidente |
-| `mots` | 0,18 | mots allumés un par un, 0,07 s d'écart, flou 6 px vers 0 | chevauchement : les mots démarrent quand le faisceau est à un tiers |
-| `tenue` | 0,95 | titre posé, immobile | la caméra seule glisse, le titre ne bouge plus |
+Apple : capture native de l'application, recadrée dans le coin haut gauche, fixe, sans zoom. Contino Sport : capture du Studio sur un écran de 2880 × 1620 à l'échelle 1, recadrée de la même façon.
 
-## Scène `studio` (4,4 à 5,4 s)
+## Plan `preuve` (5,34 à 7,60 s)
 
-| Label | t (s) | Pose clé | Intention |
-|---|---|---|---|
-| `uni` | 0,00 | Studio, maillot blanc, cadre serré | montrer l'outil réel |
-| `eclats` | 0,30 | design Éclats, entre à 103 % et se pose en 0,25 s | changement d'écran lu comme un clic |
-| `magenta` | 0,58 | couleur magenta, même entrée | la couleur arrive sur le produit |
+| t après la coupe (s) | Apple | Contino Sport |
+|---|---|---|
+| 0 à 0,17 | « 11X » balayé de gauche à droite, bord oblique | « 0 € », même balayage |
+| 0,08 à 0,21 | « UP TO » | pas d'équivalent dans le texte retenu |
+| 0,21 à 0,31 | « FASTER » | « DE PLUS » |
+| 0,28 à 0,42 | « GRAPHICS » | « PAR COULEUR » |
+| 0,42 à la coupe | texte immobile, seule la caméra à l'épaule bouge | texte immobile, la plaque Veo apportera le mouvement |
 
-## Scène `preuve` (5,4 à 7,6 s)
+## Écarts qui restent
 
-| Label | t (s) | Pose clé | Intention |
-|---|---|---|---|
-| `pov` | 0,00 | POV écran et clavier | raccord avec l'écran du plan précédent |
-| `chiffre` | 0,05 | « 0 € » balayé de gauche à droite en 0,45 s | le chiffre arrive d'abord |
-| `mots` | 0,20 | « DE PLUS PAR COULEUR » balayé en 0,5 s | chevauchement avec le chiffre |
-| `tenue` | 0,75 | texte posé, immobile jusqu'à la coupe | le décor derrière glisse, le texte tient |
-
-## Écarts volontaires
-
-- Pas de squash ni de follow-through : aucun personnage dessiné, uniquement du registre éditorial.
-- Les mouvements de caméra (glissés de 2,4 s et 2,2 s) sont en `power2.inOut` et latéraux, sans zoom lent sur le titre.
+- Ouverture du produit (1,75 à 1,92 s) : il faut une photo du maillot plié vu du dessus, l'équivalent du portable fermé, et la plaque Veo où il est déplié sur la table au même endroit. En attendant, un fondu.
+- Texte de la preuve : Apple a trois blocs (UP TO, 11X, FASTER GRAPHICS), le texte retenu en a deux.

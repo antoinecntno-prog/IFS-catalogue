@@ -1,0 +1,160 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Archivo Film";
+      src: url("assets/fonts/archivo-wdth.woff2") format("woff2");
+      font-weight: 100 900;
+      font-stretch: 62% 125%;
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      background: #101010;
+      overflow: hidden;
+      font-family: "Archivo Film", sans-serif;
+    }
+    /* Faisceau : la plaque Veo n'apparaît que dans ce polygone (mesuré sur Apple à 2,38 s). */
+    #ouv-faisceau {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 62% 30%, #6b4a33 0%, #3a2a20 35%, #1d1714 70%);
+    }
+    #ouv-plaque {
+      position: absolute;
+      left: 1290px;
+      top: 230px;
+      color: #cbb9a6;
+      font-size: 28px;
+      font-weight: 600;
+      font-stretch: 85%;
+      letter-spacing: 0.04em;
+    }
+    /* Titre couché au sol. L'éclairage part du faisceau (masque radial animé). */
+    #ouv-lumiere {
+      position: absolute;
+      inset: 0;
+      --r: 0px;
+      -webkit-mask-image: radial-gradient(circle at 940px 560px, #000 var(--r), transparent calc(var(--r) + 350px));
+      mask-image: radial-gradient(circle at 940px 560px, #000 var(--r), transparent calc(var(--r) + 350px));
+    }
+    /* Même sol que le produit : rotation de 47° dans le plan puis inclinaison de 57°. Les mots y sont posés
+       aux points de départ mesurés sur Apple (ligne de base à 30°, haut des lettres vers le haut à droite). */
+    #ouv-plan {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      transform: perspective(2400px) rotateX(57deg) rotateZ(47deg);
+      transform-origin: 960px 540px;
+    }
+    .ouv-mot {
+      position: absolute;
+      display: block;
+      white-space: nowrap;
+      line-height: 0.72;
+      background: linear-gradient(100deg, #5f5d5c 0%, #d8d4d2 38%, #9b9897 62%, #e4e1df 82%, #8d8a89 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .ouv-petit { font-size: 112px; font-weight: 800; font-stretch: 75%; }
+    .ouv-grand { font-size: 326px; font-weight: 900; font-stretch: 62%; }
+    .ouv-geant { font-size: 310px; font-weight: 900; font-stretch: 80%; letter-spacing: -0.02em; }
+    #ouv-nouveau { left: 28px; top: 568px; }
+    #ouv-catalogue { left: 96px; top: 759px; }
+    #ouv-edition { left: 1182px; top: 172px; }
+    #ouv-annee { left: 1168px; top: 435px; }
+    /* Produit : enveloppe = inclinaison (rotateX, appliquée après), objet = rotation dans le plan et échelle. */
+    #ouv-inclinaison {
+      position: absolute;
+      left: 739px;
+      top: 159px;
+      width: 441px;
+      height: 762px;
+      transform-origin: 50% 50%;
+    }
+    #ouv-objet {
+      position: absolute;
+      inset: 0;
+      transform-origin: 50% 50%;
+    }
+    #ouv-objet img {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+  <div id="root" data-composition-id="ouverture" data-width="1920" data-height="1080">
+    <div id="ouv-scene" class="clip" data-start="0" data-duration="4.42" data-layout-allow-overflow>
+      <div id="ouv-faisceau"><span id="ouv-plaque">Plaque Veo : P1 au club-house</span></div>
+      <div id="ouv-lumiere" data-layout-allow-overflow>
+        <div id="ouv-plan" data-layout-allow-overflow>
+          <span class="ouv-mot ouv-petit" id="ouv-nouveau" data-layout-allow-occlusion data-layout-allow-overlap>NOUVEAU</span>
+          <span class="ouv-mot ouv-grand" id="ouv-catalogue" data-layout-allow-occlusion data-layout-allow-overlap>CATALOGUE</span>
+          <span class="ouv-mot ouv-petit" id="ouv-edition" data-layout-allow-occlusion data-layout-allow-overlap>ÉDITION</span>
+          <span class="ouv-mot ouv-geant" id="ouv-annee" data-layout-allow-occlusion data-layout-allow-overlap>2026</span>
+        </div>
+      </div>
+      <div id="ouv-inclinaison">
+        <div id="ouv-objet"><img src="assets/set-football.png" alt="Set football Contino Sport" /></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Progression du mouvement du produit, mesurée image par image sur le film Apple (0 à 1,58 s).
+    const T = [0, 0.208, 0.375, 0.458, 0.542, 0.625, 0.708, 0.792, 0.875, 0.958, 1.042, 1.167, 1.333, 1.583];
+    const P = [0, 0.007, 0.025, 0.045, 0.082, 0.147, 0.268, 0.615, 0.871, 0.973, 0.985, 0.995, 0.999, 1];
+    // Interpolation monotone (Fritsch-Carlson) : une fonction pure du temps, sans état.
+    const pentes = (() => {
+      const n = T.length, d = [], m = [];
+      for (let i = 0; i < n - 1; i++) d.push((P[i + 1] - P[i]) / (T[i + 1] - T[i]));
+      m.push(d[0]);
+      for (let i = 1; i < n - 1; i++) m.push(d[i - 1] * d[i] <= 0 ? 0 : (d[i - 1] + d[i]) / 2);
+      m.push(d[n - 2]);
+      for (let i = 0; i < n - 1; i++) {
+        if (d[i] === 0) { m[i] = 0; m[i + 1] = 0; continue; }
+        const a = m[i] / d[i], b = m[i + 1] / d[i], s = a * a + b * b;
+        if (s > 9) { const k = 3 / Math.sqrt(s); m[i] = k * a * d[i]; m[i + 1] = k * b * d[i]; }
+      }
+      return m;
+    })();
+    function progression(t) {
+      if (t <= T[0]) return 0;
+      if (t >= T[T.length - 1]) return 1;
+      let i = 0;
+      while (t > T[i + 1]) i++;
+      const h = T[i + 1] - T[i], u = (t - T[i]) / h, u2 = u * u, u3 = u2 * u;
+      return (2 * u3 - 3 * u2 + 1) * P[i] + (u3 - 2 * u2 + u) * h * pentes[i] + (-2 * u3 + 3 * u2) * P[i + 1] + (u3 - u2) * h * pentes[i + 1];
+    }
+    // Pose finale mesurée : rotation 47° dans le plan, inclinaison 60°, échelle 0,34, décalage (+10, +26) px.
+    function poseProduit(t) {
+      const p = progression(t);
+      gsap.set("#ouv-objet", { rotation: 47 * p, scale: 1 - 0.66 * p });
+      gsap.set("#ouv-inclinaison", { rotationX: 60 * p, transformPerspective: 2400, x: 10 * p, y: 26 * p });
+    }
+
+    // Faisceau : polygone final mesuré à 2,38 s ; il naît près du produit et s'étend vers le haut à droite.
+    const SOMMETS = [[1102, 0], [1920, 0], [1920, 190], [1290, 486], [1000, 640], [790, 428]];
+    const ORIGINE = [1180, 470];
+    const polygone = (k) =>
+      "polygon(" + SOMMETS.map(([x, y]) =>
+        `${ORIGINE[0] + (x - ORIGINE[0]) * k}px ${ORIGINE[1] + (y - ORIGINE[1]) * k}px`).join(", ") + ")";
+
+    const tl = gsap.timeline({ paused: true });
+    tl.addLabel("recul", 0).addLabel("emergence", 1.72).addLabel("faisceau", 1.85).addLabel("tenue", 2.38);
+
+    const proxy = { t: 0 };
+    tl.fromTo(proxy, { t: 0 }, { t: 1.83, duration: 1.83, ease: "none", onUpdate: () => poseProduit(proxy.t) }, "recul");
+    // Le produit de synthèse passe la main au produit réel de la plaque, dans le faisceau.
+    tl.fromTo("#ouv-objet img", { opacity: 1 }, { opacity: 0, duration: 0.12, ease: "power1.inOut" }, 1.8);
+    // Le faisceau s'ouvre de 1,85 à 2,30 s.
+    tl.fromTo("#ouv-faisceau", { clipPath: polygone(0) }, { clipPath: polygone(1), duration: 0.45, ease: "sine.inOut" }, "faisceau");
+    // Le titre sort du noir à 1,72 s et s'éclaire depuis le faisceau jusqu'à 2,2 s, puis rien ne bouge.
+    tl.fromTo("#ouv-lumiere", { opacity: 0 }, { opacity: 1, duration: 0.45, ease: "power1.in" }, "emergence");
+    tl.fromTo("#ouv-lumiere", { "--r": "-350px" }, { "--r": "1900px", duration: 0.45, ease: "power1.in" }, "emergence+=0.03");
+
+    poseProduit(0);
+    window.__timelines["ouverture"] = tl;
+  </script>
+</template>
