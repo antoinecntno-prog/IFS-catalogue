@@ -150,7 +150,7 @@ I4: Top-down view of a group of company runners stretching on a track in matchin
 
 **J. P3 de nuit (5 s)**
 ```
-The man from Image 4 sits at his kitchen table at night, seen in profile, comparing numbers on an open laptop with a calculator beside it. A single pendant lamp above, deep shadows, teal night tones through the window. The camera slowly orbits a few degrees around him. Cinematic, natural film grain. No readable text.
+The man from Image 4 sits at his kitchen table at night, seen in profile, comparing numbers on an open laptop with a calculator beside it. A single pendant lamp above casts deep shadows, with teal night tones through the window. The camera slowly orbits a few degrees around him. Cinematic, natural film grain. No readable text.
 ```
 
 **K. P1 de nuit, de dos (2,5 s)**
@@ -186,20 +186,20 @@ Méthode : une image Nano Banana fixe d'abord le personnage et le décor, puis V
 
 | Clip Veo | Image de départ | Durée | Plans servis |
 |---|---|---|---|
-| V1 | N1, P1 au club-house en plongée | 8 s | 2,0 ; 8,4 ; 30,5 (version nuit étalonnée en code) |
+| V1 | N1, P1 au club-house en plongée | 8 s | 2,0 et 8,4 ; 30,5 en version nuit étalonnée en code |
 | V2 | N2, P1 en maillot, de trois quarts dos | 4 s | 7,6 |
 | V3 | N3, P2 face caméra avec le maillot running | 8 s | 11,0 ; 18,2 |
 | V4 | N4, P3 de nuit dans sa cuisine | 8 s | 24,5 ; 26,0 |
 | V5 | N5, mains au-dessus de la table, vue du dessus | 6 s | 33,5 |
 
-Images fixes animées en code, sans crédit Veo : N6 à N9 pour la mosaïque, N10 pour le POV, N11 pour la macro clavier. Le coût de Nano Banana dans Flow n'est pas vérifié : si les images coûtent aussi des crédits, faire N1 à N5 en premier.
+Images fixes animées en code, sans crédit Veo : N6 à N9 pour la mosaïque ; N10 et N11 pour le POV et la macro clavier. Le coût de Nano Banana dans Flow n'est pas vérifié : si les images coûtent aussi des crédits, faire N1 à N5 en premier.
 
 **Images Nano Banana (16:9)**
 ```
 N1: High angle wide shot of a woman in her forties, hair tied back, wearing a club tracksuit jacket, sitting at a wooden table in an amateur football club house at night, typing on an open laptop, a stack of folded jerseys beside her. Trophies on a shelf, framed old jerseys on the wall, a bar counter in the background, warm lamp light. Photorealistic, cinematic, natural film grain. No readable text or logos.
 N2: The same woman from N1, now wearing the football jersey from the reference photo, seen from three-quarter back in medium close-up in the same club house, about to turn toward the camera. Wide-angle lens, warm light. Photorealistic. Preserve the jersey design from the reference photo.
 N3: A woman in her thirties sitting behind a desk in a bright open-plan office, facing the camera, perfectly centered and symmetrical, holding a long-sleeve sublimated running jersey flat in front of her chest with both hands. Plants and screens softly blurred behind her, late afternoon light. Photorealistic. No readable brand names.
-N4: A man in his fifties sitting at his kitchen table at night, seen in profile, comparing numbers on an open laptop with a calculator beside it. A single pendant lamp above, deep shadows, teal night tones through the window. Photorealistic, cinematic.
+N4: A man in his fifties sitting at his kitchen table at night, seen in profile, comparing numbers on an open laptop with a calculator beside it. A single pendant lamp above casts deep shadows, with teal night tones through the window. Photorealistic, cinematic.
 N5: Top-down view of a wooden table. Two hands hold the football kit from the reference photo just above the table, ready to lay it flat in the center of the frame. Soft even light. Photorealistic. Preserve the kit design from the reference photo.
 N6: Top-down view of a football changing room bench with sublimated jerseys laid out in a row. Cool fluorescent light. Photorealistic.
 N7: Top-down view of a basketball team huddled in a circle on a wooden court in matching sublimated jerseys, hands stacked in the middle. Photorealistic.
@@ -211,9 +211,9 @@ N11: Extreme close-up of fingers on a dark laptop keyboard, very shallow depth o
 
 **Clips Veo 3.1 Lite (image vers vidéo, une vidéo par demande)**
 ```
-V1 (8 s), from N1: She keeps typing, glances at the stack of jerseys, then back at the screen. The camera pushes in slowly from the high angle. No dialogue, no music.
+V1 (8 s), from N1: She keeps typing, then glances at the stack of jerseys. The camera pushes in slowly from the high angle. No dialogue, no music.
 V2 (4 s), from N2: She spins quickly toward the camera and stops facing the lens with a confident half smile. Strong motion blur during the spin. No dialogue, no music.
-V3 (8 s), from N3: She lowers the jersey slightly, looks over it into the lens, then raises it back in front of her chest. Locked off frontal camera. No dialogue, no music.
-V4 (8 s), from N4: He types a number, checks the calculator, nods slightly. The camera orbits a few degrees around him. No dialogue, no music.
-V5 (6 s), from N5: The hands lay the kit flat in the center of the table, smooth it out, then withdraw out of frame, leaving the kit alone and centered. Locked off overhead camera. No dialogue, no music.
+V3 (8 s), from N3: She lowers the jersey slightly to look into the lens, then raises it back in front of her chest. Locked off frontal camera. No dialogue, no music.
+V4 (8 s), from N4: He types a number, then checks the calculator. The camera orbits a few degrees around him. No dialogue, no music.
+V5 (6 s), from N5: The hands lay the kit flat and smooth it out, then withdraw out of frame, leaving the kit alone and centered. Locked off overhead camera. No dialogue, no music.
 ```
