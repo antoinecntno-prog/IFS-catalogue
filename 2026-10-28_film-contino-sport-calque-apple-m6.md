@@ -182,7 +182,7 @@ Top-down view of a wooden table. The hands of the woman from Image 2 lay the sub
 
 Budget : Veo 3.1 Lite coûte 10 crédits par clip de 4, 6 ou 8 s, donc 50 crédits font 5 clips. Régler Flow sur une seule vidéo par demande, sinon chaque demande coûte le double. Les masques ne montrent qu'une partie du cadre : un clip de 8 s nourrit plusieurs plans. Tout le reste du film est produit en code (dossier `film/`).
 
-Méthode : une image Nano Banana fixe d'abord le personnage et le décor, puis Veo l'anime en mode image vers vidéo. Cadrage de V1 calé sur le plan Apple : plongée, produit au centre exact du cadre (là où le maillot de synthèse se pose à 0,96 s), personnage et décor en haut à droite, dans la zone du faisceau, caméra fixe. P1 garde la même image de référence dans les clips 1, 2 et 5 pour rester la même personne. La photo réelle du set football (`site/img/set-football-16cace25.webp`) est jointe comme référence chaque fois que le maillot apparaît.
+Méthode : une image Nano Banana fixe d'abord le personnage et le décor, puis Veo l'anime en mode image vers vidéo. Cadrage de V1 calé sur le plan Apple : plongée, portable ouvert au centre exact du cadre (là où l'ordinateur de synthèse s'ouvre à 1,8 s), capot vers la caméra, personnage et décor en haut à droite, dans la zone du faisceau, caméra fixe. P1 garde la même image de référence dans les clips 1, 2 et 5 pour rester la même personne. La photo réelle du set football (`site/img/set-football-16cace25.webp`) est jointe comme référence chaque fois que le maillot apparaît.
 
 | Clip Veo | Image de départ | Durée | Plans servis |
 |---|---|---|---|
@@ -196,7 +196,7 @@ Images fixes animées en code, sans crédit Veo : N6 à N9 pour la mosaïque ; N
 
 **Images Nano Banana (16:9)**
 ```
-N1: High angle shot looking down at about 45 degrees. A woman in her forties, hair tied back, wearing a club tracksuit jacket, sits at a wooden table just right of frame center, leaning over a sublimated football jersey that lies flat on the table at the exact center of the frame. Behind her, in the upper right of the frame, an amateur football club house at night: trophies on a shelf, framed old jerseys on the wall, a bar counter, warm lamp light. Photorealistic, cinematic, natural film grain. No readable text or logos.
+N1: High angle shot looking down at about 45 degrees. A woman in her forties, hair tied back, wearing a club tracksuit jacket, sits at a wooden table just right of frame center, typing on an open silver laptop placed at the exact center of the frame, its lid facing the camera and its screen facing her. Behind her, in the upper right of the frame, an amateur football club house at night: trophies on a shelf, framed old jerseys on the wall, a bar counter, warm lamp light. Photorealistic, cinematic, natural film grain. No readable text or logos.
 N2: The same woman from N1, now wearing the football jersey from the reference photo, seen from three-quarter back in medium close-up in the same club house, about to turn toward the camera. Wide-angle lens, warm light. Photorealistic. Preserve the jersey design from the reference photo.
 N3: A woman in her thirties sitting behind a desk in a bright open-plan office, facing the camera, perfectly centered and symmetrical, holding a long-sleeve sublimated running jersey flat in front of her chest with both hands. Plants and screens softly blurred behind her, late afternoon light. Photorealistic. No readable brand names.
 N4: A man in his fifties sitting at his kitchen table at night, seen in profile, comparing numbers on an open laptop with a calculator beside it. A single pendant lamp above casts deep shadows, with teal night tones through the window. Photorealistic, cinematic.
@@ -211,7 +211,7 @@ N11: Extreme close-up of fingers on a dark laptop keyboard, very shallow depth o
 
 **Clips Veo 3.1 Lite (image vers vidéo, une vidéo par demande)**
 ```
-V1 (8 s), from N1: She smooths the jersey flat with both hands, then looks at it. Locked off camera, no camera movement. No dialogue, no music.
+V1 (8 s), from N1: She keeps typing on the laptop, then glances at the screen. Locked off camera, no camera movement. No dialogue, no music.
 V2 (4 s), from N2: She spins quickly toward the camera and stops facing the lens with a confident half smile. Strong motion blur during the spin. No dialogue, no music.
 V3 (8 s), from N3: She lowers the jersey slightly to look into the lens, then raises it back in front of her chest. Locked off frontal camera. No dialogue, no music.
 V4 (8 s), from N4: He types a number, then checks the calculator. The camera orbits a few degrees around him. No dialogue, no music.

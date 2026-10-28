@@ -65,24 +65,101 @@
     #ouv-catalogue { left: 96px; top: 759px; }
     #ouv-edition { left: 1182px; top: 172px; }
     #ouv-annee { left: 1168px; top: 435px; }
-    /* Produit : enveloppe = inclinaison (rotateX, appliquée après), objet = rotation dans le plan et échelle. */
+    /* Ordinateur fermé vu du dessus, aux dimensions mesurées sur Apple (684 × 480 px, centre en 952, 540).
+       Enveloppe = inclinaison (rotateX, appliquée après), objet = rotation dans le plan et échelle. */
+    /* L'échelle et le décalage sont portés par une enveloppe plate : l'ordinateur rendu en 3D y est réduit
+       d'un bloc, profondeur comprise (GSAP n'a pas d'échelle en z). */
+    #ouv-echelle {
+      position: absolute;
+      left: 610px;
+      top: 300px;
+      width: 684px;
+      height: 480px;
+      transform-origin: 50% 50%;
+    }
     #ouv-inclinaison {
       position: absolute;
-      left: 739px;
-      top: 159px;
-      width: 441px;
-      height: 762px;
+      inset: 0;
       transform-origin: 50% 50%;
+      transform-style: preserve-3d;
     }
     #ouv-objet {
       position: absolute;
       inset: 0;
       transform-origin: 50% 50%;
+      transform-style: preserve-3d;
     }
-    #ouv-objet img {
-      display: block;
-      width: 100%;
-      height: 100%;
+    .ouv-face {
+      position: absolute;
+      backface-visibility: hidden;
+    }
+    /* Base : plateau clavier et tranches visibles en isométrique. */
+    #ouv-base {
+      inset: 0;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #7f7f7f, #b4b4b4);
+    }
+    /* Clavier côté charnière (bas, vu du dessus), pavé côté utilisateur. */
+    #ouv-clavier {
+      position: absolute;
+      left: 60px;
+      top: 200px;
+      width: 564px;
+      height: 230px;
+      border-radius: 10px;
+      background: repeating-linear-gradient(90deg, #1c1c1e 0 34px, #2b2b2e 34px 38px), #1c1c1e;
+    }
+    #ouv-pave {
+      position: absolute;
+      left: 232px;
+      top: 40px;
+      width: 220px;
+      height: 130px;
+      border-radius: 10px;
+      background: #a3a3a3;
+    }
+    #ouv-tranche-avant {
+      left: 0;
+      bottom: 0;
+      width: 684px;
+      height: 12px;
+      background: linear-gradient(#d9d9d9, #9a9a9a);
+      transform-origin: 50% 100%;
+      transform: rotateX(90deg);
+    }
+    #ouv-tranche-droite {
+      right: 0;
+      top: 0;
+      width: 12px;
+      height: 480px;
+      background: linear-gradient(90deg, #a6a6a6, #e1e1e1);
+      transform-origin: 100% 50%;
+      transform: rotateY(-90deg);
+    }
+    /* Capot : charnière sur le grand bord bas (vu du dessus), face extérieure argent avec le monogramme. */
+    #ouv-charniere {
+      position: absolute;
+      inset: 0;
+      transform-origin: 50% 100%;
+      transform-style: preserve-3d;
+    }
+    #ouv-capot {
+      inset: 0;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #565656 0%, #7a7a7a 40%, #a9a9a9 75%, #bdbdbd 100%);
+    }
+    #ouv-monogramme {
+      position: absolute;
+      left: 297px;
+      top: 197px;
+      width: 90px;
+      height: 96px;
+    }
+    #ouv-ecran {
+      inset: 0;
+      border-radius: 18px;
+      background: #0b0b0c;
+      transform: rotateY(180deg);
     }
   </style>
   <div id="root" data-composition-id="ouverture" data-width="1920" data-height="1080">
@@ -96,8 +173,18 @@
           <span class="ouv-mot ouv-geant" id="ouv-annee" data-layout-allow-occlusion data-layout-allow-overlap>2026</span>
         </div>
       </div>
+      <div id="ouv-echelle">
       <div id="ouv-inclinaison">
-        <div id="ouv-objet"><img src="assets/set-football.png" alt="Set football Contino Sport" /></div>
+        <div id="ouv-objet">
+          <div class="ouv-face" id="ouv-base"><div id="ouv-clavier"></div><div id="ouv-pave"></div></div>
+          <div class="ouv-face" id="ouv-tranche-avant"></div>
+          <div class="ouv-face" id="ouv-tranche-droite"></div>
+          <div id="ouv-charniere">
+            <div class="ouv-face" id="ouv-capot"><img id="ouv-monogramme" src="assets/c-sport-glyphe.png" alt="Contino Sport" /></div>
+            <div class="ouv-face" id="ouv-ecran"></div>
+          </div>
+        </div>
+      </div>
       </div>
     </div>
   </div>
@@ -105,8 +192,11 @@
     // Progression du mouvement du produit, mesurée image par image sur le film Apple (0 à 1,58 s).
     const T = [0, 0.208, 0.375, 0.458, 0.542, 0.625, 0.708, 0.792, 0.875, 0.958, 1.042, 1.167, 1.333, 1.583];
     const P = [0, 0.007, 0.025, 0.045, 0.082, 0.147, 0.268, 0.615, 0.871, 0.973, 0.985, 0.995, 0.999, 1];
+    // La rotation dans le plan démarre plus tard que le recul : angle du bord supérieur mesuré image par image.
+    const TR = [0, 0.458, 0.542, 0.625, 0.708, 0.792, 0.875, 0.958, 1.042, 1.6];
+    const PR = [0, 0, 0.04, 0.073, 0.1, 0.36, 0.78, 1, 1, 1];
     // Interpolation monotone (Fritsch-Carlson) : une fonction pure du temps, sans état.
-    const pentes = (() => {
+    const courbe = (T, P) => {
       const n = T.length, d = [], m = [];
       for (let i = 0; i < n - 1; i++) d.push((P[i + 1] - P[i]) / (T[i + 1] - T[i]));
       m.push(d[0]);
@@ -117,21 +207,24 @@
         const a = m[i] / d[i], b = m[i + 1] / d[i], s = a * a + b * b;
         if (s > 9) { const k = 3 / Math.sqrt(s); m[i] = k * a * d[i]; m[i + 1] = k * b * d[i]; }
       }
-      return m;
-    })();
-    function progression(t) {
-      if (t <= T[0]) return 0;
-      if (t >= T[T.length - 1]) return 1;
-      let i = 0;
-      while (t > T[i + 1]) i++;
-      const h = T[i + 1] - T[i], u = (t - T[i]) / h, u2 = u * u, u3 = u2 * u;
-      return (2 * u3 - 3 * u2 + 1) * P[i] + (u3 - 2 * u2 + u) * h * pentes[i] + (-2 * u3 + 3 * u2) * P[i + 1] + (u3 - u2) * h * pentes[i + 1];
-    }
+      return (t) => {
+        if (t <= T[0]) return P[0];
+        if (t >= T[n - 1]) return P[n - 1];
+        let i = 0;
+        while (t > T[i + 1]) i++;
+        const h = T[i + 1] - T[i], u = (t - T[i]) / h, u2 = u * u, u3 = u2 * u;
+        return (2 * u3 - 3 * u2 + 1) * P[i] + (u3 - 2 * u2 + u) * h * m[i] + (-2 * u3 + 3 * u2) * P[i + 1] + (u3 - u2) * h * m[i + 1];
+      };
+    };
+    const progression = courbe(T, P);
+    const rotationProgression = courbe(TR, PR);
     // Pose finale mesurée : rotation 47° dans le plan, inclinaison 60°, échelle 0,34, décalage (+10, +26) px.
     function poseProduit(t) {
-      const p = progression(t);
-      gsap.set("#ouv-objet", { rotation: 47 * p, scale: 1 - 0.66 * p });
-      gsap.set("#ouv-inclinaison", { rotationX: 60 * p, transformPerspective: 2400, x: 10 * p, y: 26 * p });
+      const p = progression(t), r = rotationProgression(t), e = 1 - 0.66 * p;
+      gsap.set("#ouv-objet", { rotation: 47 * r });
+      // Perspective divisée par l'échelle : même projection que l'objet réduit placé à 2400 px.
+      gsap.set("#ouv-inclinaison", { rotationX: 60 * p, transformPerspective: 2400 / e });
+      gsap.set("#ouv-echelle", { scale: e, x: 10 * p, y: 26 * p });
     }
 
     // Faisceau : polygone final mesuré à 2,38 s ; il naît près du produit et s'étend vers le haut à droite.
@@ -145,9 +238,18 @@
     tl.addLabel("recul", 0).addLabel("emergence", 1.72).addLabel("faisceau", 1.85).addLabel("tenue", 2.38);
 
     const proxy = { t: 0 };
-    tl.fromTo(proxy, { t: 0 }, { t: 1.83, duration: 1.83, ease: "none", onUpdate: () => poseProduit(proxy.t) }, "recul");
-    // Le produit de synthèse passe la main au produit réel de la plaque, dans le faisceau.
-    tl.fromTo("#ouv-objet img", { opacity: 1 }, { opacity: 0, duration: 0.12, ease: "power1.inOut" }, 1.8);
+    tl.fromTo(proxy, { t: 0 }, { t: 1.6, duration: 1.6, ease: "none", onUpdate: () => poseProduit(proxy.t) }, "recul");
+    // Lumière mesurée sur Apple : l'ordinateur passe de 130 à 61 de luminance moyenne en s'inclinant (0,70 à 0,88 s),
+    // puis le capot qui se lève reprend la lumière.
+    tl.fromTo("#ouv-echelle", { filter: "brightness(1)" }, { filter: "brightness(0.46)", duration: 0.18, ease: "power1.inOut" }, 0.7);
+    tl.to("#ouv-echelle", { filter: "brightness(0.75)", duration: 0.3, ease: "power1.out" }, 1.75);
+    // Le capot se lève vers la caméra autour de la charnière : 15° à 1,84 s, 35° à 1,92 s, 55° à 2,0 s, grand ouvert à 2,4 s.
+    tl.fromTo("#ouv-charniere", { rotationX: 0, z: 13 }, { keyframes: [
+      { rotationX: -15, duration: 0.11, ease: "power1.in" },
+      { rotationX: -35, duration: 0.08, ease: "none" },
+      { rotationX: -55, duration: 0.08, ease: "power1.out" },
+      { rotationX: -95, duration: 0.4, ease: "sine.inOut" },
+    ] }, 1.73);
     // Le faisceau s'ouvre de 1,85 à 2,30 s.
     tl.fromTo("#ouv-faisceau", { clipPath: polygone(0) }, { clipPath: polygone(1), duration: 0.45, ease: "sine.inOut" }, "faisceau");
     // Le titre sort du noir à 1,72 s et s'éclaire depuis le faisceau jusqu'à 2,2 s, puis rien ne bouge.
