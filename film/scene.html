@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Film Contino Sport, plans 1 à 4</title>
+<style>
+  @font-face { font-family: "Archivo Film"; src: url(build/archivo-latin-wdth-normal.woff2) format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+  html, body { margin: 0; background: #101010; }
+  #stage { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #101010; font-family: "Archivo Film", sans-serif; }
+  .plan { position: absolute; inset: 0; visibility: hidden; }
+  .argent {
+    background: linear-gradient(100deg, #5f5d5c 0%, #d8d4d2 38%, #9b9897 62%, #e4e1df 82%, #8d8a89 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .plaque { position: absolute; color: rgba(236, 222, 205, .55); font-size: 22px; font-weight: 600; font-stretch: 85%; letter-spacing: .04em; }
+
+  /* Plan 1 : packshot */
+  #p1 { perspective: 2400px; }
+  #pack { position: absolute; left: 50%; top: 50%; height: 760px; transform-origin: 50% 50%; }
+
+  /* Plan 2 : titre couché au sol et faisceau */
+  #p2-camera { position: absolute; inset: 0; transform-origin: 50% 50%; }
+  #faisceau { position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 62% 30%, #6b4a33 0%, #3a2a20 35%, #1d1714 70%); }
+  #faisceau .plaque { left: 1180px; top: 250px; }
+  #titre { position: absolute; left: 50%; top: 50%; width: 2000px; height: 1000px; margin: -420px 0 0 -1150px;
+    transform: perspective(1700px) rotateX(44deg) rotateZ(27deg); transform-origin: 50% 50%; }
+  #titre .bloc { position: absolute; line-height: .86; }
+  #titre .petit { font-size: 60px; font-weight: 800; font-stretch: 75%; }
+  #titre .grand { font-size: 172px; font-weight: 900; font-stretch: 62%; }
+  #titre .geant { font-size: 250px; font-weight: 900; font-stretch: 125%; letter-spacing: -.02em; }
+  #gauche { left: 150px; top: 190px; }
+  #droite { left: 1190px; top: 370px; }
+
+  /* Plan 3 : capture du Studio plein cadre */
+  #p3 img { position: absolute; inset: 0; width: 1920px; height: 1080px; transform-origin: 39% 48%; }
+
+  /* Plan 4 : POV par-dessus l'écran */
+  #p4-fond { position: absolute; inset: 0;
+    background: radial-gradient(circle at 12% 30%, #5a3b22 0, transparent 22%), radial-gradient(circle at 88% 25%, #6e4a2a 0, transparent 20%),
+                radial-gradient(circle at 80% 70%, #3b2a20 0, transparent 30%), linear-gradient(#2a211c, #171311); filter: blur(6px); }
+  #ecran { position: absolute; left: 520px; top: 70px; width: 880px; height: 560px; padding: 18px; background: #0b0b0c; border-radius: 22px;
+    box-shadow: 0 0 0 3px #3a3a3e; transform: perspective(1800px) rotateX(6deg); transform-origin: 50% 100%; }
+  #ecran img { width: 100%; height: 100%; object-fit: cover; object-position: 30% 50%; border-radius: 6px; }
+  #clavier { position: absolute; left: 260px; top: 640px; width: 1400px; height: 560px; border-radius: 30px;
+    background: repeating-linear-gradient(90deg, #1b1b1d 0 74px, #0e0e10 74px 80px), #141416;
+    transform: perspective(900px) rotateX(58deg); transform-origin: 50% 0; }
+  #p4 .plaque { left: 40px; bottom: 30px; }
+  #preuve { position: absolute; left: 50%; top: 610px; width: 2200px; margin-left: -1100px; white-space: nowrap;
+    transform: perspective(1100px) rotateX(58deg); transform-origin: 50% 50%; display: flex; align-items: baseline; gap: 28px; justify-content: center; }
+  #preuve .geant { font-size: 190px; font-weight: 900; font-stretch: 125%; line-height: 1; }
+  #preuve .mots { font-size: 140px; font-weight: 900; font-stretch: 62%; line-height: 1; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <section class="plan" id="p1"><img id="pack" src="build/set-football.png" alt=""></section>
+
+  <section class="plan" id="p2">
+    <div id="p2-camera">
+      <div id="faisceau"><span class="plaque">Plaque Veo : P1 au club-house</span></div>
+      <div id="titre">
+        <div class="bloc" id="gauche"><div class="petit argent">NOUVEAU</div><div class="grand argent">CATALOGUE</div><div class="grand argent">SUBLIMATION</div></div>
+        <div class="bloc" id="droite"><div class="petit argent">ÉDITION</div><div class="geant argent">2026</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="plan" id="p3">
+    <img id="s1" src="build/studio-1-uni.png" alt="">
+    <img id="s2" src="build/studio-2-eclats.png" alt="">
+    <img id="s3" src="build/studio-3-magenta.png" alt="">
+  </section>
+
+  <section class="plan" id="p4">
+    <div id="p4-fond"></div>
+    <div id="clavier"></div>
+    <div id="ecran"><img src="build/studio-3-magenta.png" alt=""></div>
+    <div id="preuve"><span class="geant argent">0 €</span><span class="mots argent">DE PLUS PAR COULEUR</span></div>
+    <span class="plaque">Plaque Veo : POV, écran incrusté</span>
+  </section>
+</div>
+<script>
+  const $ = s => document.querySelector(s);
+  const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+  const prog = (t, a, b) => clamp((t - a) / (b - a));
+  const mix = (a, b, k) => a + (b - a) * k;
+  const easeInOut = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+  const easeOut = k => k === 1 ? 1 : 1 - Math.pow(2, -10 * k);
+  const show = (id, on) => { $(id).style.visibility = on ? 'visible' : 'hidden'; };
+
+  // Faisceau : polygone en coordonnées écran, ouvert depuis son sommet bas.
+  const FAISCEAU = [[1160, 0], [1920, 0], [1920, 230], [1130, 600], [930, 470]];
+  function faisceau(k) {
+    const cx = 1000, cy = 540;
+    return 'polygon(' + FAISCEAU.map(([x, y]) => `${mix(cx, x, k)}px ${mix(cy, y, k)}px`).join(',') + ')';
+  }
+
+  window.render = function (t) {
+    show('#p1', t < 2.0); show('#p2', t >= 2.0 && t < 4.4); show('#p3', t >= 4.4 && t < 5.4); show('#p4', t >= 5.4);
+
+    // Plan 1 : vue du dessus, léger glissement, puis bascule en isométrique en s'éloignant.
+    if (t < 2.0) {
+      const g = prog(t, 0, 1.0), r = easeInOut(prog(t, 0.95, 1.9));
+      $('#pack').style.transform =
+        `translate(-50%, -50%) translateY(${mix(0, -8, g)}px) scale(${mix(1, 1.03, g) * mix(1, 0.3, r)}) rotateX(${mix(0, 56, r)}deg) rotateZ(${mix(0, -38, r)}deg)`;
+      $('#pack').style.filter = `brightness(${mix(1, 0.7, r)})`;
+    }
+
+    // Plan 2 : le faisceau s'ouvre, le titre s'allume, la caméra dérive.
+    if (t >= 2.0 && t < 4.4) {
+      const o = easeOut(prog(t, 2.0, 2.55)), d = prog(t, 2.0, 4.4);
+      $('#faisceau').style.clipPath = faisceau(o);
+      $('#titre').style.filter = `brightness(${mix(0.35, 1, easeOut(prog(t, 2.0, 2.7)))})`;
+      $('#p2-camera').style.transform = `scale(${mix(1, 1.045, d)}) translate(${mix(0, -14, d)}px, ${mix(0, 6, d)}px)`;
+    }
+
+    // Plan 3 : trois états réels du Studio, coupés vite, avec un léger zoom.
+    if (t >= 4.4 && t < 5.4) {
+      const z = mix(1.45, 1.55, prog(t, 4.4, 5.4));
+      ['#s1', '#s2', '#s3'].forEach((id, i) => {
+        const on = i === 0 ? t < 4.7 : i === 1 ? t >= 4.7 && t < 4.98 : t >= 4.98;
+        $(id).style.visibility = on ? 'visible' : 'hidden';
+        $(id).style.transform = `scale(${z})`;
+      });
+    }
+
+    // Plan 4 : la preuve glisse au sol devant le clavier, révélée de gauche à droite.
+    if (t >= 5.4) {
+      const w = easeOut(prog(t, 5.4, 6.0)), d = prog(t, 5.4, 7.6);
+      $('#preuve').style.clipPath = `inset(0 ${mix(100, 0, w)}% 0 0)`;
+      $('#preuve').style.transform = `perspective(1100px) rotateX(58deg) translateX(${mix(40, -40, d)}px)`;
+      $('#ecran').style.transform = `perspective(1800px) rotateX(6deg) translateY(${mix(0, 6, d)}px)`;
+    }
+  };
+  window.render(0);
+</script>
+</body>
+</html>
