@@ -1,0 +1,48 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Archivo Film";
+      src: url("assets/fonts/archivo-wdth.woff2") format("woff2");
+      font-weight: 100 900;
+      font-stretch: 62% 125%;
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      background: #101010;
+      overflow: hidden;
+      font-family: "Archivo Film", sans-serif;
+    }
+    /* Trapèze fixe mesuré sur Apple de 7,75 à 8,25 s : bords à 0,32 px par px, plus large en haut. */
+    #piv-plaque {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 50% 38%, #d9cdbb 0%, transparent 16%),
+        radial-gradient(ellipse at 78% 30%, #8a6a4a 0%, transparent 30%),
+        radial-gradient(ellipse at 22% 40%, #3b4a52 0%, transparent 34%),
+        linear-gradient(#4a3a2e, #241c17);
+      clip-path: polygon(78px 0px, 1841px 0px, 1502px 1080px, 421px 1080px);
+    }
+    .piv-etiquette {
+      position: absolute;
+      left: 640px;
+      top: 760px;
+      color: #e8dccb;
+      font-size: 28px;
+      font-weight: 600;
+      font-stretch: 85%;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+  </style>
+  <div id="root" data-composition-id="pivot" data-width="1920" data-height="1080">
+    <div id="piv-plaque" class="clip" data-start="0" data-duration="0.82">
+      <span class="piv-etiquette">Plaque V2 : P1 en maillot pivote vers l'objectif</span>
+    </div>
+  </div>
+  <script>
+    // Plan fixe : seul le contenu filmé bouge chez Apple, le masque ne bouge pas.
+    window.__timelines["pivot"] = gsap.timeline({ paused: true });
+  </script>
+</template>

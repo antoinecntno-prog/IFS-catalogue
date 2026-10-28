@@ -1,0 +1,95 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Archivo Film";
+      src: url("assets/fonts/archivo-wdth.woff2") format("woff2");
+      font-weight: 100 900;
+      font-stretch: 62% 125%;
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      background: #101010;
+      overflow: hidden;
+      font-family: "Archivo Film", sans-serif;
+    }
+    /* Quatre angles de la même scène, chacun dans un quart de cadre qui pivote autour du centre (960, 540). */
+    .bat-plaque {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 70% 40%, #6fb0b4 0%, transparent 24%),
+        radial-gradient(ellipse at 30% 70%, #6b3b3f 0%, transparent 30%),
+        linear-gradient(#1f3a3d, #121c1f);
+    }
+    #bat-a { clip-path: polygon(957px 537px, 1950px 537px, 1950px 1110px, 1530px 1110px); }
+    #bat-b { clip-path: polygon(960px 534px, 1536px 1110px, 384px 1110px); }
+    #bat-c { clip-path: polygon(-30px 537px, 955px 537px, 393px 1110px, -30px 1110px); }
+    #bat-d { clip-path: polygon(-30px -30px, 962px -30px, 962px 555px, -30px 555px); }
+    .bat-etiquette {
+      position: absolute;
+      color: #e3eeee;
+      font-size: 28px;
+      font-weight: 600;
+      font-stretch: 85%;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+    /* Point d'ancrage des textes : le coin du masque, au centre du cadre. */
+    .bat-ancre {
+      position: absolute;
+      left: 960px;
+      top: 540px;
+      width: 0;
+      height: 0;
+    }
+    .bat-bloc {
+      position: absolute;
+      top: 12px;
+      display: flex;
+      align-items: baseline;
+      gap: 9px;
+      white-space: nowrap;
+      transform: translateY(-50%);
+    }
+    #bat-bloc-1 { right: 32px; }
+    #bat-bloc-2 { left: 30px; }
+    .bat-mot {
+      line-height: 1;
+      font-weight: 900;
+      background: linear-gradient(100deg, #5f5d5c 0%, #d8d4d2 38%, #9b9897 62%, #e4e1df 82%, #8d8a89 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .bat-large { font-size: 56px; font-stretch: 125%; }
+    .bat-etroit { font-size: 44px; font-stretch: 62%; }
+  </style>
+  <div id="root" data-composition-id="batterie" data-width="1920" data-height="1080">
+    <div id="bat-a" class="bat-plaque clip" data-start="0" data-duration="1.2"><span class="bat-etiquette" style="left: 1300px; top: 640px">Plaque V4 : P3 de nuit, angle 1</span></div>
+    <div id="bat-b" class="bat-plaque clip" data-start="1.2" data-duration="1"><span class="bat-etiquette" style="left: 760px; top: 900px">Plaque V4 : P3 de nuit, angle 2</span></div>
+    <div id="bat-c" class="bat-plaque clip" data-start="2.2" data-duration="1"><span class="bat-etiquette" style="left: 120px; top: 640px">Plaque V4 : P3 de nuit, angle 3</span></div>
+    <div id="bat-d" class="bat-plaque clip" data-start="3.2" data-duration="1.02"><span class="bat-etiquette" style="left: 120px; top: 260px">Plaque V4 : P3 de nuit, angle 4</span></div>
+    <div id="bat-ancre-1" class="bat-ancre clip" data-start="0" data-duration="2.2" data-layout-allow-overflow>
+      <div id="bat-bloc-1" class="bat-bloc" data-layout-allow-overflow><span class="bat-mot bat-large">PRIX</span><span class="bat-mot bat-etroit">AFFICHÉS</span></div>
+    </div>
+    <div id="bat-ancre-2" class="bat-ancre clip" data-start="2.2" data-duration="2.02" data-layout-allow-overflow>
+      <div id="bat-bloc-2" class="bat-bloc" data-layout-allow-overflow><span class="bat-mot bat-etroit">PALIER PAR</span><span class="bat-mot bat-large">PALIER</span></div>
+    </div>
+  </div>
+  <script>
+    // Le texte est épinglé au coin du masque et tourne autour de lui, mesuré sur Apple :
+    // premier bloc à -60° jusqu'à 26,5 s, à plat à 26,75 s, vertical à 27,75 s ;
+    // second bloc à -45° jusqu'à 28,5 s, à plat à 28,75 s, vertical à 29,75 s.
+    const C = 25.9;
+    const k = (ts) => ts.map((t) => t - C);
+    const R1 = calque.courbe(k([25.9, 26.5, 26.75, 27.0, 27.25, 27.75, 28.1]), [-60, -60, 0, 0, 43, 90, 90]);
+    const R2 = calque.courbe(k([28.1, 28.5, 28.75, 29.0, 29.25, 29.75, 30.12]), [-45, -45, 0, 0, 45, 90, 90]);
+    const tl = gsap.timeline({ paused: true });
+    calque.piloter(tl, 0, 4.22, (t) => {
+      gsap.set("#bat-ancre-1", { rotation: R1(t) });
+      gsap.set("#bat-ancre-2", { rotation: R2(t) });
+    });
+    window.__timelines["batterie"] = tl;
+  </script>
+</template>

@@ -1,0 +1,128 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background: #16181a;
+      overflow: hidden;
+    }
+    /* Écran d'ordinateur en biais derrière le téléphone, flou de profondeur (Apple : éditeur de code). */
+    #fic-bureau {
+      position: absolute;
+      left: -180px;
+      top: 60px;
+      width: 1920px;
+      height: 1080px;
+    }
+    #fic-bureau img {
+      display: block;
+      width: 1920px;
+      height: 1080px;
+    }
+    /* Téléphone grossi, bas hors cadre, aux bornes mesurées sur Apple (1014 à 1824 px, haut à 108 px). */
+    #fic-telephone {
+      position: absolute;
+      left: 1014px;
+      top: 108px;
+      width: 810px;
+      height: 1720px;
+      border-radius: 110px;
+      background: #0d0d0e;
+      box-shadow: 0 0 0 6px #3b3b3e, 0 30px 80px rgba(0, 0, 0, 0.6);
+    }
+    #fic-ecran {
+      position: absolute;
+      left: 25px;
+      top: 25px;
+      width: 760px;
+      height: 1670px;
+      border-radius: 88px;
+      overflow: hidden;
+      background: #ffffff;
+    }
+    #fic-mobile {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 760px;
+      height: 1645px;
+    }
+    /* Galerie de la fiche (mesurée dans la page : 16, 85, 358 × 447,5 px CSS, échelle 1,949). */
+    #fic-galerie {
+      position: absolute;
+      left: 31px;
+      top: 166px;
+      width: 698px;
+      height: 872px;
+      overflow: hidden;
+      border-radius: 12px;
+      background: #f1eef0;
+    }
+    #fic-bande {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 872px;
+      display: flex;
+    }
+    #fic-bande img {
+      display: block;
+      flex: 0 0 698px;
+      width: 698px;
+      height: 872px;
+      object-fit: cover;
+    }
+  </style>
+  <div id="root" data-composition-id="fiche" data-width="1920" data-height="1080">
+    <svg width="0" height="0" style="position:absolute">
+      <filter id="fic-bouge" x="-20%" y="0" width="140%" height="100%">
+        <feGaussianBlur id="fic-flou" stdDeviation="0 0" />
+      </filter>
+    </svg>
+    <div id="fic-bureau" class="clip" data-start="0" data-duration="1.5" data-layout-allow-overflow>
+      <img src="assets/fiche-bureau.png" alt="Fiche du set football sur ordinateur" />
+    </div>
+    <div id="fic-telephone" class="clip" data-start="0" data-duration="1.5" data-layout-allow-overflow>
+      <div id="fic-ecran">
+        <img id="fic-mobile" src="assets/fiche-mobile.png" alt="Fiche du set football sur téléphone" />
+        <div id="fic-galerie">
+          <div id="fic-bande"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Bande de photos : les trois vues de la fiche, répétées pour 13 cartes de défilement.
+    const PHOTOS = ["set-football-16cace25.webp", "set-football-v2-0dbebe47.webp", "set-football-v3-68435e45.webp"];
+    const bande = document.getElementById("fic-bande");
+    for (let i = 0; i < 15; i++) {
+      const img = document.createElement("img");
+      img.src = "assets/" + PHOTOS[i % 3];
+      img.alt = "";
+      bande.appendChild(img);
+    }
+    // Profil de rotation écrit dans le code à l'écran chez Apple : 36 cartes par seconde à pleine vitesse,
+    // 0,2 s pour l'atteindre, 0,5 s de freinage, courbe de freinage d'exposant 3. 13 cartes au total.
+    const VMAX = 36, MONTEE = 0.2, FREIN = 0.5, EXP = 3, TOTAL = 13, DEPART = 0.1;
+    const dMontee = (VMAX * MONTEE) / 2, dFrein = (VMAX * FREIN) / EXP;
+    const croisiere = (TOTAL - dMontee - dFrein) / VMAX;
+    function distance(t) {
+      const u = t - DEPART;
+      if (u <= 0) return [0, 0];
+      if (u < MONTEE) return [(VMAX / MONTEE) * u * u / 2, (VMAX / MONTEE) * u];
+      if (u < MONTEE + croisiere) return [dMontee + VMAX * (u - MONTEE), VMAX];
+      const w = Math.min(1, (u - MONTEE - croisiere) / FREIN);
+      return [dMontee + VMAX * croisiere + dFrein * (1 - Math.pow(1 - w, EXP)), w < 1 ? VMAX * Math.pow(1 - w, EXP - 1) : 0];
+    }
+    const tl = gsap.timeline({ paused: true });
+    gsap.set("#fic-bureau", { rotationY: 24, transformPerspective: 1600, transformOrigin: "0% 50%", filter: "blur(3px) brightness(0.85)" });
+    gsap.set("#fic-bande", { filter: "url(#fic-bouge)" });
+    calque.piloter(tl, 0, 1.5, (t) => {
+      const [d, v] = distance(t);
+      gsap.set("#fic-bande", { x: -d * 698 });
+      // Flou de bougé horizontal : environ un tiers du déplacement sur une image.
+      document.getElementById("fic-flou").setAttribute("stdDeviation", `${Math.min(140, (v * 698) / 24 / 3).toFixed(1)} 0`);
+    });
+    window.__timelines["fiche"] = tl;
+  </script>
+</template>

@@ -1,0 +1,60 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background: #efeaee;
+      overflow: hidden;
+    }
+    /* Plan A : l'écran vu en biais, coin haut droit de l'application (Apple, 13,1 à 13,9 s). */
+    #mac-ecran {
+      position: absolute;
+      left: 160px;
+      top: -30px;
+      width: 1990px;
+      height: 1119px;
+    }
+    .mac-ui {
+      position: absolute;
+      inset: 0;
+      width: 1990px;
+      height: 1119px;
+    }
+    #mac-voile {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 70% 45%, transparent 45%, rgba(10, 10, 12, 0.55) 100%);
+    }
+    /* Plan B : macro sur l'image travaillée (Apple, 13,9 à 14,7 s). */
+    #mac-macro {
+      position: absolute;
+      inset: 0;
+    }
+    .mac-poitrine {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+    }
+  </style>
+  <div id="root" data-composition-id="macro" data-width="1920" data-height="1080">
+    <div id="mac-ecran" class="clip" data-start="0" data-duration="0.82" data-layout-allow-overflow>
+      <img id="mac-ui-vide" class="mac-ui clip" data-start="0" data-duration="0.5" src="assets/macro-ui-vide.png" alt="Studio, onglet Logos, aucun logo" />
+      <img id="mac-ui-plein" class="mac-ui clip" data-start="0.5" data-duration="0.32" src="assets/macro-ui-plein.png" alt="Studio, logo déposé et placé au cœur" />
+    </div>
+    <div id="mac-voile" class="clip" data-start="0" data-duration="0.82"></div>
+    <div id="mac-macro" class="clip" data-start="0.82" data-duration="0.8">
+      <img id="mac-poitrine-selection" class="mac-poitrine clip" data-start="0.82" data-duration="0.25" src="assets/macro-poitrine-selection.png" alt="Logo sélectionné sur la poitrine" />
+      <img id="mac-poitrine-pose" class="mac-poitrine clip" data-start="1.07" data-duration="0.55" src="assets/macro-poitrine.png" alt="Logo posé sur la poitrine" />
+    </div>
+  </div>
+  <script>
+    // L'écran est vu en biais et la caméra avance très lentement ; l'état change à 13,6 s comme
+    // l'interrupteur d'Apple, puis la macro passe de la sélection à l'image posée à 14,17 s.
+    const tl = gsap.timeline({ paused: true });
+    gsap.set("#mac-ecran", { rotationY: 12, rotationX: 6, transformPerspective: 1800, transformOrigin: "50% 40%" });
+    tl.fromTo("#mac-ecran", { scale: 1 }, { scale: 1.05, duration: 0.82, ease: "none" }, 0);
+    tl.fromTo("#mac-macro", { scale: 1 }, { scale: 1.04, duration: 0.8, ease: "none", transformOrigin: "60% 50%" }, 0.82);
+    window.__timelines["macro"] = tl;
+  </script>
+</template>

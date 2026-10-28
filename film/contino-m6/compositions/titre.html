@@ -1,0 +1,75 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Archivo Film";
+      src: url("assets/fonts/archivo-wdth.woff2") format("woff2");
+      font-weight: 100 900;
+      font-stretch: 62% 125%;
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      background: #101010;
+      overflow: hidden;
+      font-family: "Archivo Film", sans-serif;
+    }
+    /* Titre à plat, aligné à gauche sur 600 px comme celui d'Apple (600 à 1320 px de large). */
+    #tit-bloc {
+      position: absolute;
+      inset: 0;
+    }
+    .tit-mot {
+      position: absolute;
+      left: 600px;
+      display: block;
+      white-space: nowrap;
+      line-height: 0.74;
+      font-weight: 900;
+      background: linear-gradient(100deg, #6a6867 0%, #dcd8d6 35%, #a19e9d 60%, #e6e3e1 80%, #8f8c8b 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    #tit-nouveau { top: 250px; font-size: 52px; font-weight: 800; font-stretch: 75%; }
+    #tit-catalogue {
+      top: 368px;
+      font-size: 160px;
+      font-stretch: 62%;
+      --w: 0px;
+      -webkit-mask-image: linear-gradient(90deg, #000 var(--w), transparent calc(var(--w) + 120px));
+      mask-image: linear-gradient(90deg, #000 var(--w), transparent calc(var(--w) + 120px));
+    }
+    #tit-edition { left: 744px; top: 500px; font-size: 44px; font-weight: 800; font-stretch: 75%; }
+    #tit-annee { top: 538px; display: flex; font-size: 300px; font-stretch: 88%; letter-spacing: -0.02em; }
+    #tit-annee span {
+      display: block;
+      background: inherit;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+  </style>
+  <div id="root" data-composition-id="titre" data-width="1920" data-height="1080">
+    <div id="tit-bloc" class="clip" data-start="0" data-duration="2.28" data-layout-allow-overflow>
+      <span class="tit-mot" id="tit-nouveau">NOUVEAU</span>
+      <span class="tit-mot" id="tit-catalogue">CATALOGUE</span>
+      <span class="tit-mot" id="tit-edition">ÉDITION</span>
+      <span class="tit-mot" id="tit-annee"><span id="tit-c1">2</span><span id="tit-c2">0</span><span id="tit-c3">2</span><span id="tit-c4">6</span></span>
+    </div>
+  </div>
+  <script>
+    // Construction mesurée sur Apple : le premier mot et le début du second à la coupe (37,62 s), la fin du
+    // second à 37,95 s, le petit mot à 38,2 s, puis le grand mot caractère par caractère à partir de 38,4 s.
+    // Ensuite le bloc recule lentement (720 puis 640 px de large de 38,75 à 39,75 s).
+    const C = 37.62;
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#tit-catalogue", { "--w": "360px" }, { "--w": "720px", duration: 0.33, ease: "power2.inOut" }, 0);
+    tl.fromTo("#tit-edition", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.12, ease: "power1.out" }, 38.2 - C);
+    ["#tit-c1", "#tit-c2", "#tit-c3", "#tit-c4"].forEach((s, i) => {
+      tl.fromTo(s, { opacity: 0, filter: "blur(10px) brightness(1.6)" },
+        { opacity: 1, filter: "blur(0px) brightness(1)", duration: 0.14, ease: "power1.out" }, 38.4 - C + i * 0.07);
+    });
+    tl.fromTo("#tit-bloc", { scale: 1 }, { scale: 0.89, duration: 39.9 - 38.75, ease: "none", transformOrigin: "960px 500px" }, 38.75 - C);
+    window.__timelines["titre"] = tl;
+  </script>
+</template>

@@ -1,0 +1,56 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Archivo Film";
+      src: url("assets/fonts/archivo-wdth.woff2") format("woff2");
+      font-weight: 100 900;
+      font-stretch: 62% 125%;
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      background: #101010;
+      overflow: hidden;
+      font-family: "Archivo Film", sans-serif;
+    }
+    #nui-masque {
+      position: absolute;
+      inset: 0;
+    }
+    /* Plaque V1 étalonnée de nuit : P1 seule au club-house, petite dans le cadre, de dos puis de trois quarts. */
+    #nui-plaque {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 60% 52%, #d9d6cf 0%, transparent 6%),
+        radial-gradient(ellipse at 75% 35%, #6a2f25 0%, transparent 26%),
+        radial-gradient(ellipse at 25% 45%, #4d7477 0%, transparent 30%),
+        linear-gradient(#2a2523, #141212);
+    }
+    .nui-etiquette {
+      position: absolute;
+      left: 960px;
+      top: 400px;
+      color: #e8dccb;
+      font-size: 28px;
+      font-weight: 600;
+      font-stretch: 85%;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+  </style>
+  <div id="root" data-composition-id="nuit" data-width="1920" data-height="1080">
+    <div id="nui-masque" class="clip" data-start="0" data-duration="3.28" data-layout-allow-overflow>
+      <div id="nui-plaque"><span class="nui-etiquette">Plaque V1 de nuit : P1 au club-house</span></div>
+    </div>
+  </div>
+  <script>
+    // Masques relevés sur Apple de 30,25 à 33,25 s (outils-calage/formes.py), 36 points par clé.
+    const C = 30.12;
+    const M = window.MASQUES.nuit;
+    const F = calque.piste(M.T.map((t) => t - C), M.P);
+    const tl = gsap.timeline({ paused: true });
+    calque.piloter(tl, 0, 3.28, (t) => gsap.set("#nui-masque", { clipPath: calque.polygone(F(t)) }));
+    window.__timelines["nuit"] = tl;
+  </script>
+</template>

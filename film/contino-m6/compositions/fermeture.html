@@ -1,0 +1,160 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Archivo Film";
+      src: url("assets/fonts/archivo-wdth.woff2") format("woff2");
+      font-weight: 100 900;
+      font-stretch: 62% 125%;
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      background: #101010;
+      overflow: hidden;
+      font-family: "Archivo Film", sans-serif;
+    }
+    #fer-masque {
+      position: absolute;
+      inset: 0;
+    }
+    #fer-plaque {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 50% 22%, #d8d2c6 0%, transparent 10%),
+        radial-gradient(ellipse at 30% 10%, #8a3a2c 0%, transparent 28%),
+        radial-gradient(ellipse at 70% 15%, #4d7679 0%, transparent 28%),
+        linear-gradient(#3a302b, #1b1716);
+    }
+    .fer-etiquette {
+      position: absolute;
+      left: 700px;
+      top: 110px;
+      color: #efe6d6;
+      font-size: 28px;
+      font-weight: 600;
+      font-stretch: 85%;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+    /* Même ordinateur que l'ouverture (684 × 480 px), filmé de face puis du dessus quand le capot se rabat. */
+    #fer-echelle {
+      position: absolute;
+      left: 610px;
+      top: 300px;
+      width: 684px;
+      height: 480px;
+      transform-origin: 50% 50%;
+    }
+    #fer-lacet, #fer-inclinaison, #fer-objet {
+      position: absolute;
+      inset: 0;
+      transform-origin: 50% 50%;
+      transform-style: preserve-3d;
+    }
+    .fer-face {
+      position: absolute;
+      backface-visibility: hidden;
+    }
+    #fer-base {
+      inset: 0;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #7f7f7f, #b4b4b4);
+    }
+    #fer-clavier {
+      position: absolute;
+      left: 60px;
+      top: 200px;
+      width: 564px;
+      height: 230px;
+      border-radius: 10px;
+      background: repeating-linear-gradient(90deg, #1c1c1e 0 34px, #2b2b2e 34px 38px), #1c1c1e;
+    }
+    #fer-pave {
+      position: absolute;
+      left: 232px;
+      top: 40px;
+      width: 220px;
+      height: 130px;
+      border-radius: 10px;
+      background: #a3a3a3;
+    }
+    #fer-charniere {
+      position: absolute;
+      inset: 0;
+      transform-origin: 50% 100%;
+      transform-style: preserve-3d;
+    }
+    #fer-capot {
+      inset: 0;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #8a8a8a 0%, #a9a9a9 40%, #c9c9c9 75%, #d6d6d6 100%);
+    }
+    #fer-monogramme {
+      position: absolute;
+      left: 297px;
+      top: 192px;
+      width: 90px;
+      height: 96px;
+    }
+    #fer-ecran {
+      inset: 0;
+      border-radius: 18px;
+      background: #0b0b0c;
+      transform: rotateY(180deg);
+    }
+  </style>
+  <div id="root" data-composition-id="fermeture" data-width="1920" data-height="1080">
+    <div id="fer-masque" class="clip" data-start="0" data-duration="3.0" data-layout-allow-overflow>
+      <div id="fer-plaque"><span class="fer-etiquette">Plaque L : P1 de nuit, face caméra, rabat le capot</span></div>
+    </div>
+    <div id="fer-echelle" class="clip" data-start="0" data-duration="4.22" data-layout-allow-overflow>
+      <div id="fer-lacet">
+        <div id="fer-inclinaison">
+          <div id="fer-objet">
+            <div class="fer-face" id="fer-base"><div id="fer-clavier"></div><div id="fer-pave"></div></div>
+            <div id="fer-charniere">
+              <div class="fer-face" id="fer-capot"><img id="fer-monogramme" src="assets/c-sport-glyphe.png" alt="Contino Sport" /></div>
+              <div class="fer-face" id="fer-ecran"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const C = 33.4;
+    const k = (ts) => ts.map((t) => t - C);
+    // Masque en V relevé sur Apple de 33,5 à 36,25 s (outils-calage/formes.py).
+    const M = window.MASQUES.fermeture;
+    const V = calque.piste(k(M.T), M.P);
+    // Pose de l'ordinateur calée sur les bornes du capot mesurées chez Apple (échelle corrigée de la
+    // perspective, le capot étant plus près de l'objectif en vue de face) : échelle, inclinaison de la
+    // caméra, angle du capot, bord charnière à l'écran. Le capot reste face caméra pendant qu'elle monte
+    // au zénith, puis l'ordinateur fermé est seul, comme au tout début du film.
+    const POSE = calque.piste(k([33.4, 34.5, 35.0, 35.25, 35.5, 35.75, 36.0, 36.25, 36.5, 37.0, 37.62]), [
+      [0.584, 80, -119, 668],
+      [0.585, 80, -119, 662],
+      [0.59, 80, -107, 600],
+      [0.616, 80, -108.7, 588],
+      [0.629, 80, -98, 572],
+      [0.656, 70, -70, 548],
+      [0.783, 50, -50, 560],
+      [0.895, 25, -25, 640],
+      [0.953, 10, -10, 744],
+      [1.04, 0, 0, 798],
+      [1.04, 0, 0, 798],
+    ]);
+    const tl = gsap.timeline({ paused: true });
+    calque.piloter(tl, 0, 4.22, (t) => {
+      gsap.set("#fer-masque", { clipPath: calque.polygone(V(t)) });
+      const [e, inc, cap, charniere] = POSE(t);
+      const dy = charniere - (540 + e * 240 * Math.cos((inc * Math.PI) / 180));
+      gsap.set("#fer-lacet", { transformPerspective: 2400 / e });
+      gsap.set("#fer-inclinaison", { rotationX: inc });
+      gsap.set("#fer-charniere", { rotationX: cap, z: 13 });
+      gsap.set("#fer-echelle", { scale: e, x: 5, y: dy });
+    });
+    window.__timelines["fermeture"] = tl;
+  </script>
+</template>

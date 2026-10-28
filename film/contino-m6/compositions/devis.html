@@ -1,0 +1,55 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background: #ffffff;
+      overflow: hidden;
+    }
+    /* Formulaire de devis, étape 2, recadré serré sur le champ Précisions (capture réelle, échelle 3,43). */
+    #dev-cadre {
+      position: absolute;
+      inset: 0;
+    }
+    .dev-capture {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+    }
+    #dev-curseur {
+      position: absolute;
+      left: 0;
+      top: 404px;
+      width: 4px;
+      height: 74px;
+      background: #1b1b1b;
+    }
+  </style>
+  <div id="root" data-composition-id="devis" data-width="1920" data-height="1080">
+    <div id="dev-cadre" class="clip" data-start="0" data-duration="1.17">
+      <img class="dev-capture" src="assets/devis-debut.png" alt="Champ Précisions, début de saisie" />
+      <img id="dev-plein" class="dev-capture" src="assets/devis-plein.png" alt="Champ Précisions rempli" />
+      <div id="dev-curseur"></div>
+    </div>
+  </div>
+  <script>
+    // La saisie continue une ligne déjà commencée, comme le code tapé chez Apple (15,5 à 16,6 s) :
+    // « 10 M, 12 L, 6 XL, » est là, « noms et numéros au dos » se tape lettre par lettre.
+    // Abscisses CSS de chaque caractère mesurées dans la page (capture-suite.js), converties au cadre.
+    const XS = [663, 672, 680.9, 685.1, 698.5, 702.3, 706.5, 715.5, 724.4, 728.6, 736.5, 740.3, 744.5, 753.5,
+      757.6, 767.9, 775.8, 779.6, 783.8, 792.6, 801.8, 815, 822.6, 826.7, 835.4, 840.8, 845, 853.7, 862.5, 875.7,
+      884.4, 890.9, 899.7, 907.2, 911.3, 920, 928.7, 932.9, 942.3, 951.5, 959];
+    const cadre = (x) => (x - 620) * (1920 / 560);
+    const DEBUT = 17, FIN = 40, T0 = 0.12, T1 = 0.92;
+    const tl = gsap.timeline({ paused: true });
+    calque.piloter(tl, 0, 1.17, (t) => {
+      const k = Math.max(DEBUT, Math.min(FIN, DEBUT + Math.floor(((t - T0) / (T1 - T0)) * (FIN - DEBUT + 1))));
+      const x = cadre(XS[k]);
+      gsap.set("#dev-plein", { clipPath: `inset(398px ${(1920 - x).toFixed(1)}px 593px 0px)` });
+      gsap.set("#dev-curseur", { x: x + 2 });
+    });
+    tl.fromTo("#dev-cadre", { scale: 1 }, { scale: 1.03, duration: 1.17, ease: "none", transformOrigin: "35% 45%" }, 0);
+    window.__timelines["devis"] = tl;
+  </script>
+</template>

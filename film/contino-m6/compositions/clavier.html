@@ -1,0 +1,60 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Archivo Film";
+      src: url("assets/fonts/archivo-wdth.woff2") format("woff2");
+      font-weight: 100 900;
+      font-stretch: 62% 125%;
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      background: #1a1714;
+      overflow: hidden;
+      font-family: "Archivo Film", sans-serif;
+    }
+    /* Clavier en macro, vu en biais comme chez Apple (14,7 à 15,5 s) : touches noires, plateau argent. */
+    #cla-plateau {
+      position: absolute;
+      left: -600px;
+      top: -500px;
+      width: 3200px;
+      height: 2200px;
+      background:
+        repeating-linear-gradient(90deg, transparent 0 164px, #070708 164px 186px),
+        repeating-linear-gradient(0deg, transparent 0 164px, #070708 164px 186px),
+        repeating-linear-gradient(90deg, #3a3a3d 0 8px, #2b2b2e 8px 156px, #232325 156px 164px, transparent 164px 186px),
+        linear-gradient(#2c2c2f, #1c1c1e);
+    }
+    #cla-lumiere {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 25% 15%, rgba(255, 226, 190, 0.32) 0%, transparent 45%),
+        linear-gradient(rgba(20, 16, 12, 0.75) 0%, transparent 30%, transparent 70%, rgba(20, 16, 12, 0.8) 100%);
+    }
+    .cla-etiquette {
+      position: absolute;
+      left: 80px;
+      top: 960px;
+      color: #e8dccb;
+      font-size: 28px;
+      font-weight: 600;
+      font-stretch: 85%;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+  </style>
+  <div id="root" data-composition-id="clavier" data-width="1920" data-height="1080">
+    <div id="cla-plateau" class="clip" data-start="0" data-duration="0.73" data-layout-allow-overflow></div>
+    <div id="cla-lumiere" class="clip" data-start="0" data-duration="0.73"></div>
+    <span id="cla-etiquette" class="cla-etiquette clip" data-start="0" data-duration="0.73">Plaque Veo : mains sur le clavier, macro</span>
+  </div>
+  <script>
+    // Plan macro à la main : la caméra glisse doucement le long des touches, profondeur de champ courte.
+    const tl = gsap.timeline({ paused: true });
+    gsap.set("#cla-plateau", { rotationX: 54, rotation: -16, transformPerspective: 1400, filter: "blur(1.5px)" });
+    tl.fromTo("#cla-plateau", { x: 0, y: 0 }, { x: -70, y: 12, duration: 0.73, ease: "none" }, 0);
+    window.__timelines["clavier"] = tl;
+  </script>
+</template>

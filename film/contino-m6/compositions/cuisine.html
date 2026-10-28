@@ -1,0 +1,95 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Archivo Film";
+      src: url("assets/fonts/archivo-wdth.woff2") format("woff2");
+      font-weight: 100 900;
+      font-stretch: 62% 125%;
+    }
+    /* Fond transparent : le capot passe devant la fin du plan précédent avant la coupe. */
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      font-family: "Archivo Film", sans-serif;
+    }
+    #cui-masque {
+      position: absolute;
+      inset: 0;
+      background: #101010;
+    }
+    #cui-plaque {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 62% 22%, #f1ead9 0%, transparent 18%),
+        radial-gradient(ellipse at 30% 45%, #6f6a4c 0%, transparent 38%),
+        radial-gradient(ellipse at 75% 70%, #8b7a5f 0%, transparent 30%),
+        linear-gradient(170deg, #59533d, #2e2b21);
+    }
+    .cui-etiquette {
+      position: absolute;
+      left: 180px;
+      top: 300px;
+      color: #f0e8d6;
+      font-size: 28px;
+      font-weight: 600;
+      font-stretch: 85%;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+    /* Capot de synthèse, même matière que l'ordinateur de l'ouverture : il passe tout près de l'objectif. */
+    #cui-capot {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 684px;
+      height: 480px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #8d8d8d 0%, #b9b9b9 40%, #d8d8d8 75%, #e6e6e6 100%);
+    }
+    #cui-monogramme {
+      position: absolute;
+      left: 297px;
+      top: 192px;
+      width: 90px;
+      height: 96px;
+    }
+  </style>
+  <div id="root" data-composition-id="cuisine" data-width="1920" data-height="1080">
+    <div id="cui-masque" class="clip" data-start="0.43" data-duration="2.12" data-layout-allow-overflow>
+      <div id="cui-plaque">
+        <span class="cui-etiquette">Plaque V3 : P2 dans le bureau de sa PME</span>
+      </div>
+    </div>
+    <div id="cui-capot" class="clip" data-start="0" data-duration="2.55" data-layout-allow-overflow>
+      <img id="cui-monogramme" src="assets/c-sport-glyphe.png" alt="Contino Sport" />
+    </div>
+  </div>
+  <script>
+    const C = 10.55;
+    // Bande oblique relevée sur Apple (outils-calage/formes.py) : 36 points par clé, de 11,0 à 13,0 s.
+    const M = window.MASQUES.cuisine;
+    const BANDE = calque.piste(M.T.map((t) => t - C), M.P);
+    // Le capot balaie l'objectif de gauche à droite (Apple : 180 à 1420 px à 10,75 s, 680 à 1500 px à 11,0 s),
+    // puis rejoint les mains de P2 au bout de la bande. Centre, échelle, lacet, roulis, flou de bougé.
+    const CAPOT = calque.piste([0, 0.2, 0.45, 0.7, 0.95, 1.45], [
+      [-1400, 470, 2.3, 28, -6, 30],
+      [800, 500, 2.1, 30, -6, 16],
+      [1090, 540, 1.87, 50, -3, 8],
+      [1370, 690, 1.0, 58, 12, 3],
+      [1540, 760, 0.72, 60, 18, 0],
+      [1600, 770, 0.62, 60, 20, 0],
+    ]);
+    const tl = gsap.timeline({ paused: true });
+    calque.piloter(tl, 0, 2.55, (t) => {
+      gsap.set("#cui-masque", { clipPath: calque.polygone(BANDE(t)) });
+      const [x, y, s, ry, rz, f] = CAPOT(t);
+      gsap.set("#cui-capot", {
+        x: x - 342, y: y - 240, scale: s, rotationY: ry, rotation: rz,
+        transformPerspective: 1600, filter: `blur(${Math.max(0, f).toFixed(1)}px)`,
+      });
+    });
+    window.__timelines["cuisine"] = tl;
+  </script>
+</template>

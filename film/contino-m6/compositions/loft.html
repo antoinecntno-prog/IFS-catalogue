@@ -1,0 +1,77 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Archivo Film";
+      src: url("assets/fonts/archivo-wdth.woff2") format("woff2");
+      font-weight: 100 900;
+      font-stretch: 62% 125%;
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      background: #101010;
+      overflow: hidden;
+      font-family: "Archivo Film", sans-serif;
+    }
+    #loft-masque {
+      position: absolute;
+      inset: 0;
+    }
+    /* Plaque V1 vue d'en haut : le club-house, P1 assise à son ordinateur au sommet du biseau. */
+    #loft-plaque {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 47% 62%, #cfc3b2 0%, transparent 7%),
+        radial-gradient(ellipse at 70% 25%, #b2533f 0%, transparent 26%),
+        radial-gradient(ellipse at 90% 55%, #6d4a39 0%, transparent 30%),
+        linear-gradient(160deg, #5a4337, #2b211b);
+    }
+    .loft-etiquette {
+      position: absolute;
+      left: 1080px;
+      top: 300px;
+      color: #e8dccb;
+      font-size: 28px;
+      font-weight: 600;
+      font-stretch: 85%;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+  </style>
+  <div id="root" data-composition-id="loft" data-width="1920" data-height="1080">
+    <div id="loft-masque" class="clip" data-start="0" data-duration="2.56" data-layout-allow-overflow>
+      <div id="loft-plaque" data-layout-allow-overflow>
+        <span class="loft-etiquette">Plaque V1 : P1 au club-house, plongée</span>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Biseau mesuré image par image sur Apple (outils-calage/biseau.py) : bord gauche par ses abscisses en
+    // y = 0 et y = 600, bord droit par ses ordonnées en x = 1000 et x = 1920. Temps locaux (coupe à 8,42 s).
+    // De 8,5 à 9,0 s le V pivote en biseau oblique, puis il s'élargit pendant que la caméra approche d'elle.
+    const C = 8.42;
+    const T = [8.5, 8.75, 9.0, 9.25, 9.5, 9.75, 10.0, 10.25, 10.5, 10.75].map((t) => t - C);
+    const BISEAU = calque.piste(T, [
+      [611, 927, 954, -814],
+      [1115, 910, 767, 263],
+      [1307, 853, 719, 486],
+      [1298, 818, 696, 487],
+      [1293, 792, 678, 523],
+      [1249, 748, 683, 562],
+      [1149, 662, 732, 596],
+      [1039, 529, 809, 619],
+      [852, 252, 961, 686],
+      [620, -80, 1150, 760],
+    ]);
+    // Approche de la caméra : P1, minuscule au sommet du V à 8,5 s, grandit jusqu'au passage du capot.
+    const APPROCHE = calque.courbe([0.08, 1.08, 1.83, 2.33], [1, 1.12, 1.35, 1.7]);
+    const tl = gsap.timeline({ paused: true });
+    calque.piloter(tl, 0, 2.56, (t) => {
+      const [a, b, c, d] = BISEAU(t);
+      gsap.set("#loft-masque", { clipPath: calque.biseau(a, b, c, d) });
+      gsap.set("#loft-plaque", { scale: APPROCHE(t), transformOrigin: "900px 700px" });
+    });
+    window.__timelines["loft"] = tl;
+  </script>
+</template>

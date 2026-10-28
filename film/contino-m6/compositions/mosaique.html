@@ -1,0 +1,132 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Archivo Film";
+      src: url("assets/fonts/archivo-wdth.woff2") format("woff2");
+      font-weight: 100 900;
+      font-stretch: 62% 125%;
+    }
+    /* Fond transparent : la bascule du plan précédent reste visible pendant la montée des ordinateurs. */
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      font-family: "Archivo Film", sans-serif;
+    }
+    #mos-tout {
+      position: absolute;
+      inset: 0;
+    }
+    .mos-plaque {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 2600px;
+      height: 1080px;
+    }
+    #mos-p1 { background: radial-gradient(ellipse at 20% 75%, #8a3b33 0%, transparent 25%), linear-gradient(#3e2a26, #1f1716); }
+    #mos-p2 { background: radial-gradient(ellipse at 50% 20%, #3f8f86 0%, transparent 26%), linear-gradient(#24423f, #142120); }
+    #mos-p3 { background: radial-gradient(ellipse at 78% 78%, #a0603b 0%, transparent 26%), linear-gradient(#4a3022, #22170f); }
+    #mos-p4 { background: radial-gradient(ellipse at 60% 20%, #d9d4c6 0%, transparent 30%), linear-gradient(#6d6a60, #34322c); }
+    #mos-pj { background: radial-gradient(ellipse at 80% 30%, #bfa98a 0%, transparent 22%), linear-gradient(#4b4a3c, #22231d); }
+    .mos-etiquette {
+      position: absolute;
+      color: #efe6d6;
+      font-size: 28px;
+      font-weight: 600;
+      font-stretch: 85%;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+    /* Ordinateurs fermés vus du dessus, en ligne : 186 × 144 px, pas de 516 px (Apple, 21,0 s). */
+    .mos-portable {
+      position: absolute;
+      left: 0;
+      top: 468px;
+      width: 186px;
+      height: 144px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #8c8c8c 0%, #b0b0b0 45%, #cfcfcf 100%);
+    }
+    .mos-portable img {
+      position: absolute;
+      left: 80px;
+      top: 58px;
+      width: 26px;
+      height: 28px;
+    }
+  </style>
+  <div id="root" data-composition-id="mosaique" data-width="1920" data-height="1080">
+    <svg width="0" height="0" style="position:absolute">
+      <filter id="mos-bouge" x="0" y="-30%" width="100%" height="160%">
+        <feGaussianBlur id="mos-flou" stdDeviation="0 0" />
+      </filter>
+    </svg>
+    <div id="mos-tout" class="clip" data-start="0" data-duration="5.28" data-layout-allow-overflow>
+      <div id="mos-p1" class="mos-plaque" data-layout-allow-overflow><span class="mos-etiquette" style="left: 60px; top: 900px">Plaque I1 : vestiaire de foot, vue du dessus</span></div>
+      <div id="mos-p2" class="mos-plaque" data-layout-allow-overflow><span class="mos-etiquette" style="left: 720px; top: 120px">Plaque I2 : cercle d'équipe de basket</span></div>
+      <div id="mos-p3" class="mos-plaque" data-layout-allow-overflow><span class="mos-etiquette" style="left: 1230px; top: 900px">Plaque I3 : départ de cyclistes, dossards</span></div>
+      <div id="mos-p4" class="mos-plaque" data-layout-allow-overflow><span id="mos-e4" class="mos-etiquette" style="left: 1640px; top: 120px">Plaque I4 : coureurs d'entreprise</span></div>
+      <div id="mos-pj" class="mos-plaque clip" data-start="4.23" data-duration="1.05" data-layout-allow-overflow><span class="mos-etiquette" style="left: 1010px; top: 380px">Plaque V4 : P3 de nuit, de profil</span></div>
+      <div id="mos-o1" class="mos-portable"><img src="assets/c-sport-glyphe.png" alt="" /></div>
+      <div id="mos-o2" class="mos-portable"><img src="assets/c-sport-glyphe.png" alt="" /></div>
+      <div id="mos-o3" class="mos-portable"><img src="assets/c-sport-glyphe.png" alt="" /></div>
+      <div id="mos-o4" class="mos-portable clip" data-start="1.83" data-duration="1.7" data-layout-allow-overflow><img src="assets/c-sport-glyphe.png" alt="" /></div>
+    </div>
+  </div>
+  <script>
+    const C = 20.62;
+    const k = (ts) => ts.map((t) => t - C);
+    const tg = (deg) => Math.tan((deg * Math.PI) / 180);
+    // Montée : les ordinateurs arrivent par le bas pendant la bascule verticale (bord haut à 1036 px à 20,75 s).
+    const MONTEE = calque.courbe(k([20.62, 20.75, 20.875, 21.0]), [1100, 568, 150, 0]);
+    // Panoramique vers la gauche qui accélère, mesuré sur le bas du deuxième trapèze.
+    const PAN = calque.courbe(k([22.0, 22.25, 22.5, 22.75, 23.0, 23.25, 23.5, 23.75, 24.0, 24.25, 24.5]),
+      [0, -6, -39, -102, -208, -360, -627, -894, -1128, -1400, -1700]);
+    // Le quatrième trapèze suit le panoramique puis ralentit pour devenir le rectangle du coin haut droit.
+    const QUATRE = calque.courbe(k([22.0, 22.25, 22.5, 22.75, 23.0, 23.25, 23.5, 23.75, 24.0]),
+      [0, -6, -39, -102, -208, -360, -582, -774, -906]);
+    // Trapèzes alternés à 60° : chacun se déplie depuis son ordinateur (angle des côtés depuis la verticale,
+    // bord libre). Les côtés finissent à 30°, comme les triangles d'Apple.
+    const H1 = calque.piste(k([20.9, 21.0, 21.25, 21.5]), [[0, 612], [22, 860], [28, 1040], [30, 1110]]);
+    const B2 = calque.piste(k([21.2, 21.5, 21.75, 22.0, 22.25]), [[0, 468], [10, 396], [22, 276], [28, 96], [30, -30]]);
+    const H3 = calque.piste(k([22.0, 22.25, 22.5, 22.75, 23.0]), [[0, 612], [10, 714], [25, 960], [29, 1060], [30, 1110]]);
+    const B4 = calque.piste(k([22.45, 22.5, 22.75, 23.0]), [[0, 468], [10, 408], [25, 78], [30, -30]]);
+    const haut = (g, d, [a, yb]) => [g, 468, d, 468, d + tg(a) * (yb - 468), yb, g - tg(a) * (yb - 468), yb];
+    const bas = (g, d, [a, yt]) => [g - tg(a) * (612 - yt), yt, d + tg(a) * (612 - yt), yt, d, 612, g, 612];
+    // À partir de 23,75 s, le quatrième trapèze pivote puis se redresse en rectangle de 954 à 1920 × 0 à 558 px.
+    const RECT = calque.piste(k([23.75, 24.0, 24.25, 24.5, 24.75, 25.0, 25.25]), [
+      [745, -30, 1684, -30, 1499, 291, 1314, 612, 1116, 612],
+      [718, -30, 1585, -30, 1460, 330, 1344, 600, 985, 600],
+      [690, -30, 1500, -30, 1770, 366, 1218, 654, 864, 486],
+      [822, -30, 1950, -30, 1950, 528, 1464, 702, 936, 690],
+      [948, -30, 1950, -30, 1950, 626, 1250, 628, 954, 624],
+      [960, -30, 1950, -30, 1950, 552, 1450, 552, 960, 552],
+      [954, -30, 1950, -30, 1950, 558, 1450, 558, 954, 558],
+    ]);
+    const tl = gsap.timeline({ paused: true });
+    calque.piloter(tl, 0, 5.28, (t) => {
+      const y = MONTEE(t), y2 = MONTEE(t + 1 / 24), p = PAN(t), q = QUATRE(t);
+      gsap.set("#mos-tout", { y });
+      document.getElementById("mos-flou").setAttribute("stdDeviation", `0 ${Math.min(120, Math.abs(y2 - y) / 3).toFixed(1)}`);
+      ["#mos-p1", "#mos-p2", "#mos-p3"].forEach((s) => gsap.set(s, { x: p }));
+      gsap.set("#mos-p1", { clipPath: calque.polygone(haut(342, 528, H1(t))) });
+      gsap.set("#mos-p2", { clipPath: calque.polygone(bas(858, 1044, B2(t))) });
+      gsap.set("#mos-p3", { clipPath: calque.polygone(haut(1380, 1566, H3(t))) });
+      // Quatrième forme en coordonnées écran : trapèze décalé, puis clés relevées.
+      let f;
+      if (t < 23.75 - C) {
+        const b = bas(1896 + q, 2082 + q, B4(t));
+        f = [b[0], b[1], b[2], b[3], (b[2] + b[4]) / 2, (b[3] + b[5]) / 2, b[4], b[5], b[6], b[7]];
+      } else f = RECT(t);
+      gsap.set(["#mos-p4", "#mos-pj"], { clipPath: calque.polygone(f) });
+      gsap.set("#mos-e4", { x: q });
+      gsap.set("#mos-o1", { x: 342 + p });
+      gsap.set("#mos-o2", { x: 858 + p });
+      gsap.set("#mos-o3", { x: 1380 + p });
+      gsap.set("#mos-o4", { x: 1896 + q });
+    });
+    gsap.set("#mos-tout", { filter: "url(#mos-bouge)" });
+    window.__timelines["mosaique"] = tl;
+  </script>
+</template>

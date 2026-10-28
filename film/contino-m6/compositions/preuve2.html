@@ -1,0 +1,136 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Archivo Film";
+      src: url("assets/fonts/archivo-wdth.woff2") format("woff2");
+      font-weight: 100 900;
+      font-stretch: 62% 125%;
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      background: #101010;
+      overflow: hidden;
+      font-family: "Archivo Film", sans-serif;
+    }
+    #p2-groupe {
+      position: absolute;
+      inset: 0;
+    }
+    #p2-masque {
+      position: absolute;
+      inset: 0;
+    }
+    #p2-plaque {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 50% 26%, #d8c6a8 0%, transparent 12%),
+        radial-gradient(ellipse at 30% 12%, #77704f 0%, transparent 30%),
+        radial-gradient(ellipse at 72% 10%, #8c7b5c 0%, transparent 28%),
+        linear-gradient(#5d553e, #2c281e);
+    }
+    .p2-etiquette {
+      position: absolute;
+      left: 720px;
+      top: 150px;
+      color: #f0e8d6;
+      font-size: 28px;
+      font-weight: 600;
+      font-stretch: 85%;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+    /* Capot vu de face, symétrique, devant P2 (Apple : 680 à 1240 px à 18,25 s). */
+    #p2-capot {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 684px;
+      height: 480px;
+      border-radius: 18px;
+      background: linear-gradient(160deg, #c9c9c9 0%, #dadada 45%, #bdbdbd 100%);
+    }
+    #p2-monogramme {
+      position: absolute;
+      left: 297px;
+      top: 192px;
+      width: 90px;
+      height: 96px;
+    }
+    #p2-ligne {
+      position: absolute;
+      inset: 0;
+    }
+    /* Ligne de texte : de 68 à 1908 px à 19,0 s, ligne de base vers 992 px, comme la preuve d'Apple. */
+    #p2-texte {
+      position: absolute;
+      left: 68px;
+      top: 850px;
+      display: flex;
+      align-items: baseline;
+      gap: 22px;
+      white-space: nowrap;
+      --v: -400px;
+      -webkit-mask-image: linear-gradient(90deg, #000 var(--v), transparent calc(var(--v) + 500px));
+      mask-image: linear-gradient(90deg, #000 var(--v), transparent calc(var(--v) + 500px));
+    }
+    .p2-mot {
+      line-height: 1;
+      font-weight: 900;
+      background: linear-gradient(100deg, #5f5d5c 0%, #d8d4d2 38%, #9b9897 62%, #e4e1df 82%, #8d8a89 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    #p2-chiffre { font-size: 192px; font-stretch: 125%; }
+    #p2-mots { font-size: 115px; font-stretch: 62%; }
+  </style>
+  <div id="root" data-composition-id="preuve2" data-width="1920" data-height="1080">
+    <svg width="0" height="0" style="position:absolute">
+      <filter id="p2-bouge" x="0" y="-30%" width="100%" height="160%">
+        <feGaussianBlur id="p2-flou" stdDeviation="0 0" />
+      </filter>
+    </svg>
+    <div id="p2-groupe" class="clip" data-start="0" data-duration="2.88" data-layout-allow-overflow>
+      <div id="p2-masque" data-layout-allow-overflow>
+        <div id="p2-plaque"><span class="p2-etiquette">Plaque V3 : P2 face caméra</span></div>
+      </div>
+      <div id="p2-capot" data-layout-allow-overflow><img id="p2-monogramme" src="assets/c-sport-glyphe.png" alt="Contino Sport" /></div>
+      <div id="p2-ligne" data-layout-allow-overflow>
+        <div id="p2-texte" data-layout-allow-overflow>
+          <span class="p2-mot" id="p2-chiffre">30</span>
+          <span class="p2-mot" id="p2-mots">RÉFÉRENCES PERSONNALISABLES</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const C = 18.12;
+    // Masque en V et capot relevés sur Apple (outils-calage/formes.py), 36 points par clé, 18,25 à 20,5 s.
+    const M = window.MASQUES.preuve2;
+    const V = calque.piste(M.T.map((t) => t - C), M.P);
+    // Capot : largeur 560, 498 puis 456 px, bord haut vers 406 px ; la caméra recule pendant tout le plan.
+    const CAPOT = calque.piste([18.25, 19.5, 20.5].map((t) => t - C), [[0.819, 412], [0.728, 400], [0.667, 406]]);
+    // Texte : il entre par la droite en ralentissant (bord gauche à 436, 160 puis 68 px de 18,5 à 19,0 s),
+    // se révèle de gauche à droite, puis recule avec l'image (largeur 1840 puis 1588 px à 20,5 s).
+    const GLISSE = calque.courbe([18.3, 18.5, 18.75, 19.0].map((t) => t - C), [1300, 368, 92, 0]);
+    const REVELE = calque.courbe([18.3, 18.5, 18.75, 19.05].map((t) => t - C), [-500, 700, 1500, 2400]);
+    const RECUL = calque.courbe([19.0, 20.5].map((t) => t - C), [1, 0.863]);
+    // Bascule verticale vers le plan suivant : tout monte d'un coup, flou de bougé vertical.
+    const BASCULE = calque.courbe([20.62, 20.75, 20.875, 20.95].map((t) => t - C), [0, -145, -600, -1250]);
+    const tl = gsap.timeline({ paused: true });
+    calque.piloter(tl, 0, 2.88, (t) => {
+      gsap.set("#p2-masque", { clipPath: calque.polygone(V(t)) });
+      const [s, haut] = CAPOT(t);
+      gsap.set("#p2-capot", { x: 960 - 342, y: haut - 240 + 240 * s, scale: s });
+      gsap.set("#p2-texte", { x: GLISSE(t), "--v": `${REVELE(t).toFixed(0)}px` });
+      gsap.set("#p2-ligne", { scale: RECUL(t), transformOrigin: "740px 583px" });
+      const y = BASCULE(t), y2 = BASCULE(t + 1 / 24);
+      gsap.set("#p2-groupe", { y });
+      document.getElementById("p2-flou").setAttribute("stdDeviation", `0 ${Math.min(120, Math.abs(y2 - y) / 3).toFixed(1)}`);
+    });
+    gsap.set("#p2-groupe", { filter: "url(#p2-bouge)" });
+    window.__timelines["preuve2"] = tl;
+  </script>
+</template>
