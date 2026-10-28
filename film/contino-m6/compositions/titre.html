@@ -1,0 +1,121 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Archivo Film";
+      src: url("assets/fonts/archivo-wdth.woff2") format("woff2");
+      font-weight: 100 900;
+      font-stretch: 62% 125%;
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      background: #101010;
+      overflow: hidden;
+      font-family: "Archivo Film", sans-serif;
+    }
+    #titre-camera {
+      position: absolute;
+      inset: 0;
+    }
+    #titre-faisceau {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 62% 30%, #6b4a33 0%, #3a2a20 35%, #1d1714 70%);
+    }
+    #titre-plaque {
+      position: absolute;
+      left: 1300px;
+      top: 250px;
+      color: #cbb9a6;
+      font-size: 28px;
+      font-weight: 600;
+      font-stretch: 85%;
+      letter-spacing: 0.04em;
+    }
+    #titre-plan {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 2000px;
+      height: 1000px;
+      margin: -420px 0 0 -1150px;
+      transform: perspective(1700px) rotateX(44deg) rotateZ(27deg);
+      transform-origin: 50% 50%;
+    }
+    .titre-bloc {
+      position: absolute;
+      line-height: 0.86;
+    }
+    .titre-mot {
+      display: block;
+      background: linear-gradient(100deg, #5f5d5c 0%, #d8d4d2 38%, #9b9897 62%, #e4e1df 82%, #8d8a89 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .titre-petit {
+      font-size: 60px;
+      font-weight: 800;
+      font-stretch: 75%;
+    }
+    .titre-grand {
+      font-size: 172px;
+      font-weight: 900;
+      font-stretch: 62%;
+    }
+    .titre-geant {
+      font-size: 250px;
+      font-weight: 900;
+      font-stretch: 125%;
+      letter-spacing: -0.02em;
+    }
+    #titre-gauche {
+      left: 150px;
+      top: 190px;
+    }
+    #titre-droite {
+      left: 1170px;
+      top: 300px;
+    }
+  </style>
+  <div id="root" data-composition-id="titre" data-width="1920" data-height="1080">
+    <div id="titre-camera" class="clip" data-start="0" data-duration="2.4" data-layout-allow-overflow>
+      <div id="titre-faisceau">
+        <span id="titre-plaque">Plaque Veo : P1 au club-house</span>
+      </div>
+      <div id="titre-plan" data-layout-allow-overflow>
+        <div class="titre-bloc" id="titre-gauche">
+          <span data-layout-allow-occlusion data-layout-allow-overlap class="titre-mot titre-petit" id="titre-nouveau">NOUVEAU</span>
+          <span data-layout-allow-occlusion data-layout-allow-overlap class="titre-mot titre-grand" id="titre-catalogue">CATALOGUE</span>
+          <span data-layout-allow-occlusion data-layout-allow-overlap class="titre-mot titre-grand" id="titre-sublimation">SUBLIMATION</span>
+        </div>
+        <div class="titre-bloc" id="titre-droite">
+          <span data-layout-allow-occlusion data-layout-allow-overlap class="titre-mot titre-petit" id="titre-edition">ÉDITION</span>
+          <span data-layout-allow-occlusion data-layout-allow-overlap class="titre-mot titre-geant" id="titre-annee">2026</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Le faisceau part du point où le packshot s'est posé (centre du cadre).
+    const SOMMETS = [[1160, 0], [1920, 0], [1920, 230], [1130, 600], [930, 470]];
+    const ORIGINE = [960, 540];
+    const polygone = (k) =>
+      "polygon(" + SOMMETS.map(([x, y]) =>
+        `${ORIGINE[0] + (x - ORIGINE[0]) * k}px ${ORIGINE[1] + (y - ORIGINE[1]) * k}px`).join(", ") + ")";
+    const MOTS = ["#titre-nouveau", "#titre-catalogue", "#titre-sublimation", "#titre-edition", "#titre-annee"];
+
+    const tl = gsap.timeline({ paused: true });
+    tl.addLabel("ouverture", 0).addLabel("mots", 0.18).addLabel("faisceau", 0.55).addLabel("tenue", 0.95);
+
+    // Staging : le faisceau s'ouvre d'abord, arrivée sur une longue traîne.
+    tl.fromTo("#titre-faisceau", { clipPath: polygone(0.02) }, { clipPath: polygone(1), duration: 0.55, ease: "expo.out" }, "ouverture");
+    // Chevauchement : les mots s'allument quand le faisceau est à un tiers, 0,07 s d'écart, sans déplacement.
+    tl.fromTo(MOTS, { opacity: 0, filter: "blur(6px)" },
+      { opacity: 1, filter: "blur(0px)", duration: 0.16, ease: "power2.out", stagger: 0.07 }, "mots");
+    // Le titre posé ne bouge plus : seule la caméra glisse, dans les deux sens d'ease.
+    tl.fromTo("#titre-camera", { x: 0, y: 0 }, { x: -24, y: 8, duration: 2.4, ease: "power2.inOut" }, "ouverture");
+
+    window.__timelines["titre"] = tl;
+  </script>
+</template>

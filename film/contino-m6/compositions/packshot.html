@@ -1,0 +1,44 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background: #101010;
+      perspective: 2400px;
+    }
+    #packshot-objet {
+      position: absolute;
+      left: 739px;
+      top: 159px;
+      width: 441px;
+      height: 762px;
+      transform-origin: 50% 50%;
+    }
+    #packshot-objet img {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+  <div id="root" data-composition-id="packshot" data-width="1920" data-height="1080">
+    <div id="packshot-objet" class="clip" data-start="0" data-duration="2">
+      <img id="packshot-img" src="assets/set-football.png" alt="Set football Contino Sport" />
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.addLabel("approche", 0).addLabel("anticipation", 0.9).addLabel("bascule", 0.95).addLabel("iso", 1.85);
+
+    // Approche lente vers l'objectif : c'est l'anticipation, en sens inverse du recul qui suit.
+    tl.fromTo("#packshot-objet",
+      { scale: 1, y: 0, rotationX: 0, rotationZ: 0 },
+      { scale: 1.025, y: -8, duration: 0.9, ease: "sine.inOut" }, "approche");
+    // Bascule et recul : l'inclinaison et l'échelle ont chacune leur ease, la trajectoire s'arrondit.
+    tl.to("#packshot-objet", { rotationX: 56, rotationZ: -38, duration: 0.9, ease: "power3.inOut" }, "bascule");
+    tl.to("#packshot-objet", { scale: 0.3, duration: 0.9, ease: "power2.inOut" }, "bascule");
+    tl.to("#packshot-objet", { y: 0, duration: 0.9, ease: "power1.out" }, "bascule");
+    tl.fromTo("#packshot-img", { opacity: 1 }, { opacity: 0.75, duration: 0.9, ease: "power2.inOut" }, "bascule");
+
+    window.__timelines["packshot"] = tl;
+  </script>
+</template>

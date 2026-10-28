@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      :root {
+        --sol: #101010;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--sol);
+      }
+      #main-fond {
+        position: absolute;
+        inset: 0;
+        background: var(--sol);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="7.6"
+      data-fps="24"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div id="main-fond"></div>
+      <div
+        id="packshot"
+        data-composition-id="packshot"
+        data-composition-src="compositions/packshot.html"
+        data-start="0"
+        data-duration="2"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+      <div
+        id="titre"
+        data-composition-id="titre"
+        data-composition-src="compositions/titre.html"
+        data-start="2"
+        data-duration="2.4"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+      <div
+        id="studio"
+        data-composition-id="studio"
+        data-composition-src="compositions/studio.html"
+        data-start="4.4"
+        data-duration="1"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+      <div
+        id="preuve"
+        data-composition-id="preuve"
+        data-composition-src="compositions/preuve.html"
+        data-start="5.4"
+        data-duration="2.2"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,54 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background: #f4f0f3;
+      overflow: hidden;
+    }
+    #studio-camera {
+      position: absolute;
+      inset: 0;
+      transform-origin: 39% 48%;
+    }
+    .studio-etat {
+      position: absolute;
+      inset: 0;
+    }
+    .studio-cadre {
+      position: absolute;
+      inset: 0;
+      transform-origin: 39% 48%;
+    }
+    .studio-cadre img {
+      display: block;
+      width: 1920px;
+      height: 1080px;
+    }
+  </style>
+  <div id="root" data-composition-id="studio" data-width="1920" data-height="1080">
+    <div id="studio-camera" data-layout-allow-overflow>
+      <div class="studio-etat clip" id="studio-uni" data-start="0" data-duration="0.3">
+        <div class="studio-cadre" id="studio-cadre-uni"><img src="assets/studio-1-uni.png" alt="Studio, maillot uni" /></div>
+      </div>
+      <div class="studio-etat clip" id="studio-eclats" data-start="0.3" data-duration="0.28">
+        <div class="studio-cadre" id="studio-cadre-eclats"><img src="assets/studio-2-eclats.png" alt="Studio, design Éclats" /></div>
+      </div>
+      <div class="studio-etat clip" id="studio-magenta" data-start="0.58" data-duration="0.42">
+        <div class="studio-cadre" id="studio-cadre-magenta"><img src="assets/studio-3-magenta.png" alt="Studio, maillot magenta" /></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.addLabel("uni", 0).addLabel("eclats", 0.3).addLabel("magenta", 0.58);
+
+    // Cadre serré sur le maillot, glissement de caméra continu sur tout le plan.
+    tl.fromTo("#studio-camera", { scale: 1.45 }, { scale: 1.55, duration: 1, ease: "power1.inOut" }, "uni");
+    // Chaque nouvel écran entre légèrement grand et se pose, comme après un clic.
+    tl.fromTo("#studio-cadre-eclats", { scale: 1.03 }, { scale: 1, duration: 0.25, ease: "power3.out" }, "eclats");
+    tl.fromTo("#studio-cadre-magenta", { scale: 1.03 }, { scale: 1, duration: 0.25, ease: "power3.out" }, "magenta");
+
+    window.__timelines["studio"] = tl;
+  </script>
+</template>
