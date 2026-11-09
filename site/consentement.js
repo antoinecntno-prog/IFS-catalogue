@@ -1,7 +1,9 @@
 /* Consentement et pixel Meta.
    Le pixel ne se charge qu'après un clic sur « Accepter » (règle CNIL : refuser aussi simple qu'accepter,
    aucun traceur publicitaire avant le choix). Le choix est gardé 6 mois dans le navigateur.
-   Les pages envoient leurs événements par csTrack(nom, données) : sans accord, l'appel ne fait rien. */
+   Les pages envoient leurs événements par csTrack(nom, données) : sans accord, l'appel ne fait rien.
+   Le choix est une machine à états (machine.js), lisible sur <html data-consentement> :
+   indecis tant que le bandeau attend une réponse, puis refuse ou accepte (pixel chargé). */
 (() => {
   const PIXEL = "1636636314482269";
   const CLE = "cs-consentement";
@@ -15,6 +17,34 @@
   };
   const ecrire = v => { try { localStorage.setItem(CLE, JSON.stringify({ v, t: Date.now() })); } catch {} };
 
+  /* L'état en mémoire fait foi pendant la visite, même si le navigateur refuse d'écrire le choix.
+     Dans le stockage, le choix garde ses valeurs d'origine : « oui » et « non ». */
+  const choix = IFSMachine("consentement", {
+    initial: { oui: "accepte", non: "refuse" }[lire()] || "indecis",
+    noeud: document.documentElement,
+    attribut: "consentement",
+    etats: {
+      indecis: { ACCEPTER: "accepte", REFUSER: "refuse" },
+      refuse: { ACCEPTER: "accepte", REFUSER: "refuse" },
+      accepte: { ACCEPTER: "accepte", REFUSER: "refuse" }
+    },
+    rendu(etat, precedent, autreOnglet) {
+      if (!autreOnglet) ecrire(etat === "accepte" ? "oui" : "non");
+      if (etat === "accepte") chargerPixel();
+      /* Retrait d'un accord donné plus tôt : on recharge la page pour décharger le pixel.
+         Retrait fait dans un autre onglet : csTrack se tait, la page reste en place avec ses saisies. */
+      else if (precedent === "accepte" && !autreOnglet) location.reload();
+    }
+  });
+  /* Choix fait dans un autre onglet : celui-ci le suit */
+  window.addEventListener("storage", e => {
+    if (e.key !== CLE) return;
+    const etat = { oui: "accepte", non: "refuse" }[lire()];
+    if (!etat || choix.est(etat)) return;
+    document.querySelector(".cs-bandeau")?.remove();
+    choix.signaler(etat === "accepte" ? "ACCEPTER" : "REFUSER", true);
+  });
+
   let charge = false;
   function chargerPixel() {
     if (charge) return;
@@ -25,8 +55,12 @@
     fbq("track", "PageView");
   }
 
+  /* chargerPixel d'abord : un événement envoyé avant la fin du chargement de la page
+     (fiche ouverte par un lien direct) attend dans la file du pixel, après PageView. */
   window.csTrack = (nom, donnees) => {
-    if (lire() === "oui" && window.fbq) fbq("track", nom, donnees || {});
+    if (!choix.est("accepte")) return;
+    chargerPixel();
+    fbq("track", nom, donnees || {});
   };
 
   const style = document.createElement("style");
@@ -53,12 +87,8 @@
     d.addEventListener("click", e => {
       const b = e.target.closest("[data-cs]");
       if (!b) return;
-      const avant = lire();
-      ecrire(b.dataset.cs);
       d.remove();
-      if (b.dataset.cs === "oui") chargerPixel();
-      /* Retrait d'un accord donné plus tôt : on recharge la page pour décharger le pixel */
-      else if (avant === "oui" && charge) location.reload();
+      choix.signaler(b.dataset.cs === "oui" ? "ACCEPTER" : "REFUSER");
     });
     document.body.appendChild(d);
   }
@@ -66,9 +96,8 @@
   function demarrer() {
     const lien = document.getElementById("cs-ouvrir");
     if (lien) { lien.hidden = false; lien.addEventListener("click", bandeau); }
-    const choix = lire();
-    if (choix === "oui") chargerPixel();
-    else if (choix === null) bandeau();
+    if (choix.est("accepte")) chargerPixel();
+    else if (choix.est("indecis")) bandeau();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", demarrer);
   else demarrer();

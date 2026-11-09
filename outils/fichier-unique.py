@@ -33,6 +33,7 @@ html = html.replace('<script src="consentement.js"></script>\n', "")
 for page in ("mentions-legales.html", "confidentialite.html", "cgv.html"):
     html = html.replace(f'href="{page}', f'href="https://continosport.fr/{page}')
 html = inline('<link rel="stylesheet" href="base.css">', (SITE / "base.css").read_text(encoding="utf-8"), "style")
+html = inline('<script src="machine.js"></script>', (SITE / "machine.js").read_text(encoding="utf-8"), "script")
 html = inline('<script src="donnees.js"></script>', (SITE / "donnees.js").read_text(encoding="utf-8"), "script")
 html = inline('<script src="stockage.js"></script>', (SITE / "stockage.js").read_text(encoding="utf-8") + "\n/* Fichier unique : pas de studio (page à part), le lien Personnaliser est masqué */\nwindow.IFS_FICHIER_UNIQUE = true;", "script")
 

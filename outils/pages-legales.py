@@ -75,6 +75,7 @@ def page(fichier, titre, description, corps):
 <footer class="lg-foot">
   <div class="wrap"><span><b>Contino Sport</b>, marque du Groupe Contino IFS</span> {pied} <button type="button" id="cs-ouvrir" hidden>Cookies</button></div>
 </footer>
+<script src="machine.js"></script>
 <script src="consentement.js"></script>
 </body>
 </html>

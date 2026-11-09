@@ -271,6 +271,51 @@
   const S = { pid: null, short: false, color: null, motif: "uni", c2: null, c3: null, view: "face", els: [], sel: null, files: {}, extra: [], tab: "produit" };
   const KFIX = () => ({ wood: tok("--viz-wood"), metal: tok("--viz-metal"), jute: tok("--viz-jute"), shade: tok("--viz-shade"), hole: tok("--paper") });
   let TPL = null, CUR = null;
+
+  /* ---------- Machines du studio (machine.js) ----------
+     Cycle du visuel, lisible sur <html data-studio> : chargement (un produit arrive de la mémoire du navigateur), pret.
+     Passage au devis, sur #st-quote[data-etat] : repos, puis preparation (aperçu en cours et départ vers le devis) ;
+     echec quand le navigateur bloque l'enregistrement local.
+     « Tout effacer », sur #st-reset[data-etat] : repos, arme (un second clic dans les 4 secondes efface). */
+  const cycle = IFSMachine("studio", {
+    initial: "chargement",
+    noeud: document.documentElement,
+    attribut: "studio",
+    etats: { chargement: { CHARGER: "chargement", PRET: "pret" }, pret: { CHARGER: "chargement" } },
+    /* Un changement de produit désarme « Tout effacer » */
+    rendu() { syncQuoteBtn(); if (effacer.est("arme")) effacer.signaler("EXPIRER"); }
+  });
+  /* detail : le message d'échec, en HTML */
+  const passage = IFSMachine("studio-devis", {
+    initial: "repos",
+    noeud: $("#st-quote"),
+    etats: {
+      repos: { DEMANDER: "preparation" },
+      preparation: { ECHEC: "echec", REVENIR: "repos" },
+      echec: { DEMANDER: "preparation", REVENIR: "repos" }
+    },
+    rendu(etat, precedent, detail) {
+      syncQuoteBtn();
+      const msg = $("#st-quote-msg");
+      if (etat === "echec") msg.innerHTML = detail;
+      else msg.textContent = etat === "preparation" ? "Préparation de l'aperçu…" : "";
+    }
+  });
+  let effacerT = null;
+  const effacer = IFSMachine("studio-effacer", {
+    initial: "repos",
+    noeud: $("#st-reset"),
+    etats: { repos: { DEMANDER: "arme" }, arme: { CONFIRMER: "repos", EXPIRER: "repos" } },
+    rendu(etat) {
+      clearTimeout(effacerT);
+      $("#st-reset").textContent = etat === "arme" ? "Confirmer : tout effacer" : "Tout effacer";
+      if (etat === "arme") effacerT = setTimeout(() => effacer.signaler("EXPIRER"), 4000);
+    }
+  });
+  /* Le devis part d'un visuel chargé en entier, une demande à la fois */
+  function syncQuoteBtn() { $("#st-quote").disabled = !cycle.est("pret") || passage.est("preparation"); }
+  syncQuoteBtn();
+
   function build() {
     const p = byId[S.pid], k = KFIX();
     const fixed = p.viz.fixed === "jute";
@@ -692,6 +737,7 @@
   /* Textes en couleur automatique : lisibles sur la couleur du produit, tant que le client n'a pas choisi la leur */
   function autoColors() { const col = contrastOn(CUR.c.c); S.els.forEach(e => { if (e.type === "txt" && e.autoColor) e.color = col; }); }
   function renderAll() {
+    if (!S.pid) return;
     build();
     autoColors();
     renderStage();
@@ -788,7 +834,8 @@
   const syncProductSelect = () => { $("#p-product").value = optionName(); };
   $("#p-product").addEventListener("change", async e => {
     const m = optMap[e.target.value]; if (!m) return;
-    if (m.pid === S.pid) { S.short = m.short; renderAll(); save(); return; }
+    /* Retour au produit affiché pendant qu'un autre se charge : ce chargement est abandonné */
+    if (m.pid === S.pid) { if (cycle.est("chargement")) { loadSeq++; cycle.signaler("PRET"); } S.short = m.short; renderAll(); save(); return; }
     await flush();
     await loadProduct(m.pid, m.short);
   });
@@ -814,31 +861,42 @@
   let saveT = null;
   const serial = () => ({ pid: S.pid, short: S.short, color: S.color, motif: S.motif, c2: S.c2, c3: S.c3, els: S.els.map(e => ({ ...e })), files: Object.fromEntries(Object.entries(S.files).map(([k, f]) => [k, { blob: f.file, name: f.name }])), extra: S.extra.map(x => ({ blob: x.file, name: x.name })) });
   function save() { clearTimeout(saveT); saveT = setTimeout(flush, 350); updateUrl(); }
-  async function flush() { clearTimeout(saveT); if (S.pid && window.IFSStore) await IFSStore.set(`design:${S.pid}`, serial()); }
+  async function flush() { clearTimeout(saveT); saveT = null; if (S.pid && window.IFSStore) await IFSStore.set(`design:${S.pid}`, serial()); }
   function updateUrl() { const u = new URL(location.href); u.searchParams.set("produit", S.pid); if (byId[S.pid].quoteShort) u.searchParams.set("short", S.short ? "1" : "0"); else u.searchParams.delete("short"); history.replaceState(null, "", u); }
+  /* Charge un produit et son visuel gardé en mémoire. Le visuel se prépare à part et S ne change qu'à la fin,
+     d'un seul coup : pendant le chargement, l'écran et S décrivent encore le produit précédent, et toute
+     sauvegarde écrit un visuel complet sous le bon produit. Un chargement dépassé par un plus récent
+     s'arrête sans rien toucher. */
+  let loadSeq = 0;
   async function loadProduct(pid, short) {
-    S.pid = pid; S.sel = null; S.view = "face"; S.els = []; S.files = {}; S.extra = []; S.color = null; S.motif = "uni"; S.c2 = null; S.c3 = null;
-    S.short = typeof short === "boolean" ? short : (byId[pid].quoteShort ? byId[pid].quoteShort[0] : false);
+    const seq = ++loadSeq;
+    cycle.signaler("CHARGER");
+    const next = { pid, sel: null, view: "face", els: [], files: {}, extra: [], color: null, motif: "uni", c2: null, c3: null };
+    next.short = typeof short === "boolean" ? short : (byId[pid].quoteShort ? byId[pid].quoteShort[0] : false);
     const saved = window.IFSStore ? await IFSStore.get(`design:${pid}`) : null;
+    if (seq !== loadSeq) return;
     if (saved) {
-      S.color = saved.color || null;
-      S.motif = saved.motif || "uni"; S.c2 = saved.c2 || null; S.c3 = saved.c3 || null;
-      if (typeof short !== "boolean") S.short = !!saved.short;
+      next.color = saved.color || null;
+      next.motif = saved.motif || "uni"; next.c2 = saved.c2 || null; next.c3 = saved.c3 || null;
+      if (typeof short !== "boolean") next.short = !!saved.short;
       for (const [k, f] of Object.entries(saved.files || {})) {
-        try { const file = f.blob instanceof File ? f.blob : new File([f.blob], f.name, { type: f.blob.type }); S.files[k] = await loadFile(file); S.files[k].name = f.name; } catch (e) { /* fichier illisible : ignoré */ }
+        try { const file = f.blob instanceof File ? f.blob : new File([f.blob], f.name, { type: f.blob.type }); next.files[k] = await loadFile(file); next.files[k].name = f.name; } catch (e) { /* fichier illisible : ignoré */ }
+        if (seq !== loadSeq) return;
       }
-      S.extra = (saved.extra || []).map(x => ({ file: x.blob instanceof File ? x.blob : new File([x.blob], x.name, { type: x.blob.type }), name: x.name }));
-      S.els = (saved.els || []).filter(e => e.type === "txt" || S.files[e.src]);
-      S.els.filter(e => e.type === "txt").forEach(e => ensureFont(e.font));
+      next.extra = (saved.extra || []).map(x => ({ file: x.blob instanceof File ? x.blob : new File([x.blob], x.name, { type: x.blob.type }), name: x.name }));
+      next.els = (saved.els || []).filter(e => e.type === "txt" || next.files[e.src]);
     }
+    /* Retouches faites sur le produit précédent pendant le chargement : écrites avant de le quitter */
+    if (saveT) flush();
+    Object.assign(S, next);
+    S.els.filter(e => e.type === "txt").forEach(e => ensureFont(e.font));
     syncProductSelect();
+    cycle.signaler("PRET");
     renderAll(); updateUrl();
     document.title = `Personnaliser : ${byId[pid].name} | Contino Sport`;
   }
-  $("#st-reset").addEventListener("click", async e => {
-    const b = e.currentTarget;
-    if (b.dataset.confirm !== "1") { b.dataset.confirm = "1"; b.textContent = "Confirmer : tout effacer"; setTimeout(() => { b.dataset.confirm = ""; b.textContent = "Tout effacer"; }, 4000); return; }
-    b.dataset.confirm = ""; b.textContent = "Tout effacer";
+  $("#st-reset").addEventListener("click", async () => {
+    if (!cycle.est("pret") || effacer.signaler("DEMANDER") || !effacer.signaler("CONFIRMER")) return;
     S.els = []; S.files = {}; S.extra = []; S.sel = null; S.color = null; S.motif = "uni"; S.c2 = null; S.c3 = null;
     renderAll(); await flush(); live("Visuel effacé.");
   });
@@ -903,9 +961,8 @@
     lines.push("Aperçu indicatif, à valider sur le BAT.");
     return lines.join("\n");
   }
-  $("#st-quote").addEventListener("click", async e => {
-    const b = e.currentTarget, msg = $("#st-quote-msg");
-    b.disabled = true; msg.textContent = "Préparation de l'aperçu…";
+  $("#st-quote").addEventListener("click", async () => {
+    if (!cycle.est("pret") || !passage.signaler("DEMANDER")) return;
     try {
       await flush();
       const preview = await exporter();
@@ -917,11 +974,12 @@
       if (!back || back.at !== rec.at) throw new Error("stockage");
       location.href = "index.html#devis-visuel";
     } catch (err) {
-      b.disabled = false;
       const url = await exporter().then(bl => URL.createObjectURL(bl)).catch(() => "");
-      msg.innerHTML = `Votre navigateur bloque l'enregistrement local. ${url ? `<a href="${url}" download="apercu-contino-sport.jpg">Téléchargez l'aperçu</a> et joignez-le à votre demande de devis.` : ""}`;
+      passage.signaler("ECHEC", `Votre navigateur bloque l'enregistrement local. ${url ? `<a href="${url}" download="apercu-contino-sport.jpg">Téléchargez l'aperçu</a> et joignez-le à votre demande de devis.` : ""}`);
     }
   });
+  /* Retour du devis par le bouton Précédent du navigateur : la page revient telle qu'elle était, le bouton se libère */
+  window.addEventListener("pageshow", e => { if (e.persisted) passage.signaler("REVENIR"); });
 
   /* ---------- Démarrage ---------- */
   const params = new URLSearchParams(location.search);
